@@ -1,0 +1,65 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Artwork index{% endblock %}
+
+{% block body %}
+ 
+     <div class="content mt-3">
+            <div class="animated fadeIn">
+                
+                <div class="row">
+                    
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <strong class="card-title">List of artworks</strong>
+                            </div>
+                            <div class="card-body">
+                                <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+                                   <thead>
+                                        <tr>
+                                            <th>ArtworkName</th>
+                                            <th>ArtistName</th>
+                                            <th>DateArt</th>
+                                            <th>Description</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for artwork in artworks %}
+                                        <tr>
+                                            <td>{{ artwork.artworkName }}</td>
+                                            <td>{{ artwork.artistName }}</td>
+                                            <td>{{ artwork.dateArt ? artwork.dateArt|date('Y-m-d') : '' }}</td>
+                                            <td>{{ artwork.description }}</td>
+                                            <td>
+                                                <a href="{{ path('app_artwork_show', {'idArt': artwork.idArt}) }}" class="btn btn-primary"><i class="fa fa-eye"></i>&nbsp;  Show</a>
+                                                <a href="{{ path('app_artwork_edit', {'idArt': artwork.idArt}) }}" class="btn btn-secondary"><i class="fa fa-pencil"></i>&nbsp; Edit</a>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="8">no records found</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                <a href="{{ path('app_artwork_new') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp; Add New Artwork</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div><!-- .animated -->
+        </div><!-- .content -->
+   
+
+   
+
+
+  
+
+ 
+{% endblock %}
+

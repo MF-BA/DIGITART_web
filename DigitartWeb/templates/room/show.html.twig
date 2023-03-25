@@ -1,0 +1,38 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Room{% endblock %}
+
+{% block body %}
+    <h1>Room</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>IdRoom</th>
+                <td>{{ room.idRoom }}</td>
+            </tr>
+            <tr>
+                <th>NameRoom</th>
+                <td>{{ room.nameRoom }}</td>
+            </tr>
+            <tr>
+                <th>Area</th>
+                <td>{{ room.area }}</td>
+            </tr>
+            <tr>
+                <th>State</th>
+                <td>{{ room.state }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ room.description }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_room_index') }}" class="btn btn-secondary"><i class="fa fa-mail-reply"></i>&nbsp; back To List</a>
+
+    <a href="{{ path('app_room_edit', {'idRoom': room.idRoom}) }}">edit</a>
+
+    {{ include('room/_delete_form.html.twig') }}
+{% endblock %}
