@@ -792,6 +792,9 @@
         margin: 2px 0 0;
         font-size: 18px; }
 
+        .btn{
+        border-radius: 40px;  
+        }
 .social {
   color: #fff; }
   .social.btn-sm {
@@ -1088,7 +1091,7 @@ aside.left-panel {
         .navbar .navbar-nav li > a:hover .menu-icon {
           color: #fff !important; }
         .navbar .navbar-nav li > a .menu-icon {
-          color: #8b939b;
+          color: #BD2A2E;
           float: left;
           margin-top: 8px;
           width: 55px;
@@ -1551,11 +1554,64 @@ header .form-inline {
   float: left;
   padding: 0 20px;
   width: 100%; }
+.buttons-center-form{
+  margin-left: 700px;
+  margin-right: 700px ;
+  margin-bottom:20px;
+  margin-top: -80px;
+}
+.btn{
 
+ border: 0;
+ font-size: 1rem;
+ font-weight: 20;
+ 
+}
+.outer-wrapper {
+  margin: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  border: 1px solid black;
+  border-radius: 4px;
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.9);
+  max-width: fit-content;
+  max-height: fit-content;
+
+  
+}
+.table-wrapper {
+
+  overflow-y: scroll;
+  overflow-x: scroll;
+  height: fit-content;
+  max-height: 66.4vh;
+  
+  margin-top: 22px;
+  
+  margin: 15px;
+  padding-bottom: 20px;
+  
+}
+.heading-table {
+  display: flex;
+  background-color: #BD2A2E;
+  box-shadow: 0px 1px 2px #232f3e;
+
+}
+.card-table {
+  margin-bottom:100px;
+  margin-top: 20px;
+  margin-left: 100px;
+  margin-right: 200px;
+  border-radius: 40px;
+   }
 .card {
-  margin-bottom:24px;
-  margin-bottom: 1.5rem;
-  border-radius: 0; }
+  margin-bottom:100px;
+  margin-top: 20px;
+  margin-left: 200px;
+  margin-right: 200px;
+  border-radius: 40px;
+   }
   .card h4 {
     font-size:17.6px;
     font-size: 1.1rem; }
@@ -1569,16 +1625,13 @@ header .form-inline {
     width: 50px;
     padding:12px 0;
     padding: 0.75rem 0;
-    margin: 0 !important !important;
-    color: #fff;
-    outline: 0;
-    text-align: center;
-    background: transparent;
-    border: 0;
-    border-left: 1px solid rgba(120, 130, 140, 0.4); }
+    margin: 0 !important;
+    
+  }
   .card .card-footer {
-    padding:10.4px 20px;
-    padding: 0.65rem 1.25rem;
+    padding:10px 10px;
+  
+    
     background-color: #f0f3f5;
     border-top: 1px solid #c2cfd6; }
     .card .card-footer ul li {
@@ -2343,6 +2396,9 @@ header .form-inline {
   .badges button {
     margin: 2px 0; } }
 
+    .dashtitle-color{
+      color: #BD2A2E;
+    }
 @media (max-width: 1024px) {
   aside.left-panel {
     padding: 0 20px;
