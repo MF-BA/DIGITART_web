@@ -14,6 +14,12 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class AuctionController extends AbstractController
 {
+    #[Route('/Admin', name: 'admin')]
+    public function back(AuctionRepository $Rep): Response
+    {
+        return $this->render('back.html.twig', []);
+    }
+
     #[Route('/Admin/auction', name: 'auctionAdmin')]
     public function display_admin(AuctionRepository $Rep): Response
     {
