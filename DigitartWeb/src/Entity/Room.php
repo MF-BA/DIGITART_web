@@ -37,7 +37,7 @@ class Room
      */
     private $area;
 
-    /**
+    /** 
      * @var string
      *
      * @ORM\Column(name="state", type="string", length=255, nullable=false)
@@ -103,6 +103,9 @@ class Room
 
         return $this;
     }
-
+    public function __toString(): string
+    {
+        return (string) $this->getIdRoom();
+    }
 
 }

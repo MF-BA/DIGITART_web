@@ -1,0 +1,48 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Event index{% endblock %}
+
+{% block body %}
+    <h1>List of Events</h1>
+
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>EventName</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>NbParticipants</th>
+                <th>Detail</th>
+                <th>StartTime</th>
+                <th>Image</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for event in events %}
+            <tr>
+                <td>{{ event.id }}</td>
+                <td>{{ event.eventName }}</td>
+                <td>{{ event.startDate ? event.startDate|date('Y-m-d') : '' }}</td>
+                <td>{{ event.endDate ? event.endDate|date('Y-m-d') : '' }}</td>
+                <td>{{ event.nbParticipants }}</td>
+                <td>{{ event.detail }}</td>
+                <td>{{ event.startTime }}</td>
+                <td>{{ event.image }}</td>
+                <td>
+                    <a class="btn btn-success" href="{{ path('app_event_show', {'id': event.id}) }}">show</a>
+                    <a class="btn btn-info" href="{{ path('app_event_edit', {'id': event.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-dark" href="{{ path('app_event_new') }}">Create new</a>
+
+{% endblock %}
