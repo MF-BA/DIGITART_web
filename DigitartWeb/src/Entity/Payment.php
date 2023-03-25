@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="payment", indexes={@ORM\Index(name="pk", columns={"user_id"})})
  * @ORM\Entity
-  * @ORM\Entity(repositoryClass="App\Repository\PaymentRepository")
  */
 class Payment
 {
@@ -59,7 +58,14 @@ class Payment
     private $totalPayment;
 
     /**
-     * @var Users
+     * @var bool|null
+     *
+     * @ORM\Column(name="paid", type="boolean", nullable=true)
+     */
+    private $paid;
+
+    /**
+     * @var \Users
      *
      * @ORM\ManyToOne(targetEntity="Users")
      * @ORM\JoinColumns({
@@ -129,6 +135,18 @@ class Payment
     public function setTotalPayment(?int $totalPayment): self
     {
         $this->totalPayment = $totalPayment;
+
+        return $this;
+    }
+
+    public function isPaid(): ?bool
+    {
+        return $this->paid;
+    }
+
+    public function setPaid(?bool $paid): self
+    {
+        $this->paid = $paid;
 
         return $this;
     }

@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="auction", indexes={@ORM\Index(name="fk_artwork", columns={"id_artwork"})})
  * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\AuctionRepository")
  */
 class Auction
 {
@@ -59,7 +58,7 @@ class Auction
     private $state;
 
     /**
-     * @var Artwork
+     * @var \Artwork
      *
      * @ORM\ManyToOne(targetEntity="Artwork")
      * @ORM\JoinColumns({
@@ -141,6 +140,9 @@ class Auction
     public function setIdArtwork(?Artwork $idArtwork): self
     {
         $this->idArtwork = $idArtwork;
+
         return $this;
     }
+
+
 }

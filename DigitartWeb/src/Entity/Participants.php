@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="participants", indexes={@ORM\Index(name="id_event_const", columns={"id_event"})})
  * @ORM\Entity
-  * @ORM\Entity(repositoryClass="App\Repository\ParticipantsRepository")
  */
 class Participants
 {
@@ -42,17 +41,7 @@ class Participants
     private $gender;
 
     /**
-     * @var Event
-     *
-     * @ORM\ManyToOne(targetEntity="Event")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_event", referencedColumnName="id")
-     * })
-     */
-    private $idEvent;
-
-    /**
-     * @var Users
+     * @var \Users
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
@@ -62,6 +51,16 @@ class Participants
      * })
      */
     private $idUser;
+
+    /**
+     * @var \Event
+     *
+     * @ORM\ManyToOne(targetEntity="Event")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_event", referencedColumnName="id")
+     * })
+     */
+    private $idEvent;
 
     public function getFirstName(): ?string
     {
@@ -111,18 +110,6 @@ class Participants
         return $this;
     }
 
-    public function getIdEvent(): ?Event
-    {
-        return $this->idEvent;
-    }
-
-    public function setIdEvent(?Event $idEvent): self
-    {
-        $this->idEvent = $idEvent;
-
-        return $this;
-    }
-
     public function getIdUser(): ?Users
     {
         return $this->idUser;
@@ -131,6 +118,18 @@ class Participants
     public function setIdUser(?Users $idUser): self
     {
         $this->idUser = $idUser;
+
+        return $this;
+    }
+
+    public function getIdEvent(): ?Event
+    {
+        return $this->idEvent;
+    }
+
+    public function setIdEvent(?Event $idEvent): self
+    {
+        $this->idEvent = $idEvent;
 
         return $this;
     }

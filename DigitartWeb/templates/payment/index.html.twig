@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Payment index{% endblock %}
+
+{% block body %}
+    <h1>Payment index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>PaymentId</th>
+                <th>PurchaseDate</th>
+                <th>NbAdult</th>
+                <th>NbTeenager</th>
+                <th>NbStudent</th>
+                <th>TotalPayment</th>
+                <th>Check</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for payment in payments %}
+            <tr>
+                <td>{{ payment.paymentId }}</td>
+                <td>{{ payment.purchaseDate ? payment.purchaseDate|date('Y-m-d') : '' }}</td>
+                <td>{{ payment.nbAdult }}</td>
+                <td>{{ payment.nbTeenager }}</td>
+                <td>{{ payment.nbStudent }}</td>
+                <td>{{ payment.totalPayment }}</td>
+                <td>{{ payment.paid ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_payment_show', {'paymentId': payment.paymentId}) }}">show</a>
+                    <a href="{{ path('app_payment_edit', {'paymentId': payment.paymentId}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_payment_new') }}">Create new</a>
+{% endblock %}

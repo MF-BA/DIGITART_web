@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="bid")
  * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\BidRepository")
  */
 class Bid
 {
@@ -103,4 +102,6 @@ class Bid
 
         return $this;
     }
+
+
 }
