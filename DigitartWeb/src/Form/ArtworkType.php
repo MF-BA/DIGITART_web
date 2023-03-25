@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Artwork;
+use App\Entity\Room;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,7 +20,10 @@ class ArtworkType extends AbstractType
             ->add('dateArt')
             ->add('description')
             ->add('imageArt')
-           # ->add('idRoom')
+            ->add('idRoom', EntityType::class, [
+                'class' => Room::class,
+                'choice_label' => 'nameRoom',
+            ])
         ;
     }
 
