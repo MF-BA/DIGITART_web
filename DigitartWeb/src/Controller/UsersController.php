@@ -15,4 +15,18 @@ class UsersController extends AbstractController
             'controller_name' => 'UsersController',
         ]);
     }
+    #[Route('/showback', name: 'showbackpage')]
+    public function display_back(): Response
+    {
+        return $this->render('back.html.twig', [
+            
+        ]);
+    }
+    #[Route('/adduserback', name: 'adduserback')]
+    public function display_adduserback(): Response
+    {
+        return $this->render('users/adduserback.html.twig', [
+            
+        ]);
+    }
 }
