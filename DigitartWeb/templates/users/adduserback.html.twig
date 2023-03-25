@@ -1,0 +1,109 @@
+
+{% extends 'back.html.twig' %}
+
+
+{% block body %}
+    
+    
+                        
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <strong>Add New </strong> User
+                                                    </div>
+                                                    <div class="card-body card-block">
+                                                        <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                                                            
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-3"><label for="cin-input" class=" form-control-label">Cin</label></div>
+                                                                <div class="col-12 col-md-9"><input type="text" id="cin-input" name="cin-input" placeholder="Enter cin" class="form-control"><small class="form-text text-muted">This is a help text</small></div>
+                                                            </div>
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-3"><label for="fname-input" class=" form-control-label">First name</label></div>
+                                                                <div class="col-12 col-md-9"><input type="text" id="fname-input" name="fname-input" placeholder="Enter First name" class="form-control"><small class="form-text text-muted">This is a help text</small></div>
+                                                            </div>
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-3"><label for="lname-input" class=" form-control-label">Last name</label></div>
+                                                                <div class="col-12 col-md-9"><input type="text" id="lname-input" name="lname-input" placeholder="Enter Last name" class="form-control"><small class="form-text text-muted">This is a help text</small></div>
+                                                            </div>
+
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-3"><label for="email-input" class=" form-control-label">Email Input</label></div>
+                                                                <div class="col-12 col-md-9"><input type="email" id="email-input" name="email-input" placeholder="Enter Email" class="form-control"><small class="help-block form-text">Please enter your email</small></div>
+                                                            </div>
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-3"><label for="password-input" class=" form-control-label">Password</label></div>
+                                                                <div class="col-12 col-md-9"><input type="password" id="password-input" name="password-input" placeholder="Password" class="form-control"><small class="help-block form-text">Please enter a complex password</small></div>
+                                                            </div>
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-3"><label for="address-input" class=" form-control-label">Address</label></div>
+                                                                <div class="col-12 col-md-9"><input type="text" id="address-input" name="address-input" placeholder="Enter an address" class="form-control"><small class="form-text text-muted">This is a help text</small></div>
+                                                            </div>
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-3"><label for="phonenum-input" class=" form-control-label">phone number</label></div>
+                                                                <div class="col-12 col-md-9"><input type="text" id="phonenum-input" name="phonenum-input" placeholder="Enter phone number" class="form-control"><small class="form-text text-muted">This is a help text</small></div>
+                                                            </div>
+                                                            <div class="row form-group">
+                                                                 <div class="col col-md-3"><label for="Bdate-input" class=" form-control-label">Birth Date</label></div>
+                                                                   <div class="col-12 col-md-9">
+                                                                    <div class="input-group">
+                                                                    <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                                                                    <input type="text" id="Bdate-input" name="Bdate-input" placeholder="Enter birth date" class="form-control">
+                                                                    </div>
+                                                                    <small class="form-text text-muted">ex. 99/99/9999</small>
+                                                                    </div>
+                                                            </div>
+                                                                <div class="row form-group">
+                                                                    <div class="col col-md-3"><label for="select" class=" form-control-label">Role</label></div>
+                                                                    <div class="col-12 col-md-9">
+                                                                        <select name="select" id="select" class="form-control">
+                                                                            <option value="0">Please select a role</option>
+                                                                            <option value="1">Admin</option>
+                                                                            <option value="1">Subscriber</option>
+                                                                            <option value="2">Artist</option>
+                                                                            <option value="3">Gallery manager</option>
+                                                                            <option value="3">Auction manager</option>
+                                                                            <option value="3">Events manager</option>
+                                                                            <option value="3">Tickets manager</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="row form-group">
+                                                                    <div class="col col-md-3"><label class=" form-control-label">Gender</label></div>
+                                                                    <div class="col col-md-9">
+                                                                        <div class="form-check">
+                                                                            <div class="radio">
+                                                                                <label for="radio1" class="form-check-label ">
+                                                                                    <input type="radio" id="radio1" name="radios" value="option1" class="form-check-input">Female
+                                                                                </label>
+                                                                            </div>
+                                                                            <div class="radio">
+                                                                                <label for="radio2" class="form-check-label ">
+                                                                                    <input type="radio" id="radio2" name="radios" value="option2" class="form-check-input">Male
+                                                                                </label>
+                                                                            </div>
+                                                                            
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                               
+                                                               
+                                                               
+                                                                <div class="row form-group">
+                                                                    <div class="col col-md-3"><label for="file-input" class=" form-control-label">File input</label></div>
+                                                                    <div class="col-12 col-md-9"><input type="file" id="file-input" name="file-input" class="form-control-file"></div>
+                                                                </div>
+                                                               
+                                                        </form>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <button type="submit" class="btn btn-primary btn-sm">
+                                                            <i class="fa fa-dot-circle-o"></i> Submit
+                                                        </button>
+                                                        <button type="reset" class="btn btn-danger btn-sm">
+                                                            <i class="fa fa-ban"></i> Reset
+                                                        </button>
+                                                    </div>
+                                                
+
+  {% endblock %}
