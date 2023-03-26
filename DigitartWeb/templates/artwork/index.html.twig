@@ -34,7 +34,8 @@
                                             <td>{{ artwork.description }}</td>
                                             <td>
                                                 <a href="{{ path('app_artwork_show', {'idArt': artwork.idArt}) }}" class="btn btn-primary"><i class="fa fa-eye"></i>&nbsp;  Show</a>
-                                                <a href="{{ path('app_artwork_edit', {'idArt': artwork.idArt}) }}" class="btn btn-secondary"><i class="fa fa-pencil"></i>&nbsp; Edit</a>
+                                                <a href="{{ path('app_artwork_edit', {'idArt': artwork.idArt}) }}" class="btn btn-warning"><i class="fa fa-pencil"></i>&nbsp; Edit</a>
+                                                <a {{ include('artwork/_delete_form.html.twig') }}</a>
                                             </td>
                                         </tr>
                                     {% else %}

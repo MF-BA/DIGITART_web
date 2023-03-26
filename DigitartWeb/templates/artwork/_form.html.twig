@@ -1,4 +1,12 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#form_idArtist').change(function() {
+            $('#artistName').val($(this).find(':selected').text());
+        });
+    });
+</script>
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
