@@ -1,3 +1,6 @@
+
+
+
 {{ form_start(form) }}
     {{ form_widget(form) }}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -8,5 +11,5 @@
         });
     });
 </script>
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <button class="btn btn-success"><i class="fa  fa-save (alias)"></i>&nbsp;{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
