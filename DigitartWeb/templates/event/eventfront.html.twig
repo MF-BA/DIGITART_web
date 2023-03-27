@@ -1,0 +1,115 @@
+  {% extends 'base.html.twig' %}
+
+{% block title %}Event index{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .bg-gradient{ background-image: -o-linear-gradient(330deg, #7605f8 0%, #db48f9 100%), -o-linear-gradient(330deg, #9d25ee 0%, #f9488b 100%); background-image: linear-gradient(120deg, #9325ee 0%, #f948ea 100%), linear-gradient(120deg, #a425ee 0%, #f9488b 100%);
+}
+</style>
+
+<!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/breadcrumbs-bg.jpg')}});">
+      <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
+
+        <h2>Edit profile</h2>
+        <ol>
+          <li><a href="{{ path('showfrontpage') }}">Home</a></li>
+          
+        </ol>
+
+      </div>
+    </div><!-- End Breadcrumbs -->
+  <!-- Counter Section Begin -->
+    <section class="counter-section bg-gradient">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="counter-text">
+                        <span>Event Date</span>
+                        <h3>countdown <br />Until the Event</h3>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="cd-timer" id="countdown">
+                        <div class="cd-item">
+                            <span id="days">00</span>
+                            <p>Days</p>
+                        </div>
+                        <div class="cd-item">
+                            <span id="hours">00</span>
+                            <p>Hours</p>
+                        </div>
+                        <div class="cd-item">
+                            <span id="minutes">00</span>
+                            <p>Minutes</p>
+                        </div>
+                        <div class="cd-item">
+                            <span id="seconds">00</span>
+                            <p>Seconds</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Counter Section End -->
+<script>
+    var countDownDate = new Date("apr 15,2023 12:00:00").getTime();
+    var x=setInterval(function(){
+     var now=new Date().getTime();
+     var distance =countDownDate-now;
+     
+     var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+document.getElementById("days").innerHTML=days;
+document.getElementById("hours").innerHTML=hours;
+document.getElementById("seconds").innerHTML=seconds;
+document.getElementById("minutes").innerHTML=minutes;
+
+if(distance<0)
+{
+    clearInterval(x);
+    document.getElementById("days").innerHTML="00";
+    document.getElementById("hours").innerHTML="00";
+    document.getElementById("seconds").innerHTML="00";
+    document.getElementById("minutes").innerHTML="00";
+}
+
+
+    },1000)
+</script>
+    <!-- Home About Section Begin -->
+    <section class="home-about-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="ha-pic">
+                        <img src="img/event.png" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="ha-text">
+                        <h2>A propos de l'evenment</h2>
+                        <p>C’est un tournoi qui mettra 16 danseurs en compétition puis 16 rappeurs. 
+                            L’affrontement sera en 1v1 et le gagnant de chaque catégorie sera sélectionné par des jurys professionnels et il bénéficiera d’un prix. 
+                            L'événement aura lieu à la salle de restaurant de l’IHEC le 15 février à l'IHEC Carthage 
+                        </p>
+                        <ul>
+                            <li><span class="icon_check"></span> Nom : Kill The Beat</li>
+                            <li><span class="icon_check"></span> Lieu : Resto Ihec</li>
+                            <li><span class="icon_check"></span> Temps : 15 Fevrier</li>
+                            <li><span class="icon_check"></span> Dance / Rap</li>
+                        </ul>
+                        <a href="https://www.instagram.com/p/Cnz9f91A4cI/" class="ha-btn">Discover Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endblock %}

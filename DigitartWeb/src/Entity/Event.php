@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Event
  *
@@ -14,6 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Event
 {
+
+
     /**
      * @var int
      *
@@ -25,7 +27,7 @@ class Event
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(message = "Event name cannot be empty")
      * @ORM\Column(name="event_name", type="string", length=255, nullable=false)
      */
     private $eventName;
@@ -182,6 +184,7 @@ class Event
 
         return $this;
     }
+  
 
 
 }

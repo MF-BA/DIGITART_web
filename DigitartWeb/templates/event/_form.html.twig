@@ -7,34 +7,37 @@
                 <div class="card-body">
                     <div class="form-group">
                         {{ form_label(form.eventName, 'Event Name') }}
-                        {{ form_widget(form.eventName, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.eventName, { 'attr': {'class': 'form-control', 'placeholder': 'Enter the event name'} }) }}
+                        {% if form.eventName.vars.errors|length > 0 %}
+                            <span class="text-danger">{{ form.eventName.vars.errors[0].message }}</span>
+                        {% endif %}
                     </div>
-
+<hr>
                     <div class="form-group">
                         {{ form_label(form.startDate, 'Start Date') }}
                         {{ form_widget(form.startDate, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-
+                      <hr>
                     <div class="form-group">
                         {{ form_label(form.endDate, 'End Date') }}
                         {{ form_widget(form.endDate, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-
+<hr>
                     <div class="form-group">
                         {{ form_label(form.nbParticipants, 'Number of Participants') }}
-                        {{ form_widget(form.nbParticipants, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.nbParticipants, { 'attr': {'class': 'form-control', 'placeholder': 'Enter the number of participants'} }) }}
                     </div>
-
+<hr>
                     <div class="form-group">
                         {{ form_label(form.detail, 'Details') }}
-                        {{ form_widget(form.detail, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.detail, { 'attr': {'class': 'form-control', 'placeholder': 'Enter the event details'} }) }}
                     </div>
-
+<hr>
                     <div class="form-group">
                         {{ form_label(form.startTime, 'Start Time') }}
-                        {{ form_widget(form.startTime, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.startTime, { 'attr': {'class': 'form-control', 'placeholder': 'Specify the start time'} }) }}
                     </div>
-
+<hr>
                     <div class="form-group">
                         {{ form_label(form.image, 'Image') }}
                         {{ form_widget(form.image, {
@@ -42,7 +45,7 @@
                             'type': 'file'
                         }) }}
                     </div>
-
+        <hr>
                     <div class="form-group">
                         {{ form_label(form.idRoom, 'Room') }}
                         {{ form_widget(form.idRoom, { 'attr': {'class': 'form-control'} }) }}

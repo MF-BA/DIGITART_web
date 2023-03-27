@@ -16,8 +16,19 @@ class EventController extends AbstractController
     #[Route('/', name: 'app_event_index', methods: ['GET'])]
     public function index(EventRepository $eventRepository): Response
     {
+        $events = $eventRepository->findAll();
+
         return $this->render('event/index.html.twig', [
-            'events' => $eventRepository->findAll(),
+            'events' => $events,
+        ]);
+    }
+    #[Route('/front', name: 'app_event_front_index', methods: ['GET'])]
+    public function indexfront(EventRepository $eventRepository): Response
+    {
+        $events = $eventRepository->findAll();
+
+        return $this->render('event/eventfront.html.twig', [
+            'events' => $events,
         ]);
     }
 
@@ -75,4 +86,8 @@ class EventController extends AbstractController
 
         return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
     }
+
+   
+
+
 }
