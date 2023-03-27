@@ -31,9 +31,12 @@ class Artwork
     private $artworkName;
 
     /**
-     * @var int|null
+     * @var Users|null
      *
-     * @ORM\Column(name="id_artist", type="integer", nullable=true)
+        * @ORM\ManyToOne(targetEntity="Users")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_artist", referencedColumnName="id")
+     * })
      */
     private $idArtist;
 
@@ -75,6 +78,9 @@ class Artwork
      */
     private $idRoom;
 
+
+    
+
     public function getIdArt(): ?int
     {
         return $this->idArt;
@@ -92,12 +98,12 @@ class Artwork
         return $this;
     }
 
-    public function getIdArtist(): ?int
+    public function getIdArtist(): ?Users
     {
         return $this->idArtist;
     }
 
-    public function setIdArtist(?int $idArtist): self
+    public function setIdArtist(?Users $idArtist): self
     {
         $this->idArtist = $idArtist;
 

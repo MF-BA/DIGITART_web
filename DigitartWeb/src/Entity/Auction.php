@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use PhpParser\Node\Name;
 
 /**
  * Auction
@@ -21,7 +22,7 @@ class Auction
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $idAuction;
+    private $id_auction;
 
     /**
      * @var int
@@ -59,18 +60,18 @@ class Auction
     private $state;
 
     /**
-     * @var Artwork
+     * @var artwork
      *
      * @ORM\ManyToOne(targetEntity="Artwork")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_artwork", referencedColumnName="id_art")
      * })
      */
-    private $idArtwork;
+    private $artwork;
 
     public function getIdAuction(): ?int
     {
-        return $this->idAuction;
+        return $this->id_auction;
     }
 
     public function getStartingPrice(): ?int
@@ -133,14 +134,14 @@ class Auction
         return $this;
     }
 
-    public function getIdArtwork(): ?Artwork
+    public function getartwork(): ?Artwork
     {
-        return $this->idArtwork;
+        return $this->artwork;
     }
 
-    public function setIdArtwork(?Artwork $idArtwork): self
+    public function setartwork(?Artwork $artwork): self
     {
-        $this->idArtwork = $idArtwork;
+        $this->artwork = $artwork;
         return $this;
     }
 }

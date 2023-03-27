@@ -2614,6 +2614,10 @@ section {
   height: 36px;
   transition: 0.3s;
 }
+label {
+  color: #000000; /* black */
+  font-weight: bold;
+}
 
 .footer .footer-content .social-links a:hover {
   background: var(--color-primary);

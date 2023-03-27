@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Auction
+{% endblock %}
+
+{% block homeActive %}{% endblock %}
+{% block auctionActive %}
+	class="active"
+{% endblock %}
+
+{% block body %}
+	<!-- ======= Breadcrumbs ======= -->
+	<!-- ======= Breadcrumbs ======= -->
+		<div class="breadcrumbs d-flex align-items-center" style="background-image: url({{auction.artwork.imageArt}});"> <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
+
+			<h2>{{auction.artwork.artworkName|upper}}</h2>
+
+		</div>
+	</div>
+	<!-- End Breadcrumbs -->
+
+	<h1>BY
+		{{auction.artwork.idArtist.firstname|upper}}
+		{{auction.artwork.idArtist.lastname|upper}}
+	</h1>
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Starting Price</th>
+				<td>{{ auction.startingPrice }}</td>
+			</tr>
+			<tr>
+				<th>Increment By</th>
+				<td>{{ auction.increment }}</td>
+			</tr>
+			<tr>
+				<th>Ending Date</th>
+				<td>{{ auction.endingDate ? auction.endingDate|date('Y-m-d') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Description</th>
+				<td>{{ auction.description }}</td>
+			</tr>
+			<tr>
+				<th>Highest Bid</th>
+				<td>{{ highestBid }}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<a href="{{ path('displayAll') }}">BACK</a>
+
+	{% if highestBid == 'No Bids yet' %}
+<br>
+		<a href="{{ path('app_auction_edit', {'id_auction': auction.idAuction}) }}">EDIT</a>
+		<a href="{{ path('app_auction_delete',{'id_auction': auction.idAuction}) }}">&nbsp;&nbsp;&nbsp;&nbsp;DELETE</a>
+
+	{% endif %}
+
+
+{% endblock %}

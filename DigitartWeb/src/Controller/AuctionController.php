@@ -3,59 +3,135 @@
 namespace App\Controller;
 
 use App\Entity\Auction;
-use App\Form\AuctionType;
+use App\Form\Auction1Type;
 use App\Repository\AuctionRepository;
-use Symfony\Component\HttpFoundation\Request;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\BidRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
+
+#[Route('/auction')]
 class AuctionController extends AbstractController
 {
-    #[Route('/Admin', name: 'admin')]
-    public function back(AuctionRepository $Rep): Response
-    {
-        return $this->render('back.html.twig', []);
-    }
 
-    #[Route('/Admin/auction', name: 'auctionAdmin')]
-    public function display_admin(AuctionRepository $Rep): Response
-    {
-        $auction=$Rep->findAll();
-        return $this->render('auction/index.html.twig', [
-            'auction' => $auction,
-        ]);
-    }
 
-    #[Route('/Admin/AddToAuction', name: 'AddToAuction')]
-    public function Add_Auction(Request $request,ManagerRegistry $manager): Response
+    #[Route('/home', name: 'displayAll', methods: ['GET'])]
+    public function index(AuctionRepository $auctionRepository, BidRepository $BidRepository): Response
     {
-        $auction = new Auction;
-        $form = $this->createForm(AuctionType::class, $auction);
-        $form->add('save',SubmitType::class);
-        $form->handleRequest($request);
-        if ($form->isSubmitted()) {
-            $em = $manager->getManager();
-            $em->persist($auction);
-            $em->flush();
-            return $this->redirectToRoute('auctionAdmin');
+        $array[] = "";
+        $auction = $auctionRepository->findAll();
+        foreach ($auction as $auc) {
+            $highestBid = $BidRepository->highestBid($auc->getIdAuction());
+            if ($highestBid)
+                $array[$auc->getIdAuction()] = $highestBid->getOffer();
+            else $array[$auc->getIdAuction()] = 'No Bids yet';
         }
-        return $this->render('auction/add_to_auction_admin.html.twig', ['form' => $form->createView(),]);
-    }
-    #[Route('/showfront', name: 'showfrontpage')]
-    public function display_front(): Response
-    {
-        return $this->render('home.html.twig', [
-            
+        return $this->render('auction/displayAll.html.twig', [
+            'auctions' => $auction, 'highestBids' => $array,
         ]);
     }
-    #[Route('/showback', name: 'showbackpage')]
-    public function display_back(): Response
+
+
+    #[Route('/new', name: 'app_auction_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, AuctionRepository $auctionRepository): Response
     {
-        return $this->render('back.html.twig', [
-            
+        $auction = new Auction();
+        $form = $this->createForm(Auction1Type::class, $auction);
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            $auctionRepository->save($auction, true);
+
+            return $this->redirectToRoute('displayAll', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('auction/new.html.twig', [
+            'auction' => $auction,
+            'form' => $form,
         ]);
+    }
+
+    #[Route('/show/{id_auction}', name: 'app_auction_show', methods: ['GET'])]
+    public function show(Auction $auction, BidRepository $BidRepository): Response
+    {
+        $highestBid = $BidRepository->highestBid($auction->getIdAuction());
+        if ($highestBid)
+            $highestBid = $highestBid->getOffer();
+        else $highestBid = 'No Bids yet';
+        return $this->render('auction/show.html.twig', [
+            'auction' => $auction, 'highestBid' => $highestBid,
+        ]);
+    }
+
+    #[Route('/edit/{id_auction}', name: 'app_auction_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Auction $auction, AuctionRepository $auctionRepository): Response
+    {
+        $form = $this->createForm(Auction1Type::class, $auction);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $auctionRepository->save($auction, true);
+
+            return $this->redirectToRoute('displayAll', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('auction/edit.html.twig', [
+            'auction' => $auction,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/delete/{id_auction}', name: 'app_auction_delete', methods: ['POST'])]
+    public function delete(Request $request, Auction $auction, AuctionRepository $auctionRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $auction->getIdAuction(), $request->request->get('_token'))) {
+            $auctionRepository->remove($auction, true);
+        }
+
+        return $this->redirectToRoute('displayAll', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/admin', name: 'DisplayAuctionBack', methods: ['GET'])]
+    public function indexBACK(AuctionRepository $auctionRepository, BidRepository $BidRepository): Response
+    {
+        $array[] = "";
+        $auction = $auctionRepository->findAll();
+        foreach ($auction as $auc) {
+            $highestBid = $BidRepository->highestBid($auc->getIdAuction());
+            if ($highestBid)
+                $array[$auc->getIdAuction()] = $highestBid->getOffer();
+            else $array[$auc->getIdAuction()] = 'No Bids yet';
+        }
+        return $this->render('auction/displayAllBACK.html.twig', [
+            'auctions' => $auction, 'highestBids' => $array,
+        ]);
+    }
+
+    #[Route('/admin/add', name: 'adminAddAUCTION',  methods: ['GET', 'POST'])]
+    public function addauctionBACK(Request $request, AuctionRepository $auctionRepository): Response
+    {
+        $auction = new Auction();
+        $form = $this->createForm(Auction1Type::class, $auction);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $auctionRepository->save($auction, true);
+            return $this->redirectToRoute('DisplayAuctionBack', [], Response::HTTP_SEE_OTHER);
+        }
+        return $this->renderForm('auction/add_to_auction_admin.html.twig', [
+            'auction' => $auction,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/admin/delete/{id_auction}', name: 'app_auction_deleteBACK', methods: ['POST'])]
+    public function deleteBACK(Request $request, Auction $auction, AuctionRepository $auctionRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $auction->getIdAuction(), $request->request->get('_token'))) {
+            $auctionRepository->remove($auction, true);
+        }
+
+        return $this->redirectToRoute('DisplayAuctionBack', [], Response::HTTP_SEE_OTHER);
     }
 }

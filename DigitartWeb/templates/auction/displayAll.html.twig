@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Auction index
+{% endblock %}
+
+{% block homeActive %}{% endblock %}
+{% block auctionActive %}
+	class="active"
+{% endblock %}
+
+
+{% block body %}
+
+
+	<!-- ======= Breadcrumbs ======= -->
+	<div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/breadcrumbs-bg.jpg')}});">
+		<div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
+
+			<h2>AUCTION</h2>
+
+		</div>
+	</div>
+	<!-- End Breadcrumbs -->
+
+
+	<section id="blog" class="blog">
+		<div class="container" data-aos="fade-up" data-aos-delay="100">
+			<div class="row gy-4 posts-list">
+				{% for auction in auctions %}
+					<div class="col-xl-4 col-md-6">
+						<div class="post-item position-relative h-100">
+							<div class="post-img position-relative overflow-hidden">
+								<img src="{{auction.artwork.imageArt}}" class="img-fluid" alt="">
+								{% if auction.endingDate %}
+									{% set endingDate = auction.endingDate|date('Y-m-d H:i:s') %}
+									<span id="timer_{{auction.idAuction}}" class="post-date"></span>
+									<script>
+										updateTimer("{{ endingDate }}", "timer_{{ auction.idAuction }}");
+									</script>
+								{% else %}
+									<span class="post-date">Auction has no ending date.</span>
+								{% endif %}
+							</div>
+							<div class="post-content d-flex flex-column">
+								<h3 class="post-title">{{ auction.artwork.artworkName }}</h3>
+								<div class="meta d-flex align-items-center">
+									<div class="d-flex align-items-center">
+										<i class="bi bi-person"></i>
+										<span class="ps-2">
+											{{auction.artwork.idArtist.lastname|upper}}
+											{{auction.artwork.idArtist.firstname|upper}}
+										</span>
+									</div>
+									<span class="px-3 text-black-50">/</span>
+									<div class="d-flex align-items-center">
+										<i class="bi bi-cash"></i>
+										<span class="ps-2">{{ highestBids[auction.idAuction] is not null ? highestBids[auction.idAuction] : 'none' }}</span>
+									</div>
+
+								</div>
+
+								<p>
+									{{auction.description}}
+								</p>
+
+								<hr>
+
+								<a href="{{ path('app_auction_show', {'id_auction': auction.idAuction}) }}" class="readmore stretched-link">
+									<span>Read More</span>
+									<i class="bi bi-arrow-right"></i>
+								</a>
+
+							</div>
+
+						</div>
+					</div>
+				{% endfor %}
+
+
+			</div>
+		</div>
+	</section>
+
+
+{% endblock %}

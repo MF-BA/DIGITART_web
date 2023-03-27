@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Auction{% endblock %}
+
+{% block homeActive %}{% endblock %}
+{% block auctionActive %} class="active" {% endblock %}
+
+{% block body %}
+<!-- ======= Breadcrumbs ======= -->
+    <!-- ======= Breadcrumbs ======= -->
+	<div class="breadcrumbs d-flex align-items-center" style="background-image: url({{auction.artwork.imageArt}});">
+		<div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
+
+			<h2>AUCTION</h2>
+
+		</div>
+	</div>
+	<!-- End Breadcrumbs -->
+
+
+  
+    <h1>Edit Auction</h1>
+
+    {{ include('auction/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('displayAll') }}">back to list</a>
+
+{% endblock %}

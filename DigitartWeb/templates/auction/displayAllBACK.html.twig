@@ -1,0 +1,70 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Auction
+{% endblock %}
+
+
+{% block body %}
+
+	<div class="content mt-3">
+		<div class="animated fadeIn">
+			<div class="row">
+
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<strong class="card-title">Artworks in The Auction</strong>
+						</div>
+						<div class="card-body">
+							<table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+								<thead>
+									<tr>
+										<th>artwork name</th>
+										<th>Starting Price</th>
+										<th>Increment</th>
+										<th>Ending Date</th>
+										<th>Description</th>
+										<th>highest bid</th>
+										<th>actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for auction in auctions %}
+										<tr>
+											<td>{{ auction.artwork.artworkName|upper }}</td>
+											<td>{{ auction.startingPrice }}</td>
+											<td>{{ auction.increment }}</td>
+											<td>{{ auction.endingDate ? auction.endingDate|date('Y-m-d') : '' }}</td>
+											<td>{{ auction.description }}</td>
+											<td>{{ highestBids[auction.idAuction] is not null ? highestBids[auction.idAuction] : 'none' }}</td>
+
+											<td>
+												<a href="{{ path('app_auction_show', {'id_auction': auction.idAuction}) }}">SHOW</a>
+												{% if highestBids[auction.idAuction] == 'No Bids yet' %}
+													<br>
+													<a href="{{ path('app_auction_edit', {'id_auction': auction.idAuction}) }}">
+														<strong>EDIT</a>
+														<a href="{{ path('app_auction_deleteBACK', {'id_auction': auction.idAuction}) }}" onclick="event.preventDefault(); document.getElementById('delete-form-{{ auction.idAuction }}').submit();">
+															&nbsp;&nbsp;&nbsp;&nbsp; DELETE
+														</a>
+
+														<form id="delete-form-{{ auction.idAuction }}" action="{{ path('app_auction_deleteBACK', {'id_auction': auction.idAuction}) }}" method="POST" style="display: none;">
+															<input type="hidden" name="_method" value="DELETE">
+															<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ auction.idAuction) }}">
+														</form>
+
+													{% endif %}
+												</td>
+											</td>
+										</tr>
+									{% else %}
+										<tr>
+											<td colspan="7">no records found</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			{% endblock %}
