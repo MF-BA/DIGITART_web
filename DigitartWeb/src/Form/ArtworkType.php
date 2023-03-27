@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType ;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -32,6 +33,7 @@ class ArtworkType extends AbstractType
                 },
                 'choice_label' => 'lastname',
                 'placeholder' => 'Select an Artist', // optional placeholder text
+                'required' => false, // or true, depending on your needs
             ])
             ->add('artistName', TextType::class, [
                 'attr' => ['id' => 'artistName']
@@ -43,7 +45,10 @@ class ArtworkType extends AbstractType
                 
             ])
             ->add('description')
-            ->add('imageArt')
+            ->add('imageArt', FileType::class, [
+                'label' => 'Image file',
+                'required' => false, // set to false so the user can submit the form without an image
+            ])
             ->add('idRoom', EntityType::class, [
                 'class' => Room::class,
                 'choice_label' => 'nameRoom',
