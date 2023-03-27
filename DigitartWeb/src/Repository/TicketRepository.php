@@ -39,6 +39,27 @@ class TicketRepository extends ServiceEntityRepository
         }
     }
 
+    public function getTicketPrice(string $ticketType, \DateTimeInterface $selectedDate): int
+    {
+        $qb = $this->createQueryBuilder('t');
+        $qb->select('t.price')
+            ->where('t.ticketType = :ticketType')
+            ->andWhere(':selectedDate BETWEEN t.ticketDate AND t.ticketEdate')
+            ->setParameter('ticketType', $ticketType)
+            ->setParameter('selectedDate', $selectedDate->format('Y-m-d'));
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        if ($result === null) {
+            return 0;
+        }
+
+        return (int) $result['price'];
+    }
+
+    
+
+
 //    /**
 //     * @return Ticket[] Returns an array of Ticket objects
 //     */

@@ -65,7 +65,7 @@ class Payment
     private $paid;
 
     /**
-     * @var \Users
+     * @var Users
      *
      * @ORM\ManyToOne(targetEntity="Users")
      * @ORM\JoinColumns({

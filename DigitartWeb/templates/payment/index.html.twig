@@ -1,45 +1,163 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Payment index{% endblock %}
+{% block title %}Payment{% endblock %}
 
 {% block body %}
-    <h1>Payment index</h1>
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/front-home/museum4')}});">
+      <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>PaymentId</th>
-                <th>PurchaseDate</th>
-                <th>NbAdult</th>
-                <th>NbTeenager</th>
-                <th>NbStudent</th>
-                <th>TotalPayment</th>
-                <th>Check</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for payment in payments %}
-            <tr>
-                <td>{{ payment.paymentId }}</td>
-                <td>{{ payment.purchaseDate ? payment.purchaseDate|date('Y-m-d') : '' }}</td>
-                <td>{{ payment.nbAdult }}</td>
-                <td>{{ payment.nbTeenager }}</td>
-                <td>{{ payment.nbStudent }}</td>
-                <td>{{ payment.totalPayment }}</td>
-                <td>{{ payment.paid ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('app_payment_show', {'paymentId': payment.paymentId}) }}">show</a>
-                    <a href="{{ path('app_payment_edit', {'paymentId': payment.paymentId}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <h2>Buy Ticket</h2>
+        <ol>
+          <li><a href="">Home</a></li>
+          
+        </ol>
 
-    <a href="{{ path('app_payment_new') }}">Create new</a>
+      </div>
+    </div><!-- End Breadcrumbs -->
+  <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                {{ form_start(form) }}
+                {{ form_row(form.purchaseDate) }}
+
+                <div id="form-fields" style="display:none;">
+                    <h3 class="mb-3">Select Ticket Quantity</h3>
+                    <div class="ticket-quantity mb-3">
+                        {{ form_label(form.nbAdult) }}
+                        {{ form_widget(form.nbAdult) }}
+                        <span class="adult-price">$0.00</span>
+                    </div>
+                    <div class="ticket-quantity mb-3">
+                        {{ form_label(form.nbTeenager) }}
+                        {{ form_widget(form.nbTeenager) }}
+                        <span class="teen-price">$0.00</span>
+                    </div>
+                    <div class="ticket-quantity mb-3">
+                        {{ form_label(form.nbStudent) }}
+                        {{ form_widget(form.nbStudent) }}
+                        <span class="student-price">$0.00</span>
+                    </div>
+                    {{ form_row(form.totalPayment) }}
+                 <button class="btn">{{ button_label|default('Save') }}</button>
+                   
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+
+<script>
+   
+    const purchaseDateInput = document.querySelector('#{{ form.purchaseDate.vars.id }}');
+    const formFieldsDiv = document.querySelector('#form-fields');
+
+    purchaseDateInput.addEventListener('change', () => {
+        if (purchaseDateInput.value !== '') {
+            formFieldsDiv.style.display = 'block';
+        }
+    });
+
+    // Get the spinner and price elements
+    const adultSpinner = document.querySelector('.adult-spinner');
+    const adultPrice = document.querySelector('.adult-price');
+    const teenSpinner = document.querySelector('.teen-spinner');
+    const teenPrice = document.querySelector('.teen-price');
+    const studentSpinner = document.querySelector('.student-spinner');
+    const studentPrice = document.querySelector('.student-price');
+    const totalAmount = document.querySelector('.total-amount');
+
+    // Update prices when spinner values change
+    function updateTotalAmount() {
+        const adultQty = parseInt(adultSpinner.value);
+        const adultPriceVal = parseFloat(adultPrice.textContent.replace('$', ''));
+        const teenQty = parseInt(teenSpinner.value);
+        const teenPriceVal = parseFloat(teenPrice.textContent.replace('$', ''));
+        const studentQty = parseInt(studentSpinner.value);
+        const studentPriceVal = parseFloat(studentPrice.textContent.replace('$', ''));
+        const total = adultPriceVal +teenPriceVal + studentPriceVal;
+        totalAmount.value = total.toFixed(2);
+    }
+
+    // Update prices when spinner values change
+    adultSpinner.addEventListener('change', () => {
+        const qty = parseInt(adultSpinner.value);
+        const selectedDate = document.getElementById("payment_purchaseDate").value;
+        const url = "{{ path('get_ticket_price') }}?ticketType=Adult&selectedDate=" + selectedDate;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                adultPrice.textContent = `$${qty * data.price}`;
+                updateTotalAmount();
+            });
+    });
+
+    teenSpinner.addEventListener('change', () => {
+        const qty = parseInt(teenSpinner.value);
+        const selectedDate = document.getElementById("payment_purchaseDate").value;
+        const url = "{{ path('get_ticket_price') }}?ticketType=Teen&selectedDate=" + selectedDate;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                teenPrice.textContent = `$${qty * data.price}`;
+                updateTotalAmount();
+            });
+    });
+
+    studentSpinner.addEventListener('change', () => {
+        const qty = parseInt(studentSpinner.value);
+        const selectedDate = document.getElementById("payment_purchaseDate").value;
+        const url = "{{ path('get_ticket_price') }}?ticketType=Student&selectedDate=" + selectedDate;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                studentPrice.textContent = `$${qty * data.price}`;
+                updateTotalAmount();
+            });
+    });
+</script>
+
+<style>
+/* Styles for Payment Form */
+
+form label {
+  font-weight: bold;
+}
+
+form .ticket-quantity {
+  margin-bottom: 20px;
+}
+
+form .ticket-quantity input {
+  width: 50px;
+}
+
+form .total-amount input {
+  background-color: #f1f1f1;
+  border: none;
+  font-weight: bold;
+}
+
+form button {
+  background-color: #008CBA;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+form button:hover {
+  background-color: #006080;
+}
+
+body {
+  background-color: black;
+}
+
+</style>
+
 {% endblock %}

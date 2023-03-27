@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Payment;
+use App\Entity\Ticket;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -38,6 +39,8 @@ class PaymentRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+   
 
 //    /**
 //     * @return Payment[] Returns an array of Payment objects

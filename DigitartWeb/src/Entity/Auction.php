@@ -58,7 +58,7 @@ class Auction
     private $state;
 
     /**
-     * @var \Artwork
+     * @var Artwork
      *
      * @ORM\ManyToOne(targetEntity="Artwork")
      * @ORM\JoinColumns({

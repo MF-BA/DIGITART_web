@@ -2,30 +2,52 @@
 
 namespace App\Form;
 
-use App\Entity\Payment;
 use App\Entity\Users;
+use App\Entity\Payment;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class PaymentType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('purchaseDate')
-            ->add('nbAdult')
-            ->add('nbTeenager')
-            ->add('nbStudent')
-            ->add('totalPayment')
-            ->add('paid')
-            ->add('user', EntityType::class, [
+        ->add('purchaseDate', DateType::class, [
+            'widget' => 'single_text',
+            'label' => 'Ticket Start Date',
+            'attr' => ['min' => (new \DateTime())->format('Y-m-d')],
+        ])
+        ->add('nbAdult', IntegerType::class, [
+            'label' => 'Adult',
+            'data' => '0',
+            'attr' => ['min' => 0, 'max' => 10, 'class' => 'adult-spinner'],
+        ])
+        ->add('nbTeenager', IntegerType::class, [
+            'label' => 'Teen',
+            'data' => '0',
+            'attr' => ['min' => 0, 'max' => 10, 'class' => 'teen-spinner'],
+        ])
+        ->add('nbStudent', IntegerType::class, [
+            'label' => 'Student',
+            'data' => '0',
+            'attr' => ['min' => 0, 'max' => 10, 'class' => 'student-spinner'],
+        ])
+        ->add('totalPayment', IntegerType::class, [
+            'label' => 'Total Amount',
+            'data' => '0',
+            'disabled' => true,
+            'attr' => ['class' => 'total-amount'],
+        ])
+        ->add('paid')
+        ->add('user', EntityType::class, [
                 'class' => Users::class,
                 'choice_label' => 'id',
-            ])
+            ]);
         
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
