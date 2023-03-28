@@ -60,8 +60,9 @@
 								</div>
 
 								<p>
-									{{auction.description}}
-								</p>
+    {{ auction.description|slice(0, 50) }}{{ (auction.description|length > 50 ? '...' : '') }}
+</p>
+
 
 								<hr>
 

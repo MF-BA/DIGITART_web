@@ -27,17 +27,28 @@ class BidRepository extends ServiceEntityRepository
 
 
     public function highestBid(int $var): ?Bid
-{
-    $queryBuilder = $this->createQueryBuilder('s')
-        ->where('s.id_auction = :id_auction')
-        ->setParameter('id_auction', $var)
-        ->orderBy('s.offer', 'DESC')
-        ->setMaxResults(1);
+    {
+        $queryBuilder = $this->createQueryBuilder('s')
+            ->where('s.id_auction = :id_auction')
+            ->setParameter('id_auction', $var)
+            ->orderBy('s.offer', 'DESC')
+            ->setMaxResults(1);
 
-    $result = $queryBuilder->getQuery()->getOneOrNullResult();
+        $result = $queryBuilder->getQuery()->getOneOrNullResult();
 
-    return $result;
-}
+        return $result;
+    }
+    public function countBids(int $var): int
+    {
+        $queryBuilder = $this->createQueryBuilder('s')
+            ->select('COUNT(s.id)')
+            ->where('s.id_auction = :id_auction')
+            ->setParameter('id_auction', $var);
+
+        $result = $queryBuilder->getQuery()->getSingleScalarResult();
+
+        return $result;
+    }
 
 
 

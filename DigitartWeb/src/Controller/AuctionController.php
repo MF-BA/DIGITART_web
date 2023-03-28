@@ -2,21 +2,21 @@
 
 namespace App\Controller;
 
+use App\Entity\Bid;
+use App\Form\BidType;
 use App\Entity\Auction;
 use App\Form\Auction1Type;
 use App\Repository\AuctionRepository;
-use App\Repository\BidRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\BidRepository;
 
 
 #[Route('/auction')]
 class AuctionController extends AbstractController
 {
-
-
     #[Route('/home', name: 'displayAll', methods: ['GET'])]
     public function index(AuctionRepository $auctionRepository, BidRepository $BidRepository): Response
     {
@@ -26,7 +26,7 @@ class AuctionController extends AbstractController
             $highestBid = $BidRepository->highestBid($auc->getIdAuction());
             if ($highestBid)
                 $array[$auc->getIdAuction()] = $highestBid->getOffer();
-            else $array[$auc->getIdAuction()] = 'No Bids yet';
+            else $array[$auc->getIdAuction()] = null;
         }
         return $this->render('auction/displayAll.html.twig', [
             'auctions' => $auction, 'highestBids' => $array,
@@ -40,7 +40,7 @@ class AuctionController extends AbstractController
         $auction = new Auction();
         $form = $this->createForm(Auction1Type::class, $auction);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $auctionRepository->save($auction, true);
 
@@ -53,15 +53,29 @@ class AuctionController extends AbstractController
         ]);
     }
 
-    #[Route('/show/{id_auction}', name: 'app_auction_show', methods: ['GET'])]
-    public function show(Auction $auction, BidRepository $BidRepository): Response
+    #[Route('/show/{id_auction}', name: 'app_auction_show', methods: ['GET', 'POST'])]
+    public function show(Request $request, Auction $auction, BidRepository $BidRepository): Response
     {
         $highestBid = $BidRepository->highestBid($auction->getIdAuction());
+        
         if ($highestBid)
             $highestBid = $highestBid->getOffer();
-        else $highestBid = 'No Bids yet';
+        else $highestBid = null;
+
+        $bid = new Bid();
+        $bid->setIdUser('37');
+        $bid->setIdAuction($auction);
+        $bid->setDate(new \DateTime());
+
+        $form = $this->createForm(BidType::class, $bid);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $BidRepository->save($bid, true);
+            return $this->redirectToRoute('app_auction_show', ['id_auction'=>$auction->getIdAuction()], Response::HTTP_SEE_OTHER);
+        }
         return $this->render('auction/show.html.twig', [
-            'auction' => $auction, 'highestBid' => $highestBid,
+            'auction' => $auction, 'highestBid' => $highestBid, 'countBids' => $BidRepository->countBids($auction->getIdAuction()), 'bid' => $bid,
+            'form' => $form->createView(),
         ]);
     }
 

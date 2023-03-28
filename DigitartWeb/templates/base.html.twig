@@ -11,7 +11,7 @@
 		{% block stylesheets %}
 			<link href="{{asset('Front/assets/img/logo-digitart-rouge.png')}}" rel="icon">
 			<link
-			href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+			href="{{asset('Front/assets/img/apple-touch-icon.png')}}" rel="apple-touch-icon">
 
 			<!-- Google Fonts -->
 			<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,69 +48,77 @@
 
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 			<script>
-				function updateTimer(endingDate, timerId) { 
-    var remainingTime = moment(endingDate).diff(moment(), 'seconds');
-    var duration = moment.duration(remainingTime, 'seconds');
-    
-    // Update the timer
-    if (remainingTime <= 0) { // Auction has ended
-        document.getElementById(timerId).innerHTML = "Auction has ended";
-    } else { // Auction is still active
-        var days = duration.days();
-        var hours = duration.hours();
-        var minutes = duration.minutes();
-        var seconds = duration.seconds();
-        document.getElementById(timerId).innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
-        setTimeout(function () {
-            updateTimer(endingDate, timerId);
-        }, 1000); // Update the timer every second
-    }
+				function updateTimer(endingDate, timerId) {
+var remainingTime = moment(endingDate).diff(moment(), 'seconds');
+var duration = moment.duration(remainingTime, 'seconds');
+
+// Update the timer
+if (remainingTime <= 0) { // Auction has ended
+document.getElementById(timerId).innerHTML = "Auction has ended";
+} else { // Auction is still active
+var days = duration.days();
+var hours = duration.hours();
+var minutes = duration.minutes();
+var seconds = duration.seconds();
+document.getElementById(timerId).innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+setTimeout(function () {
+updateTimer(endingDate, timerId);
+}, 1000); // Update the timer every second
 }
-
-
+}
 			</script>
 
+		{% block BID_CONDITION %}
 		{% endblock %}
+		{% endblock %}
+
 
 	</head>
 
 	{% block navbar %}
 
-	<!-- ======= Header ======= -->
-	<header id="header" class="header d-flex align-items-center">
-		<div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+		<!-- ======= Header ======= -->
+		<header id="header" class="header d-flex align-items-center">
+			<div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
-			<a
-				href="" class="logo d-flex align-items-center">
-				<!-- Uncomment the line below if you also wish to use an image logo -->
-				<img src="{{asset('Front/assets/img/logo digitart.png')}}" alt="">
+				<a
+					href="{{path('home')}}" class="logo d-flex align-items-center">
+					<!-- Uncomment the line below if you also wish to use an image logo -->
+					<img src="{{asset('Front/assets/img/logo digitart.png')}}" alt="">
 
-			</a>
+				</a>
 
-			<i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
-			<i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
-			<nav id="navbar" class="navbar">
-				<ul>
-					<li>
-						<a href="{{path('home')}}" {% block homeActive %} class="active" {% endblock %}>
-							
-							Home</a>
+				<i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+				<i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+				<nav id="navbar" class="navbar">
+					<ul>
+						<li>
+							<a href="{{path('home')}}"
+								{% block homeActive %}
+									class="active"
+								{% endblock %}>
+
+								Home</a>
 						</li>
 						<li>
-							<a href="about.html"{% block aboutActive %}{% endblock %}>
-								
+							<a href="about.html"
+								{% block aboutActive %}{% endblock %}>
+
+
 								About</a>
 						</li>
+						<!-- @formatter:off -->
 						<li class="dropdown">
-							<a href="{{path('displayAll')}}" 
-								{% block auctionActive %} {% endblock %}  >
+							<a href="{{path('displayAll')}}"
+								{% block auctionActive %}{% endblock %}>
 								<span>auction</span>
 								<i class="bi bi-chevron-down dropdown-indicator"></i>
 							</a>
 							<ul>
-								<li><ahref="{{path('app_auction_new')}}">Add to Auction</a></li>
+								<li><a href="{{path('app_auction_new')}}">Add to Auction</a></li>
 							</ul>
 						</li>
+						<!-- @formatter:on -->
 
 						<li>
 							<a href="projects.html">Projects</a>
@@ -204,59 +212,6 @@
 		<!-- End Hero Section -->
 
 		<main id="main">
-
-			<!-- 
-																														    <section id="get-started" class="get-started section-bg">
-																														      <div class="container">
-																														
-																														        <div class="row justify-content-between gy-4">
-																														
-																														          <div class="col-lg-6 d-flex align-items-center" data-aos="fade-up">
-																														            <div class="content">
-																														              <h3>Minus hic non reiciendis ea possimus at quia.</h3>
-																														              <p>Rem id rerum. Debitis deserunt quidem delectus expedita ducimus dolor. Aut iusto ipsa. Eos ipsum nobis ipsa soluta itaque perspiciatis fuga ipsum perspiciatis. Eum amet fugiat totam nisi possimus ut delectus dicta.
-																														              <p>Aliquam velit deserunt autem. Inventore et saepe. Tenetur suscipit eligendi labore culpa eos. Deserunt porro magni qui necessitatibus dolorem at animi cupiditate.</p>
-																														            </div>
-																														          </div>
-																														
-																														          <div class="col-lg-5" data-aos="fade">
-																														            <form action="forms/quote.php" method="post" class="php-email-form">
-																														              <h3>Get a quote</h3>
-																														              <p>Vel nobis odio laboriosam et hic voluptatem. Inventore vitae totam. Rerum repellendus enim linead sero park flows.</p>
-																														              <div class="row gy-3">
-																														
-																														                <div class="col-md-12">
-																														                  <input type="text" name="name" class="form-control" placeholder="Name" required>
-																														                </div>
-																														
-																														                <div class="col-md-12 ">
-																														                  <input type="email" class="form-control" name="email" placeholder="Email" required>
-																														                </div>
-																														
-																														                <div class="col-md-12">
-																														                  <input type="text" class="form-control" name="phone" placeholder="Phone" required>
-																														                </div>
-																														
-																														                <div class="col-md-12">
-																														                  <textarea class="form-control" name="message" rows="6" placeholder="Message" required></textarea>
-																														                </div>
-																														
-																														                <div class="col-md-12 text-center">
-																														                  <div class="loading">Loading</div>
-																														                  <div class="error-message"></div>
-																														                  <div class="sent-message">Your quote request has been sent successfully. Thank you!</div>
-																														
-																														                  <button type="submit">Get a quote</button>
-																														                </div>
-																														
-																														              </div>
-																														            </form>
-																														          </div>
-																														
-																														        </div>
-																														
-																														      </div>
-																														    </section>-->
 
 			<!-- ======= Constructions Section ======= -->
 				<section id="constructions" class="constructions"> <div class="container" data-aos="fade-up">
@@ -546,7 +501,7 @@
 									<h3>Voluptatem dignissimos provident</h3>
 									<p class="fst-italic">
 										Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-																																																																																																				                  magna aliqua.
+																																																																																																																																																						                  magna aliqua.
 									</p>
 									<ul>
 										<li>
@@ -561,7 +516,7 @@
 									</ul>
 								</div>
 								<div class="col-lg-6 order-1 order-lg-2 text-center" data-aos="fade-up" data-aos-delay="200">
-									<img src="assets/img/features-1.jpg" alt="" class="img-fluid">
+									<img src="{{asset('Front/assets/img/features-1.jpg')}}" alt="" class="img-fluid">
 								</div>
 							</div>
 						</div>
@@ -573,7 +528,7 @@
 									<h3>Neque exercitationem debitis</h3>
 									<p class="fst-italic">
 										Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-																																																																																																				                  magna aliqua.
+																																																																																																																																																						                  magna aliqua.
 									</p>
 									<ul>
 										<li>
@@ -614,7 +569,7 @@
 									</ul>
 									<p class="fst-italic">
 										Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-																																																																																																				                  magna aliqua.
+																																																																																																																																																						                  magna aliqua.
 									</p>
 								</div>
 								<div class="col-lg-6 order-1 order-lg-2 text-center">
@@ -630,7 +585,7 @@
 									<h3>Omnis fugiat ea explicabo sunt</h3>
 									<p class="fst-italic">
 										Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-																																																																																																				                  magna aliqua.
+																																																																																																																																																						                  magna aliqua.
 									</p>
 									<ul>
 										<li>
@@ -681,7 +636,7 @@
 
 							<div class="col-lg-4 col-md-6 portfolio-item filter-remodeling">
 								<div class="portfolio-content h-100">
-									<img src="assets/img/projects/remodeling-1.jpg" class="img-fluid" alt="">
+									<img src="{{asset('Front/assets/img/projects/remodeling-1.jpg')}}" class="img-fluid" alt="">
 									<div class="portfolio-info">
 										<h4>Remodeling 1</h4>
 										<p>Lorem ipsum, dolor sit amet consectetur</p>
@@ -698,7 +653,7 @@
 
 							<div class="col-lg-4 col-md-6 portfolio-item filter-construction">
 								<div class="portfolio-content h-100">
-									<img src="assets/img/projects/construction-1.jpg" class="img-fluid" alt="">
+									<img src="{{asset('Front/assets/img/projects/construction-1.jpg')}}" class="img-fluid" alt="">
 									<div class="portfolio-info">
 										<h4>Construction 1</h4>
 										<p>Lorem ipsum, dolor sit amet consectetur</p>
@@ -715,7 +670,7 @@
 
 							<div class="col-lg-4 col-md-6 portfolio-item filter-repairs">
 								<div class="portfolio-content h-100">
-									<img src="assets/img/projects/repairs-1.jpg" class="img-fluid" alt="">
+									<img src="{{asset('Front/assets/img/projects/repairs-1.jpg')}}" class="img-fluid" alt="">
 									<div class="portfolio-info">
 										<h4>Repairs 1</h4>
 										<p>Lorem ipsum, dolor sit amet consectetur</p>
@@ -732,7 +687,7 @@
 
 							<div class="col-lg-4 col-md-6 portfolio-item filter-design">
 								<div class="portfolio-content h-100">
-									<img src="assets/img/projects/design-1.jpg" class="img-fluid" alt="">
+									<img src="{{asset('Front/assets/img/projects/design-1.jpg')}}" class="img-fluid" alt="">
 									<div class="portfolio-info">
 										<h4>Design 1</h4>
 										<p>Lorem ipsum, dolor sit amet consectetur</p>
@@ -749,7 +704,7 @@
 
 							<div class="col-lg-4 col-md-6 portfolio-item filter-remodeling">
 								<div class="portfolio-content h-100">
-									<img src="assets/img/projects/remodeling-2.jpg" class="img-fluid" alt="">
+									<img src="{{asset('Front/assets/img/projects/remodeling-2.jpg')}}" class="img-fluid" alt="">
 									<div class="portfolio-info">
 										<h4>Remodeling 2</h4>
 										<p>Lorem ipsum, dolor sit amet consectetur</p>
@@ -766,7 +721,7 @@
 
 							<div class="col-lg-4 col-md-6 portfolio-item filter-construction">
 								<div class="portfolio-content h-100">
-									<img src="assets/img/projects/construction-2.jpg" class="img-fluid" alt="">
+									<img src="{{asset('Front/assets/img/projects/construction-2.jpg')}}" class="img-fluid" alt="">
 									<div class="portfolio-info">
 										<h4>Construction 2</h4>
 										<p>Lorem ipsum, dolor sit amet consectetur</p>
@@ -800,11 +755,11 @@
 
 							<div class="col-lg-4 col-md-6 portfolio-item filter-design">
 								<div class="portfolio-content h-100">
-									<img src="assets/img/projects/design-2.jpg" class="img-fluid" alt="">
+									<img src="{{asset('Front/assets/img/projects/design-2.jpg')}}" class="img-fluid" alt="">
 									<div class="portfolio-info">
 										<h4>Design 2</h4>
 										<p>Lorem ipsum, dolor sit amet consectetur</p>
-										<a href="assets/img/projects/design-2.jpg" title="Repairs 2" data-gallery="portfolio-gallery-book" class="glightbox preview-link">
+										<a href="{{asset('Front/assets/img/projects/design-2.jpg')}}" title="Repairs 2" data-gallery="portfolio-gallery-book" class="glightbox preview-link">
 											<i class="bi bi-zoom-in"></i>
 										</a>
 										<a href="project-details.html" title="More Details" class="details-link">
@@ -1273,6 +1228,4 @@
 		</footer>
 		<!-- End Footer -->
 	{% endblock %}
-
-
-</html>
+</html></head></html>

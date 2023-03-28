@@ -1,0 +1,10 @@
+{{ form_start(form) }}
+
+{{ form_widget(form.offer, {'attr': {'value': {{ highestBid is not null ? highestBid + auction.increment : auction.startingPrice }}}}) }}
+
+
+<button type="submit">
+	<i class="bi bi-credit-card">{{ button_label|default('') }}</i>
+</button>
+
+{{ form_end(form) }}
