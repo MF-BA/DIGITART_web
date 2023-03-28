@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+class LoginsecureController extends AbstractController
+{
+    #[Route('/loginsecure', name: 'app_loginsecure')]
+    public function index(): Response
+    {
+        return $this->render('loginsecure/login.html.twig', [
+            'controller_name' => 'LoginsecureController',
+        ]);
+    }
+    
+}

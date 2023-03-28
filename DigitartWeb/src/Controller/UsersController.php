@@ -29,6 +29,8 @@ class UsersController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPassword()));
             $usersRepository->save($user, true);
 
             return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
@@ -75,4 +77,34 @@ class UsersController extends AbstractController
 
         return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
     }
+    
+    #[Route('/{id}/updatestatus', name: 'app_users_updatestatus', methods: ['GET', 'POST'])]
+    public function updateStatus(Request $request, $id)
+    {
+        $newStatus = $request->query->get('newStatus');
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $entityManager->getRepository(Users::class)->find($id);
+    
+        if (!$user) {
+            throw $this->createNotFoundException('User not found');
+        }
+    
+        $user->setStatus($newStatus);
+        $entityManager->flush();
+    
+        return $this->redirectToRoute('app_users_index', ['id' => $id]);
+    }
+    #[Route('/users/search', name: 'app_users_search', methods: ['POST'])]
+    public function search(Request $request, UsersRepository $userRepository): JsonResponse
+     {
+    $searchTerm = $request->request->get('searchTerm');
+    $users = $userRepository->search($searchTerm);
+    
+    return $this->json(['users' => $users]);
+     }
+
+    
+  
+    
+     
 }

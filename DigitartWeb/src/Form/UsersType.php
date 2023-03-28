@@ -11,6 +11,12 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 class UsersType extends AbstractType
 {
@@ -60,33 +66,54 @@ class UsersType extends AbstractType
                         'message' => 'Please enter a last name',
                     ])
                 ],
-            ])
-            ->add('email', TextType::class, [
-                'label' => 'Email',
-                'attr' => [
-                    'placeholder' => 'Enter Email',
-                    'class' => 'form-control',
-                    'id' => 'email-input', // Define the id attribute here
-                ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter an email',
-                    ])
-                ],
-            ])
-            ->add('password', TextType::class, [
-                'label' => 'Password',
+            ]);
+             // Add the email and password fields as hidden fields
+        // so they are still submitted with the form
+        $builder->add('email',TextType::class, [
+            'label' => 'Email',
+            'attr' => [
+                'placeholder' => 'Enter Email',
+                'class' => 'form-control',
+                'id' => 'email-input', // Define the id attribute here
+            ],
+            'constraints' => [
+                new Assert\NotBlank([
+                    'message' => 'Please enter an email',
+                ]),
+                new Assert\Email([
+                    'message' => 'Please enter a valid email address',
+                ]),
+            ],
+        ]);
+        $builder->add('password', TextType::class, [
+            'label' => 'Password',
                 'attr' => [
                     'placeholder' => 'Enter password',
                     'class' => 'form-control',
                     'id' => 'password-input', // Define the id attribute here
                 ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a password',
-                    ])
-                ],
-            ])
+            'constraints' => [
+                new NotBlank([
+                    'message' => 'Please enter a password',
+                ]),
+                new Regex([
+                    'pattern' => '/^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#\$%\^&\*\(\)]).+$/',
+                    'message' => 'Password should contain at least one uppercase letter, one lowercase letter, and one special character (!@#$%^&*())',
+                ]),
+            ],
+        ]);
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $form = $event->getForm();
+            $user = $event->getData();
+
+            // Check if the form is being used to edit an existing user
+            if ($user instanceof Users && $user->getId() !== null) {
+                // If so, remove the email and password fields from the form
+                $form->remove('email');
+                $form->remove('password');
+            }
+        })
             ->add('address', TextType::class, [
                 'label' => 'Address',
                 'attr' => [
@@ -110,7 +137,14 @@ class UsersType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter a phone number',
-                    ])
+                    ]),
+                    
+                    new Length([
+                    'min' => 8,
+                    'max' => 8,
+                    'exactMessage' => 'Phone number must contain exactly {{ limit }} digits',
+                     ]),
+                    
                 ],
             ])
             ->add('birthDate',BirthdayType::class, [
@@ -120,8 +154,8 @@ class UsersType extends AbstractType
             ])
             ->add('gender', ChoiceType::class, [
                 'choices' => [
-                    'Male' => 'male',
-                    'Female' => 'female',
+                    'Male' => 'Male',
+                    'Female' => 'Female',
                    
                 ],
                 'expanded' => true,
@@ -154,4 +188,5 @@ class UsersType extends AbstractType
             'data_class' => Users::class,
         ]);
     }
+    
 }

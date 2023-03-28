@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Users
@@ -12,7 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
   * @ORM\Entity(repositoryClass="App\Repository\UsersRepository")
  */
-class Users
+
+class Users implements UserInterface
 {
     /**
      * @var int
@@ -114,6 +116,16 @@ class Users
      */
     private $secretcode;
 
+    /**
+     * @ORM\Column(type="string", length=180, )
+     */
+    private $reset_token;
+
+     
+      
+
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -167,9 +179,12 @@ class Users
         return $this;
     }
 
-    public function getPassword(): ?string
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
     {
-        return $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(?string $password): self
@@ -275,5 +290,63 @@ class Users
         return $this;
     }
 
+     /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        
+        // guarantee every user at least has ROLE_USER
+        $roles[] = $this->role;
+
+        return array_unique($roles);
+    }
+
+    /**
+     * Returning a salt is only needed, if you are not using a modern
+     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
+     *
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResetToken()
+    {
+        return $this->reset_token;
+    }
+
+    /**
+     * @param mixed $reset_token
+     */
+    public function setResetToken($reset_token): void
+    {
+        $this->reset_token = $reset_token;
+    }
 
 }

@@ -1,0 +1,319 @@
+{% extends 'loginsecure/login.html.twig' %}
+{% block stylesheets %}
+	<style>
+
+    .wrap-login100 {
+  width: 900px !important;
+  height: 800px !important;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 60px 30px 30px 110px !important;
+   }
+   .login100-pic {
+  width: 440px !important;
+  position: relative !important;
+  right: 135px !important;
+  top: 90px !important;
+}
+.login100-form {
+  width: 290px !important;
+  position: relative !important;
+  right: 50px !important;
+  left: 100px !important;
+  bottom: 20px !important;
+}
+.login100-form-title {
+  font-family: Poppins-Bold;
+  font-size: 24px;
+  position: relative !important;
+  right: 50px !important;
+  color: #333333;
+  line-height: 1.2;
+  text-align: center;
+
+  width: 100%;
+  display: block;
+  padding-bottom: 54px;
+}
+.focus-input100 {
+  display: block;
+  position: absolute;
+  border-radius: 25px;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0px 0px 0px 0px;
+  color: #BD2A2E !important;
+}
+.input100:focus + .focus-input100 + .symbol-input100 {
+  color: #BD2A2E !important;
+  padding-left: 28px !important;
+}
+.login100-form-btn {
+  font-family: Montserrat-Bold;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #fff;
+  text-transform: uppercase;
+
+  width: 100%;
+  height: 50px;
+  border-radius: 25px;
+  background: #BD2A2E !important;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 25px;
+
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+
+a:hover {
+	text-decoration: none;
+  color: #BD2A2E !important;
+}
+.login100-form-btn:hover {
+  background: #333333 !important;
+}
+.container-login100 {
+  width: 100% !important;  
+  min-height: 100vh !important;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 15px !important;
+  background-image: url("login/images/background.jpg") !important;
+}
+.container-login100-form-btn {
+  width: 30% !important;
+  position: relative;
+  left: 235px !important;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-top: 20px;
+}
+.text-center {
+    
+    position: relative;
+    right: 30px;
+}
+
+	</style>
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="{{asset('login/images/icons/favicon.ico')}}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{asset('login/vendor/bootstrap/css/bootstrap.min.css')}}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{asset('login/fonts/font-awesome-4.7.0/css/font-awesome.min.css')}}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{asset('login/vendor/animate/animate.css')}}">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="{{asset('login/vendor/css-hamburgers/hamburgers.min.css')}}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{asset('login/vendor/select2/select2.min.css')}}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{asset('login/css/util.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('login/css/main.css')}}">
+<!--===============================================================================================-->
+
+   {% endblock %}
+
+
+{% block body %}
+	<div class="limiter">
+		<div class="container-login100">
+            <div class="wrap-login100">
+				
+        {{ form_start(form) }}
+			
+					<span class="login100-form-title">
+						Register
+					</span>
+       <div class="row form-group">
+        <div class="col col-md-6">
+
+					{# Cin #}
+        <div class="row form-group">
+        <div class="col col-md-6">
+        {{ form_label(form.cin, 'Cin') }}
+          
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.cin, {'attr': {'class': 'form-control', 'placeholder': 'Enter cin'}}) }}
+          {{ form_errors(form.cin) }}
+          <small class="form-text text-muted">Cin must contain 8 digits</small>
+        </div>
+      </div>
+
+      {# First name #}
+      <div class="row form-group">
+        <div class="col col-md-6">
+        {{ form_label(form.firstname, 'First name') }}
+          
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Enter First name'}}) }}
+          {{ form_errors(form.firstname) }}
+          
+        </div>
+      </div>
+     
+         {# Last name #}
+      <div class="row form-group">
+        <div class="col col-md-6">
+        {{ form_label(form.lastname, 'Last name') }}
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Enter Last name'}}) }}
+          {{ form_errors(form.lastname) }}
+          
+        </div>
+      </div>
+      {# Email #}
+       <div class="row form-group">
+        <div class="col col-md-6">
+        {{ form_label(form.email, 'Email') }}
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email'}}) }}
+          {{ form_errors(form.email) }}
+          <small class="form-text text-muted">Please enter a valid email!</small>
+        </div>
+      </div>
+      
+      
+
+      {# Password #}
+      <div class="row form-group">
+        <div class="col col-md-6">
+        {{ form_label(form.password, 'Password') }}
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Enter Password'}}) }}
+          {{ form_errors(form.password) }}
+          <small class="form-text text-muted">Please enter a complex password</small>
+        </div>
+      </div>
+          </div>
+    <div class="col col-md-6">
+      {# Address #}
+      <div class="row form-group">
+        <div class="col col-md-6">
+      {{ form_label(form.address, 'Address') }}
+        </div>
+<div class="col-12 col-md-9">
+{{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter Address'}}) }}
+{{ form_errors(form.address) }}
+
+</div>
+</div>
+{# Phone #}
+  <div class="row form-group">
+    <div class="col col-md-6">
+    {{ form_label(form.phoneNum, 'Phone Number') }}
+      
+    </div>
+    <div class="col-12 col-md-9">
+      {{ form_widget(form.phoneNum, {'attr': {'class': 'form-control', 'placeholder': 'Enter Phone'}}) }}
+      {{ form_errors(form.phoneNum) }}
+      <small class="form-text text-muted">Phone number must contain 8 digits</small>
+    </div>
+  </div>
+  {# birth date #}
+  <div class="row form-group">
+        <div class="col col-md-6">
+        {{ form_label(form.birthDate, 'Birth Date') }}
+    </div>
+    <div class="col-12 col-md-9">
+        {{ form_widget(form.birthDate, {'attr': {'class': 'form-control'}}) }}
+    </div>
+ </div>
+{# role #}
+  <div class="row form-group">
+  <div class="col col-md-6">
+  {{ form_label(form.role, 'Role') }}
+    
+  </div>
+  <div class="col-12 col-md-9">
+    {{ form_widget(form.role, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.role) }}
+  </div>
+</div>
+{# Gender #}
+  <div class="row form-group">
+        <div class="col col-md-6">
+        {{ form_label(form.gender, 'Gender') }}
+        </div>
+    <div class="col-12 col-md-9">
+        {{ form_widget(form.gender, {'attr': {'class': 'form-control'}}) }}
+    </div>
+ </div>
+					</div>
+
+          </div>
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn">
+						<i class="fa fa-check-square-o"></i>  Register
+						</button>
+					</div>
+
+					<div class="text-center p-t-12">
+						<span class="txt1">
+							Already have
+						</span>
+						<a class="txt2" href="{{ path('showloginpage') }}">
+							an account?
+						</a>
+					</div>
+                    {{ form_end(form) }}
+				
+			</div>
+        </div>
+	</div>
+	
+	{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -29,7 +29,7 @@
         <div class="col-12 col-md-9">
           {{ form_widget(form.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Enter First name'}}) }}
           {{ form_errors(form.firstname) }}
-          <small class="form-text text-muted">Text</small>
+          
         </div>
       </div>
      
@@ -41,12 +41,11 @@
         <div class="col-12 col-md-9">
           {{ form_widget(form.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Enter Last name'}}) }}
           {{ form_errors(form.lastname) }}
-          <small class="form-text text-muted">Text</small>
+          
         </div>
       </div>
-
       {# Email #}
-      <div class="row form-group">
+       <div class="row form-group">
         <div class="col col-md-2">
         {{ form_label(form.email, 'Email') }}
         </div>
@@ -56,19 +55,19 @@
           <small class="form-text text-muted">Please enter a valid email!</small>
         </div>
       </div>
-
       {# Password #}
       <div class="row form-group">
         <div class="col col-md-2">
         {{ form_label(form.password, 'Password') }}
         </div>
         <div class="col-12 col-md-9">
-          {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Password'}}) }}
+          {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Enter Password'}}) }}
           {{ form_errors(form.password) }}
           <small class="form-text text-muted">Please enter a complex password</small>
         </div>
       </div>
 
+    
       {# Address #}
       <div class="row form-group">
         <div class="col col-md-2">
@@ -77,7 +76,7 @@
 <div class="col-12 col-md-9">
 {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter Address'}}) }}
 {{ form_errors(form.address) }}
-<small class="form-text text-muted">Text</small>
+
 </div>
 </div>
 {# Phone #}
@@ -125,11 +124,11 @@
       
 
   <div class="card-footer">
-    <button type="submit" class="btn btn-primary btn-sm">
-      <i class="fa fa-dot-circle-o"></i> {{ button_label|default('Submit') }} 
+    <button type="submit" class="btn btn-success btn-sm">
+      <i class="fa fa-check-square-o"></i> {{ button_label|default('Submit') }} 
     </button>
     <button type="reset" class="btn btn-danger btn-sm">
-      <i class="fa fa-ban"></i> Reset
+      <i class="fa fa-refresh"></i> Reset
     </button>
   </div>
 
