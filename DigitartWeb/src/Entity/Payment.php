@@ -53,7 +53,7 @@ class Payment
     /**
      * @var int|null
      *
-     * @ORM\Column(name="total_payment", type="integer", nullable=true)
+     * @ORM\Column(name="total_payment", type="integer", nullable=false)
      */
     private $totalPayment;
 

@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+
+use App\Entity\Payment;
 use App\Entity\Ticket;
 use App\Form\TicketType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,6 +28,17 @@ class TicketController extends AbstractController
         ]);
     }
 
+    #[Route('/payment', name: 'app_payment_index', methods: ['GET'])]
+    public function indexPayment(EntityManagerInterface $entityManager): Response
+    {
+        $payments = $entityManager
+            ->getRepository(Payment::class)
+            ->findAll();
+
+        return $this->render('payment/showBack.html.twig', [
+            'payments' => $payments,
+        ]);
+    }
 
     #[Route('/new', name: 'app_ticket_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, ManagerRegistry $doctrine): Response

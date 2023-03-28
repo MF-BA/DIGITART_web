@@ -2,9 +2,10 @@
 
 {% block title %}Payment{% endblock %}
 
+
 {% block body %}
     <!-- ======= Breadcrumbs ======= -->
-    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/front-home/museum4')}});">
+    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/front-home/museum4.jpg')}});">
       <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
 
         <h2>Buy Ticket</h2>
@@ -15,39 +16,106 @@
 
       </div>
     </div><!-- End Breadcrumbs -->
-  <div class="container my-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                {{ form_start(form) }}
-                {{ form_row(form.purchaseDate) }}
+{% for message in app.flashes('error') %}
+    <div class="sufee-alert alert with-close alert-danger alert-dismissible fade show" style="text-align: center;" id="flash-message">
+        {{ message }}
+         <li><a href="{{ path('app_payment_card') }}">Check Card</a></li>
+    </div>
+{% endfor %}
+    <!-- ======= Services Section ======= -->
+<section id="services" class="services section-bg">
+  <div class="container" data-aos="fade-up">
 
-                <div id="form-fields" style="display:none;">
-                    <h3 class="mb-3">Select Ticket Quantity</h3>
-                    <div class="ticket-quantity mb-3">
-                        {{ form_label(form.nbAdult) }}
-                        {{ form_widget(form.nbAdult) }}
-                        <span class="adult-price">$0.00</span>
-                    </div>
-                    <div class="ticket-quantity mb-3">
-                        {{ form_label(form.nbTeenager) }}
-                        {{ form_widget(form.nbTeenager) }}
-                        <span class="teen-price">$0.00</span>
-                    </div>
-                    <div class="ticket-quantity mb-3">
-                        {{ form_label(form.nbStudent) }}
-                        {{ form_widget(form.nbStudent) }}
-                        <span class="student-price">$0.00</span>
-                    </div>
-                    {{ form_row(form.totalPayment) }}
-                 <button class="btn">{{ button_label|default('Save') }}</button>
-                   
-                </div>
+    <div class="row gy-4">
+      <div class="section-header">
+        <h2>Select a date to visit our museum </h2>
+        <p>Enjoy your journey with DigitArt</p>
+      </div>
 
-                {{ form_end(form) }}
-            </div>
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+
+          <div class="service-photo">
+            <img src="{{asset('Front/assets/img/front-home/museum1.png')}}" alt="Service 1">
         </div>
+      </div><!-- End Service Item -->
+
+    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+        <div class="service-item position-relative">
+          <div class="service-photo">
+          </div>
+          <div>
+            {{ form_start(form) }}
+            {{ form_row(form.purchaseDate) }}
+         </div>
+         
+         <div class="service-item position-relative" id="form-fields" style="display:none;">
+            <h3>Select Ticket Quantity:</h3>
+            <div class="ticket-quantity mb-3">
+              <div class="d-flex justify-content-between align-items-center">
+              <div style="width: 30%;">
+                  <span style="color: black;">Adult</span>
+                </div>
+                <div style="width: 30%;">
+                   {{ form_label(form.nbAdult) }}
+                   {{ form_widget(form.nbAdult) }}   
+                </div>
+                <div style="width: 30%;">
+                 <span style="color: black;" , class="adult-price">$0</span>
+                </div>
+              </div>
+            </div>
+
+             <div class="ticket-quantity mb-3">
+              <div class="d-flex justify-content-between align-items-center">
+              <div style="width: 30%;">
+                  <span style="color: black;">Teenager</span>
+                </div>
+                <div style="width: 30%;">
+                   {{ form_label(form.nbTeenager) }}
+                   {{ form_widget(form.nbTeenager) }}
+                </div>
+                <div style="width: 30%;">
+                 <span style="color: black;", class="teen-price">$0</span>
+                </div>
+              </div>
+            </div>
+
+             <div class="ticket-quantity mb-3">
+              <div class="d-flex justify-content-between align-items-center">
+              <div style="width: 30%;">
+                  <span style="color: black;">Student</span>
+                </div>
+                <div style="width: 30%;">
+                    {{ form_label(form.nbStudent) }}
+                    {{ form_widget(form.nbStudent) }} 
+                </div>
+                <div style="width: 30%;">
+                 <span style="color: black;", class="student-price">$0</span>
+                </div>
+              </div>
+            </div>
+
+         <div class="ticket-quantity mb-3 text-center">
+              {{ form_row(form.totalPayment) }} 
+            </div>
+            <div class="ticket-quantity mb-3 text-center">
+              <button class="btn btn-outline-danger btn-sm">{{ button_label|default('Add to Card') }}</button>
+            </div>
+             {{ form_end(form) }}
+          </div>
+        </div>
+    </div><!-- End Service Item -->
+
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                   <div class="service-photo">
+             <img src="{{asset('Front/assets/img/front-home/museum1.png')}}" alt="Service 1">
+        </div>
+      </div><!-- End Service Item -->
+   
     </div>
 
+  </div>
+</section><!-- End Services Section -->
 
 <script>
    
@@ -57,6 +125,18 @@
     purchaseDateInput.addEventListener('change', () => {
         if (purchaseDateInput.value !== '') {
             formFieldsDiv.style.display = 'block';
+        
+        adultSpinner.value = 0;
+        teenSpinner.value = 0;
+        studentSpinner.value = 0;
+        adultPrice.textContent = "$0";
+        teenPrice.textContent = "$0";
+        studentPrice.textContent = "$0";
+        totalAmount.value = 0;
+
+        teenSpinner.disabled = false;
+        studentSpinner.disabled = false;
+        adultSpinner.disabled = false;
         }
     });
 
@@ -78,7 +158,7 @@
         const studentQty = parseInt(studentSpinner.value);
         const studentPriceVal = parseFloat(studentPrice.textContent.replace('$', ''));
         const total = adultPriceVal +teenPriceVal + studentPriceVal;
-        totalAmount.value = total.toFixed(2);
+        totalAmount.value = total.toFixed(0);
     }
 
     // Update prices when spinner values change
@@ -89,9 +169,16 @@
         fetch(url)
             .then(response => response.json())
             .then(data => {
+            if (data.price == 0 ) {
+                adultSpinner.disabled = true;
+                adultSpinner.value = 0;
+                adultPrice.textContent = "$0";
+            } else {
+                adultSpinner.disabled = false;
                 adultPrice.textContent = `$${qty * data.price}`;
-                updateTotalAmount();
-            });
+            }
+            updateTotalAmount();
+        });
     });
 
     teenSpinner.addEventListener('change', () => {
@@ -101,9 +188,16 @@
         fetch(url)
             .then(response => response.json())
             .then(data => {
+            if (data.price == 0 ) {
+                teenSpinner.disabled = true;
+                teenSpinner.value = 0;
+                teenPrice.textContent = "$0";
+            } else {
+                teenSpinner.disabled = false;
                 teenPrice.textContent = `$${qty * data.price}`;
-                updateTotalAmount();
-            });
+            }
+            updateTotalAmount();
+        });
     });
 
     studentSpinner.addEventListener('change', () => {
@@ -113,15 +207,34 @@
         fetch(url)
             .then(response => response.json())
             .then(data => {
+            if (data.price == 0 ) {
+                studentSpinner.disabled = true;
+                studentSpinner.value = 0;
+                studentPrice.textContent = "$0";
+            } else {
+                studentSpinner.disabled = false;
                 studentPrice.textContent = `$${qty * data.price}`;
-                updateTotalAmount();
-            });
+            }
+            updateTotalAmount();
+        });
     });
+
+
+    setTimeout(function() {
+        var flashMessage = document.getElementById('flash-message');
+        if (flashMessage) {
+            flashMessage.classList.remove('show');
+        }
+    }, 8000);
 </script>
 
 <style>
 /* Styles for Payment Form */
-
+.service-photo img {
+  height: 250px; /* adjust height as needed */
+  border-radius: 8px;
+  object-fit: cover;
+}
 form label {
   font-weight: bold;
 }

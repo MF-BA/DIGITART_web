@@ -22,31 +22,29 @@ class PaymentType extends AbstractType
             'attr' => ['min' => (new \DateTime())->format('Y-m-d')],
         ])
         ->add('nbAdult', IntegerType::class, [
-            'label' => 'Adult',
+            'label' => ' ',
             'data' => '0',
             'attr' => ['min' => 0, 'max' => 10, 'class' => 'adult-spinner'],
         ])
         ->add('nbTeenager', IntegerType::class, [
-            'label' => 'Teen',
+            'label' => ' ',
             'data' => '0',
             'attr' => ['min' => 0, 'max' => 10, 'class' => 'teen-spinner'],
         ])
         ->add('nbStudent', IntegerType::class, [
-            'label' => 'Student',
+            'label' => ' ',
             'data' => '0',
             'attr' => ['min' => 0, 'max' => 10, 'class' => 'student-spinner'],
         ])
         ->add('totalPayment', IntegerType::class, [
             'label' => 'Total Amount',
-            'data' => '0',
-            'disabled' => true,
-            'attr' => ['class' => 'total-amount'],
-        ])
-        ->add('paid')
-        ->add('user', EntityType::class, [
-                'class' => Users::class,
-                'choice_label' => 'id',
-            ]);
+            'mapped' => true,
+            'attr' => [
+                'class' => 'total-amount',
+                'readonly' => true,
+            ],
+        ]);
+        
         
     }
 
