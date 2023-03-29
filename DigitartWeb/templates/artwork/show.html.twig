@@ -29,13 +29,13 @@
             </tr>
             <tr>
                 <th>ImageArt</th>
-                <td><img src="{{ asset(artwork.ImageArt) }}" ></td>
+                <td><img style="width: 700px; height: 500px;" src="{{ asset(artwork.ImageArt) }}" ></td>
             </tr>
             <tr>
                 <th>Actions</th>
-                <td>  <a href="{{ path('app_artwork_edit', {'idArt': artwork.idArt}) }}" class="btn btn-warning"><i class="fa fa-pencil"></i>&nbsp;edit</a>
+                <td>  <a href="{{ path('app_artwork_edit', {'idArt': artwork.idArt}) }}" class="btn btn-warning"><i class="fa fa-pencil"></i>&nbsp;edit</a></td>
 
-    {{ include('artwork/_delete_form.html.twig') }}</td>
+                  <td>  {{ include('artwork/_delete_form.html.twig') }}</td>
             </tr>
         </tbody>
     </table>

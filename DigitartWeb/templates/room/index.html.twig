@@ -33,9 +33,11 @@
                                             <td>{{ room.state }}</td>
                                             <td>{{ room.description }}</td>
                                             <td>
-                                                <a href="{{ path('app_room_show', {'idRoom': room.idRoom}) }}" class="btn btn-primary"><i class="fa fa-eye"></i>&nbsp;  Show</a>
-                                                <a href="{{ path('app_room_edit', {'idRoom': room.idRoom}) }}" class="btn btn-secondary"><i class="fa fa-pencil"></i>&nbsp; Edit</a>
-                                                {{ include('room/_delete_form.html.twig') }}
+                                                <div class="form-actions form-group">
+                                                    <a href="{{ path('app_room_show', {'idRoom': room.idRoom}) }}" class="btn btn-primary"><i class="fa fa-eye"></i>&nbsp;  Show</a>
+                                                    <a href="{{ path('app_room_edit', {'idRoom': room.idRoom}) }}" class="btn btn-warning"><i class="fa fa-pencil"></i>&nbsp; Edit</a>
+                                                    {{ include('room/_delete_form.html.twig') }}
+                                                </div>
                                             </td>
                                         </tr>
                                     {% else %}

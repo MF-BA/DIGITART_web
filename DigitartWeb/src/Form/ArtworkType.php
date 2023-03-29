@@ -31,9 +31,11 @@ class ArtworkType extends AbstractType
                         ->setParameter('role', 'Artist')
                         ->orderBy('u.lastname', 'ASC');
                 },
-                'choice_label' => 'lastname',
+                'choice_label' => 'lastname', // use the artist's last name for display
+                'choice_value' => 'id',
                 'placeholder' => 'Select an Artist', // optional placeholder text
                 'required' => false, // or true, depending on your needs
+               
             ])
             ->add('artistName', TextType::class, [
                 'attr' => ['id' => 'artistName']

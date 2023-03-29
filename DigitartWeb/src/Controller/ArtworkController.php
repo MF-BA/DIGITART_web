@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Artwork;
 use App\Form\ArtworkType;
 use App\Repository\ArtworkRepository;
+use App\Repository\RoomRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +22,22 @@ class ArtworkController extends AbstractController
             'artworks' => $artworkRepository->findAll(),
         ]);
     }
+
+    #[Route('/showfront/artwork', name: 'showfrontartwork', methods: ['GET'])]
+    public function display_front(ArtworkRepository $artworkRepository,RoomRepository $roomRepository): Response
+    {
+        $artworks = $artworkRepository->findAll();
+        $roomNames = [];
+    
+        foreach ($artworks as $artwork) {
+            $roomNames[$artwork->getIdArt()] = $roomRepository->getRoomNameById($artwork->getIdroom());
+        }
+        return $this->render('artwork/indexFront.html.twig', [
+            'artworks' => $artworkRepository->findAll(),
+            'roomNames' =>$roomNames,
+        ]);
+    }
+   
 
     #[Route('/artwork/new', name: 'app_artwork_new', methods: ['GET', 'POST'])]
     public function new(Request $request, ArtworkRepository $artworkRepository): Response
@@ -47,6 +64,17 @@ class ArtworkController extends AbstractController
     {
         return $this->render('artwork/show.html.twig', [
             'artwork' => $artwork,
+        ]);
+    }
+
+    #[Route('showfront/artwork/{idArt}', name: 'app_artwork_showfront', methods: ['GET'])]
+    public function showfront(Artwork $artwork,RoomRepository $roomRepository): Response
+    {
+        $roomNames = [];
+        $roomNames[$artwork->getIdArt()] = $roomRepository->getRoomNameById($artwork->getIdroom());
+        return $this->render('artwork/showfront.html.twig', [
+            'artwork' => $artwork,
+            'roomNames' =>$roomNames,
         ]);
     }
 
@@ -78,13 +106,7 @@ class ArtworkController extends AbstractController
         return $this->redirectToRoute('app_artwork_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/showfront/artwork', name: 'showfrontpage')]
-    public function display_front(): Response
-    {
-        return $this->render('indexFront.html.twig', [
-            
-        ]);
-    }
+   
 
     public function submitArtwork(Request $request)
 {
