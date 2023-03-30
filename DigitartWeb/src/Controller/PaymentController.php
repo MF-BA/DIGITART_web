@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\TicketRepository;
+use Stripe\Checkout\Session;
+use Stripe\Stripe;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/payment')]
 class PaymentController extends AbstractController
@@ -64,36 +67,82 @@ class PaymentController extends AbstractController
     }
     
     #[Route('/card', name: 'app_payment_card', methods: ['GET', 'POST'])]
-    public function index(Request $request, EntityManagerInterface $entityManager, int $userId = null): Response
+    public function payment(Request $request, EntityManagerInterface $entityManager, int $userId = null): Response
     {
+        // find any unpaid payment records for the user
         $payments = $entityManager
             ->getRepository(Payment::class)
             ->findBy([
                 'user' => $userId,
                 'paid' => null
             ]);
-    
+
+        // initiate the Stripe checkout session when the form is submitted
         if ($request->isMethod('POST')) {
-            $paymentRepository = $entityManager->getRepository(Payment::class);
-            $paymentsToUpdate = $paymentRepository->findBy([
-                'user' => $userId,
-                'paid' => null
-            ]);
-            foreach ($paymentsToUpdate as $payment) {
-                $payment->setPaid(true);
+            Stripe::setApiKey('sk_test_51MfRIsHcaMLPP7A1X3INIItKLbEljzGYdpTujtvwb4mrggNEJtwS1SG2C6MyxYdz8T2uPVh219jsg7LBZRWSh2Ye00QEgBJZmW');
+            $totalAmount = 0;
+            foreach ($payments as $payment) {
+                $totalAmount += $payment->getTotalPayment();
             }
-            $entityManager->flush();
-            return $this->redirectToRoute('app_payment_card', ['userId' => $userId]);
+            $totalAmount=$totalAmount * 100;
+            $session = Session::create([
+                'payment_method_types' => ['card'],
+                'line_items'           => [
+                    [
+                        'price_data' => [
+                            'currency'     => 'usd',
+                            'product_data' => [
+                                'name' => 'DigitArt Ticket',
+                            ],
+                            'unit_amount'  => $totalAmount,
+                        ],
+                        'quantity'   => 1,
+                    ]
+                ],
+                'mode'                 => 'payment',
+                'success_url'          => $this->generateUrl('app_payment_CurrentcardHistory', [], UrlGeneratorInterface::ABSOLUTE_URL),
+                'cancel_url'           => $this->generateUrl('app_payment_card', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            ]);
+
+            // redirect to the Stripe checkout page
+            return $this->redirect($session->url, 303);
         }
-    
+
+        // render the payment form
         return $this->render('payment/card.html.twig', [
+            'payments' => $payments,
+        ]);
+    }
+
+   
+    #[Route('/cardHistory', name: 'app_payment_CurrentcardHistory')]
+    public function CurrentcardHistory( EntityManagerInterface $entityManager, int $userId = null): Response
+    {
+        // update any unpaid payment records for the user after successful payment
+        $paymentRepository = $entityManager->getRepository(Payment::class);
+        $paymentsToUpdate = $paymentRepository->findBy([
+            'user' => $userId,
+            'paid' => null
+        ]);
+        foreach ($paymentsToUpdate as $payment) {
+            $payment->setPaid(true);
+        }
+
+        $entityManager->flush();
+        $payments = $entityManager
+            ->getRepository(Payment::class)
+            ->findBy([
+                'user' => $userId,
+                'paid' => true
+            ]);
+    
+        
+        return $this->render('payment/cardHistory.html.twig', [
             'payments' => $payments,
         ]);
     }
     
     
-
-
     #[Route('/{paymentId}', name: 'app_payment_delete', methods: ['POST'])]
     public function delete(Request $request, Payment $payment, EntityManagerInterface $entityManager): Response
     {

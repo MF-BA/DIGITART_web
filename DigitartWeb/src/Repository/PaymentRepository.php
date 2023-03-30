@@ -40,6 +40,18 @@ class PaymentRepository extends ServiceEntityRepository
         }
     }
 
+    public function getPaymentsByUserId(int $userId): array
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->where('p.user_id = :userId')
+            ->andWhere('p.paid = :paid')
+            ->andWhere('p.purchaseDate >= :today')
+            ->setParameter('userId', $userId)
+            ->setParameter('paid', true)
+            ->setParameter('today', new \DateTime());
+        
+        return $queryBuilder->getQuery()->getResult();
+    }
    
 
 //    /**

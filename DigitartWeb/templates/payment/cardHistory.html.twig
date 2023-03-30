@@ -28,9 +28,9 @@
     <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/front-home/museum4.jpg')}});">
       <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
 
-        <h2>My Ticket Card</h2>
+        <h2>Purchase History</h2>
         <ol>
-          <li><a href="{{ path('app_payment_new') }}">Payment </a>/My Card</li>
+          <li><a href="{{ path('app_payment_new') }}">Payment  <a href="{{ path('app_payment_card') }}">  /My Card</a></li>
           
         </ol>
 
@@ -49,11 +49,10 @@
   {% if payments is empty %}
   <h1 class="upcomming" data-aos="fade-up" data-aos-delay="200">No purchases were made!</h1>
   {% else %}
-    {% set totalPayment = 0 %}
-    <h1 class="upcomming" data-aos="fade-up" data-aos-delay="200">Tickets Added</h1>
+    <h1 class="upcomming" data-aos="fade-up" data-aos-delay="200">Tickets Bought</h1>
     {% for payment in payments %}
       <div class="item" data-aos="fade-up" data-aos-delay="200">
-        <div class="item-right">
+        <div class="item-right" >
           {% set day = payment.purchaseDate|date('d') %}
           {% set month = payment.purchaseDate|date('M')|lower %}
           <h2 class="num">{{ day }}</h2>
@@ -80,24 +79,17 @@
             <p>Digitart</p>
           </div>
           <div class="fix"></div>
-          <form method="post" action="{{ path('app_payment_delete', {'paymentId': payment.paymentId}) }}" onsubmit="return confirm('Are you sure you want to delete this purchase?');">
-            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ payment.paymentId) }}">
-            <button type="submit" class="tickets">Delete</button>
           </form>
         </div> <!-- end item-right -->
       </div> <!-- end item -->
-      {% set totalPayment = totalPayment + payment.totalPayment %}
     {% endfor %}
-   <td><span class="upcomming2" data-aos="fade-up" data-aos-delay="200" style="text-align: center;">Total Amount to pay :<br><span style="color: #BD2A2E">{{ totalPayment }} $</span></br></span></td>
-  <form method="post">
-    <button type="submit" class="submit" name="finalizePayment" data-aos="fade-up" data-aos-delay="200">Finalize the command and Checkout</button>
-  </form>
+
   {% endif %}
 </div>
 <!-- partial -->
-  </div>
+   </div>
   
-</section><!-- End Services Section -->
+</section><!-- End Services Section --> 
 
 
 

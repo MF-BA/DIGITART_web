@@ -57,6 +57,25 @@ class TicketRepository extends ServiceEntityRepository
         return (int) $result['price'];
     }
 
+    public function getEnabledDates(): array
+    {
+        $enabledDates = [];
+        $tickets = $this->createQueryBuilder('t')
+            ->getQuery()
+            ->getResult();
+
+        foreach ($tickets as $ticket) {
+            $ticketDate = $ticket->getTicketDate();
+            $ticketEdate = $ticket->getTicketEdate();
+            // Add all dates between ticket_date and ticket_edate to the enabledDates list
+            for ($date = $ticketDate; $date <= $ticketEdate; $date->modify('+1 day')) {
+                $enabledDates[] = $date->format('Y-m-d');
+            }
+        }
+
+        return $enabledDates;
+    }
+
     
 
 
