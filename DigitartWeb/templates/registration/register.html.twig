@@ -1,14 +1,12 @@
-{% extends 'loginsecure/login.html.twig' %}
+{% extends 'security/login.html.twig' %}
 {% block stylesheets %}
 	<style>
-
     .wrap-login100 {
   width: 900px !important;
   height: 800px !important;
   background: #fff;
   border-radius: 10px;
   overflow: hidden;
-
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -39,7 +37,6 @@
   color: #333333;
   line-height: 1.2;
   text-align: center;
-
   width: 100%;
   display: block;
   padding-bottom: 54px;
@@ -85,7 +82,6 @@
   -moz-transition: all 0.4s;
   transition: all 0.4s;
 }
-
 a:hover {
 	text-decoration: none;
   color: #BD2A2E !important;
@@ -109,7 +105,7 @@ a:hover {
 }
 .container-login100-form-btn {
   width: 30% !important;
-  position: relative;
+  position: relative !important;
   left: 235px !important;
   display: -webkit-box;
   display: -webkit-flex;
@@ -121,9 +117,8 @@ a:hover {
   padding-top: 20px;
 }
 .text-center {
-    
-    position: relative;
-    right: 30px;
+    position: relative !important;
+    right: 30px !important;
 }
 
 	</style>
@@ -146,141 +141,137 @@ a:hover {
 
    {% endblock %}
 
-
 {% block body %}
-	<div class="limiter">
+   <div class="limiter">
 		<div class="container-login100">
             <div class="wrap-login100">
-				
-        {{ form_start(form) }}
-			
-					<span class="login100-form-title">
+
+    {{ form_start(registrationForm) }}
+    <span class="login100-form-title">
 						Register
 					</span>
-       <div class="row form-group">
+
+            <div class="row form-group">
         <div class="col col-md-6">
 
-					{# Cin #}
+         {# Cin #}
         <div class="row form-group">
         <div class="col col-md-6">
-        {{ form_label(form.cin, 'Cin') }}
-          
+        {{ form_label(registrationForm.cin, 'Cin') }}
         </div>
         <div class="col-12 col-md-9">
-          {{ form_widget(form.cin, {'attr': {'class': 'form-control', 'placeholder': 'Enter cin'}}) }}
-          {{ form_errors(form.cin) }}
+          {{ form_widget(registrationForm.cin, {'attr': {'class': 'form-control', 'placeholder': 'Enter cin'}}) }}
+          {{ form_errors(registrationForm.cin) }}
           <small class="form-text text-muted">Cin must contain 8 digits</small>
         </div>
       </div>
+       {# First name #}
+      <div class="row form-group">
+        <div class="col col-md-6">
+        {{ form_label(registrationForm.firstname, 'First name') }}
+          
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(registrationForm.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Enter First name'}}) }}
+          {{ form_errors(registrationForm.firstname) }}
+        </div>
+      </div>
 
-      {# First name #}
+       {# Last name #}
       <div class="row form-group">
         <div class="col col-md-6">
-        {{ form_label(form.firstname, 'First name') }}
-          
+        {{ form_label(registrationForm.lastname, 'Last name') }}
         </div>
         <div class="col-12 col-md-9">
-          {{ form_widget(form.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Enter First name'}}) }}
-          {{ form_errors(form.firstname) }}
+          {{ form_widget(registrationForm.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Enter Last name'}}) }}
+          {{ form_errors(registrationForm.lastname) }}
           
         </div>
       </div>
-     
-         {# Last name #}
-      <div class="row form-group">
-        <div class="col col-md-6">
-        {{ form_label(form.lastname, 'Last name') }}
-        </div>
-        <div class="col-12 col-md-9">
-          {{ form_widget(form.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Enter Last name'}}) }}
-          {{ form_errors(form.lastname) }}
-          
-        </div>
-      </div>
-      {# Email #}
+         {# Email #}
        <div class="row form-group">
         <div class="col col-md-6">
-        {{ form_label(form.email, 'Email') }}
+        {{ form_label(registrationForm.email, 'Email') }}
         </div>
         <div class="col-12 col-md-9">
-          {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email'}}) }}
-          {{ form_errors(form.email) }}
+          {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email'}}) }}
+          {{ form_errors(registrationForm.email) }}
           <small class="form-text text-muted">Please enter a valid email!</small>
         </div>
       </div>
-      
-      
-
-      {# Password #}
+        {# Password #}
       <div class="row form-group">
         <div class="col col-md-6">
-        {{ form_label(form.password, 'Password') }}
+        {{ form_label(registrationForm.plainPassword, 'Password') }}
         </div>
         <div class="col-12 col-md-9">
-          {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Enter Password'}}) }}
-          {{ form_errors(form.password) }}
+          {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Enter Password'}}) }}
+          {{ form_errors(registrationForm.plainPassword) }}
           <small class="form-text text-muted">Please enter a complex password</small>
         </div>
       </div>
           </div>
-    <div class="col col-md-6">
+
+      
+
+<div class="col col-md-6">
       {# Address #}
       <div class="row form-group">
         <div class="col col-md-6">
-      {{ form_label(form.address, 'Address') }}
+      {{ form_label(registrationForm.address, 'Address') }}
         </div>
 <div class="col-12 col-md-9">
-{{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter Address'}}) }}
-{{ form_errors(form.address) }}
+{{ form_widget(registrationForm.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter Address'}}) }}
+{{ form_errors(registrationForm.address) }}
 
 </div>
 </div>
 {# Phone #}
   <div class="row form-group">
     <div class="col col-md-6">
-    {{ form_label(form.phoneNum, 'Phone Number') }}
+    {{ form_label(registrationForm.phoneNum, 'Phone Number') }}
       
     </div>
     <div class="col-12 col-md-9">
-      {{ form_widget(form.phoneNum, {'attr': {'class': 'form-control', 'placeholder': 'Enter Phone'}}) }}
-      {{ form_errors(form.phoneNum) }}
+      {{ form_widget(registrationForm.phoneNum, {'attr': {'class': 'form-control', 'placeholder': 'Enter Phone'}}) }}
+      {{ form_errors(registrationForm.phoneNum) }}
       <small class="form-text text-muted">Phone number must contain 8 digits</small>
     </div>
   </div>
   {# birth date #}
   <div class="row form-group">
         <div class="col col-md-6">
-        {{ form_label(form.birthDate, 'Birth Date') }}
+        {{ form_label(registrationForm.birthDate, 'Birth Date') }}
     </div>
     <div class="col-12 col-md-9">
-        {{ form_widget(form.birthDate, {'attr': {'class': 'form-control'}}) }}
+        {{ form_widget(registrationForm.birthDate, {'attr': {'class': 'form-control'}}) }}
     </div>
  </div>
 {# role #}
   <div class="row form-group">
   <div class="col col-md-6">
-  {{ form_label(form.role, 'Role') }}
+  {{ form_label(registrationForm.role, 'Role') }}
     
   </div>
   <div class="col-12 col-md-9">
-    {{ form_widget(form.role, {'attr': {'class': 'form-control'}}) }}
-    {{ form_errors(form.role) }}
+    {{ form_widget(registrationForm.role, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(registrationForm.role) }}
   </div>
 </div>
 {# Gender #}
   <div class="row form-group">
         <div class="col col-md-6">
-        {{ form_label(form.gender, 'Gender') }}
+        {{ form_label(registrationForm.gender, 'Gender') }}
         </div>
     <div class="col-12 col-md-9">
-        {{ form_widget(form.gender, {'attr': {'class': 'form-control'}}) }}
+        {{ form_widget(registrationForm.gender, {'attr': {'class': 'form-control'}}) }}
     </div>
  </div>
 					</div>
+       </div>
 
-          </div>
 					<div class="container-login100-form-btn">
-						<button class="login100-form-btn">
+						<button type="submit" class="login100-form-btn">
 						<i class="fa fa-check-square-o"></i>  Register
 						</button>
 					</div>
@@ -289,31 +280,14 @@ a:hover {
 						<span class="txt1">
 							Already have
 						</span>
-						<a class="txt2" href="{{ path('showloginpage') }}">
+						<a class="txt2" href="{{ path('app_login') }}">
 							an account?
 						</a>
 					</div>
-                    {{ form_end(form) }}
-				
-			</div>
+        
+    {{ form_end(registrationForm) }}
+    </div>
         </div>
 	</div>
-	
-	{% endblock %}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+{% endblock %}

@@ -20,6 +20,16 @@
         <link rel="stylesheet" href="{{asset('Back/assets/css/style.css')}}">
 
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+        <style>
+      .widget-content-right {
+    position: relative;
+    top: 7px;
+    right: 15px;
+      }
+     .color-app{
+        color: #BD2A2E;
+     }
+        </style>
         {% endblock %}
 
         {% block javascripts %}
@@ -80,8 +90,8 @@
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><div class="dashtitle-color"><i class="menu-icon fa fa-users"></i>Users Management</div></a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-plus"></i><a href="{{ path('app_users_new') }}">Add User</a></li>
-                            <li><i class="fa fa-bars"></i><a href="{{ path('app_users_index') }}">List of users</a></li>
+                            <li><i class="fa fa-plus"></i><a href="{{path('app_users_new')}}">Add User</a></li>
+                            <li><i class="fa fa-bars"></i><a href="{{path('app_users_index')}}">List of users</a></li>
                             <li><i class="fa fa-credit-card"></i><a href="">Edit my profile</a></li>
                             
                         </ul>
@@ -209,43 +219,28 @@
                     </div>
                 </div>
 
-                <div class="col-sm-5">
+                <div class="widget-content-wrapper">
+                   
                     <div class="user-area dropdown float-right">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img class="user-avatar rounded-circle" src="{{asset('Back/images/admin.jpg')}}" alt="User Avatar">
                         </a>
 
                         <div class="user-menu dropdown-menu">
-                            <a class="nav-link" href="#"><i class="fa fa-user"></i> My Profile</a>
+                            <a class="nav-link" href="{{path('app_users_showprofile', {'id': app.user.id})}}"><i class="fa fa-user"></i> My Profile</a>
 
                             <a class="nav-link" href="#"><i class="fa fa-user"></i> Notifications <span class="count">13</span></a>
 
                             <a class="nav-link" href="#"><i class="fa fa-cog"></i> Settings</a>
 
-                            <a class="nav-link" href="#"><i class="fa fa-power-off"></i> Logout</a>
+                            <a class="nav-link" href="{{path('app_logout')}}"><i class="fa fa-power-off"></i> Logout</a>
                         </div>
                     </div>
-
-                    <div class="language-select dropdown" id="language-select">
-                        <a class="dropdown-toggle" href="#" data-toggle="dropdown"  id="language" aria-haspopup="true" aria-expanded="true">
-                            <i class="flag-icon flag-icon-us"></i>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="language">
-                            <div class="dropdown-item">
-                                <span class="flag-icon flag-icon-fr"></span>
-                            </div>
-                            <div class="dropdown-item">
-                                <i class="flag-icon flag-icon-es"></i>
-                            </div>
-                            <div class="dropdown-item">
-                                <i class="flag-icon flag-icon-us"></i>
-                            </div>
-                            <div class="dropdown-item">
-                                <i class="flag-icon flag-icon-it"></i>
-                            </div>
-                        </div>
+                        
+                    <div class="user-area dropdown widget-content-right" >
+                      <strong class="color-app">  {{app.user.firstname}}   {{app.user.lastname}} </strong>
                     </div>
-
+                 
                 </div>
             </div>
 
@@ -254,7 +249,29 @@
     {% endblock %}
         
     {% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
 
+<div class="example-wrapper">
+    <h1>Hello {{ app.user.firstname }}! ✅</h1>
+
+   Welcome to your Dashboard!
+    <ul>
+        <li>Your controller at <code><a href="{{ 'C:/Users/venom-1/OneDrive/Documents/Symfonyprojects/FirstProject/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
+        <li>Your template at <code><a href="{{ 'C:/Users/venom-1/OneDrive/Documents/Symfonyprojects/FirstProject/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
+    </ul>
+
+
+
+
+    
+
+
+
+
+</div>
     {% endblock %}
     </body>
 </html>

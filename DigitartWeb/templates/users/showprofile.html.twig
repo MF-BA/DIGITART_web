@@ -7,10 +7,7 @@
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
+            
             <tr>
                 <th>Cin</th>
                 <td>{{ user.cin }}</td>
@@ -26,10 +23,6 @@
             <tr>
                 <th>Email</th>
                 <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
             </tr>
             <tr>
                 <th>Address</th>
@@ -65,13 +58,17 @@
       <div class="row">
     <a href="{{ path('app_users_index') }}">
    <button type="button" class="btn social stack-overflow mr-2">
-    <i class="fa fa-mail-reply (alias)"></i>back to list</button></a>
+    <i class="fa fa-mail-reply (alias)"></i>back to home</button></a>
 
     <a href="{{ path('app_users_edit', {'id': user.id}) }}">
     <button type="button" class="btn social dropbox mr-2">
-    <i class="fa fa-pencil-square-o"></i>Edit</button></a>
+    <i class="fa fa-pencil-square-o"></i>Edit my profile</button></a>
 
-    {{ include('users/_delete_form.html.twig') }}
+    <a href="#">
+   <button type="button" class="btn social vine mr-2">
+    <i class="fa fa-repeat"></i>change my password!</button></a>
+
+    {{ include('users/_delete_profile.html.twig') }}
     </div>
     </div>
 {% endblock %}

@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\Entity\Users;
 use App\Form\UsersType;
 use App\Repository\UsersRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/users')]
 class UsersController extends AbstractController
@@ -22,24 +24,30 @@ class UsersController extends AbstractController
     }
 
     #[Route('/new', name: 'app_users_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, UsersRepository $usersRepository): Response
+    public function new(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new Users();
         $form = $this->createForm(UsersType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // encode the plain password
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
 
-            $user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPassword()));
-            $usersRepository->save($user, true);
-
+            $entityManager->persist($user);
+            $entityManager->flush();
             return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('users/new.html.twig', [
-            'user' => $user,
-            'form' => $form,
+        return $this->render('users/new.html.twig', [
+            'form' => $form->createView(),
         ]);
+        
     }
 
     #[Route('/{id}', name: 'app_users_show', methods: ['GET'])]
@@ -50,14 +58,24 @@ class UsersController extends AbstractController
         ]);
     }
 
+    #[Route('/profile/{id}', name: 'app_users_showprofile', methods: ['GET'])]
+    public function showprofile(Users $user): Response
+    {
+        
+        return $this->render('users/showprofile.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
     #[Route('/{id}/edit', name: 'app_users_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Users $user, UsersRepository $usersRepository): Response
+    public function edit(Request $request, Users $user, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(UsersType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $usersRepository->save($user, true);
+            $entityManager->persist($user);
+            $entityManager->flush();
 
             return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -76,6 +94,17 @@ class UsersController extends AbstractController
         }
 
         return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[Route('/delprofile/{id}', name: 'app_users_deleteprofile', methods: ['POST'])]
+    public function deleteprofile(Request $request, Users $user, UsersRepository $usersRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            $session = $request->getSession();
+            $session->invalidate();
+            $usersRepository->remove($user, true);
+        }
+        
+        return $this->redirectToRoute('app_logout', [], Response::HTTP_SEE_OTHER);
     }
     
     #[Route('/{id}/updatestatus', name: 'app_users_updatestatus', methods: ['GET', 'POST'])]

@@ -6,14 +6,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class LoginsecureController extends AbstractController
+class HomeController extends AbstractController
 {
-    #[Route('/loginsecure', name: 'app_loginsecure')]
+    #[Route('/home', name: 'app_home')]
     public function index(): Response
     {
-        return $this->render('loginsecure/login.html.twig', [
-            'controller_name' => 'LoginsecureController',
+        $user=$this->getUser();
+        return $this->render('home/index.html.twig', [
+            'user' => $user,
         ]);
     }
-    
 }

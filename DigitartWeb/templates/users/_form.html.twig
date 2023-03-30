@@ -58,11 +58,11 @@
       {# Password #}
       <div class="row form-group">
         <div class="col col-md-2">
-        {{ form_label(form.password, 'Password') }}
+        {{ form_label(form.plainPassword, 'Password') }}
         </div>
         <div class="col-12 col-md-9">
-          {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Enter Password'}}) }}
-          {{ form_errors(form.password) }}
+          {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Enter Password'}}) }}
+          {{ form_errors(form.plainPassword) }}
           <small class="form-text text-muted">Please enter a complex password</small>
         </div>
       </div>

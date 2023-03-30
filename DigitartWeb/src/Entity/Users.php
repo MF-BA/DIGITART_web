@@ -2,21 +2,19 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
+use App\Repository\UsersRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Users
- *
- * @ORM\Table(name="users")
- * @ORM\Entity
-  * @ORM\Entity(repositoryClass="App\Repository\UsersRepository")
- */
 
-class Users implements UserInterface
+/**
+ * @ORM\Entity(repositoryClass=UsersRepository::class)
+ */
+class Users implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
+     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
@@ -117,13 +115,9 @@ class Users implements UserInterface
     private $secretcode;
 
     /**
-     * @ORM\Column(type="string", length=180, )
-     */
-    private $reset_token;
-
-     
-      
-
+    * @ORM\Column(type="json", nullable=true)
+    */
+    private array $roles = [];
 
 
     public function getId(): ?int
@@ -172,7 +166,7 @@ class Users implements UserInterface
         return $this->email;
     }
 
-    public function setEmail(?string $email): self
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -180,20 +174,57 @@ class Users implements UserInterface
     }
 
     /**
+     * A visual identifier that represents this user.
+     *
      * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @deprecated since Symfony 5.3, use getUserIdentifier instead
+     */
+    public function getUsername(): string
+    {
+        return (string) $this->email;
+    }
+
+   
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
      */
     public function getPassword(): string
     {
-        return (string)$this->password;
+        return $this->password;
     }
 
-    public function setPassword(?string $password): self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
         return $this;
     }
-
     public function getAddress(): ?string
     {
         return $this->address;
@@ -290,28 +321,6 @@ class Users implements UserInterface
         return $this;
     }
 
-     /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUsername(): string
-    {
-        return (string) $this->email;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
-    {
-        
-        // guarantee every user at least has ROLE_USER
-        $roles[] = $this->role;
-
-        return array_unique($roles);
-    }
-
     /**
      * Returning a salt is only needed, if you are not using a modern
      * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
@@ -323,7 +332,6 @@ class Users implements UserInterface
         return null;
     }
 
-
     /**
      * @see UserInterface
      */
@@ -333,20 +341,5 @@ class Users implements UserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getResetToken()
-    {
-        return $this->reset_token;
-    }
-
-    /**
-     * @param mixed $reset_token
-     */
-    public function setResetToken($reset_token): void
-    {
-        $this->reset_token = $reset_token;
-    }
-
+    
 }
