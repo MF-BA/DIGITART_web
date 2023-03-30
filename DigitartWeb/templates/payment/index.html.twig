@@ -16,109 +16,80 @@
 
       </div>
     </div><!-- End Breadcrumbs -->
+
+    <!-- ======= Services Section ======= -->
+<section id="services" class="services section-bg">
+  <div class="container" data-aos="fade-up">
+      <div class="row gy-4">
+      <div class="section-header">
+        <h2>Enjoy your journey with DigitArt ! </h2>
+        <p>Here you can reserve you're ticket </p>
+      </div>
 {% for message in app.flashes('error') %}
     <div class="sufee-alert alert with-close alert-danger alert-dismissible fade show" style="text-align: center;" id="flash-message">
         {{ message }}
          <li><a href="{{ path('app_payment_card') }}">Check Card</a></li>
     </div>
 {% endfor %}
-    <!-- ======= Services Section ======= -->
-<section id="services" class="services section-bg">
-  <div class="container" data-aos="fade-up">
-
-    <div class="row gy-4">
-      <div class="section-header">
-        <h2>Select a date to visit our museum </h2>
-        <p>Enjoy your journey with DigitArt</p>
-      </div>
-
-      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-
-          <div class="service-photo">
-            <img src="{{asset('Front/assets/img/front-home/museum1.png')}}" alt="Service 1">
-        </div>
-      </div><!-- End Service Item -->
-
-
-    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-        <div class="service-item position-relative">
-          <div class="service-photo">
-          </div>
-          <div>
-            {{ form_start(form) }}
-            {{ form_row(form.purchaseDate) }}
-         </div>
+      <div class="mainscreen">
+      <div class="cardF">
+       <div class="leftside">
+            <img
+            src="https://images.unsplash.com/photo-1554907984-15263bfd63bd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YXJ0JTIwbXVzZXVtfGVufDB8fDB8fA%3D%3D&w=1000&q=80"
+            class="product"
+            alt="Shoes"
+            />
+       </div>
+       <div class="rightside">
+            <form action="{{ path('app_payment_new') }}" method="POST">
+            <h2>Select a date :</h2>       
+            {{ form_row(form.purchaseDate, {'attr': {'class': 'inputbox', 'name': 'exp_date', 'id': 'exp_date', 'required': 'required'}}) }}
          
-         <div class="service-item position-relative" id="form-fields" style="display:none;">
-            <h3>Select Ticket Quantity:</h3>
-            <div class="ticket-quantity mb-3">
-              <div class="d-flex justify-content-between align-items-center">
-              <div style="width: 30%;">
-                  <span style="color: black;">Adult</span>
-                </div>
-                <div style="width: 30%;">
-                   {{ form_label(form.nbAdult) }}
-                   {{ form_widget(form.nbAdult) }}   
-                </div>
-                <div style="width: 30%;">
-                 <span style="color: black;" , class="adult-price">$0</span>
-                </div>
-              </div>
+
+            <div id="form-fields" style="display:none;">
+            <p>Adult Ticket Number</p>
+            <div class="expcvv">
+             {{ form_label(form.nbAdult) }}
+             {{ form_widget(form.nbAdult, {'attr': {'class': 'inputbox adult-spinner',  'id': 'exp_date', 'required': 'required'}}) }}   
+            <p class="expcvv_text2">  </p>
+            <span name="cvv" id="cvv", class="inputbox adult-price">$0</span>
             </div>
 
-             <div class="ticket-quantity mb-3">
-              <div class="d-flex justify-content-between align-items-center">
-              <div style="width: 30%;">
-                  <span style="color: black;">Teenager</span>
-                </div>
-                <div style="width: 30%;">
-                   {{ form_label(form.nbTeenager) }}
-                   {{ form_widget(form.nbTeenager) }}
-                </div>
-                <div style="width: 30%;">
-                 <span style="color: black;", class="teen-price">$0</span>
-                </div>
-              </div>
+            <p>Teenager Ticket Number</p>
+            <div class="expcvv">
+             {{ form_label(form.nbTeenager) }}
+             {{ form_widget(form.nbTeenager, { 'attr': {'class': 'inputbox teen-spinner', 'name': 'card_number', 'id': 'card_number', 'required': 'required'} }) }}
+            <p class="expcvv_text2">  </p>
+            <span name="cvv" id="cvv", class="inputbox teen-price">$0</span>
             </div>
 
-             <div class="ticket-quantity mb-3">
-              <div class="d-flex justify-content-between align-items-center">
-              <div style="width: 30%;">
-                  <span style="color: black;">Student</span>
-                </div>
-                <div style="width: 30%;">
-                    {{ form_label(form.nbStudent) }}
-                    {{ form_widget(form.nbStudent) }} 
-                </div>
-                <div style="width: 30%;">
-                 <span style="color: black;", class="student-price">$0</span>
-                </div>
-              </div>
+            <p>Student Ticket Number</p>
+            <div class="expcvv">
+            {{ form_label(form.nbStudent) }}
+             {{ form_widget(form.nbStudent, { 'attr': {'class': 'inputbox student-spinner', 'name': 'card_number', 'id': 'card_number', 'required': 'required'} }) }} 
+            <p class="expcvv_text2">  </p>
+            <span name="cvv" id="cvv", class="inputbox student-price">$0</span>
             </div>
+            <p></p>
 
-         <div class="ticket-quantity mb-3 text-center">
-              {{ form_row(form.totalPayment) }} 
+        
+            <div class="expcvv">
+            <p>Total amount : </p>
+            <p class="expcvv_text2">  </p>
+             {{ form_row(form.totalPayment, { 'attr': {'class': 'inputbox total-amount', 'name': 'name', 'type': 'text'} }) }} 
             </div>
-            <div class="ticket-quantity mb-3 text-center">
-              <button class="btn btn-outline-danger btn-sm">{{ button_label|default('Add to Card') }}</button>
-            </div>
-             {{ form_end(form) }}
-          </div>
+           
+            <button type="submit" class="button">{{ button_label|default('Add to Card') }}</button>
+            {{ form_end(form) }}
+          </form> 
         </div>
-    </div><!-- End Service Item -->
-
-
-      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                   <div class="service-photo">
-             <img src="{{asset('Front/assets/img/front-home/museum1.png')}}" alt="Service 1">
-        </div>
-      </div><!-- End Service Item -->
-   
-    </div>
-
+      </div>
+      </div>
+       </div>
   </div>
-  
+  </div>
 </section><!-- End Services Section -->
+
 
 <script>
    
@@ -232,48 +203,151 @@
 </script>
 
 <style>
-/* Styles for Payment Form */
-.service-photo img {
-  height: 250px; /* adjust height as needed */
-  border-radius: 8px;
-  object-fit: cover;
-}
-form label {
-  font-weight: bold;
-}
-
-form .ticket-quantity {
-  margin-bottom: 20px;
-}
-
-form .ticket-quantity input {
-  width: 50px;
-}
-
-form .total-amount input {
-  background-color: #f1f1f1;
-  border: none;
-  font-weight: bold;
-}
-
-form button {
-  background-color: #008CBA;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 20px;
-}
-
-form button:hover {
-  background-color: #006080;
-}
-
 body {
-  background-color: black;
+    font-family: 'Roboto', sans-serif!important;
+	margin:0;
+	padding:0;
+	box-sizing: border-box;
 }
 
+.mainscreen
+{
+	min-height: 100vh;
+	width: 100%;
+	display: flex;
+    flex-direction: column;
+    background-color: #DFDBE5;
+    background-image: url("{{asset('Front/assets/img/background.jpg')}}");
+    color:#BD2A2E;
+}
+
+.cardF {
+	width: 60rem;
+    margin: auto;
+    background: white;
+    position:center;
+    align-self: center;
+    top: 50rem;
+    border-radius: 1.5rem;
+    box-shadow: 4px 3px 20px #3535358c;
+    display:flex;
+    flex-direction: row;
+    
+}
+
+.leftside {
+	background: #030303;
+	width: 25rem;
+	display: inline-flex;
+    align-items: center;
+    justify-content: center;
+	border-top-left-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
+}
+
+.product {
+    object-fit: cover;
+	width: 20em;
+    height: 20em;
+    border-radius: 100%;
+}
+
+.rightside {
+    background-color: #ffffff;
+	width: 35rem;
+	border-bottom-right-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+    padding: 1rem 2rem 3rem 3rem;
+}
+
+p{
+    display:block;
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin: .8rem 0;
+}
+
+.inputbox
+{
+    color:#030303;
+	width: 100%;
+    padding: 0.5rem;
+    border: none;
+    border-bottom: 1.5px solid #ccc;
+    margin-bottom: 1rem;
+    border-radius: 0.3rem;
+    font-family: 'Roboto', sans-serif;
+    color: #615a5a;
+    font-size: 1.1rem;
+    font-weight: 500;
+  outline:none;
+}
+
+
+  .expcvv {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 0.6rem;
+  }
+  #card_number {
+    width: 70%; /* set the width of the card_number input to 70% */
+  }
+  #cvv {
+    width: 30%; /* set the width of the cvv input to 30% */
+  }
+
+
+.expcvv_text{
+    padding-right: 1rem;
+}
+.expcvv_text2{
+    padding:0 1rem;
+}
+
+.button{
+    background: linear-gradient(
+135deg
+, #BD2A2E 0%, #000000  100%);
+    padding: 15px;
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-weight: 400;
+    font-size: 1.2rem;
+    margin-top: 10px;
+    width:100%;
+    letter-spacing: .11rem;
+    outline:none;
+}
+
+.button:hover
+{
+	transform: scale(1.05) translateY(-3px);
+    box-shadow: 3px 3px 6px #38373785;
+}
+
+@media only screen and (max-width: 1000px) {
+    .cardF{
+        flex-direction: column;
+        width: auto;
+      
+    }
+
+    .leftside{
+        width: 100%;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 0;
+      border-top-right-radius:0;
+      border-radius:0;
+    }
+
+    .rightside{
+        width:auto;
+        border-bottom-left-radius: 1.5rem;
+        padding:0.5rem 3rem 3rem 2rem;
+      border-radius:0;
+    }
+}
 </style>
 
 {% endblock %}
