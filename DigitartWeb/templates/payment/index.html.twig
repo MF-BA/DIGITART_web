@@ -20,8 +20,8 @@
     <!-- ======= Services Section ======= -->
 <section id="services" class="services section-bg">
   <div class="container" data-aos="fade-up">
-      <div class="row gy-4">
-      <div class="section-header">
+      <div class="row gy-4" data-aos="fade-up" data-aos-delay="200">
+      <div class="section-header" data-aos="fade-up" data-aos-delay="200">
         <h2>Enjoy your journey with DigitArt ! </h2>
         <p>Here you can reserve you're ticket </p>
       </div>
@@ -31,16 +31,16 @@
          <li><a href="{{ path('app_payment_card') }}">Check Card</a></li>
     </div>
 {% endfor %}
-      <div class="mainscreen">
-      <div class="cardF">
-       <div class="leftside">
+      <div class="mainscreen" data-aos="fade-up" data-aos-delay="200">
+      <div class="cardF" data-aos="fade-up" data-aos-delay="200">
+       <div class="leftside" data-aos="fade-up" data-aos-delay="200">
             <img
             src="https://images.unsplash.com/photo-1554907984-15263bfd63bd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YXJ0JTIwbXVzZXVtfGVufDB8fDB8fA%3D%3D&w=1000&q=80"
             class="product"
             alt="Shoes"
             />
        </div>
-       <div class="rightside">
+       <div class="rightside" data-aos="fade-up" data-aos-delay="200">
             <form action="{{ path('app_payment_new') }}" method="POST">
             <h2>Select a date :</h2>       
             {{ form_row(form.purchaseDate, {'attr': {'class': 'inputbox', 'name': 'exp_date', 'id': 'exp_date', 'required': 'required'}}) }}
