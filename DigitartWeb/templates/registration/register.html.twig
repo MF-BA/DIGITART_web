@@ -15,6 +15,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   padding: 60px 30px 30px 110px !important;
+  overflow: scroll !important; /* add overflow property */
    }
    .login100-pic {
   width: 440px !important;
@@ -102,6 +103,7 @@ a:hover {
   align-items: center !important;
   padding: 15px !important;
   background-image: url("login/images/background.jpg") !important;
+
 }
 .container-login100-form-btn {
   width: 30% !important;
@@ -119,6 +121,10 @@ a:hover {
 .text-center {
     position: relative !important;
     right: 30px !important;
+}
+.error-msg-form{
+  color: red !important;
+  font-size: 0.8em !important;
 }
 
 	</style>
@@ -161,7 +167,7 @@ a:hover {
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(registrationForm.cin, {'attr': {'class': 'form-control', 'placeholder': 'Enter cin'}}) }}
-          {{ form_errors(registrationForm.cin) }}
+          <small class="error-msg-form">{{ form_errors(registrationForm.cin) }}</small>
           <small class="form-text text-muted">Cin must contain 8 digits</small>
         </div>
       </div>
@@ -173,7 +179,7 @@ a:hover {
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(registrationForm.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Enter First name'}}) }}
-          {{ form_errors(registrationForm.firstname) }}
+          <small class="error-msg-form">{{ form_errors(registrationForm.firstname) }}</small>
         </div>
       </div>
 
@@ -184,7 +190,7 @@ a:hover {
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(registrationForm.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Enter Last name'}}) }}
-          {{ form_errors(registrationForm.lastname) }}
+          <small class="error-msg-form">{{ form_errors(registrationForm.lastname) }}</small>
           
         </div>
       </div>
@@ -195,7 +201,7 @@ a:hover {
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email'}}) }}
-          {{ form_errors(registrationForm.email) }}
+          <small class="error-msg-form">{{ form_errors(registrationForm.email) }}</small>
           <small class="form-text text-muted">Please enter a valid email!</small>
         </div>
       </div>
@@ -206,7 +212,7 @@ a:hover {
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Enter Password'}}) }}
-          {{ form_errors(registrationForm.plainPassword) }}
+          <small class="error-msg-form">{{ form_errors(registrationForm.plainPassword) }}</small>
           <small class="form-text text-muted">Please enter a complex password</small>
         </div>
       </div>
@@ -222,7 +228,7 @@ a:hover {
         </div>
 <div class="col-12 col-md-9">
 {{ form_widget(registrationForm.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter Address'}}) }}
-{{ form_errors(registrationForm.address) }}
+<small class="error-msg-form">{{ form_errors(registrationForm.address) }}</small>
 
 </div>
 </div>
@@ -234,7 +240,7 @@ a:hover {
     </div>
     <div class="col-12 col-md-9">
       {{ form_widget(registrationForm.phoneNum, {'attr': {'class': 'form-control', 'placeholder': 'Enter Phone'}}) }}
-      {{ form_errors(registrationForm.phoneNum) }}
+      <small class="error-msg-form">{{ form_errors(registrationForm.phoneNum) }}</small>
       <small class="form-text text-muted">Phone number must contain 8 digits</small>
     </div>
   </div>
@@ -255,7 +261,7 @@ a:hover {
   </div>
   <div class="col-12 col-md-9">
     {{ form_widget(registrationForm.role, {'attr': {'class': 'form-control'}}) }}
-    {{ form_errors(registrationForm.role) }}
+    <small class="error-msg-form">{{ form_errors(registrationForm.role) }}</small>
   </div>
 </div>
 {# Gender #}
@@ -264,7 +270,17 @@ a:hover {
         {{ form_label(registrationForm.gender, 'Gender') }}
         </div>
     <div class="col-12 col-md-9">
-        {{ form_widget(registrationForm.gender, {'attr': {'class': 'form-control'}}) }}
+         {{ form_row(registrationForm.gender, {
+    'attr': {
+        'class': 'form-check-inline my-3'
+    },
+    'label_attr': {
+        'class': 'form-check-label mr-3'
+    },
+    'row_attr': {
+        'class': 'form-check'
+    }
+}) }}
     </div>
  </div>
 					</div>

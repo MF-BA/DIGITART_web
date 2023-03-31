@@ -19,7 +19,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class RegistrationFormType extends AbstractType
 {
@@ -27,7 +27,7 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             
-            ->add('cin', TextType::class, [
+            ->add('cin', IntegerType::class, [
                 'label' => 'Cin',
                 'attr' => [
                     'placeholder' => 'Enter cin',
@@ -43,6 +43,10 @@ class RegistrationFormType extends AbstractType
                         'max' => 8,
                         'exactMessage' => 'Cin must contain exactly {{ limit }} digits',
                     ]),
+                    new Regex([
+                        'pattern' => '/^\d+$/',
+                        'message' => 'Cin must be a number',
+                    ]),
                 ],
             ])
             ->add('firstname', TextType::class, [
@@ -55,7 +59,11 @@ class RegistrationFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter a first name',
-                    ])
+                    ]),
+                    new Regex([
+                        'pattern' => '/^[a-zA-Z]+$/',
+                        'message' => 'Please enter a valid first name',
+                    ]),
                 ],
             ])
             ->add('lastname', TextType::class, [
@@ -68,7 +76,11 @@ class RegistrationFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter a last name',
-                    ])
+                    ]),
+                    new Regex([
+                        'pattern' => '/^[a-zA-Z]+$/',
+                        'message' => 'Please enter a valid last name',
+                    ]),
                 ],
             ]);
              // Add the email and password fields as hidden fields
@@ -124,7 +136,7 @@ class RegistrationFormType extends AbstractType
                     ])
                 ],
             ])
-            ->add('phoneNum', TextType::class, [
+            ->add('phoneNum', IntegerType::class, [
                 'label' => 'Phone Number',
                 'attr' => [
                     'placeholder' => 'Enter phone number',
@@ -141,6 +153,10 @@ class RegistrationFormType extends AbstractType
                     'max' => 8,
                     'exactMessage' => 'Phone number must contain exactly {{ limit }} digits',
                      ]),
+                     new Regex([
+                        'pattern' => '/^\d+$/',
+                        'message' => 'Phone number must be a number',
+                    ]),
                     
                 ],
             ])
@@ -158,7 +174,7 @@ class RegistrationFormType extends AbstractType
                 'expanded' => true,
                 'multiple' => false,
                
-            ] )
+            ])
             ->add('role', ChoiceType::class, [
                 'choices' => [
                     'Artist' => 'Artist',

@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-header">
-    <strong>Edit</strong> User
+    <strong>Edit</strong> Profile
   </div>
   <div class="card-body card-block">
     {{ form_start(form) }}
@@ -43,7 +43,17 @@
           <small class="form-text text-muted">Text</small>
         </div>
       </div>
-
+{# Email #}
+       <div class="row form-group">
+        <div class="col col-md-2">
+        {{ form_label(form.email, 'Email') }}
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email'}}) }}
+          {{ form_errors(form.email) }}
+          <small class="form-text text-muted">Please enter a valid email!</small>
+        </div>
+      </div>
 
       {# Address #}
       <div class="row form-group">
@@ -104,9 +114,9 @@
       
 
   <div class="card-footer">
-  <a href="{{ path('app_users_index') }}">
+  <a href="{{ path('app_users_showprofile', {'id': app.user.id}) }}">
    <button class="btn social stack-overflow btn-sm">
-   <i class="fa fa-mail-reply (alias)"></i>back to list</button></a>
+   <i class="fa fa-mail-reply (alias)"></i>back to profile</button></a>
 
     <button type="submit" class="btn btn-success btn-sm">
       <i class="fa fa-chevron-circle-down"></i> {{ button_label|default('Submit') }} 

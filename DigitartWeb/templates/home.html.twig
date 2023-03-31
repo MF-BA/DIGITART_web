@@ -1,8 +1,106 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+        <style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .hero .info .btn-get-started {
+    font-family: var(--font-primary) !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    letter-spacing: 1px !important;
+    display: inline-block !important;
+    padding: 12px 40px !important; 
+    border-radius: 50px !important;
+    transition: 0.5s !important;
+    margin: 10px !important;
+    color: #fff !important;
+    border: 2px solid var(--color-primary) !important;
+}
+.circle {
+			width: 60px !important;
+			height: 60px !important;
+			border-radius: 50%;
+      background-color: #BD2A2E !important;
+			position: relative !important;
+      top: 30px !important;
+      left: 250px !important;
+      border: 2px solid var(#BD2A2E);
+			color: #fff;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			transform: translateY(-50%);
+		}
 
+		.circle-name {
+			font-size: 10px;
+			position: relative !important;
+      top: 2px !important;
+      left: 1px !important;
+		}
+    .user-name {
+      font-size: 20px;
+      color: #BD2A2E;
+			position: relative !important;
+      top: 2px !important;
+      left: 230px !important;
+    }
+		.options {
+			position: fixed;
+			top: 155px !important;
+			right: 20px !important;
+			transform: translateY(-50%);
+			background-color: #000000;
+      border-radius: 10% !important;
+			box-shadow: 0 4px 6px rgba(0,0,0,.1);
+			padding: 10px;
+			display: none;
+		}
 
+		.option {
+			margin-bottom: 10px;
+			cursor: pointer;
+		}
 
+		.option:hover {
+			color: #BD2A2E;
+		}
+</style>
+
+		
+	
+	<script>
+		function toggleOptions() {
+			var options = document.getElementById('options');
+			if (options.style.display === 'none') {
+				options.style.display = 'block';
+			} else {
+				options.style.display = 'none';
+			}
+		}
+	</script>
+           <link href="{{asset('Front/assets/img/logo-digitart-rouge.png')}}" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+ 
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{{asset('Front/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/aos/aos.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/glightbox/css/glightbox.min.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/swiper/swiper-bundle.min.css')}}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{{asset('Front/assets/css/main.css')}}" rel="stylesheet">
+        {% endblock %}
  {% block navbar %}
         
           <!-- ======= Header ======= -->
@@ -43,7 +141,19 @@
             </ul>
           </li>
           <li><a href="contact.html">Contact</a></li>
+          
+          
         </ul>
+        <strong class="user-name">  {{app.user.firstname}}   {{app.user.lastname}} </strong>
+         <div class="circle" onclick="toggleOptions()">
+		
+		<div class="circle-name">user image</div>
+	</div>
+	<div class="options" id="options">
+		<a class="nav-link" href="#"><div class="option"><i class="fa fa-user"></i> My profile</div></a>
+		<a class="nav-link" href="{{path('app_logout')}}"><div class="option"><i class="fa fa-power-off"></i>  Logout</div></a>
+	</div>
+      
       </nav><!-- .navbar -->
 
     </div>
@@ -52,5 +162,55 @@
 
   {% block body %}
 
+<!-- ======= Hero Section ======= -->
+  <section id="hero" class="hero">
+
+    <div class="info d-flex align-items-center">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-6 text-center">
+            <h2 data-aos="fade-down">Welcome to <span>DigitArt</span></h2>
+            <p data-aos="fade-up">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <a data-aos="fade-up" data-aos-delay="200" href="#get-started" class="btn-get-started">Get Started</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="hero-carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+
+      <div class="carousel-item active" style="background-image: url({{asset('Front/assets/img/front-home/museum0.jpg')}})"></div>
+      <div class="carousel-item" style="background-image: url({{asset('Front/assets/img/front-home/museum1.png')}})"></div>
+      <div class="carousel-item" style="background-image: url({{asset('Front/assets/img/front-home/museum2.jpg')}})"></div>
+      <div class="carousel-item" style="background-image: url({{asset('Front/assets/img/front-home/museum3.jpg')}})"></div>
+      <div class="carousel-item" style="background-image: url({{asset('Front/assets/img/front-home/museum4.jpg')}})"></div>
+
+      <a class="carousel-control-prev" href="#hero-carousel" role="button" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bi bi-chevron-left" aria-hidden="true"></span>
+      </a>
+
+      <a class="carousel-control-next" href="#hero-carousel" role="button" data-bs-slide="next">
+        <span class="carousel-control-next-icon bi bi-chevron-right" aria-hidden="true"></span>
+      </a>
+
+    </div>
+
+  </section><!-- End Hero Section -->
+<div class="example-wrapper">
+    <h1>Hello {{ app.user.firstname }}! ✅</h1>
+
+    This friendly message is coming from:
+    <ul>
+        <li>Your controller at <code><a href="{{ 'C:/Users/venom-1/OneDrive/Documents/Symfonyprojects/FirstProject/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
+        <li>Your template at <code><a href="{{ 'C:/Users/venom-1/OneDrive/Documents/Symfonyprojects/FirstProject/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
+    </ul>
+
+
+
+
+
+
+
+</div>
 
   {% endblock %}

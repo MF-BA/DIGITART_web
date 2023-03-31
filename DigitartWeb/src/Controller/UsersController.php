@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+
 #[Route('/users')]
 class UsersController extends AbstractController
 {
@@ -61,7 +62,7 @@ class UsersController extends AbstractController
     #[Route('/profile/{id}', name: 'app_users_showprofile', methods: ['GET'])]
     public function showprofile(Users $user): Response
     {
-        
+       
         return $this->render('users/showprofile.html.twig', [
             'user' => $user,
         ]);
@@ -85,7 +86,24 @@ class UsersController extends AbstractController
             'form' => $form,
         ]);
     }
+    #[Route('/{id}/editprof', name: 'app_users_editprof', methods: ['GET', 'POST'])]
+    public function editprof(Request $request, Users $user, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(UsersType::class, $user);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('showbackpage', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('users/editaccount.html.twig', [
+            'user' => $user,
+            'form' => $form,
+        ]);
+    }
     #[Route('/{id}', name: 'app_users_delete', methods: ['POST'])]
     public function delete(Request $request, Users $user, UsersRepository $usersRepository): Response
     {

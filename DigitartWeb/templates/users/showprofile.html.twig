@@ -1,9 +1,9 @@
 {% extends 'back.html.twig' %}
 
-{% block title %}User{% endblock %}
+{% block title %}My Profile{% endblock %}
 
 {% block body %}
-    <h1>User</h1>
+    <h1>My Profile</h1>
 
     <table class="table">
         <tbody>
@@ -56,11 +56,11 @@
     </table>
      <div class="card-footer">
       <div class="row">
-    <a href="{{ path('app_users_index') }}">
+    <a href="{{ path('showbackpage') }}">
    <button type="button" class="btn social stack-overflow mr-2">
     <i class="fa fa-mail-reply (alias)"></i>back to home</button></a>
 
-    <a href="{{ path('app_users_edit', {'id': user.id}) }}">
+    <a href="{{ path('app_users_editprof', {'id': app.user.id}) }}">
     <button type="button" class="btn social dropbox mr-2">
     <i class="fa fa-pencil-square-o"></i>Edit my profile</button></a>
 

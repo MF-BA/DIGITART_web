@@ -45,6 +45,13 @@ class AuctionController extends AbstractController
              
          ]);
      }
+     #[Route('/showdigit', name: 'showdigit')]
+     public function display_digit(): Response
+     {
+         return $this->render('base.html.twig', [
+             
+         ]);
+     }
      #[Route('/showback', name: 'showbackpage')]
      public function display_back(): Response
      {
