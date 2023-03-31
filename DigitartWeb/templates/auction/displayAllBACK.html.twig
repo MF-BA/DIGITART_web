@@ -6,6 +6,22 @@
 
 {% block body %}
 
+	<script>
+		$(document).ready(function () {
+$("#myInput").on("input", function () {
+$.ajax({
+url: "{{ path('DisplayAuctionBack') }}",
+type: "GET",
+data: {
+input_value: $("#myInput").val()
+},
+success: function (data) { // Handle the response from the server
+}
+});
+});
+});
+	</script>
+
 	<div class="content mt-3">
 		<div class="animated fadeIn">
 			<div class="row">
@@ -16,44 +32,128 @@
 							<strong class="card-title">Artworks in The Auction</strong>
 						</div>
 						<div class="card-body">
+
+
 							<table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+								<thead></thead>
+								{% set sort = app.request.query.get('sort') %}
+								{% set order = app.request.query.get('order') %}
+
 								<thead>
 									<tr>
-										<th>artwork name</th>
-										<th>Starting Price</th>
-										<th>Increment</th>
-										<th>Ending Date</th>
-										<th>Description</th>
-										<th>highest bid</th>
-										<th>actions</th>
+										<th style="width: 10%;">
+											<a href="{{ path('DisplayAuctionBack', {'sort': 'artwork_name', 'order': sort == 'artwork_name' and order == 'ASC' ? 'DESC' : 'ASC' }) }}">
+												Artwork Name
+												{% if sort == 'artwork_name' %}
+													{% if order == 'ASC' %}
+														<i class="fa fa-chevron-circle-up"></i>
+
+													{% else %}
+														<i class="fa fa-chevron-circle-down"></i>
+													{% endif %}
+												{% endif %}
+											</a>
+										</th>
+										<th style="width: 10%;">
+											<a href="{{ path('DisplayAuctionBack', {'sort': 'starting_price', 'order': sort == 'starting_price' and order == 'ASC' ? 'DESC' : 'ASC' }) }}">
+												Starting Price
+												{% if sort == 'starting_price' %}
+													{% if order == 'ASC' %}
+														<i class="fa fa-chevron-circle-up"></i>
+
+													{% else %}
+														<i class="fa fa-chevron-circle-down"></i>
+													{% endif %}
+												{% endif %}
+											</a>
+										</th>
+										<th style="width: 8%;">
+											<a href="{{ path('DisplayAuctionBack', {'sort': 'increment', 'order': sort == 'increment' and order == 'ASC' ? 'DESC' : 'ASC' }) }}">
+												Increment
+												{% if sort == 'increment' %}
+													{% if order == 'ASC' %}
+														<i class="fa fa-chevron-circle-up"></i>
+
+													{% else %}
+														<i class="fa fa-chevron-circle-down"></i>
+													{% endif %}
+												{% endif %}
+											</a>
+										</th>
+										<th style="width: 10%;">
+											<a href="{{ path('DisplayAuctionBack', {'sort': 'ending_date', 'order': sort == 'ending_date' and order == 'ASC' ? 'DESC' : 'ASC' }) }}">
+												Ending Date
+												{% if sort == 'ending_date' %}
+													{% if order == 'ASC' %}
+														<i class="fa fa-chevron-circle-up"></i>
+
+													{% else %}
+														<i class="fa fa-chevron-circle-down"></i>
+													{% endif %}
+												{% endif %}
+											</a>
+										</th>
+										<th style="width: 42%;">Description</th>
+										<th style="width: 10%;">
+											<a href="{{ path('DisplayAuctionBack', {'sort': 'highest_bid', 'order': sort == 'highest_bid' and order == 'ASC' ? 'DESC' : 'ASC' }) }}">
+												Highest Bid
+												{% if sort == 'highest_bid' %}
+													{% if order == 'ASC' %}
+														<i class="fa fa-chevron-circle-up"></i>
+
+													{% else %}
+														<i class="fa fa-chevron-circle-down"></i>
+													{% endif %}
+												{% endif %}
+											</a>
+										</th>
+										<th style="width: 10%;">Actions</th>
 									</tr>
 								</thead>
+
+
 								<tbody>
 									{% for auction in auctions %}
 										<tr>
 											<td>{{ auction.artwork.artworkName|upper }}</td>
 											<td>{{ auction.startingPrice }}</td>
 											<td>{{ auction.increment }}</td>
-											<td>{{ auction.endingDate ? auction.endingDate|date('Y-m-d') : '' }}</td>
+											<td>
+												{% if auction.endingDate|date('Y-m-d') <  'now'|date('Y-m-d') %}
+													{{ auction.endingDate|date('Y-m-d') }}
+													<strong>{{'(Ended)'}}
+													{% else %}
+														{{ auction.endingDate|date('Y-m-d') }}
+													{% endif %}
+												</td>
+											</td>
 											<td>{{ auction.description }}</td>
 											<td>{{ highestBids[auction.idAuction] is not null ? highestBids[auction.idAuction] : 'none' }}</td>
 
 											<td>
 												<a href="{{ path('app_auction_show', {'id_auction': auction.idAuction}) }}">SHOW</a>
 												{% if highestBids[auction.idAuction] == 'No Bids yet' %}
-													<br>
-													<a href="{{ path('app_auction_edit', {'id_auction': auction.idAuction}) }}">
-														<strong>EDIT</a>
-														<a href="{{ path('app_auction_deleteBACK', {'id_auction': auction.idAuction}) }}" onclick="event.preventDefault(); document.getElementById('delete-form-{{ auction.idAuction }}').submit();">
-															&nbsp;&nbsp;&nbsp;&nbsp; DELETE
-														</a>
+													{% if auction.endingDate|date('Y-m-d') >=  'now'|date('Y-m-d') %}
 
-														<form id="delete-form-{{ auction.idAuction }}" action="{{ path('app_auction_deleteBACK', {'id_auction': auction.idAuction}) }}" method="POST" style="display: none;">
-															<input type="hidden" name="_method" value="DELETE">
-															<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ auction.idAuction) }}">
-														</form>
+														<br>
+														<a href="{{ path('app_auction_edit', {'id_auction': auction.idAuction}) }}">
+															<strong>EDIT</a>
+															<a href="{{ path('app_auction_deleteBACK', {'id_auction': auction.idAuction}) }}" onclick="event.preventDefault(); document.getElementById('delete-form-{{ auction.idAuction }}').submit();">
+																&nbsp;&nbsp;&nbsp;&nbsp; DELETE
+															</a>
 
-													{% endif %}
+															<form id="delete-form-{{ auction.idAuction }}" action="{{ path('app_auction_deleteBACK', {'id_auction': auction.idAuction}) }}" method="POST" style="display: none;">
+																<input type="hidden" name="_method" value="DELETE">
+																<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ auction.idAuction) }}">
+															</form>
+														{% endif %}
+
+													{% else %}
+														<br>
+														<a href="{{ path('app_bid_index', {'id_auction': auction.idAuction}) }}">
+															<strong>SHOW BIDS</a>
+														{% endif %}
+													</td>
 												</td>
 											</td>
 										</tr>

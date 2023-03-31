@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Form;
+
 use App\Entity\Artwork;
 use App\Entity\Auction;
 use Symfony\Component\Form\AbstractType;
@@ -8,26 +9,49 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Repository\ArtworkRepository;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+
+
 
 class Auction1Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
+            $builder
             ->add('startingPrice')
             ->add('increment')
-            ->add('endingDate')
+            ->add('endingDate', DateType::class, [
+                'widget' => 'single_text',
+                'label' => 'Ending Date',
+                'attr' => ['min' => (new \DateTime('+1 day'))->format('Y-m-d')],
+                'data' => new \DateTime('+1 day'),
+            ])
             ->add('description')
             ->add('artwork', EntityType::class, [
                 'class' => Artwork::class,
                 'choice_label' => 'artworkName',
                 'query_builder' => function (ArtworkRepository $er) {
+                    $sub = $er->createQueryBuilder('s')
+                        ->select('s.idArt, a.idArt as artwork_id')
+                        ->from(Auction::class, 'ac')
+                        ->join('ac.artwork', 'a')
+                        ->getQuery()
+                        ->getResult();
+
+                        $artworkIds = array_map(function($row) {
+                            return $row['artwork_id'];
+                        }, $sub);
+                        
+
                     return $er->createQueryBuilder('a')
-                        ->where('a.idArtist != :excluded_id')
-                        ->setParameter('excluded_id', -1);
+                        ->where('a.idArt NOT IN (:artwork_ids)')
+                        ->andWhere('a.idArtist != :excluded_id')
+                        ->setParameter('excluded_id', -1)
+                        ->setParameter('artwork_ids', $artworkIds);
                 },
             ]);
     }
+    //id_auction
 
     public function configureOptions(OptionsResolver $resolver): void
     {

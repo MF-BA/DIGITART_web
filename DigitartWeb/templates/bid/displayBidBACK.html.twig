@@ -1,0 +1,69 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Auction
+{% endblock %}
+
+
+{% block body %}
+
+	<script>
+		$(document).ready(function () {
+$("#myInput").on("input", function () {
+$.ajax({
+url: "{{ path('DisplayAuctionBack') }}",
+type: "GET",
+data: {
+input_value: $("#myInput").val()
+},
+success: function (data) { // Handle the response from the server
+}
+});
+});
+});
+	</script>
+
+	<div class="content mt-3">
+		<div class="animated fadeIn">
+			<div class="row">
+
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<a class="card-title">Bids in The
+								<strong>{{auction.artwork.artworkName|upper}}</strong>
+								Auction</a>
+						</div>
+						<div class="card-body">
+
+
+							<table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+								<thead></thead>
+								<thead>
+									<tr>
+										<th style="width: 10%;">
+												Offer
+										</th>
+										<th style="width: 10%;">
+												Date and Time
+										</th>
+										<th style="width: 8%;">
+												User
+										</th>
+									</tr>
+								</thead>
+
+								<tbody>
+									{% for bid in bids %}
+										<tr>
+											<td>{{ bid.offer }}</td>
+											<td>{{ bid.date|date('Y-m-d H:i:s') }}</td>
+											<td>{{ users[bid.id]|upper }}</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+							<a href="{{path('DisplayAuctionBack')}}">Go Back </a>
+						</div>
+					</div>
+				</div>
+			{% endblock %}

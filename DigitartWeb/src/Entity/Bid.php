@@ -26,7 +26,7 @@ class Bid
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date", type="date", nullable=false)
+     * @ORM\Column(name="date", type="datetime", nullable=false)
      */
     private $date;
 

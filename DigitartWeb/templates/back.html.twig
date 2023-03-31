@@ -31,6 +31,7 @@
 			<script src="{{asset('Back/vendors/popper.js/dist/umd/popper.min.js')}}"></script>
 			<script src="{{asset('Back/vendors/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 			<script src="{{asset('Back/assets/js/main.js')}}"></script>
+			<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 			<script src="{{asset('Back/vendors/chart.js/dist/Chart.bundle.min.js')}}"></script>
 			<script src="{{asset('Back/assets/js/dashboard.js')}}"></script>
@@ -38,27 +39,12 @@
 			<script src="{{asset('Back/vendors/jqvmap/dist/jquery.vmap.min.js')}}"></script>
 			<script src="{{asset('Back/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js')}}"></script>
 			<script src="{{asset('Back/vendors/jqvmap/dist/maps/jquery.vmap.world.js')}}"></script>
-			<script>
-				(function ($) {
-"use strict";
+			
 
-jQuery('#vmap').vectorMap({
-map: 'world_en',
-backgroundColor: null,
-color: '#ffffff',
-hoverOpacity: 0.7,
-selectedColor: '#1de9b6',
-enableZoom: true,
-showTooltip: true,
-values: sample_data,
-scaleColors: [
-'#1de9b6', '#03a9f5'
-],
-normalizeFunction: 'polynomial'
-});
-})(jQuery);
-			</script>
+
+
 		{% endblock %}
+
 
 	</head>
 
@@ -79,7 +65,7 @@ normalizeFunction: 'polynomial'
 					<div id="main-menu" class="main-menu collapse navbar-collapse">
 						<ul class="nav navbar-nav">
 							<li class="active">
-								<a href="index.html">
+								<a href="{{path('showbackpage')}}">
 									<i class="menu-icon fa fa-dashboard"></i>Dashboard
 								</a>
 							</li>
@@ -168,19 +154,19 @@ normalizeFunction: 'polynomial'
 									<i class="menu-icon fa fa-th"></i>Ticket</a>
 								<ul
 									class="sub-menu children dropdown-menu"><!-- <li><i class="menu-icon fa fa-th"></i><a href="">Tickets List</a></li>
-										                           <li><i class="menu-icon fa fa-th"></i><a href="">Add new ticket</a></li> -->
+																														                           <li><i class="menu-icon fa fa-th"></i><a href="">Add new ticket</a></li> -->
 								</ul>
 							</li>
 							<li class="menu-item-has-children dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<i class="menu-icon fa fa-th"></i>Auction</a>
+									<i class="menu-icon fa fa-gavel"></i>Auction</a>
 								<ul class="sub-menu children dropdown-menu">
 									<li>
-										<i class="menu-icon fa fa-th"></i>
-										<a href="{{path('DisplayAuctionBack')}}" >Auction</a>
+										<i class="menu-icon fa fa-shopping-cart"></i>
+										<a href="{{path('DisplayAuctionBack')}}">Auction</a>
 									</li>
 									<li>
-										<i class="menu-icon fa fa-th"></i>
+										<i class="menu-icon fa fa-plus"></i>
 										<a href="{{path('adminAddAUCTION')}}">Add to auction</a>
 									</li>
 								</ul>
@@ -340,8 +326,7 @@ normalizeFunction: 'polynomial'
 
 			{% endblock %}
 
-			{% block body %}
-            {% endblock %}
+			{% block body %}{% endblock %}
 		</body>
 	</body>
 </html>

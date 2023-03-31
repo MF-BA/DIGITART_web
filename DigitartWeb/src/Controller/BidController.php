@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Auction;
 use App\Entity\Bid;
 use App\Form\BidType;
 use App\Repository\BidRepository;
+use App\Repository\UsersRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,13 +15,30 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/bid')]
 class BidController extends AbstractController
 {
-    #[Route('/', name: 'app_bid_index', methods: ['GET'])]
-    public function index(BidRepository $bidRepository): Response
+    #[Route('/{id_auction}', name: 'app_bid_index', methods: ['GET'])]
+    public function showBidsAuction(UsersRepository $usersrepo, BidRepository $bidRepository, Auction $auction): Response
     {
-        return $this->render('bid/index.html.twig', [
-            'bids' => $bidRepository->findAll(),
+        $bids = $bidRepository->createQueryBuilder('b')
+            ->where('b.id_auction = :auctionId')
+            ->setParameter('auctionId', $auction->getIdAuction())
+            ->getQuery()
+            ->getResult();
+        $users[] = "";
+        foreach ($bids as $auc) {
+            $users[$auc->getId()] = $usersrepo->createQueryBuilder('u')
+                ->select("CONCAT(u.lastname, ' ', u.firstname) as full_name")
+                ->where('u.id = :id')
+                ->setParameter(':id', $auc->getIdUser())
+                ->getQuery()
+                ->getSingleScalarResult();
+        }
+
+
+        return $this->render('bid/displayBidBACK.html.twig', [
+            'bids' => $bids, 'auction' => $auction, 'users' => $users,
         ]);
     }
+
 
     #[Route('/new', name: 'app_bid_new', methods: ['GET', 'POST'])]
     public function new(Request $request, BidRepository $bidRepository): Response
@@ -67,7 +86,7 @@ class BidController extends AbstractController
     #[Route('/{id}', name: 'app_bid_delete', methods: ['POST'])]
     public function delete(Request $request, Bid $bid, BidRepository $bidRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$bid->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $bid->getId(), $request->request->get('_token'))) {
             $bidRepository->remove($bid, true);
         }
 

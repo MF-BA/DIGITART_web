@@ -49,23 +49,46 @@
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 			<script>
 				function updateTimer(endingDate, timerId) {
-var remainingTime = moment(endingDate).diff(moment(), 'seconds');
-var duration = moment.duration(remainingTime, 'seconds');
+    var remainingTime = moment(endingDate).diff(moment(), 'seconds');
+    var duration = moment.duration(remainingTime, 'seconds');
 
-// Update the timer
-if (remainingTime <= 0) { // Auction has ended
-document.getElementById(timerId).innerHTML = "Auction has ended";
-} else { // Auction is still active
-var days = duration.days();
-var hours = duration.hours();
-var minutes = duration.minutes();
-var seconds = duration.seconds();
-document.getElementById(timerId).innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
-setTimeout(function () {
-updateTimer(endingDate, timerId);
-}, 1000); // Update the timer every second
+    // Update the timer
+    if (remainingTime <= 0) { // Auction has ended
+        document.getElementById(timerId).innerHTML = "Auction has ended";
+    } else { // Auction is still active
+        var years = duration.years();
+        var months = duration.months();
+        var days = duration.days();
+        var hours = duration.hours();
+        var minutes = duration.minutes();
+        var seconds = duration.seconds();
+        
+        var timeStr = "";
+        if (years > 0) {
+            timeStr += years + "y ";
+        }
+        if (months > 0) {
+            timeStr += months + "mo ";
+        }
+        if (days > 0) {
+            timeStr += days + "d ";
+        }
+        if (hours > 0) {
+            timeStr += hours + "h ";
+        }
+        if (minutes > 0) {
+            timeStr += minutes + "m ";
+        }
+        timeStr += seconds + "s";
+        
+        document.getElementById(timerId).innerHTML = timeStr;
+        setTimeout(function () {
+            updateTimer(endingDate, timerId);
+        }, 1000);
+    }
 }
-}
+ // Update the timer every second
+
 			</script>
 
 		{% block BID_CONDITION %}
@@ -109,7 +132,7 @@ updateTimer(endingDate, timerId);
 						</li>
 						<!-- @formatter:off -->
 						<li class="dropdown">
-							<a href="{{path('displayAll')}}"
+							<a href="{{path('displayAUCTION')}}"
 								{% block auctionActive %}{% endblock %}>
 								<span>auction</span>
 								<i class="bi bi-chevron-down dropdown-indicator"></i>
