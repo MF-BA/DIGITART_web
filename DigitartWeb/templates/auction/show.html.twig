@@ -127,7 +127,7 @@ return true;
 
 							<div class="meta-top">
 								<a>The starting Price :
-									{{auction.startingPrice}}
+									{{auction.startingPrice ~ '$'}}
 								</a>
 								<br>
 								<br>
@@ -145,7 +145,7 @@ return true;
 							</div>
 							<br>
 
-							<h2 class="sidebar-title">Make An Offer :
+							<h2 class="sidebar-title" >Make An Offer :
 							</h2>
 
 							{{ form_start(form, {'attr': {'class': 'mt-3', 'onsubmit': 'return validateBid();'}})}}

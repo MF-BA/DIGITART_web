@@ -93,7 +93,7 @@ success: function (data) { // Handle the response from the server
 												{% endif %}
 											</a>
 										</th>
-										<th style="width: 42%;">Description</th>
+										<th style="width: 40%;">Description</th>
 										<th style="width: 10%;">
 											<a href="{{ path('DisplayAuctionBack', {'sort': 'highest_bid', 'order': sort == 'highest_bid' and order == 'ASC' ? 'DESC' : 'ASC' }) }}">
 												Highest Bid
@@ -107,7 +107,7 @@ success: function (data) { // Handle the response from the server
 												{% endif %}
 											</a>
 										</th>
-										<th style="width: 10%;">Actions</th>
+										<th style="width: 12%;">Actions</th>
 									</tr>
 								</thead>
 
@@ -131,7 +131,7 @@ success: function (data) { // Handle the response from the server
 											<td>{{ highestBids[auction.idAuction] is not null ? highestBids[auction.idAuction] : 'none' }}</td>
 
 											<td>
-												<a href="{{ path('app_auction_show', {'id_auction': auction.idAuction}) }}">SHOW</a>
+												<a href="{{ path('app_bid_index', {'id_auction': auction.idAuction}) }}"><strong>More Information</a>
 												{% if highestBids[auction.idAuction] == 'No Bids yet' %}
 													{% if auction.endingDate|date('Y-m-d') >=  'now'|date('Y-m-d') %}
 
@@ -147,11 +147,6 @@ success: function (data) { // Handle the response from the server
 																<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ auction.idAuction) }}">
 															</form>
 														{% endif %}
-
-													{% else %}
-														<br>
-														<a href="{{ path('app_bid_index', {'id_auction': auction.idAuction}) }}">
-															<strong>SHOW BIDS</a>
 														{% endif %}
 													</td>
 												</td>

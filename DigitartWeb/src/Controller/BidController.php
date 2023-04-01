@@ -18,9 +18,16 @@ class BidController extends AbstractController
     #[Route('/{id_auction}', name: 'app_bid_index', methods: ['GET'])]
     public function showBidsAuction(UsersRepository $usersrepo, BidRepository $bidRepository, Auction $auction): Response
     {
+        $highestBid = $bidRepository->highestBid($auction->getIdAuction());
+
+        if ($highestBid)
+            $highestBid = $highestBid->getOffer();
+        else $highestBid = null;
+
         $bids = $bidRepository->createQueryBuilder('b')
             ->where('b.id_auction = :auctionId')
             ->setParameter('auctionId', $auction->getIdAuction())
+            ->orderBy('b.offer','Desc')
             ->getQuery()
             ->getResult();
         $users[] = "";
@@ -35,7 +42,7 @@ class BidController extends AbstractController
 
 
         return $this->render('bid/displayBidBACK.html.twig', [
-            'bids' => $bids, 'auction' => $auction, 'users' => $users,
+            'bids' => $bids, 'auction' => $auction, 'users' => $users,"highestBid" =>$highestBid,
         ]);
     }
 

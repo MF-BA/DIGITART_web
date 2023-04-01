@@ -3,23 +3,55 @@
 {% block title %}Auction
 {% endblock %}
 
-
 {% block body %}
 
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/pdfmake.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/vfs_fonts.js"></script>
+
 	<script>
+	
 		$(document).ready(function () {
-$("#myInput").on("input", function () {
-$.ajax({
-url: "{{ path('DisplayAuctionBack') }}",
-type: "GET",
-data: {
-input_value: $("#myInput").val()
-},
-success: function (data) { // Handle the response from the server
-}
+    $("#saveAsPdf").click(function () {
+		
+        // Define the document definition
+        var docDefinition = {
+            content: [
+                { text: "{{auction.artwork.artworkName|upper}}", style: 'header' },
+                { text: "By : {{auction.artwork.idArtist.lastname|upper}} {{auction.artwork.idArtist.firstname|upper}}" },
+                { text: "The starting Price : {{auction.startingPrice}}" },
+                { text: "Increment : {{auction.increment}}" },
+{ text: 'Description: {{ auction.description|replace(["\""], ["\\\\\""]) }}' },
+                { text: "The Highest Offer : {{ highestBid is not null ? highestBid ~ '$' : 'none' }}" },
+                { text: "\n\n\n" },
+                {
+                    style: 'tableExample',
+                    table: {
+                        headerRows: 1,
+                        body: [
+                            ['Offer', 'Date and Time', 'Bidder'],
+                            {% for bid in bids %}
+                            ['{{ bid.offer }}', '{{ bid.date|date('Y-m-d H:i:s') }}', '{{ users[bid.id]|upper }}'],
+                            {% endfor %}
+                        ]
+                    }
+                }
+            ],
+            styles: {
+                header: {
+                    fontSize: 22,
+                    bold: true
+                },
+                tableExample: {
+                    margin: [0, 5, 0, 15]
+                }
+            }
+        };
+
+        // Generate the PDF
+        pdfMake.createPdf(docDefinition).download('auction.pdf');
+    });
 });
-});
-});
+
 	</script>
 
 	<div class="content mt-3">
@@ -29,25 +61,61 @@ success: function (data) { // Handle the response from the server
 				<div class="col-md-12">
 					<div class="card">
 						<div class="card-header">
-							<a class="card-title">Bids in The
+							<a class="card-title">More Information About
 								<strong>{{auction.artwork.artworkName|upper}}</strong>
 								Auction</a>
 						</div>
 						<div class="card-body">
+							<H3>
+								<strong>{{auction.artwork.artworkName|upper}}</strong>
+							</H3>
+							<br>
 
+							<a>By :
+								<strong>
+									{{auction.artwork.idArtist.lastname|upper}}
+									{{auction.artwork.idArtist.firstname|upper}}
+								</strong>
+							</a>
+							<br>
+							<br>
+							<a>The starting Price :
+								<strong>{{auction.startingPrice}}</strong>
+							</a>
+							<br>
+							<br>
+							<a>Increment :
+								<strong>{{auction.increment}}</strong>
+							</a>
+							<br>
+							<br>
+							<a>Description :
+								<strong>{{auction.description}}</strong>
+							</a>
+							<br>
+							<br>
+
+							
+							<a>The Highest Offer :
+								<strong>
+									{{ highestBid is not null ? highestBid ~ '$' : 'none' }}
+								</strong>
+							</a>
+							<br>
+							<br>
 
 							<table id="bootstrap-data-table-export" class="table table-striped table-bordered">
 								<thead></thead>
 								<thead>
 									<tr>
 										<th style="width: 10%;">
-												Offer
+											Offer
 										</th>
 										<th style="width: 10%;">
-												Date and Time
+											Date and Time
 										</th>
 										<th style="width: 8%;">
-												User
+											Bidder
 										</th>
 									</tr>
 								</thead>
@@ -59,11 +127,20 @@ success: function (data) { // Handle the response from the server
 											<td>{{ bid.date|date('Y-m-d H:i:s') }}</td>
 											<td>{{ users[bid.id]|upper }}</td>
 										</tr>
+									{% else %}
+										<tr>
+											<td colspan="7">No offers yet</td>
+										</tr>
 									{% endfor %}
 								</tbody>
 							</table>
-							<a href="{{path('DisplayAuctionBack')}}">Go Back </a>
+							<a href="#" id="saveAsPdf">Save as PDF</a>
+
 						</div>
+						
+							
 					</div>
+						<a href="{{path('DisplayAuctionBack')}}">Go Back</a>
+
 				</div>
 			{% endblock %}
