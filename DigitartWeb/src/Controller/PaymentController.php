@@ -13,6 +13,7 @@ use App\Repository\TicketRepository;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/payment')]
 class PaymentController extends AbstractController
@@ -49,10 +50,10 @@ class PaymentController extends AbstractController
                 return $this->redirectToRoute('app_payment_new');
             }
     
-            if ($paymentCount >= 3) {
+           if ($paymentCount >= 4) {
                 $this->addFlash('error', 'You have reached the maximum limit of payments. Please finalize your purchases first!');
                 return $this->redirectToRoute('app_payment_new');
-            }
+            } 
     
             $entityManager->persist($payment);
             $entityManager->flush();
@@ -99,6 +100,7 @@ class PaymentController extends AbstractController
                         'quantity'   => 1,
                     ]
                 ],
+                'customer_email'       => 'aminemehdi@gmail.com',
                 'mode'                 => 'payment',
                 'success_url'          => $this->generateUrl('app_payment_CurrentcardHistory', [], UrlGeneratorInterface::ABSOLUTE_URL),
                 'cancel_url'           => $this->generateUrl('app_payment_card', [], UrlGeneratorInterface::ABSOLUTE_URL),
@@ -155,7 +157,49 @@ class PaymentController extends AbstractController
     }
 
   
-
+    #[Route('/test', name: 'calendar')]
+    public function Test( )
+    {
+        
+        return $this->render('payment/test.html.twig', [
+        ]);
+    }
    
+
+    #[Route('/ticket/date', name: 'get_available_dates')]
+    public function getAvailableDates(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $selectedDate = $request->query->get('selectedDate');
+        $query = $entityManager->createQueryBuilder()
+            ->select('t.ticketDate, t.ticketEdate')
+            ->from(Ticket::class, 't')
+            ->where(':selectedDate BETWEEN t.ticketDate AND t.ticketEdate')
+            ->setParameter('selectedDate', $selectedDate)
+            ->getQuery();
+
+        $tickets = $query->getResult();
+
+        $availableDates = [];
+
+        foreach ($tickets as $ticket) {
+            $ticketDate = $ticket['ticketDate'];
+            $ticketEdate = $ticket['ticketEdate'];
+
+            $date = new \DateTime($ticketDate->format('Y-m-d'));
+            $endDate = new \DateTime($ticketEdate->format('Y-m-d'));
+
+            while ($date <= $endDate) {
+                if (!in_array($date->format('Y-m-d'), $availableDates)) {
+                    $availableDates[] = $date->format('Y-m-d');
+                }
+                $date->modify('+1 day');
+            }
+        }
+
+        return new JsonResponse([
+            'availableDates' => $availableDates,
+        ]);
+    }
+
 
 }

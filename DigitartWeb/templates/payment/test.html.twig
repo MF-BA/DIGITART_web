@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Test{% endblock %}
+{% block navbar %}
+{% endblock %}
+{% block body %}
+
+  
+<form>
+<input type="datetime-local" class="form-control" placeholder="select a date">
+
+</form>
+
+<script>
+config= {
+    inline: true,
+}
+flatpickr("input[type=datetime-local]",config);
+
+</script>
+{% endblock %}
+{% block footer %}
+{% endblock %}

@@ -18,7 +18,7 @@ class PaymentType extends AbstractType
         $builder
         ->add('purchaseDate', DateType::class, [
             'widget' => 'single_text',
-            'label' => 'Ticket Start Date',
+            'label' => ' ',
             'attr' => ['min' => (new \DateTime())->format('Y-m-d')],
         ])
         ->add('nbAdult', IntegerType::class, [
@@ -37,7 +37,7 @@ class PaymentType extends AbstractType
             'attr' => ['min' => 0, 'max' => 10, 'class' => 'student-spinner'],
         ])
         ->add('totalPayment', IntegerType::class, [
-            'label' => 'Total Amount',
+            'label' => ' ',
             'mapped' => true,
             'attr' => [
                 'class' => 'total-amount',

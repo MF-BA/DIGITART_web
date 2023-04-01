@@ -42,10 +42,8 @@
        </div>
        <div class="rightside" data-aos="fade-up" data-aos-delay="200">
             <form action="{{ path('app_payment_new') }}" method="POST">
-            <h2>Select a date :</h2>       
-            {{ form_row(form.purchaseDate, {'attr': {'class': 'inputbox', 'name': 'exp_date', 'id': 'exp_date', 'required': 'required'}}) }}
-         
-
+            <h2>Select a date :</h2>  
+            {{ form_row(form.purchaseDate, {'attr': {'class': 'form-control','type': 'datetime-local','data-flatpickr': {dateFormat: "Y-m-d"}|json_encode}}) }}
             <div id="form-fields" style="display:none;">
             <p>Adult Ticket Number</p>
             <div class="expcvv">
@@ -75,7 +73,7 @@
         
             <div class="expcvv">
             <p>Total amount : </p>
-            <p class="expcvv_text2">  </p>
+            <p class="expcvv_text2"> </p>
              {{ form_row(form.totalPayment, { 'attr': {'class': 'inputbox total-amount', 'name': 'name', 'type': 'text'} }) }} 
             </div>
            
@@ -92,7 +90,6 @@
 
 
 <script>
-   
     const purchaseDateInput = document.querySelector('#{{ form.purchaseDate.vars.id }}');
     const formFieldsDiv = document.querySelector('#form-fields');
 
@@ -192,6 +189,24 @@
             updateTotalAmount();
         });
     });
+
+// Initialize the flatpickr instance with an empty enable array
+const today = new Date();
+const startDate = new Date();
+startDate.setDate(today.getDate() - 1); // Set start date to yesterday
+
+const endDate = new Date();
+endDate.setDate(today.getDate() + 13); // Set end date to 14 days from today
+
+const enableDates = [{ from: startDate, to: endDate }];
+const config = {
+  inline: true,
+  enable: enableDates
+};   
+flatpickr("[data-flatpickr]", config);
+
+
+flatpickr("[data-flatpickr]", config);
 
 
     setTimeout(function() {
@@ -348,6 +363,33 @@ p{
       border-radius:0;
     }
 }
+
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange,
+.flatpickr-day.selected.inRange,
+.flatpickr-day.startRange.inRange,
+.flatpickr-day.endRange.inRange,
+.flatpickr-day.selected:focus,
+.flatpickr-day.startRange:focus,
+.flatpickr-day.endRange:focus,
+.flatpickr-day.selected:hover,
+.flatpickr-day.startRange:hover,
+.flatpickr-day.endRange:hover,
+.flatpickr-day.selected.prevMonthDay,
+.flatpickr-day.startRange.prevMonthDay,
+.flatpickr-day.endRange.prevMonthDay,
+.flatpickr-day.selected.nextMonthDay,
+.flatpickr-day.startRange.nextMonthDay,
+.flatpickr-day.endRange.nextMonthDay {
+    background: #BD2A2E; /* Change this value to your preferred color */
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #fff; /* Change this value to the text color you prefer */
+    border-color: #000000; /* Change this value to the border color you prefer */
+}
+
 </style>
 
 {% endblock %}
