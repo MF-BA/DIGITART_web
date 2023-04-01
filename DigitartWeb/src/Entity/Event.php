@@ -27,8 +27,9 @@ class Event
 
     /**
      * @var string
-     * @Assert\NotBlank(message = "Event name cannot be empty")
      * @ORM\Column(name="event_name", type="string", length=255, nullable=false)
+     *      
+     * 
      */
     private $eventName;
 

@@ -6,15 +6,14 @@
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-    .bg-gradient{ background-image: -o-linear-gradient(330deg, #7605f8 0%, #db48f9 100%), -o-linear-gradient(330deg, #9d25ee 0%, #f9488b 100%); background-image: linear-gradient(120deg, #9325ee 0%, #f948ea 100%), linear-gradient(120deg, #a425ee 0%, #f9488b 100%);
-}
+    
 </style>
-
+  <link href="{{asset('Front/assets/css/style-event.css')}}" rel="stylesheet">
 <!-- ======= Breadcrumbs ======= -->
-    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/breadcrumbs-bg.jpg')}});">
+    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/event_bg.jfif')}});">
       <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
 
-        <h2>Edit profile</h2>
+        <h2>Here Are the Events</h2>
         <ol>
           <li><a href="{{ path('showfrontpage') }}">Home</a></li>
           
@@ -23,7 +22,7 @@
       </div>
     </div><!-- End Breadcrumbs -->
   <!-- Counter Section Begin -->
-    <section class="counter-section bg-gradient">
+    <section class="counter-section bg-gradient special">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4">
@@ -56,6 +55,42 @@
         </div>
     </section>
     <!-- Counter Section End -->
+<style>
+.ha-text h2 {
+    color: #fdfdfd;
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 32px;
+}
+.bg-gradient{
+    	background-image: -o-linear-gradient(330deg, #f80519 0%, #080808 100%), -o-linear-gradient(330deg, #9d25ee 0%, #f9488b 100%) !important;
+	background-image: linear-gradient(120deg, #700000 0%, #b30202 100%), linear-gradient(120deg, #6d0404 0%, #000000 100%) !important;
+}
+.ha-text .ha-btn {
+	font-size: 16px;
+	color: #7b88ad;
+	font-weight: 600;
+	position: relative;
+}
+
+.ha-text .ha-btn:before {
+	position: absolute;
+	left: 0;
+	bottom: -6px;
+	height: 2px;
+	width: 100%;
+	background: #f44949 !important;
+	content: "";
+    
+}
+    .cc-text {
+  background: url('/images/event_bg.jpg') no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+    }
+</style>
 <script>
     var countDownDate = new Date("apr 15,2023 12:00:00").getTime();
     var x=setInterval(function(){
@@ -85,31 +120,127 @@ if(distance<0)
     },1000)
 </script>
     <!-- Home About Section Begin -->
+    {% set now = date() %}
+   {% for event in events %}
+   {% if event.getStartDate > now %}
+    <!-- Home About Section Begin -->
     <section class="home-about-section spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
                     <div class="ha-pic">
-                        <img src="img/event.png" alt="">
+                        <img src="{{ asset('images/' ~ event.image) }}" alt="">
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="ha-text">
-                        <h2>A propos de l'evenment</h2>
-                        <p>C’est un tournoi qui mettra 16 danseurs en compétition puis 16 rappeurs. 
-                            L’affrontement sera en 1v1 et le gagnant de chaque catégorie sera sélectionné par des jurys professionnels et il bénéficiera d’un prix. 
-                            L'événement aura lieu à la salle de restaurant de l’IHEC le 15 février à l'IHEC Carthage 
-                        </p>
+                        <h2>{{ event.getEventName }}</h2>
+                        <p>{{ event.getDetail }}</p>
                         <ul>
-                            <li><span class="icon_check"></span> Nom : Kill The Beat</li>
-                            <li><span class="icon_check"></span> Lieu : Resto Ihec</li>
-                            <li><span class="icon_check"></span> Temps : 15 Fevrier</li>
-                            <li><span class="icon_check"></span> Dance / Rap</li>
+                            <li><span class="icon_check"></span> Name : {{ event.getEventName }}</li>
+                            <li><span class="icon_check"></span> Max number of participants : {{ event.getNbParticipants }}</li>
+                            <li><span class="icon_check"></span> Start Time : {{ event.getStartTime }}h</li>
+
+
                         </ul>
-                        <a href="https://www.instagram.com/p/Cnz9f91A4cI/" class="ha-btn">Discover Now</a>
+                        <a href="{{ path('app_event_show_front', {'id': event.getId}) }}" class="ha-btn">Discover Now</a>
                     </div>
                 </div>
             </div>
         </div>
+        {% endif %}
+        {% endfor %}
+        
+ <section id="contact" class="contact">
+       <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+     <div class="row gy-4">
+      <div class="col-lg-6">
+        <div class="info-item  d-flex flex-column justify-content-center align-items-center">
+          <i class="bi bi-map"></i>
+          <h3>Our Address</h3>
+          <p>ESPRIT, 745151 A 874784</p>
+        </div>
+      </div><!-- End Info Item -->
+
+      <div class="col-lg-3 col-md-6">
+        <div class="info-item d-flex flex-column justify-content-center align-items-center">
+          <i class="bi bi-envelope"></i>
+          <h3>Email Us</h3>
+          <p>digitart@gmail.com</p>
+        </div>
+      </div><!-- End Info Item -->
+
+      <div class="col-lg-3 col-md-6">
+        <div class="info-item  d-flex flex-column justify-content-center align-items-center">
+          <i class="bi bi-telephone"></i>
+          <h3>Call Us</h3>
+          <p>+216 99 010 319</p>
+        </div>
+      </div><!-- End Info Item -->
+  
+     </div>
+
+       </section><!-- End Contact Section --> 
+ 
+
+ <!-- Contact Top Content Section Begin -->
+    <section class="contact-content-section" data-aos="fade-up" data-aos-delay="100">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="cc-text set-bg" data-setbg="images/event_bg.jpg">
+                        <div class="row">
+                            <div class="col-lg- offset-lg-4">
+                                <div class="section-title">
+                                    <h2>Location</h2>
+                                    <p>Get directions to our event center</p>
+                                </div>
+                                <div class="cs-text">
+                                    <div class="ct-address">
+                                        <span>Address:</span>
+                                        <p>01 Pascale Springs Apt. 339, NY City <br />United State</p>
+                                    </div>
+                                    <ul>
+                                        <li>
+                                            <span>Phone:</span>
+                                            (+12)-345-67-8910
+                                        </li>
+                                        <li>
+                                            <span>Email:</span>
+                                            info.colorlib@gmail.com
+                                        </li>
+                                    </ul>
+                                    <div class="ct-links">
+                                        <span>Website:</span>
+                                        <p>https://conference.colorlib.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="cc-map">
+  <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB20J0YArSAor39b70wlsLGS5L2LKKBc4A&q=Esprit+Tunisia&zoom=15&q=Esprit+Tunisia&center=36.8991667,10.1897222" frameborder="0" style="border:0; width: 100%; height: 580px;" allowfullscreen></iframe>
+
+                           <div class="map-hover">
+                            <i class="fa fa-map-marker"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        
     </section>
+    <!-- Contact Top Content Section End -->
+
+
+   
+
+
+
+
     {% endblock %}

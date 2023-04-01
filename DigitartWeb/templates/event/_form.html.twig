@@ -2,25 +2,31 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            {{ form_start(form) }}
+            {{ form_start(form,{attr:{novalidate:'novalidate'} }) }}
             <div class="card"> 
                 <div class="card-body">
                     <div class="form-group">
                         {{ form_label(form.eventName, 'Event Name') }}
                         {{ form_widget(form.eventName, { 'attr': {'class': 'form-control', 'placeholder': 'Enter the event name'} }) }}
-                        {% if form.eventName.vars.errors|length > 0 %}
-                            <span class="text-danger">{{ form.eventName.vars.errors[0].message }}</span>
-                        {% endif %}
+                        {{ form_errors(form.eventName, { 'attr': {'class': 'text-danger'} }) }}
+                        
                     </div>
 <hr>
                     <div class="form-group">
-                        {{ form_label(form.startDate, 'Start Date') }}
-                        {{ form_widget(form.startDate, { 'attr': {'class': 'form-control'} }) }}
-                    </div>
+                       {{ form_label(form.startDate, 'Start Date') }}
+                        <div class="input-group date">
+                                {{ form_widget(form.startDate, { 'attr': {'class': 'form-control', 'autocomplete': 'off'} }) }}
+                       
+                      </div>
+                      {{ form_errors(form.startDate) }}
+</div>
                       <hr>
                     <div class="form-group">
                         {{ form_label(form.endDate, 'End Date') }}
+                         <div class="input-group date">
                         {{ form_widget(form.endDate, { 'attr': {'class': 'form-control'} }) }}
+                        
+                      </div>
                     </div>
 <hr>
                     <div class="form-group">
@@ -31,11 +37,13 @@
                     <div class="form-group">
                         {{ form_label(form.detail, 'Details') }}
                         {{ form_widget(form.detail, { 'attr': {'class': 'form-control', 'placeholder': 'Enter the event details'} }) }}
+                        {{ form_errors(form.detail, { 'attr': {'class': 'text-danger'} }) }}
                     </div>
 <hr>
                     <div class="form-group">
                         {{ form_label(form.startTime, 'Start Time') }}
                         {{ form_widget(form.startTime, { 'attr': {'class': 'form-control', 'placeholder': 'Specify the start time'} }) }}
+                        {{ form_errors(form.startTime, { 'attr': {'class': 'text-danger'} }) }}
                     </div>
 <hr>
                     <div class="form-group">

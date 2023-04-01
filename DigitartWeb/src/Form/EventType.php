@@ -11,28 +11,102 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\GreaterThan;
-
-
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Validator\Constraints\Range;
 class EventType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-             ->add('eventName', null, [
+        ->add('eventName', TextType::class, [
+            'constraints' => [
+                new Length([
+                    'min' => '3',
+                    'max' => '20',
+                    'minMessage' => 'doit etre plus que 3',
+                    'maxMessage' => 'doit etre moins que 21',
+                ]),
+                new NotNull([
+                    'message' => 'Event name cannot be empty',
+                ]),
+            ],
+        ])
+        ->add('startDate', BirthdayType::class, [               
+            'label' => 'Start date',
+            'widget' => 'single_text',
+            'attr' => [
+                'class' => 'form-control',
+                'min' => date('Y-m-d'), // set the minimum date to today
+            ],
+            'constraints' => [
+                new NotNull([
+                    'message' => 'Event name cannot be empty',
+                ]),
+            ],
+            'data' => new \DateTime(),
+        ])
+        ->add('endDate', BirthdayType::class, [
+            'label' => 'End date',
+            'widget' => 'single_text',
+            'attr' => [
+                'class' => 'form-control',
+                'min' => date('Y-m-d'), // set the minimum date to today
+            ],
+            'constraints' => [
+                new NotBlank([
+                    'message' => 'End date cannot be empty',
+                ]),
+            ],
+            'data' => new \DateTime(),
+        ])
+            ->add('nbParticipants')
+            ->add('detail', TextType::class, [
                 'constraints' => [
-                    new NotBlank(),
-                    new Length(['max' => 255]),
+                    new Length([
+                        'min' => '5',
+                        'max' => '100',
+                        'minMessage' => 'doit etre plus que 5',
+                        'maxMessage' => 'doit etre moins que 100',
+                    ]),
+                    new NotNull([
+                        'message' => 'Event details cannot be empty',
+                    ]),
                 ],
             ])
-            ->add('startDate')
-            ->add('endDate')
-            ->add('nbParticipants')
-            ->add('detail')
-            ->add('startTime')
+            ->add('startTime', NumberType::class, [
+                'label' => 'Start time',
+                'attr' => [
+                    'class' => 'form-control',
+                    'min' => 0,
+                    'max' => 23,
+                ],
+                'constraints' => [
+                    new NotNull([
+                        'message' => 'Start time cannot be empty',
+                    ]),
+                    new Range([
+                        'min' => 0,
+                        'max' => 23,
+                        'notInRangeMessage' => 'Start time must be between {{ min }} and {{ max }}',
+                    ]),
+                ],
+            ])
             ->add('image')
-            ->add('idRoom', EntityType::class, [                 'class' => Room::class,                 'choice_label' => 'nameRoom',             ])
+            ->add('idRoom', EntityType::class, [                 
+                'class' => Room::class,                 
+                'choice_label' => 'nameRoom',             
+            ])
         ;
     }
+
 
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -40,4 +114,5 @@ class EventType extends AbstractType
             'data_class' => Event::class,
         ]);
     }
+
 }

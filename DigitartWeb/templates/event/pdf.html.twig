@@ -1,0 +1,36 @@
+<h1 class="align-center">Bienvenue dans votre application Travel me </h1>
+
+<p>Voila la liste de tout les Voyages</p>
+<table class="table" border="5" >
+    <thead class="thead-dark">
+    <tr>
+        <th>Id</th>
+        <th>Image</th>
+        <th>Event Name</th>
+        <th>Start Time</th>
+        <th>Max number of participants</th>
+        <th>Details</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for event in events %}
+        <tr>
+            <td>{{ event.id }}</td>
+            {% if event.image|length > 0 %}
+                <img src="{{ app.request.scheme ~ '://' ~ app.request.host ~ '/images/' ~ event.image }}" width="150" height="250">
+
+            {% else %}
+             <img src="{{ app.request.scheme ~ '://' ~ app.request.host ~ '/images/' ~ event.image }}" width="250" height="150">
+            {% endif %}
+            <td>{{ event.getEventName }}</td>
+            <td>{{ event.getStartTime }}h</td>
+            <td>{{ event.getNbParticipants}}</td>
+            <td>{{ event.getDetail}}</td>
+            <td>{{ event.getStartDate ? event.getStartDate|date('Y-m-d') : '' }}</td>
+            <td>{{ event.getEndDate ? event.getEndDate|date('Y-m-d') : '' }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
