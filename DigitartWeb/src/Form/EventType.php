@@ -30,9 +30,9 @@ class EventType extends AbstractType
             'constraints' => [
                 new Length([
                     'min' => '3',
-                    'max' => '20',
+                    'max' => '50',
                     'minMessage' => 'doit etre plus que 3',
-                    'maxMessage' => 'doit etre moins que 21',
+                    'maxMessage' => 'doit etre moins que 49',
                 ]),
                 new NotNull([
                     'message' => 'Event name cannot be empty',
@@ -44,7 +44,7 @@ class EventType extends AbstractType
             'widget' => 'single_text',
             'attr' => [
                 'class' => 'form-control',
-                'min' => date('Y-m-d'), // set the minimum date to today
+  
             ],
             'constraints' => [
                 new NotNull([
@@ -58,7 +58,7 @@ class EventType extends AbstractType
             'widget' => 'single_text',
             'attr' => [
                 'class' => 'form-control',
-                'min' => date('Y-m-d'), // set the minimum date to today
+
             ],
             'constraints' => [
                 new NotBlank([

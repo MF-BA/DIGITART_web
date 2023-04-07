@@ -56,7 +56,7 @@
   -o-background-size: cover;
   background-size: cover;
 }.pricing-section {
-  background: url('/images/event_bg.jpg') no-repeat center center;
+  background: url('/images/event_bg_1.jpg') no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -188,10 +188,11 @@ if(distance<0)
               <div class="watch-video d-flex align-items-center position-relative">
                 <i class="bi bi-play-circle"></i>
                 <a href="" class="glightbox stretched-link ">Watch Video</a>
-                <a href="{{ path('PDF_Voyage') }}">
+                
+              </div>
+              <a href="{{ path('PDF_Voyage') }}">
                  <button>Print all the events</button>
            </a>
-              </div>
             </div>
           </div>
 
@@ -209,7 +210,7 @@ if(distance<0)
                 <div class="col-lg-12">
                     <div class="section-title">
                         <h2>Ticket Pricing</h2>
-                        <p>Get your event ticket plan</p>
+                        <p>Entering the event is included when buying a normal ticket</p>
                     </div>
                 </div>
             </div>
@@ -222,7 +223,7 @@ if(distance<0)
                         </div>
                         <h4>Full Pass</h4>
                         <div class="pi-price">
-                            <h2><span></span>5 DT</h2>
+                            <h2><span></span>Free</h2>
                         </div>
                      
                         <a href="#" class="price-btn">Get Ticket <span class="arrow_right"></span></a>
@@ -244,16 +245,16 @@ if(distance<0)
             <article class="blog-details">
 
               <div class="post-img">
-                <img src="assets/img/blog/blog-1.jpg" alt="" class="img-fluid">
+                <img src="{{ asset('images/museum_event_1.jpg') }}" alt="" class="img-fluid">
               </div>
 
               <h2 class="title">Here are some additional informations to keep in mind</h2>
 
               <div class="meta-top">
                 <ul>
-                  <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="blog-details.html">John Doe</a></li>
+                  <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="blog-details.html">Koussay Bedhief</a></li>
                   <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-details.html"><time datetime="2020-01-01">Jan 1, 2022</time></a></li>
-                  <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> <a href="blog-details.html">12 Comments</a></li>
+          
                 </ul>
               </div><!-- End meta top -->
 
@@ -286,11 +287,9 @@ Be Respectful: Encourage attendees to be respectful to the museum staff, other a
 No Pets: Unless the museum allows service animals, it's best to encourage attendees to not bring pets to the event.
  <p>
 Respect Restricted Areas: Some exhibits or areas may be off-limits to visitors. Encourage attendees to respect any restricted areas to avoid damage to exhibits or injury.                </p>
- <p>
-                  Alias quia non aliquid. Eos et ea velit. Voluptatem maxime enim omnis ipsa voluptas incidunt. Nulla sit eaque mollitia nisi asperiores est veniam.
-                </p>
 
-                <img src="assets/img/blog/blog-inside-post.jpg" class="img-fluid" alt="">
+
+                <img src="{{ asset('images/museum_event.webp') }}" class="img-fluid" alt="">
 
                 <h3>Enjoy the event !</h3>
                 <p>
@@ -301,14 +300,14 @@ We want you to have an enjoyable experience at our event and to fully appreciate
               <div class="meta-bottom">
                 <i class="bi bi-folder"></i>
                 <ul class="cats">
-                  <li><a href="#">Business</a></li>
+                  <li><a href="#">Events page</a></li>
                 </ul>
 
                 <i class="bi bi-tags"></i>
                 <ul class="tags">
                   <li><a href="#">Creative</a></li>
-                  <li><a href="#">Tips</a></li>
-                  <li><a href="#">Marketing</a></li>
+                  <li><a href="#">Art</a></li>
+                  <li><a href="#">Fun</a></li>
                 </ul>
               </div><!-- End meta bottom -->
 

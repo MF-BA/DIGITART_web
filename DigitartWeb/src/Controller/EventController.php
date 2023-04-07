@@ -201,7 +201,7 @@ public function qrcode(Event $event): Response
         // Render the HTML as PDF
         $dompdf->render();
         // Output the generated PDF to Browser (inline view)
-        $dompdf->stream("ListeDesVoyages.pdf", [
+        $dompdf->stream("ListeDesEvenements.pdf", [
             "events" => true
         ]);
     }
