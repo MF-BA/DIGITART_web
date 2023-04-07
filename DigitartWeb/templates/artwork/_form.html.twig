@@ -8,45 +8,61 @@
         {{ form_start(form, {'attr': {'class': 'form', 'enctype': 'multipart/form-data'}}) }}
         <div class="row form-group">
             <div class="col col-md-3"><label for="artworkName-input" class=" form-control-label">artworkName</label></div>
-             <div class="col-12 col-md-9">{{ form_widget(form.artworkName) }} <small class="form-text text-muted">This is a help text</small></div>
+             <div class="col-12 col-md-9">{{ form_widget(form.artworkName) }} </div>
          </div>
+         <div class="row form-group">
+            <div class="col col-md-3"><label for="ownerType-input" class=" form-control-label">ownerType</label></div>
+             <div class="col-12 col-md-9"> {{ form_row(form.ownerType) }} </div>
+         </div>
+        
         <div class="row form-group">
-             <div class="col col-md-3"><label for="idArtist-input" </label>Artists</div>
-            <div class="col-12 col-md-9">{{ form_widget(form.idArtist) }} <small class="form-text text-muted">if the artist is not a user don't fill this field</small></div>
+             <div class="col col-md-3"><label for="idArtist-input" </label></div>
+            <div class="col-12 col-md-9">{{ form_widget(form.idArtist) }} </div>
         </div>
         <div class="row form-group">
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-             <script>
-                $(document).ready(function() {
-                $('#form_idArtist').change(function() {
-                $('#artistName').val($(this).find(':selected').text());
-                });
-                });
-            </script>
-            <div class="col col-md-3"><label for="artistName-input" class=" form-control-label">artistName</label></div>
-            <div class="col-12 col-md-9">{{ form_widget(form.artistName) }} <small class="form-text text-muted">This is a help text</small></div>
+            <div class="col col-md-3"><label for="artistName-input" class=" form-control-label"></label></div>
+            <div class="col-12 col-md-9">{{ form_widget(form.artistName) }} </div>
         </div>
 
         <div class="row form-group">
             <div class="col col-md-3"><label for="dateArt-input" class=" form-control-label">dateArt</label></div>
-            <div class="col-12 col-md-9">{{ form_widget(form.dateArt) }} <small class="form-text text-muted">This is a help text</small></div>
+            <div class="col-12 col-md-9">{{ form_widget(form.dateArt) }} </div>
         </div>
         <div class="row form-group">
             <div class="col col-md-3"><label for="description-input" class=" form-control-label">description</label></div>
-            <div class="col-12 col-md-9">{{ form_widget(form.description) }} <small class="form-text text-muted">This is a help text</small></div>
+            <div class="col-12 col-md-9">{{ form_widget(form.description) }} </div>
         </div>
                                                             
         <div class="row form-group">
             <div class="col col-md-3"><label for="imageArt-input" class=" form-control-label">imageArt</label></div>
-            <div class="col-12 col-md-9">{{ form_widget(form.imageArt) }} <small class="form-text text-muted">This is a help text</small></div>
+            <div class="col-12 col-md-9">{{ form_widget(form.imageArt) }} </div>
         </div>
         <div class="row form-group">
             <div class="col col-md-3"><label for="idRoom-input" class=" form-control-label">name room</label></div>
-            <div class="col-12 col-md-9">{{ form_widget(form.idRoom) }} <small class="form-text text-muted">This is a help text</small></div>
+            <div class="col-12 col-md-9">{{ form_widget(form.idRoom) }} </div>
         </div>
         <button class="btn btn-success"><i class="fa fa-save (alias)"></i>&nbsp;{{ button_label|default('Add artwork') }}</button>
         <a href="{{ path('app_artwork_index') }}" class="btn btn-secondary"><i class="fa fa-mail-reply"></i>&nbsp; back To List</a>
+        
+        <script>
+            const ownerTypeField = document.getElementById('{{ form.ownerType.vars.id }}');
+            const idArtistField = document.getElementById('{{ form.idArtist.vars.id }}');
+            const artistNameField = document.getElementById('{{ form.artistName.vars.id }}');
+
+            ownerTypeField.addEventListener('change', (event) => {
+                if (event.target.value === 'artist') {
+                        idArtistField.style.display = 'block';
+                        artistNameField
+                        .style.display = 'none';
+                    } else if (event.target.value === 'museum') {
+                        idArtistField.style.display = 'none';
+                        artistNameField.style.display = 'block';
+                    }
+            });
+        </script>
         {{ form_end(form) }} 
+
+        
                                                         
     </div>
         <div class="card-footer">                                                  

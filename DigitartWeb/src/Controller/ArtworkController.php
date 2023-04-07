@@ -3,10 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Artwork;
+use App\Form\ArtworkArtistType;
 use App\Form\ArtworkType;
 use App\Repository\ArtworkRepository;
 use App\Repository\RoomRepository;
+use App\Repository\UsersRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,25 +20,37 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArtworkController extends AbstractController
 {
     #[Route('/artwork', name: 'app_artwork_index', methods: ['GET'])]
-    public function index(ArtworkRepository $artworkRepository): Response
+    public function index(ArtworkRepository $artworkRepository,RoomRepository $roomRepository,UsersRepository $userRepository): Response
     {
+        $artworks = $artworkRepository->findAll();
+        $roomNames = [];
+        $users = [];
+        foreach ($artworks as $artwork) {
+            $users[$artwork->getIdArt()] = $userRepository->getuserNameById($artwork->getIdArtist());
+            $roomNames[$artwork->getIdArt()] = $roomRepository->getRoomNameById($artwork->getIdroom());
+        }
         return $this->render('artwork/index.html.twig', [
-            'artworks' => $artworkRepository->findAll(),
+            'artworks' => $artworks,
+            'roomNames' =>$roomNames,
+            'users' =>$users,
         ]);
     }
 
     #[Route('/showfront/artwork', name: 'showfrontartwork', methods: ['GET'])]
-    public function display_front(ArtworkRepository $artworkRepository,RoomRepository $roomRepository): Response
+    public function display_front(ArtworkRepository $artworkRepository,RoomRepository $roomRepository,UsersRepository $userRepository): Response
     {
         $artworks = $artworkRepository->findAll();
         $roomNames = [];
+        $users = [];
     
         foreach ($artworks as $artwork) {
             $roomNames[$artwork->getIdArt()] = $roomRepository->getRoomNameById($artwork->getIdroom());
+            $users[$artwork->getIdArt()] = $userRepository->getuserNameById($artwork->getIdArtist());
         }
         return $this->render('artwork/indexFront.html.twig', [
-            'artworks' => $artworkRepository->findAll(),
+            'artworks' => $artworks,
             'roomNames' =>$roomNames,
+            'users' =>$users,
         ]);
     }
    
@@ -59,11 +75,49 @@ class ArtworkController extends AbstractController
         ]);
     }
 
+
+
+    #[Route('/artwork/newfront', name: 'app_artwork_newfront', methods: ['GET', 'POST'])]
+    public function newfront(Request $request, ArtworkRepository $artworkRepository,UsersRepository $userrepo): Response
+    {   
+
+        $user = $userrepo->createQueryBuilder('u')
+                ->orderBy('u.id', 'ASC')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+        $artwork = new Artwork();
+        $artwork->setIdArtist($user);
+        
+    
+        $form = $this->createForm(ArtworkArtistType::class, $artwork);
+
+       
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->submitArtwork($request, $artwork);
+            $artworkRepository->save($artwork, true);
+
+            return $this->redirectToRoute('showfrontartwork', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('artwork/newfront.html.twig', [
+            'artwork' => $artwork,
+            'form' => $form,
+        ]);
+    }
+
     #[Route('/artwork/{idArt}', name: 'app_artwork_show', methods: ['GET'])]
-    public function show(Artwork $artwork): Response
+    public function show(Artwork $artwork,RoomRepository $roomRepository): Response
     {
+        $roomNames = [];
+        $roomNames[$artwork->getIdArt()] = $roomRepository->getRoomNameById($artwork->getIdroom());
         return $this->render('artwork/show.html.twig', [
             'artwork' => $artwork,
+            'roomNames' =>$roomNames,
         ]);
     }
 

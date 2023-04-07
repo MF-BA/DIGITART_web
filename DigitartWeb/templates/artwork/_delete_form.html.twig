@@ -1,4 +1,6 @@
-<form method="post" action="{{ path('app_artwork_delete', {'idArt': artwork.idArt}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ artwork.idArt) }}">
-    <button class="btn btn-danger"><i class="fa fa-times"></i>&nbsp; Delete</button>
-</form>
+<div class="form-actions form-group">     
+    <form method="post" action="{{ path('app_artwork_delete', {'idArt': artwork.idArt}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ artwork.idArt) }}">
+        <button class="btn btn-danger"><i class="fa fa-times"></i>&nbsp; Delete</button>
+    </form>
+</div>

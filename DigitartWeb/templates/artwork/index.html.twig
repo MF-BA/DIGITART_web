@@ -22,6 +22,7 @@
                                             <th>ArtistName</th>
                                             <th>DateArt</th>
                                             <th>Description</th>
+                                            <th>nameRoom</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -29,13 +30,18 @@
                                     {% for artwork in artworks %}
                                         <tr>
                                             <td>{{ artwork.artworkName }}</td>
-                                            <td>{{ artwork.artistName }}</td>
+                                            <td>
+                                               {% if artwork.idArtist is not null %}{{ users[ artwork.idArt ] }}{% else %} {{ artwork.artistName }}{% endif %}
+                                            </td>
                                             <td>{{ artwork.dateArt ? artwork.dateArt|date('Y-m-d') : '' }}</td>
                                             <td>{{ artwork.description }}</td>
+                                            <td>{{ roomNames[ artwork.idArt ] }} </td>
                                             <td>
-                                                <a href="{{ path('app_artwork_show', {'idArt': artwork.idArt}) }}" class="btn btn-primary"><i class="fa fa-eye"></i>&nbsp;  Show</a>
-                                                <a href="{{ path('app_artwork_edit', {'idArt': artwork.idArt}) }}" class="btn btn-warning"><i class="fa fa-pencil"></i>&nbsp; Edit</a>
-                                                <a {{ include('artwork/_delete_form.html.twig') }}</a>
+                                                 
+                                                    <a href="{{ path('app_artwork_show', {'idArt': artwork.idArt}) }}" class="btn btn-primary"><i class="fa fa-eye"></i>&nbsp;  Show</a>
+                                                    <a href="{{ path('app_artwork_edit', {'idArt': artwork.idArt}) }}" class="btn btn-warning"><i class="fa fa-pencil"></i>&nbsp; Edit</a>
+                                                    <a {{ include('artwork/_delete_form.html.twig') }}</a>
+                                               
                                             </td>
                                         </tr>
                                     {% else %}

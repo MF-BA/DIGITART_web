@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\Room;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,11 +16,18 @@ class RoomType extends AbstractType
     {
         $builder
             ->add('nameRoom')
-            ->add('area')
+            ->add('area', IntegerType::class, [
+                'label' => 'Area',
+                'attr' => [
+                    'input' => 'spinner',
+                    'step' => 10,
+                    'min' => 0,
+                ],
+            ])
             ->add('state', ChoiceType::class, [
                 'choices' => [
-                    'Available' => true,
-                    'Unavailable' => false,
+                    'Available' => 'Available',
+                    'Unavailable' => 'Unavailable',
                 ],
                 'expanded' => false, // to display as dropdown list
                 'multiple' => false, // to allow selecting only one option

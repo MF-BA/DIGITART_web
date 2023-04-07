@@ -1,6 +1,6 @@
 {% extends 'back.html.twig' %}
 
-{% block title %}Artwork{% endblock %}
+
 
 {% block body %}
     <h1>Artwork</h1>
@@ -29,7 +29,16 @@
             </tr>
             <tr>
                 <th>ImageArt</th>
+                {% if artwork.ImageArt is not null %}
                 <td><img style="width: 700px; height: 500px;" src="{{ asset(artwork.ImageArt) }}" ></td>
+                {% else %}
+                <td><img style="width: 700px; height: 500px;" src="http://localhost/images/noimage.jpg" ></td>
+                {% endif %}
+               
+            </tr>
+             <tr>
+                <th>nameRoom</th>
+                <td>{{ roomNames[ artwork.idArt ] }}</td>
             </tr>
             <tr>
                 <th>Actions</th>

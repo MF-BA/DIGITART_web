@@ -31,9 +31,11 @@ class Artwork
     private $artworkName;
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="id_artist", type="integer", nullable=true)
+     * @var Users
+      * @ORM\ManyToOne(targetEntity="Users")
+     * @ORM\JoinColumns({
+     * @ORM\JoinColumn(name="id_artist", referencedColumnName="id")
+     * })
      */
     private $idArtist;
 
@@ -75,6 +77,8 @@ class Artwork
      */
     private $idRoom;
 
+    private $ownerType;
+
     public function getIdArt(): ?int
     {
         return $this->idArt;
@@ -92,12 +96,12 @@ class Artwork
         return $this;
     }
 
-    public function getIdArtist(): ?int
+    public function getIdArtist(): ?Users
     {
         return $this->idArtist;
     }
 
-    public function setIdArtist(?int $idArtist): self
+    public function setIdArtist(?Users $idArtist): self
     {
         $this->idArtist = $idArtist;
 
@@ -164,5 +168,14 @@ class Artwork
         return $this;
     }
 
+    public function getOwnerType(): ?string
+    {
+        return $this->idArtist ? 'artist' : 'museum';
+    }
 
+    public function setOwnerType(string $ownerType): void
+    {
+        // Do nothing - this property is virtual and cannot be set
+    }
+    
 }

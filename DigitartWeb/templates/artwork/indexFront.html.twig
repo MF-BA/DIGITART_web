@@ -23,7 +23,11 @@
             <div class="post-item position-relative h-100">
 
               <div class="post-img position-relative overflow-hidden">
+              {% if artwork.ImageArt is not null %}
                 <img  src="{{ asset(artwork.ImageArt) }}"  class="img-fluid" style="width: 400px; height: 300px;" alt="">
+                {% else %}
+                <img  src="http://localhost/images/noimage.jpg"  class="img-fluid" style="width: 400px; height: 300px;" alt="">
+                {% endif %}
                 <span class="post-date">{{ artwork.dateArt ? artwork.dateArt|date('d/m/Y') : '' }}</span>
               </div>
 
@@ -33,7 +37,7 @@
 
                 <div class="meta d-flex align-items-center">
                   <div class="d-flex align-items-center">
-                    <i class="bi bi-person"></i> <span class="ps-2">{{ artwork.artistName }}</span>
+                    <i class="bi bi-person"></i> <span class="ps-2">{% if artwork.idArtist is not null %}{{ users[ artwork.idArt ] }}{% else %} {{ artwork.artistName }}{% endif %}</span>
                   </div>
                   <span class="px-3 text-black-50">/</span>
                   <div class="d-flex align-items-center">
@@ -45,7 +49,15 @@
                 </div>
 
                 <p>
-                 {{ artwork.description }}
+                {% set max_lines = 2 %}
+                  {% set max_chars_per_line = 80 %}
+
+                  {% set truncated_description = artwork.description|split("\n")|slice(0, max_lines)|join("\n")|slice(0, max_chars_per_line*(max_lines-1)) ~ (artwork.description|split("\n")|length > max_lines ? '...' : '') %}
+                 {% if truncated_description|last == ' ' %}
+                    {{ truncated_description }}
+                {% else %}
+                    {{ truncated_description|split(' ')|slice(0, -1)|join(' ') }}...
+                {% endif %}
                 </p>
 
                 <hr>

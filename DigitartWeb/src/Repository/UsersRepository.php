@@ -39,6 +39,12 @@ class UsersRepository extends ServiceEntityRepository
         }
     }
 
+    public function getuserNameById($id)
+    {
+        $user = $this->findOneBy(['id' => $id]);
+        return $user ? $user->getLastname() : null;
+    }
+
 //    /**
 //     * @return Users[] Returns an array of Users objects
 //     */

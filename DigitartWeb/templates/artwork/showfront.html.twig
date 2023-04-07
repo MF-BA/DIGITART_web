@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 <!-- ======= Breadcrumbs ======= -->
-    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset( artwork.ImageArt )}});">
+    <div class="breadcrumbs d-flex align-items-center" {% if artwork.ImageArt is not null %}style="background-image: url({{asset( artwork.ImageArt )}});"{% else %}style="background-image: url({{asset('Front/assets/img/photo-1554907984-15263bfd63bd.jpg')}});"{% endif %}>
       <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
 
         <h2>{{ artwork.artworkName }}</h2>
@@ -25,7 +25,13 @@
             <article class="blog-details">
 
               <div class="post-img">
+                {% if artwork.ImageArt is not null %}
                 <img src="{{ asset(artwork.ImageArt) }}" style="width: 700px; height: 700px;" alt="" class="img-fluid">
+                {% else %}
+                <img  src="http://localhost/images/noimage.jpg"  class="img-fluid" style="width: 700px; height: 700px;" alt="">
+                {% endif %}
+
+                
               </div>
 
               <h2 class="title">{{ artwork.artworkName }}</h2>

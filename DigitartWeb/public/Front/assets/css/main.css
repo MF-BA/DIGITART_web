@@ -1655,7 +1655,7 @@ section {
 
 .contact .info-item h3 {
   font-size: 20px;
-  color: #6c757d;
+  color: #fe0202;
   font-weight: 700;
   margin: 10px 0;
 }
@@ -1669,7 +1669,7 @@ section {
 
 .contact .php-email-form {
   width: 100%;
-  background: #fff;
+  background: #000000;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
   padding: 30px;
 }
@@ -2670,4 +2670,11 @@ section {
 
 .footer .footer-legal .credits a {
   color: var(--color-primary);
+}
+
+.center-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }

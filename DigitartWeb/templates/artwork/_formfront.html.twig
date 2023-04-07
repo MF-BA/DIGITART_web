@@ -1,0 +1,48 @@
+<!-- ======= Contact Section ======= -->
+    <section id="contact" class="contact">
+      <div {##}style="background-image: url({{asset('Front/assets/img/footer.jpg')}});"class="container" data-aos="fade-up" data-aos-delay="100">
+
+       
+
+        
+          
+          
+          {{ form_start(form, {'attr': {'class': 'form', 'enctype': 'multipart/form-data'}}) }}
+            
+               <div class="text-center" class="col col-md-3"><label class=" form-control-label">Artwork Name:</label></div>
+                <div class="text-center" class="col-lg-6 form-group">
+                  {{ form_widget(form.artworkName) }}
+                </div>
+                <div class="text-center" class="col col-md-3"><label class=" form-control-label">Artwork Date :</label></div>
+                <div class="text-center"class="col-lg-6 form-group">
+                  {{ form_widget(form.dateArt) }}
+                </div>
+              <div class="text-center" class="col col-md-3"><label class=" form-control-label">Artwork description:</label></div>
+              <div class="text-center" class="form-group">
+                <textarea {{ form_widget(form.description) }}</textarea>
+              </div>
+              <div class="text-center" class="col col-md-3"><label class=" form-control-label">Artwork Image:</label></div>
+              <div class="text-center" class="col-lg-6 form-group">
+                  {{ form_widget(form.imageArt) }}
+                 
+                </div>
+                <div class="text-center" class="col col-md-3"><label class=" form-control-label">room Name:</label></div>
+                <div class="text-center" class="col-lg-6 form-group">
+                  {{ form_widget(form.idRoom) }}
+                </div>
+             
+
+              <div  <button class="btn btn-success"><i class="fa fa-save (alias)"></i>&nbsp;{{ button_label|default('Add artwork') }}</button></div>
+            
+             {{ form_end(form) }} 
+          
+
+        
+
+      </div>
+    </section><!-- End Contact Section -->
+
+
+
+
+
