@@ -144,7 +144,10 @@
           
           
         </ul>
-        <strong class="user-name">  {{app.user.firstname}}   {{app.user.lastname}} </strong>
+        {% if app.user is not null %} 
+    <strong class="user-name">  {{app.user.firstname}}   {{app.user.lastname}} </strong>
+{% endif %}
+
          <div class="circle" onclick="toggleOptions()">
 		
 		<div class="circle-name">user image</div>
@@ -197,7 +200,12 @@
 
   </section><!-- End Hero Section -->
 <div class="example-wrapper">
-    <h1>Hello {{ app.user.firstname }}! ✅</h1>
+
+{% if app.user is not null %} 
+        <h1>Hello {{ app.user.firstname }}! ✅</h1>
+{% endif %}
+
+
 
     This friendly message is coming from:
     <ul>
