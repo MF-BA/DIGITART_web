@@ -81,34 +81,28 @@ class PaymentController extends AbstractController
         // initiate the Stripe checkout session when the form is submitted
         if ($request->isMethod('POST')) {
             Stripe::setApiKey('sk_test_51MfRIsHcaMLPP7A1X3INIItKLbEljzGYdpTujtvwb4mrggNEJtwS1SG2C6MyxYdz8T2uPVh219jsg7LBZRWSh2Ye00QEgBJZmW');
+         
+            // Calculate the total amount of the payment
             $totalAmount = 0;
             foreach ($payments as $payment) {
                 $totalAmount += $payment->getTotalPayment();
             }
-            $totalAmount=$totalAmount * 100;
-            $session = Session::create([
-                'payment_method_types' => ['card'],
-                'line_items'           => [
-                    [
-                        'price_data' => [
-                            'currency'     => 'usd',
-                            'product_data' => [
-                                'name' => 'DigitArt Ticket',
-                            ],
-                            'unit_amount'  => $totalAmount,
-                        ],
-                        'quantity'   => 1,
-                    ]
-                ],
-                'customer_email'       => 'aminemehdi@gmail.com',
-                'mode'                 => 'payment',
-                'success_url'          => $this->generateUrl('app_payment_CurrentcardHistory', [], UrlGeneratorInterface::ABSOLUTE_URL),
-                'cancel_url'           => $this->generateUrl('app_payment_card', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            $totalAmount = $totalAmount * 100;
+        
+            // Create a Payment Intent
+            $intent = \Stripe\PaymentIntent::create([
+                'amount' => $totalAmount,
+                'currency' => 'usd',
             ]);
-
-            // redirect to the Stripe checkout page
-            return $this->redirect($session->url, 303);
+            $Amount= $totalAmount / 100;
+            // Render your custom payment form with Stripe Elements
+            // You can use the $intent->client_secret to authenticate the payment on the server side
+            return $this->render('payment/your_custom_form.html.twig', [
+                'clientSecret' => $intent->client_secret,
+                'Amount' =>$Amount,
+            ]);
         }
+        
 
         // render the payment form
         return $this->render('payment/card.html.twig', [
