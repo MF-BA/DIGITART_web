@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Ticket
@@ -24,21 +25,27 @@ class Ticket
 
     /**
      * @var \DateTime|null
-     *
+     * @Assert\NotBlank(message="Date should not be empty")
      * @ORM\Column(name="ticket_date", type="date", nullable=true)
      */
     private $ticketDate;
 
     /**
      * @var \DateTime|null
-     *
+     * @Assert\NotBlank(message="Date should not be empty")
+     * @Assert\GreaterThanOrEqual(propertyPath="ticketDate", message="The end date must be greater than the start date.")
      * @ORM\Column(name="ticket_edate", type="date", nullable=true)
      */
     private $ticketEdate;
 
     /**
      * @var int
-     *
+     * @Assert\NotBlank(message="Price should not be empty !")
+     * @Assert\GreaterThan(value=0, message="The price should be greater than 0.")
+     * @Assert\Range(
+     *      max = 99999,
+     *      maxMessage = "The price cannot exceed {{ limit }}."
+     * )
      * @ORM\Column(name="price", type="integer", nullable=false)
      */
     private $price;

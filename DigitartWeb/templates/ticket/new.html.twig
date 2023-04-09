@@ -19,7 +19,7 @@
 
         <section class="card">
     <div class="card-body">
-        {{ form_start(form) }}
+        {{ form_start(form,{ 'attr': {'novalidate': 'novalidate'} }) }}
         <div class="form-group">
             <label class="form-control-label">Date Start Ticket</label>
             <div class="input-group">
@@ -27,6 +27,9 @@
                 {{ form_widget(form.ticketDate, { 'attr': {'class': 'form-control'} }) }}
             </div>
             <small class="form-text text-muted">ex. 99/99/9999</small>
+            <div class="alert alert-light" role="alert">
+            {{ form_errors(form.ticketDate,{ 'attr': {'class': 'text-danger'} }) }}
+            </div>
         </div>
          <div class="form-group">
             <label class="form-control-label">Date End Ticket</label>
@@ -36,7 +39,7 @@
             </div>
             <small class="form-text text-muted">ex. 99/99/9999</small>
              <div class="alert alert-light" role="alert">
-             {{ form_errors(form.ticketEDate) }}
+             {{  form_errors(form.ticketEDate,{ 'attr': {'class': 'text-danger'} }) }}
             </div>
         </div>
         <div class="form-group">
@@ -47,7 +50,7 @@
             </div>
             <small class="form-text text-muted">ex. 20</small>
             <div class="alert alert-light" role="alert">
-              {{ form_errors(form.price) }}
+              {{ form_errors(form.price,{ 'attr': {'class': 'text-danger'} }) }}
               </div>
             </div>
         <div class="form-group">

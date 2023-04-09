@@ -29,6 +29,9 @@ class TicketType extends AbstractType
                 'label' => 'Ticket End Date',
                 'attr' => ['min' => (new \DateTime())->format('Y-m-d')],
                 'constraints' => [
+                    new NotBlank([
+                        'message' => 'The end date should not be empty.'
+                    ]),
                     new GreaterThanOrEqual([
                         'propertyPath' => 'parent.all[ticketDate].data',
                         'message' => 'The end date must be greater than the start date.'
@@ -42,13 +45,6 @@ class TicketType extends AbstractType
                     'input' => 'number',
                     'pattern' => '\d*', // restrict input to only numbers
                 ],
-                'constraints' => [
-                    new NotBlank(),
-                    new GreaterThan([
-                        'value' => 0,
-                        'message' => 'The price should be greater than 0.'
-                    ])
-                ]
             ])
             
             

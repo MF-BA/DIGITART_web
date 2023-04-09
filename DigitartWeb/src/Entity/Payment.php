@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo; // gedmo annotations
 
 /**
  * Payment
@@ -63,6 +64,20 @@ class Payment
      * @ORM\Column(name="paid", type="boolean", nullable=true)
      */
     private $paid;
+
+    /**
+     *
+     * @ORM\Column(name="createdAt", type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $createdAt;
+
+    /**
+     *
+     * @ORM\Column(name="updatedAt", type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updatedAt;
 
     /**
      * @var Users
