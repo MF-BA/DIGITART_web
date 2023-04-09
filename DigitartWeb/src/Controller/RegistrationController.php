@@ -31,7 +31,14 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-
+            if($form->get('role')->getData()==='Artist')
+            {
+                $user->setRoles(['ROLE_ARTIST']);
+            }
+            if($form->get('role')->getData()==='Subscriber')
+            {
+                $user->setRoles(['ROLE_SUBSCRIBER']);
+            }
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email

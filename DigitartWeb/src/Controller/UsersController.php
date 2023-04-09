@@ -39,7 +39,38 @@ class UsersController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-
+            if($form->get('role')->getData()==='Artist')
+            {
+                $user->setRoles(['ROLE_ARTIST']);
+            }
+            if($form->get('role')->getData()==='Subscriber')
+            {
+                $user->setRoles(['ROLE_SUBSCRIBER']);
+            }
+            if($form->get('role')->getData()==='Admin')
+            {
+                $user->setRoles(['ROLE_ADMIN']);
+            }
+            if($form->get('role')->getData()==='Gallery manager')
+            {
+                $user->setRoles(['ROLE_GALLERY_MANAGER']);
+            }
+            if($form->get('role')->getData()==='Auction manager')
+            {
+                $user->setRoles(['ROLE_AUCTION_MANAGER']);
+            }
+            if($form->get('role')->getData()==='Events manager')
+            {
+                $user->setRoles(['ROLE_EVENT8MANAGER']);
+            }
+            if($form->get('role')->getData()==='Tickets manager')
+            {
+                $user->setRoles(['ROLE_TICKETS_MANAGER']);
+            }
+            if($form->get('role')->getData()==='Users manager')
+            {
+                $user->setRoles(['ROLE_USERS_MANAGER']);
+            }
             $entityManager->persist($user);
             $entityManager->flush();
             return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
@@ -91,7 +122,7 @@ class UsersController extends AbstractController
     {
         $form = $this->createForm(UsersType::class, $user);
         $form->handleRequest($request);
-
+         
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($user);
             $entityManager->flush();

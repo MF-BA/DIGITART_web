@@ -163,7 +163,13 @@ class RegistrationFormType extends AbstractType
             ->add('birthDate',BirthdayType::class, [
                 'label' => 'Birth date',
                 'widget' => 'single_text',
-                'attr' => ['class' => 'form-control']
+                'attr' => ['class' => 'form-control'],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter your birth date',
+                    ]),
+                    
+                ],
             ])
             ->add('gender', ChoiceType::class, [
                 'choices' => [
@@ -173,6 +179,12 @@ class RegistrationFormType extends AbstractType
                 ],
                 'expanded' => true,
                 'multiple' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please specify your gender',
+                    ]),
+                    
+                ],
                
             ])
             ->add('role', ChoiceType::class, [
@@ -184,6 +196,7 @@ class RegistrationFormType extends AbstractType
                 'multiple' => false,
                 'placeholder' => 'Choose your role',
             ])
+            
         ;
     }
 

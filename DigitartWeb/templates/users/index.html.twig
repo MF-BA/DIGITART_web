@@ -29,7 +29,6 @@
                 <th>Firstname</th>
                 <th>Lastname</th>
                 <th>Email</th>
-                <th>Password</th>
                 <th>Address</th>
                 <th>PhoneNum</th>
                 <th>BirthDate</th>
@@ -46,7 +45,6 @@
                 <td>{{ user.firstname }}</td>
                 <td>{{ user.lastname }}</td>
                 <td>{{ user.email }}</td>
-                <td>{{ user.password }}</td>
                 <td>{{ user.address }}</td>
                 <td>{{ user.phoneNum }}</td>
                 <td>{{ user.birthDate ? user.birthDate|date('Y-m-d') : '' }}</td>
@@ -58,23 +56,23 @@
                  <div class="d-flex">
                     <a href="{{ path('app_users_show', {'id': user.id}) }}">
                     <button type="button" class="btn btn-outline-info mr-2">
-                    <i class="fa fa-question-circle"></i> show
+                    <i class="fa fa-question-circle"></i>
                     </button></a>
 
                     <a href="{{ path('app_users_edit', {'id': user.id}) }}">
                     <button type="button" class="btn btn-outline-dark mr-2">
-                    <i class="fa fa-pencil-square"></i> edit
+                    <i class="fa fa-pencil-square"></i>
                     </button></a>
 
                     <a href="{{ path('app_users_updatestatus', {'id': user.id, 'newStatus': 'blocked'}) }}">
                <button type="button" class="btn btn-outline-danger mr-2">
-               <i class="fa fa-times-circle"></i> Block
+               <i class="fa fa-lock"></i>
               </button>
               </a>
 
 <a href="{{ path('app_users_updatestatus', {'id': user.id, 'newStatus': 'unblocked'}) }}">
     <button type="button" class="btn btn-outline-success mr-2">
-    <i class="fa  fa-unlock"></i> Unblock
+    <i class="fa  fa-unlock"></i>
     </button>
 </a>
 

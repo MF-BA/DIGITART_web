@@ -144,7 +144,7 @@ a:hover {
 	<link rel="stylesheet" type="text/css" href="{{asset('login/css/util.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('login/css/main.css')}}">
 <!--===============================================================================================-->
-
+   
    {% endblock %}
 
 {% block body %}
@@ -152,7 +152,7 @@ a:hover {
 		<div class="container-login100">
             <div class="wrap-login100">
 
-    {{ form_start(registrationForm) }}
+    {{ form_start(registrationForm,{attr:{novalidate:'novalidate'}}) }}
     <span class="login100-form-title">
 						Register
 					</span>
@@ -167,7 +167,7 @@ a:hover {
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(registrationForm.cin, {'attr': {'class': 'form-control', 'placeholder': 'Enter cin'}}) }}
-          <small class="error-msg-form">{{ form_errors(registrationForm.cin) }}</small>
+          <small class="error-msg-form">{{ form_errors(registrationForm.cin,{'attr':{'class':'text-danger'}}) }}</small>
           <small class="form-text text-muted">Cin must contain 8 digits</small>
         </div>
       </div>
@@ -179,7 +179,7 @@ a:hover {
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(registrationForm.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Enter First name'}}) }}
-          <small class="error-msg-form">{{ form_errors(registrationForm.firstname) }}</small>
+          <small class="error-msg-form">{{ form_errors(registrationForm.firstname,{'attr':{'class':'text-danger'}}) }}</small>
         </div>
       </div>
 
@@ -190,7 +190,7 @@ a:hover {
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(registrationForm.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Enter Last name'}}) }}
-          <small class="error-msg-form">{{ form_errors(registrationForm.lastname) }}</small>
+          <small class="error-msg-form">{{ form_errors(registrationForm.lastname,{'attr':{'class':'text-danger'}}) }}</small>
           
         </div>
       </div>
@@ -201,7 +201,7 @@ a:hover {
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email'}}) }}
-          <small class="error-msg-form">{{ form_errors(registrationForm.email) }}</small>
+          <small class="error-msg-form">{{ form_errors(registrationForm.email,{'attr':{'class':'text-danger'}}) }}</small>
           <small class="form-text text-muted">Please enter a valid email!</small>
         </div>
       </div>
@@ -212,7 +212,7 @@ a:hover {
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Enter Password'}}) }}
-          <small class="error-msg-form">{{ form_errors(registrationForm.plainPassword) }}</small>
+          <small class="error-msg-form">{{ form_errors(registrationForm.plainPassword,{'attr':{'class':'text-danger'}}) }}</small>
           <small class="form-text text-muted">Please enter a complex password</small>
         </div>
       </div>
@@ -228,7 +228,7 @@ a:hover {
         </div>
 <div class="col-12 col-md-9">
 {{ form_widget(registrationForm.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter Address'}}) }}
-<small class="error-msg-form">{{ form_errors(registrationForm.address) }}</small>
+<small class="error-msg-form">{{ form_errors(registrationForm.address,{'attr':{'class':'text-danger'}}) }}</small>
 
 </div>
 </div>
@@ -240,7 +240,7 @@ a:hover {
     </div>
     <div class="col-12 col-md-9">
       {{ form_widget(registrationForm.phoneNum, {'attr': {'class': 'form-control', 'placeholder': 'Enter Phone'}}) }}
-      <small class="error-msg-form">{{ form_errors(registrationForm.phoneNum) }}</small>
+      <small class="error-msg-form">{{ form_errors(registrationForm.phoneNum,{'attr':{'class':'text-danger'}}) }}</small>
       <small class="form-text text-muted">Phone number must contain 8 digits</small>
     </div>
   </div>
@@ -251,6 +251,7 @@ a:hover {
     </div>
     <div class="col-12 col-md-9">
         {{ form_widget(registrationForm.birthDate, {'attr': {'class': 'form-control'}}) }}
+        <small class="error-msg-form">{{ form_errors(registrationForm.birthDate,{'attr':{'class':'text-danger'}}) }}</small>
     </div>
  </div>
 {# role #}
@@ -261,26 +262,14 @@ a:hover {
   </div>
   <div class="col-12 col-md-9">
     {{ form_widget(registrationForm.role, {'attr': {'class': 'form-control'}}) }}
-    <small class="error-msg-form">{{ form_errors(registrationForm.role) }}</small>
+    <small class="error-msg-form">{{ form_errors(registrationForm.role,{'attr':{'class':'text-danger'}}) }}</small>
   </div>
 </div>
 {# Gender #}
   <div class="row form-group">
-        <div class="col col-md-6">
-        {{ form_label(registrationForm.gender, 'Gender') }}
-        </div>
-    <div class="col-12 col-md-9">
-         {{ form_row(registrationForm.gender, {
-    'attr': {
-        'class': 'form-check-inline my-3'
-    },
-    'label_attr': {
-        'class': 'form-check-label mr-3'
-    },
-    'row_attr': {
-        'class': 'form-check'
-    }
-}) }}
+     <div class="col-12 col-md-9">
+        {{ form_row(registrationForm.gender) }}
+        <small class="error-msg-form">{{ form_errors(registrationForm.gender,{'attr':{'class':'text-danger'}}) }}</small>
     </div>
  </div>
 					</div>
@@ -302,8 +291,13 @@ a:hover {
 					</div>
         
     {{ form_end(registrationForm) }}
+   
+
+
     </div>
         </div>
 	</div>
+
+
 
 {% endblock %}
