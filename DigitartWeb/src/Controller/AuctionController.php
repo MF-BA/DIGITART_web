@@ -39,17 +39,38 @@ class AuctionController extends AbstractController
         return $this->render('auction/add_to_auction_admin.html.twig', ['form' => $form->createView(),]);
     }
     #[Route('/showfront', name: 'showfrontpage')]
-    public function display_front(): Response
-    {
-        return $this->render('home.html.twig', [
-            
-        ]);
-    }
-    #[Route('/showback', name: 'showbackpage')]
-    public function display_back(): Response
-    {
-        return $this->render('back.html.twig', [
-            
-        ]);
-    }
+     public function display_front(): Response
+     {
+         return $this->render('home.html.twig', [
+             
+         ]);
+     }
+     #[Route('/showdigit', name: 'showdigit')]
+     public function display_digit(): Response
+     {
+         return $this->render('base.html.twig', [
+             
+         ]);
+     }
+     #[Route('/showback', name: 'showbackpage')]
+     public function display_back(): Response
+     {
+         return $this->render('back.html.twig', [
+             
+         ]);
+     }
+     #[Route('/showlogin', name: 'showloginpage')]
+     public function display_login(): Response
+     {
+         return $this->render('users/login.html.twig', [
+             
+         ]);
+     }
+     #[Route('/showregister', name: 'showregister')]
+     public function display_register(): Response
+     {
+         return $this->render('users/register.html.twig', [
+             
+         ]);
+     }
 }

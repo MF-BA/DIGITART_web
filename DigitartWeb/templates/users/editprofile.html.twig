@@ -1,0 +1,133 @@
+<div class="card">
+  <div class="card-header">
+    <strong>Edit</strong> Profile
+  </div>
+  <div class="card-body card-block">
+    {{ form_start(form) }}
+
+      
+      {# Cin #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+        {{ form_label(form.cin, 'Cin') }}
+          
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.cin, {'attr': {'class': 'form-control', 'placeholder': 'Enter cin'}}) }}
+          {{ form_errors(form.cin) }}
+          <small class="form-text text-muted">Cin must contain 8 digits</small>
+        </div>
+      </div>
+
+      {# First name #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+        {{ form_label(form.firstname, 'First name') }}
+          
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Enter First name'}}) }}
+          {{ form_errors(form.firstname) }}
+          <small class="form-text text-muted">Text</small>
+        </div>
+      </div>
+     
+{# Last name #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+        {{ form_label(form.lastname, 'Last name') }}
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Enter Last name'}}) }}
+          {{ form_errors(form.lastname) }}
+          <small class="form-text text-muted">Text</small>
+        </div>
+      </div>
+{# Email #}
+       <div class="row form-group">
+        <div class="col col-md-2">
+        {{ form_label(form.email, 'Email') }}
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email'}}) }}
+          {{ form_errors(form.email) }}
+          <small class="form-text text-muted">Please enter a valid email!</small>
+        </div>
+      </div>
+
+      {# Address #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+      {{ form_label(form.address, 'Address') }}
+        </div>
+<div class="col-12 col-md-9">
+{{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter Address'}}) }}
+{{ form_errors(form.address) }}
+<small class="form-text text-muted">Text</small>
+</div>
+</div>
+{# Phone #}
+  <div class="row form-group">
+    <div class="col col-md-2">
+    {{ form_label(form.phoneNum, 'Phone Number') }}
+      
+    </div>
+    <div class="col-12 col-md-9">
+      {{ form_widget(form.phoneNum, {'attr': {'class': 'form-control', 'placeholder': 'Enter Phone'}}) }}
+      {{ form_errors(form.phoneNum) }}
+      <small class="form-text text-muted">Phone number must contain 8 digits</small>
+    </div>
+  </div>
+  {# birth date #}
+  <div class="row form-group">
+        <div class="col col-md-2">
+        {{ form_label(form.birthDate, 'Birth Date') }}
+    </div>
+    <div class="col-12 col-md-9">
+        {{ form_widget(form.birthDate, {'attr': {'class': 'form-control'}}) }}
+    </div>
+ </div>
+{# role #}
+  <div class="row form-group">
+  <div class="col col-md-2">
+  {{ form_label(form.role, 'Role') }}
+    
+  </div>
+  <div class="col-12 col-md-9">
+    {{ form_widget(form.role, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.role) }}
+  </div>
+</div>
+{# Gender #}
+<div class="row form-group">
+  <div class="col col-md-2">
+    {{ form_label(form.gender, 'Gender') }}
+  </div>
+  <div class="col-12 col-md-9">
+    {{ form_widget(form.gender, {
+        'attr': {'class': 'form-control'},
+        'value': user.gender|default('male')
+    }) }}
+  </div>
+</div>
+
+      
+
+  <div class="card-footer">
+  <a href="{{ path('app_users_showprofile', {'id': app.user.id}) }}">
+   <button class="btn social stack-overflow btn-sm">
+   <i class="fa fa-mail-reply (alias)"></i>back to profile</button></a>
+
+    <button type="submit" class="btn btn-success btn-sm">
+      <i class="fa fa-chevron-circle-down"></i> {{ button_label|default('Submit') }} 
+    </button>
+    <button type="reset" class="btn btn-danger btn-sm">
+      <i class="fa fa-ban"></i> Reset
+    </button>
+
+
+  </div>
+
+{{ form_end(form) }}
+</div>
+</div>

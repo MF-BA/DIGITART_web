@@ -6,6 +6,63 @@
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
+        <style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .hero .info .btn-get-started {
+    font-family: var(--font-primary) !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    letter-spacing: 1px !important;
+    display: inline-block !important;
+    padding: 12px 40px !important; 
+    border-radius: 50px !important;
+    transition: 0.5s !important;
+    margin: 10px !important;
+    color: #fff !important;
+    border: 2px solid var(--color-primary) !important;
+}
+.login100-form-btn {
+  font-family: var(--font-primary);
+  font-size: 15px;
+  line-height: 1.5;
+  color: #fff;
+  text-transform: uppercase;
+
+  width: 120%;
+  height: 50px;
+  border-radius: 25px;
+  position: relative !important;
+  right: 120px !important;
+  background: transparent !important;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 25px;
+  border:2px solid var(--color-primary) !important;
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+
+a:hover {
+	text-decoration: none;
+  color: #BD2A2E !important;
+}
+.login100-form-btn:hover {
+  background: #BD2A2E !important;
+}
+button {
+    outline: none !important;
+    border: none;
+    background: transparent;
+}
+</style>
            <link href="{{asset('Front/assets/img/logo-digitart-rouge.png')}}" rel="icon">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
  
@@ -84,7 +141,10 @@
         </ul>
       </nav><!-- .navbar -->
 
+
     </div>
+    <a href="{{path('app_login')}}"><button class="login100-form-btn"><i class="fa fa-sign-in" aria-hidden="true"></i>   Login</button></a>
+            
   </header><!-- End Header -->
   
   {% endblock %}

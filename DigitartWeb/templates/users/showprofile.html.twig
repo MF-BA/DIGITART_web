@@ -1,0 +1,74 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block body %}
+    <h1>My Profile</h1>
+
+    <table class="table">
+        <tbody>
+            
+            <tr>
+                <th>Cin</th>
+                <td>{{ user.cin }}</td>
+            </tr>
+            <tr>
+                <th>Firstname</th>
+                <td>{{ user.firstname }}</td>
+            </tr>
+            <tr>
+                <th>Lastname</th>
+                <td>{{ user.lastname }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>{{ user.address }}</td>
+            </tr>
+            <tr>
+                <th>PhoneNum</th>
+                <td>{{ user.phoneNum }}</td>
+            </tr>
+            <tr>
+                <th>BirthDate</th>
+                <td>{{ user.birthDate ? user.birthDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Gender</th>
+                <td>{{ user.gender }}</td>
+            </tr>
+            <tr>
+                <th>Role</th>
+                <td>{{ user.role }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ user.status }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{{ user.image }}</td>
+            </tr>
+        </tbody>
+    </table>
+     <div class="card-footer">
+      <div class="row">
+    <a href="{{ path('showbackpage') }}">
+   <button type="button" class="btn social stack-overflow mr-2">
+    <i class="fa fa-mail-reply (alias)"></i>back to home</button></a>
+
+    <a href="{{ path('app_users_editprof', {'id': app.user.id}) }}">
+    <button type="button" class="btn social dropbox mr-2">
+    <i class="fa fa-pencil-square-o"></i>Edit my profile</button></a>
+
+    <a href="#">
+   <button type="button" class="btn social vine mr-2">
+    <i class="fa fa-repeat"></i>change my password!</button></a>
+
+    {{ include('users/_delete_profile.html.twig') }}
+    </div>
+    </div>
+{% endblock %}

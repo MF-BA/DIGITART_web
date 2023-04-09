@@ -792,6 +792,9 @@
         margin: 2px 0 0;
         font-size: 18px; }
 
+        .btn{
+        border-radius: 40px;  
+        }
 .social {
   color: #fff; }
   .social.btn-sm {
@@ -1570,15 +1573,13 @@ header .form-inline {
     padding:12px 0;
     padding: 0.75rem 0;
     margin: 0 !important;
-    color: #fff;
-    outline: 0;
-    text-align: center;
-    background: transparent;
-    border: 0;
-    border-left: 1px solid rgba(120, 130, 140, 0.4); }
+    
+    
+  }
   .card .card-footer {
-    padding:10.4px 20px;
-    padding: 0.65rem 1.25rem;
+    padding:10px 10px;
+  
+    
     background-color: #f0f3f5;
     border-top: 1px solid #c2cfd6; }
     .card .card-footer ul li {
@@ -2343,6 +2344,9 @@ header .form-inline {
   .badges button {
     margin: 2px 0; } }
 
+    .dashtitle-color{
+      color: #BD2A2E;
+    }
 @media (max-width: 1024px) {
   aside.left-panel {
     padding: 0 20px;
