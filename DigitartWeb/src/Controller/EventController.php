@@ -109,6 +109,7 @@ class EventController extends AbstractController
             'form' => $form,
         ]);
     }
+ 
 
     #[Route('/{id}', name: 'app_event_show', methods: ['GET'])]
     public function show(Event $event): Response
@@ -117,6 +118,7 @@ class EventController extends AbstractController
             'event' => $event,
         ]);
     }
+
     #[Route('/{id}/front', name: 'app_event_show_front', methods: ['GET'])]
     public function showfront(Event $event): Response
     {
@@ -171,7 +173,7 @@ public function qrcode(Event $event): Response
     $imageData = $qrCode->writeString();
     return new Response($imageData, 200, [
         'Content-Type' => $qrCode->getContentType(),
-        'Content-Disposition' => 'inline; filename="qrcode.png"'
+        'Content-Disposition' => 'inline; filename="images/qrcode.png"'
     ]);
 }
 

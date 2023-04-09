@@ -25,9 +25,11 @@
                 <th>StartDate</th>
                 <th>EndDate</th>
                 <th>NbParticipants</th>
-                <th>Detail</th>
+                <th>Description</th>
                 <th>StartTime</th>
-                <th>Image</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>Image</th>            
                 <th>actions</th>
             </tr>
         </thead>
@@ -38,10 +40,13 @@
                 <td>{{ event.eventName }}</td>
                 <td>{{ event.startDate ? event.startDate|date('Y-m-d') : '' }}</td>
                 <td>{{ event.endDate ? event.endDate|date('Y-m-d') : '' }}</td>
-                <td>{{ event.nbParticipants }}</td>
+                <td>{{ event.nbParticipants }} </td>
                 <td>{{ event.detail }}</td>
-                <td>{{ event.startTime }}</td>
+                <td>{{ event.startTime }}h</td>
+                <td>{{ event.createdAt ? event.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ event.updatedAt ? event.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td><img src="{{ asset('images/' ~ event.image) }}" alt=""></td>
+                
                 <td>
                     <div class="d-flex">
                         <a class="btn social html5 mr-2" href="{{ path('app_event_show', {'id': event.id}) }}"><i class="fa  fa-eye"></i> Show</a>

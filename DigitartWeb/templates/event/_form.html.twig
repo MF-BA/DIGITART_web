@@ -26,13 +26,17 @@
                          <div class="input-group date">
                         {{ form_widget(form.endDate, { 'attr': {'class': 'form-control'} }) }}
                         
+                        
                       </div>
+                      {{ form_errors(form.endDate, { 'attr': {'class': 'text-danger'} }) }}
                     </div>
 <hr>
                     <div class="form-group">
                         {{ form_label(form.nbParticipants, 'Number of Participants') }}
                         {{ form_widget(form.nbParticipants, { 'attr': {'class': 'form-control', 'placeholder': 'Enter the number of participants'} }) }}
+                         {{ form_errors(form.nbParticipants) }}
                     </div>
+
 <hr>
                     <div class="form-group">
                         {{ form_label(form.detail, 'Details') }}

@@ -27,29 +27,17 @@ class EventType extends AbstractType
     {
         $builder
         ->add('eventName', TextType::class, [
-            'constraints' => [
-                new Length([
-                    'min' => '3',
-                    'max' => '50',
-                    'minMessage' => 'doit etre plus que 3',
-                    'maxMessage' => 'doit etre moins que 49',
-                ]),
-                new NotNull([
-                    'message' => 'Event name cannot be empty',
-                ]),
+            'attr' => [
+                'class' => 'form-control',
             ],
         ])
+        
         ->add('startDate', BirthdayType::class, [               
             'label' => 'Start date',
             'widget' => 'single_text',
             'attr' => [
                 'class' => 'form-control',
   
-            ],
-            'constraints' => [
-                new NotNull([
-                    'message' => 'Event name cannot be empty',
-                ]),
             ],
             'data' => new \DateTime(),
         ])
@@ -58,28 +46,24 @@ class EventType extends AbstractType
             'widget' => 'single_text',
             'attr' => [
                 'class' => 'form-control',
+                
 
             ],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'End date cannot be empty',
-                ]),
-            ],
+
             'data' => new \DateTime(),
         ])
-            ->add('nbParticipants')
+        ->add('nbParticipants', NumberType::class, [
+            'label' => 'nbParticipants',
+            'attr' => [
+                'min' => 0,
+                'input' => 'number',
+                'pattern' => '\d*', // restrict input to only numbers
+            ],
+
+        ])
+           
             ->add('detail', TextType::class, [
-                'constraints' => [
-                    new Length([
-                        'min' => '5',
-                        'max' => '100',
-                        'minMessage' => 'doit etre plus que 5',
-                        'maxMessage' => 'doit etre moins que 100',
-                    ]),
-                    new NotNull([
-                        'message' => 'Event details cannot be empty',
-                    ]),
-                ],
+
             ])
             ->add('startTime', NumberType::class, [
                 'label' => 'Start time',
@@ -88,16 +72,7 @@ class EventType extends AbstractType
                     'min' => 0,
                     'max' => 23,
                 ],
-                'constraints' => [
-                    new NotNull([
-                        'message' => 'Start time cannot be empty',
-                    ]),
-                    new Range([
-                        'min' => 0,
-                        'max' => 23,
-                        'notInRangeMessage' => 'Start time must be between {{ min }} and {{ max }}',
-                    ]),
-                ],
+                
             ])
             ->add('image')
             ->add('idRoom', EntityType::class, [                 

@@ -60,6 +60,7 @@ class Participants
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_user", referencedColumnName="id")
      * })
+     * 
      */
     private $idUser;
 
