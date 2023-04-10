@@ -47,11 +47,12 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
         }
 
         $user= $token->getUser();
+
         if($user->getRole() == 'Admin')
         {
         return new RedirectResponse($this->urlGenerator->generate('showbackpage'));
         }
-        if($user->getRole() == 'Subscriber')
+        else
         {
         return new RedirectResponse($this->urlGenerator->generate('showfrontpage'));
         }

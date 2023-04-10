@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 use App\Entity\Event;
+use App\Entity\Users;
 use App\Entity\Participants;
 use App\Form\EventType;
 use App\Repository\EventRepository;
@@ -122,11 +123,56 @@ class EventController extends AbstractController
     #[Route('/{id}/front', name: 'app_event_show_front', methods: ['GET'])]
     public function showfront(Event $event): Response
     {
+        
         return $this->render('event/showfront.html.twig', [
             'event' => $event,
         ]);
     }
+    #[Route('/participated/a', name: 'app_event_already', methods: ['GET'])]
+    public function already(EventRepository $eventRepository): Response
+    {
+        $events = $eventRepository->findAll();
 
+        return $this->render('event/alreadyparticipated.html.twig', [
+            'events' => $events,
+        ]);
+    }
+    
+    #[Route('/{id}/participate/l', name: 'app_event_participate', methods: ['GET'])]
+    public function participateAction(Event $event)
+    {
+        
+        // Get the Participants entity manager
+        $em = $this->getDoctrine()->getManager();
+        $user=$this->getUser();
+        // Get the current user
+          // Check if the user has already participated
+    $participantRepository = $em->getRepository(Participants::class);
+    $existingParticipant = $participantRepository->findOneBy([
+        'idUser' => $user->getId(),
+        'idEvent' => $event->getId(),
+    ]);
+    
+    if ($existingParticipant) {
+        // User has already participated, do not create a new participant
+        return $this->redirectToRoute('app_event_already', [], Response::HTTP_SEE_OTHER);
+    }
+        // Create a new Participants entity
+        $participant = new Participants();
+        // Set the properties
+        $participant->setFirstName($user->getFirstName());
+        $participant->setIdUser($user);
+        $participant->setLastName($user->getLastName());
+        $participant->setAdress($user->getAddress());
+        $participant->setGender($user->getGender());
+        $participant->setIdEvent($event);
+        // Save the entity
+        $em->persist($participant);
+        $em->flush();
+
+        // Redirect to the event page
+        return $this->redirectToRoute('app_event_show_front', ['id' => $event->getId()]);
+    }
     #[Route('/{id}/edit', name: 'app_event_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Event $event, EventRepository $eventRepository): Response
     {

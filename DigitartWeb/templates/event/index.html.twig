@@ -4,7 +4,11 @@
 
 {% block body %}
     <h1><strong>List of Events</strong></h1>
-
+<style>
+   .img {
+  max-width: 50% !important; 
+}
+</style>
     <div class="mb-3">
          <form action="{{ path('event_search') }}" method="get">
             <div class="input-group">

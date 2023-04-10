@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230409155620 extends AbstractMigration
+final class Version20230409235827 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,12 @@ final class Version20230409155620 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE event ADD created_at DATETIME NOT NULL, ADD updated_at DATETIME NOT NULL');
+        $this->addSql('ALTER TABLE participants DROP INDEX UNIQ_716970926B3CA4B, ADD INDEX IDX_716970926B3CA4B (id_user)');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE event DROP created_at, DROP updated_at');
+        $this->addSql('ALTER TABLE participants DROP INDEX IDX_716970926B3CA4B, ADD UNIQUE INDEX UNIQ_716970926B3CA4B (id_user)');
     }
 }

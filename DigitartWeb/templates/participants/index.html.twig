@@ -12,6 +12,7 @@
                 <th>LastName</th>
                 <th>Adress</th>
                 <th>Gender</th>
+                <th>ParticipatedAt</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -22,9 +23,10 @@
                 <td>{{ participant.lastName }}</td>
                 <td>{{ participant.adress }}</td>
                 <td>{{ participant.gender }}</td>
+                <td>{{ participant.createdAt ? participant.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a class="btn social html5 mr-2" href="{{ path('app_participants_show', {'idUser': participant.idUser}) }}"><i class="fa  fa-eye"></i> Show</a>
-                    <a class="btn btn-info" href="{{ path('app_participants_edit', {'idUser': participant.idUser}) }}"><i class="fa fa-pencil-square"></i> Edit</a>
+                    <a class="btn social html5 mr-2" href="{{ path('app_participants_show', {'idUser': app.user.id}) }}"><i class="fa  fa-eye"></i> Show</a>
+                    <a class="btn btn-info" href="{{ path('app_participants_edit', {'idUser': app.user.id}) }}"><i class="fa fa-pencil-square"></i> Edit</a>
                 </td>
             </tr>
         {% else %}

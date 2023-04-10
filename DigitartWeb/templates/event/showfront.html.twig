@@ -77,6 +77,17 @@
 .about .watch-video a {
     color: #6a6b7c  !important;
 }
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 </style>
      <script>
     var countDownDate = new Date("{{ event.getStartDate|date('M d,Y H:i:s') }}").getTime();
@@ -180,7 +191,7 @@ if(distance<0)
                <li><span class="icon_check"></span> <span class="color-event">Name : </span><span class="color-event-text"> {{ event.getEventName }}</span></li>
             <li><span class="icon_check"></span> <span class="color-event">Max number of participants : </span><span class="color-event-text"> {{ event.getNbParticipants }}</span></li>
             <li><span class="icon_check"></span> <span class="color-event">Start Time : </span><span class="color-event-text"> {{ event.getStartTime }}h</span></li>
-             <li><img src="{{ path('app_event_qrcode', {'id': event.getId}) }}" alt="QR code"></li>
+             <li><img src="{{ path('app_event_front_index', {'id': event.getId}) }}" alt="QR code"></li>
              
               </ul>
               <p>Vitae autem velit excepturi fugit. Animi ad non. Eligendi et non nesciunt suscipit repellendus porro in quo eveniet. Molestias in maxime doloremque.</p>
@@ -189,13 +200,13 @@ if(distance<0)
                 <i class="bi bi-play-circle"></i>
                 <a href="" class="glightbox stretched-link ">Watch Video</a>
                 
+                
               </div>
               <a href="{{ path('PDF_Voyage') }}">
                  <button>Print all the events</button>
            </a>
-           <a href="{{ path('app_event_participate') }}">
-                 <button>Participate</button>
-           </a>
+           
+           <a href="{{ path('app_event_participate', {'id': event.getId}) }}" class="glightbox stretched-link ">Participate</a>
             </div>
           </div>
 
@@ -255,7 +266,7 @@ if(distance<0)
 
               <div class="meta-top">
                 <ul>
-                  <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="blog-details.html">Koussay Bedhief</a></li>
+                  <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="blog-details.html">{{app.user.firstname}}</a></li>
                   <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-details.html"><time datetime="2020-01-01">Jan 1, 2022</time></a></li>
           
                 </ul>

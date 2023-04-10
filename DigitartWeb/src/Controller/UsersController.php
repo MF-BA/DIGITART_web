@@ -172,17 +172,7 @@ class UsersController extends AbstractController
     
         return $this->redirectToRoute('app_users_index', ['id' => $id]);
     }
-    #[Route('/users/search', name: 'app_users_search', methods: ['POST'])]
-    public function search(Request $request, UsersRepository $userRepository): JsonResponse
-     {
-    $searchTerm = $request->request->get('searchTerm');
-    $users = $userRepository->search($searchTerm);
-    
-    return $this->json(['users' => $users]);
-     }
+   
 
-    
-  
-    
      
 }
