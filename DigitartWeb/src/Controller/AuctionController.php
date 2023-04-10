@@ -41,7 +41,7 @@ class AuctionController extends AbstractController
     #[Route('/showfront', name: 'showfrontpage')]
      public function display_front(): Response
      {
-         return $this->render('home.html.twig', [
+         return $this->render('base.html.twig', [
              
          ]);
      }

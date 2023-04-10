@@ -61,7 +61,7 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Please enter a first name',
                     ]),
                     new Regex([
-                        'pattern' => '/^[a-zA-Z]+$/',
+                        'pattern' => '/^[a-zA-Z ]+$/',
                         'message' => 'Please enter a valid first name',
                     ]),
                 ],
@@ -78,7 +78,7 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Please enter a last name',
                     ]),
                     new Regex([
-                        'pattern' => '/^[a-zA-Z]+$/',
+                        'pattern' => '/^[a-zA-Z ]+$/',
                         'message' => 'Please enter a valid last name',
                     ]),
                 ],

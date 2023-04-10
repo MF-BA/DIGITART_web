@@ -62,7 +62,71 @@ button {
     border: none;
     background: transparent;
 }
+ 
+    
+.circle {
+			width: 60px !important;
+			height: 60px !important;
+			border-radius: 50%;
+      background-color: #BD2A2E !important;
+			position: relative !important;
+      top: 30px !important;
+      left: 250px !important;
+      border: 2px solid var(#BD2A2E);
+			color: #fff;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			transform: translateY(-50%);
+		}
+
+		.circle-name {
+			font-size: 10px;
+			position: relative !important;
+      top: 2px !important;
+      left: 1px !important;
+		}
+    .user-name {
+      font-size: 20px;
+      color: #BD2A2E;
+			position: relative !important;
+      top: 2px !important;
+      left: 230px !important;
+    }
+		.options {
+			position: fixed;
+			top: 155px !important;
+			right: 20px !important;
+			transform: translateY(-50%);
+			background-color: #000000;
+      border-radius: 10% !important;
+			box-shadow: 0 4px 6px rgba(0,0,0,.1);
+			padding: 10px;
+			display: none;
+		}
+
+		.option {
+			margin-bottom: 10px;
+			cursor: pointer;
+		}
+
+		.option:hover {
+			color: #BD2A2E;
+		}
+
 </style>
+<script>
+		function toggleOptions() {
+			var options = document.getElementById('options');
+			if (options.style.display === 'none') {
+				options.style.display = 'block';
+			} else {
+				options.style.display = 'none';
+			}
+		}
+	</script>
            <link href="{{asset('Front/assets/img/logo-digitart-rouge.png')}}" rel="icon">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
  
@@ -139,12 +203,29 @@ button {
           </li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
+        {% if app.user is not null %}
+
+        {% if app.user.role == 'Subscriber' or app.user.role == 'Artist' %}
+         <strong class="user-name">  {{app.user.firstname}}   {{app.user.lastname}} </strong>
+         <div class="circle" onclick="toggleOptions()">
+		
+		<div class="circle-name">user image</div>
+	</div>
+	<div class="options" id="options">
+		<a class="nav-link" href="#"><div class="option"><i class="fa fa-user"></i> My profile</div></a>
+		<a class="nav-link" href="{{path('app_logout')}}"><div class="option"><i class="fa fa-power-off"></i>  Logout</div></a>
+	</div>
+  {% endif %} 
+
+  {% endif %} 
       </nav><!-- .navbar -->
 
 
     </div>
-    <a href="{{path('app_login')}}"><button class="login100-form-btn"><i class="fa fa-sign-in" aria-hidden="true"></i>   Login</button></a>
-            
+    {% if app.user is null %}
+     <a href="{{path('app_login')}}"><button class="login100-form-btn"><i class="fa fa-sign-in" aria-hidden="true"></i>   Login</button></a>
+    {% endif %}
+           
   </header><!-- End Header -->
   
   {% endblock %}

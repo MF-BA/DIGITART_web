@@ -3,7 +3,7 @@
 	<style>
     .wrap-login100 {
   width: 900px !important;
-  height: 800px !important;
+  height: 500px !important;
   background: #fff;
   border-radius: 10px;
   overflow: hidden;
@@ -34,7 +34,7 @@
   font-family: Poppins-Bold;
   font-size: 24px;
   position: relative !important;
-  right: 50px !important;
+  right: 20px !important;
   color: #333333;
   line-height: 1.2;
   text-align: center;
@@ -118,15 +118,85 @@ a:hover {
   justify-content: center;
   padding-top: 20px;
 }
-.text-center {
+.text-center1 {
     position: relative !important;
-    right: 30px !important;
+    right: 0 !important;
+    bottom: 10px !important;
+}
+.text-center2 {
+    position: relative !important;
+    right: 0px !important;
+    bottom: 10px !important;
+}
+.text-center3 {
+    position: relative !important;
+    right: 0px !important;
+    bottom: 10px !important;
 }
 .error-msg-form{
   color: red !important;
   font-size: 0.8em !important;
 }
+/* Style the input fields */
+input {
+  padding: 10px;
+  width: 100%;
+  font-size: 17px;
+  font-family: Arial;
+  border: 1px solid #aaaaaa;
+}
 
+/* Hide the tabs */
+.tab {
+  display: none;
+}
+
+/* Style the previous/next buttons */
+#prevBtn,
+#nextBtn {
+  background-color: #04aa6d;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+#prevBtn:hover,
+#nextBtn:hover {
+  background-color: #f9f9f9;
+  color: #04aa6d;
+}
+
+/* Clear floats after the form */
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.fieldset {
+			border: none;
+      position: relative;
+      left: 30px;
+			margin-bottom: 20px;
+		}
+
+		.btn {
+			background: #BD2A2E !important;
+			color: #fff;
+			padding: 10px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+
+		.btn:hover {
+			background: #333333 !important;
+		}
+
+		.hide {
+			display: none;
+		}
 	</style>
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="{{asset('login/images/icons/favicon.ico')}}">
@@ -152,16 +222,16 @@ a:hover {
 		<div class="container-login100">
             <div class="wrap-login100">
 
-    {{ form_start(registrationForm,{attr:{novalidate:'novalidate'}}) }}
+    {{ form_start(registrationForm,{attr:{'id': 'registration-form','novalidate':'novalidate'}}) }}
     <span class="login100-form-title">
 						Register
 					</span>
 
-            <div class="row form-group">
-        <div class="col col-md-6">
-
+<fieldset id="step1" class="fieldset">     
+  <div class="row form-group">
+    <div class="col col-md-6">
          {# Cin #}
-        <div class="row form-group">
+      <div class="row form-group">
         <div class="col col-md-6">
         {{ form_label(registrationForm.cin, 'Cin') }}
         </div>
@@ -171,18 +241,6 @@ a:hover {
           <small class="form-text text-muted">Cin must contain 8 digits</small>
         </div>
       </div>
-       {# First name #}
-      <div class="row form-group">
-        <div class="col col-md-6">
-        {{ form_label(registrationForm.firstname, 'First name') }}
-          
-        </div>
-        <div class="col-12 col-md-9">
-          {{ form_widget(registrationForm.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Enter First name'}}) }}
-          <small class="error-msg-form">{{ form_errors(registrationForm.firstname,{'attr':{'class':'text-danger'}}) }}</small>
-        </div>
-      </div>
-
        {# Last name #}
       <div class="row form-group">
         <div class="col col-md-6">
@@ -191,11 +249,24 @@ a:hover {
         <div class="col-12 col-md-9">
           {{ form_widget(registrationForm.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Enter Last name'}}) }}
           <small class="error-msg-form">{{ form_errors(registrationForm.lastname,{'attr':{'class':'text-danger'}}) }}</small>
-          
         </div>
       </div>
-         {# Email #}
-       <div class="row form-group">
+       
+   </div>
+
+    <div class="col col-md-6">
+      {# First name #}
+      <div class="row form-group">
+        <div class="col col-md-6">
+        {{ form_label(registrationForm.firstname, 'First name') }}
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(registrationForm.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Enter First name'}}) }}
+          <small class="error-msg-form">{{ form_errors(registrationForm.firstname,{'attr':{'class':'text-danger'}}) }}</small>
+        </div>
+      </div>
+       {# Email #}
+      <div class="row form-group">
         <div class="col col-md-6">
         {{ form_label(registrationForm.email, 'Email') }}
         </div>
@@ -205,7 +276,48 @@ a:hover {
           <small class="form-text text-muted">Please enter a valid email!</small>
         </div>
       </div>
-        {# Password #}
+      
+    </div>
+ </div>
+ <button id="next1" class="btn">Next</button>
+
+ <div class="text-center1 p-t-12">
+						<span class="txt1">
+							Already have
+						</span>
+						<a class="txt2" href="{{ path('app_login') }}">
+							an account?
+						</a>
+					</div>
+</fieldset>
+<fieldset id="step2" class="fieldset hide">      
+  <div class="row form-group">
+    <div class="col col-md-6">
+         {# birth date #}
+      <div class="row form-group">
+        <div class="col col-md-6">
+        {{ form_label(registrationForm.birthDate, 'Birth Date') }}
+        </div>
+        <div class="col-12 col-md-9">
+        {{ form_widget(registrationForm.birthDate, {'attr': {'class': 'form-control'}}) }}
+        <small class="error-msg-form">{{ form_errors(registrationForm.birthDate,{'attr':{'class':'text-danger'}}) }}</small>
+        </div>
+      </div>
+       {# Gender #}
+     <div class="row form-group">
+     <div class="col col-md-6">
+        {{ form_label(registrationForm.gender, 'Gender') }}
+        </div>
+     <div class="col-6 col-md-9">
+        {{ form_widget(registrationForm.gender) }}
+        <small class="error-msg-form">{{ form_errors(registrationForm.gender,{'attr':{'class':'text-danger'}}) }}</small>
+     </div>
+     </div>
+       
+   </div>
+
+    <div class="col col-md-6">
+      {# Password #}
       <div class="row form-group">
         <div class="col col-md-6">
         {{ form_label(registrationForm.plainPassword, 'Password') }}
@@ -216,72 +328,22 @@ a:hover {
           <small class="form-text text-muted">Please enter a complex password</small>
         </div>
       </div>
-          </div>
-
-      
-
-<div class="col col-md-6">
-      {# Address #}
-      <div class="row form-group">
-        <div class="col col-md-6">
-      {{ form_label(registrationForm.address, 'Address') }}
-        </div>
-<div class="col-12 col-md-9">
-{{ form_widget(registrationForm.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter Address'}}) }}
-<small class="error-msg-form">{{ form_errors(registrationForm.address,{'attr':{'class':'text-danger'}}) }}</small>
-
-</div>
-</div>
-{# Phone #}
-  <div class="row form-group">
-    <div class="col col-md-6">
-    {{ form_label(registrationForm.phoneNum, 'Phone Number') }}
-      
-    </div>
-    <div class="col-12 col-md-9">
+       {# Phone #}
+       <div class="row form-group">
+       <div class="col col-md-6">
+       {{ form_label(registrationForm.phoneNum, 'Phone Number') }}
+       </div>
+       <div class="col-12 col-md-9">
       {{ form_widget(registrationForm.phoneNum, {'attr': {'class': 'form-control', 'placeholder': 'Enter Phone'}}) }}
       <small class="error-msg-form">{{ form_errors(registrationForm.phoneNum,{'attr':{'class':'text-danger'}}) }}</small>
       <small class="form-text text-muted">Phone number must contain 8 digits</small>
-    </div>
-  </div>
-  {# birth date #}
-  <div class="row form-group">
-        <div class="col col-md-6">
-        {{ form_label(registrationForm.birthDate, 'Birth Date') }}
-    </div>
-    <div class="col-12 col-md-9">
-        {{ form_widget(registrationForm.birthDate, {'attr': {'class': 'form-control'}}) }}
-        <small class="error-msg-form">{{ form_errors(registrationForm.birthDate,{'attr':{'class':'text-danger'}}) }}</small>
+     </div>
+     </div>
     </div>
  </div>
-{# role #}
-  <div class="row form-group">
-  <div class="col col-md-6">
-  {{ form_label(registrationForm.role, 'Role') }}
-    
-  </div>
-  <div class="col-12 col-md-9">
-    {{ form_widget(registrationForm.role, {'attr': {'class': 'form-control'}}) }}
-    <small class="error-msg-form">{{ form_errors(registrationForm.role,{'attr':{'class':'text-danger'}}) }}</small>
-  </div>
-</div>
-{# Gender #}
-  <div class="row form-group">
-     <div class="col-12 col-md-9">
-        {{ form_row(registrationForm.gender) }}
-        <small class="error-msg-form">{{ form_errors(registrationForm.gender,{'attr':{'class':'text-danger'}}) }}</small>
-    </div>
- </div>
-					</div>
-       </div>
-
-					<div class="container-login100-form-btn">
-						<button type="submit" class="login100-form-btn">
-						<i class="fa fa-check-square-o"></i>  Register
-						</button>
-					</div>
-
-					<div class="text-center p-t-12">
+ <button id="next2" class="btn">Next</button>
+ <button id="prev2" class="btn">Previous</button>
+ <div class="text-center2 p-t-12">
 						<span class="txt1">
 							Already have
 						</span>
@@ -289,7 +351,51 @@ a:hover {
 							an account?
 						</a>
 					</div>
-        
+</fieldset>
+<fieldset id="step3" class="fieldset hide">        
+  <div class="row form-group">
+        <div class="col col-md-6">
+        {# role #}
+        <div class="row form-group">
+        <div class="col col-md-6">
+        {{ form_label(registrationForm.role, 'Role') }}
+        </div>
+       <div class="col-12 col-md-9">
+       {{ form_widget(registrationForm.role, {'attr': {'class': 'form-control'}}) }}
+       <small class="error-msg-form">{{ form_errors(registrationForm.role,{'attr':{'class':'text-danger'}}) }}</small>
+       </div>
+       </div>
+       </div>
+    <div class="col col-md-6">
+    {# Address #}
+      <div class="row form-group">
+        <div class="col col-md-6">
+       {{ form_label(registrationForm.address, 'Address') }}
+        </div>
+       <div class="col-12 col-md-9">
+       {{ form_widget(registrationForm.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter Address'}}) }}
+       <small class="error-msg-form">{{ form_errors(registrationForm.address,{'attr':{'class':'text-danger'}}) }}</small>
+       </div>
+      </div>
+      
+     </div>
+ </div>
+    <button id="prev3" class="btn">Previous</button>
+		<button type="submit" class="btn">
+		<i class="fa fa-check-square-o"></i>  Register
+		</button>
+		<div class="text-center3 p-t-12">
+						<span class="txt1">
+							Already have
+						</span>
+						<a class="txt2" href="{{ path('app_login') }}">
+							an account?
+						</a>
+					</div>			
+</fieldset>
+
+					
+       
     {{ form_end(registrationForm) }}
    
 
@@ -298,6 +404,43 @@ a:hover {
         </div>
 	</div>
 
+<script>
+  
+const step1 = document.querySelector("#step1");
+const step2 = document.querySelector("#step2");
+const step3 = document.querySelector("#step3");
+const next1 = document.querySelector("#next1");
+const prev2 = document.querySelector("#prev2");
+const next2 = document.querySelector("#next2");
+const prev3 = document.querySelector("#prev3");
 
+next1.addEventListener("click", function(event) {
+	event.preventDefault();
+	step1.classList.add("hide");
+	step2.classList.remove("hide");
+});
+
+prev2.addEventListener("click", function(event) {
+	event.preventDefault();
+	step2.classList.add("hide");
+	step1.classList.remove("hide");
+});
+
+next2.addEventListener("click", function(event) {
+	event.preventDefault();
+	step2.classList.add("hide");
+	step3.classList.remove("hide");
+});
+
+prev3.addEventListener("click", function(event) {
+	event.preventDefault();
+	step3.classList.add("hide");
+	step2.classList.remove("hide");
+});
+
+
+
+
+   </script>
 
 {% endblock %}

@@ -51,7 +51,7 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
         {
         return new RedirectResponse($this->urlGenerator->generate('showbackpage'));
         }
-        if($user->getRole() == 'Subscriber')
+        else
         {
         return new RedirectResponse($this->urlGenerator->generate('showfrontpage'));
         }
