@@ -110,7 +110,44 @@
     }) }}
   </div>
 </div>
+{%  if user.image is null %}
+{# image #}
+<div class="row form-group">
+  <div class="col col-md-2">
+    {{ form_label(form.image, 'Add profile image') }}
+  </div>
+  <div class="col-12 col-md-9">
+    {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.image) }}
+  </div>
+</div>
+{% endif %}  
 
+{%  if user.image is not null %}
+
+{# image #}
+<div class="row form-group">
+  <div class="col col-md-2">
+    {{ form_label(form.image, 'change profile image') }}
+  </div>
+  <div class="col-12 col-md-9">
+  <img src="{{ asset('/uploads/' ~ user.image) }}" alt="Image" width="150">
+    {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.image) }}
+  </div>
+</div>
+{% endif %}  
+
+{# images #}
+<div class="row form-group">
+  <div class="col col-md-2">
+    {{ form_label(form.userImages, 'Add other images') }}
+  </div>
+  <div class="col-12 col-md-9">
+    {{ form_widget(form.userImages, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.userImages) }}
+  </div>
+</div>
       
 
   <div class="card-footer">

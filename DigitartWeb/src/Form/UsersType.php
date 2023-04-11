@@ -18,19 +18,25 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class UsersType extends AbstractType
 {
     private $security;
+ 
 
     public function __construct(Security $security)
     {
         $this->security = $security;
     }
+    
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $currentUser = $this->security->getUser();
         $currentUserId = $currentUser ? $currentUser->getId() : null;
+        
         $builder
       
         ->add('cin', TextType::class, [
@@ -120,15 +126,23 @@ class UsersType extends AbstractType
     $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($currentUserId) {
         $form = $event->getForm();
         $user = $event->getData();
-
+        
         // Check if the form is being used to edit an existing user
         if ($user instanceof Users && $user->getId() !== null && $user->getId() !== $currentUserId) {
             // If so, remove the email and password fields from the form
             $form->remove('email');
             $form->remove('plainPassword');
+            $form->remove('userImages');
+            $form->remove('image');
+        }
+        if ($user instanceof Users && $user->getId() === null) {
+           
+            $form->remove('userImages');
+            $form->remove('image');
         }
         if ($user->getId() === $currentUserId){
             $form->remove('plainPassword');
+            
         }
        
     })
@@ -208,7 +222,18 @@ class UsersType extends AbstractType
             'placeholder' => 'Choose a role',
             
         ])
-            
+         ->add('userImages', FileType::class, [
+           'label' => false,
+           'multiple' => true,
+           'mapped' => false,
+           'required' => false
+         ])   
+         ->add('image', FileType::class, [
+            'label' => false,
+            'multiple' => false,
+            'mapped' => false,
+            'required' => false
+          ]) 
         ;
     }
 

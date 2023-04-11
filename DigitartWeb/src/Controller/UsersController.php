@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Users;
+use App\Entity\UserImages;
 use App\Form\UsersType;
 use App\Repository\UsersRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,6 +18,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 #[Route('/users')]
 class UsersController extends AbstractController
 {
+    
     #[Route('/', name: 'app_users_index', methods: ['GET'])]
     public function index(UsersRepository $usersRepository): Response
     {
@@ -39,6 +42,7 @@ class UsersController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+            
             if($form->get('role')->getData()==='Artist')
             {
                 $user->setRoles(['ROLE_ARTIST']);
@@ -124,6 +128,34 @@ class UsersController extends AbstractController
         $form->handleRequest($request);
          
         if ($form->isSubmitted() && $form->isValid()) {
+            $userImages = $form->get('userImages')->getData();
+            $profileimage = $form->get('image')->getData();
+            // on boucle sur les images 
+            foreach($userImages as $image)
+            {
+               // On génère un nouveau nom de fichier
+               $fichier = md5(uniqid()) . '.' . $image->guessExtension();
+
+               // On copie le fichier dans le dossier uploads
+               $image->move(
+                   $this->getParameter('images_directory'),
+                   $fichier
+               );
+
+               // On stocke l'image dans la base de données (son nom)
+               $img = new UserImages();
+               $img->setName($fichier);
+               $user->addUserImage($img); 
+            }
+            if($profileimage != null)
+            {
+            $fichier2 = md5(uniqid()) . '.' . $profileimage->guessExtension();
+            $profileimage->move(
+                $this->getParameter('images_directory'),
+                $fichier2
+            );
+            $user->setImage($fichier2);
+               }
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -181,6 +213,29 @@ class UsersController extends AbstractController
     return $this->json(['users' => $users]);
      }
 
+
+    #[Route('/supprime/image/{id}', name: 'users_delete_image', methods: ['DELETE'])]
+    public function deleteImage(UserImages $image, Request $request){
+        $data = json_decode($request->getContent(), true);
+
+        // On vérifie si le token est valide
+        if($this->isCsrfTokenValid('delete'.$image->getId(), $data['_token'])){
+            // On récupère le nom de l'image
+            $nom = $image->getName();
+            // On supprime le fichier
+            unlink($this->getParameter('images_directory').'/'.$nom);
+
+            // On supprime l'entrée de la base
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($image);
+            $em->flush();
+
+            // On répond en json
+            return new JsonResponse(['success' => 1]);
+        }else{
+            return new JsonResponse(['error' => 'Token Invalide'], 400);
+        }
+    }
     
   
     

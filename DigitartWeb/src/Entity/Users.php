@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UsersRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -119,7 +121,46 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     */
     private array $roles = [];
 
+     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserImages", mappedBy="users", orphanRemoval=true, cascade={"persist"})
+     */
+    private $userImages;
 
+    public function __construct()
+    {
+        $this->userImages = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection|Images[]
+     */
+    public function getUserImages(): Collection
+    {
+        return $this->userImages;
+    }
+
+    public function addUserImage(UserImages $userImage): self
+    {
+        if (!$this->userImages->contains($userImage)) {
+            $this->userImages->add($userImage);
+            $userImage->setusers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserImage(UserImages $userImage): self
+    {
+        if ($this->userImages->removeElement($userImage)) {
+            // set the owning side to null (unless already changed)
+            if ($userImage->getusers() === $this) {
+                $userImage->setusers(null);
+            }
+        }
+
+        return $this;
+    }
+     
     public function getId(): ?int
     {
         return $this->id;
@@ -340,6 +381,8 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
+
+    
 
     
 }

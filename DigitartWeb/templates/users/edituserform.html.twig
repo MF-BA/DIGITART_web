@@ -43,8 +43,19 @@
           <small class="form-text text-muted">Text</small>
         </div>
       </div>
-
-
+{%  if user.id is same as(app.user.id) %}
+{# Email #}
+       <div class="row form-group">
+        <div class="col col-md-2">
+        {{ form_label(form.email, 'Email') }}
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email'}}) }}
+          {{ form_errors(form.email) }}
+          <small class="form-text text-muted">Please enter a valid email!</small>
+        </div>
+      </div>
+{% endif %} 
       {# Address #}
       <div class="row form-group">
         <div class="col col-md-2">
@@ -100,8 +111,42 @@
     }) }}
   </div>
 </div>
-
-      
+{%  if user.id is same as(app.user.id) %}
+{%  if user.image is not null %}
+{# images #}
+<div class="row form-group">
+  <div class="col col-md-2">
+    {{ form_label(form.image, 'profile image') }}
+  </div>
+  <div class="col-12 col-md-9">
+  <img src="{{ asset('/uploads/' ~ user.image) }}" alt="Image" width="150">
+    {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.image) }}
+  </div>
+</div>
+{% else %}
+{# images #}
+<div class="row form-group">
+  <div class="col col-md-2">
+    {{ form_label(form.image, 'profile image') }}
+  </div>
+  <div class="col-12 col-md-9">
+    {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.image) }}
+  </div>
+</div>
+{% endif %} 
+{# images #}
+<div class="row form-group">
+  <div class="col col-md-2">
+    {{ form_label(form.userImages, 'Add other images') }}
+  </div>
+  <div class="col-12 col-md-9">
+    {{ form_widget(form.userImages, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.userImages) }}
+  </div>
+</div>
+{% endif %}    
 
   <div class="card-footer">
   <a href="{{ path('app_users_index') }}">

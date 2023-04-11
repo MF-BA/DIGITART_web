@@ -65,8 +65,8 @@ button {
  
     
 .circle {
-			width: 60px !important;
-			height: 60px !important;
+			width: 70px !important;
+			height: 70px !important;
 			border-radius: 50%;
       background-color: #BD2A2E !important;
 			position: relative !important;
@@ -208,8 +208,7 @@ button {
         {% if app.user.role == 'Subscriber' or app.user.role == 'Artist' %}
          <strong class="user-name">  {{app.user.firstname}}   {{app.user.lastname}} </strong>
          <div class="circle" onclick="toggleOptions()">
-		
-		<div class="circle-name">user image</div>
+		    <img class="user-avatar rounded-circle" src="{{ asset('/uploads/' ~ app.user.image) }}" alt="Image" width="60">
 	</div>
 	<div class="options" id="options">
 		<a class="nav-link" href="#"><div class="option"><i class="fa fa-user"></i> My profile</div></a>
