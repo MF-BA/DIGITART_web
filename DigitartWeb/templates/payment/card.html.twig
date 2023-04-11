@@ -89,9 +89,11 @@
       {% set totalPayment = totalPayment + payment.totalPayment %}
     {% endfor %}
    <td><span class="upcomming2" data-aos="fade-up" data-aos-delay="200" style="text-align: center;">Total Amount to pay :<br><span style="color: #BD2A2E">{{ totalPayment }} $</span></br></span></td>
+  <div class="watch-video d-flex align-items-center position-relative">
   <form method="post">
     <button type="submit" class="submit" name="finalizePayment" data-aos="fade-up" data-aos-delay="200">Finalize the command and Checkout</button>
   </form>
+    </div>
   {% endif %}
 </div>
 <!-- partial -->

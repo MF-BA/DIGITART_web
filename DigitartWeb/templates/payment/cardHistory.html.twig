@@ -49,6 +49,12 @@
   {% if payments is empty %}
   <h1 class="upcomming" data-aos="fade-up" data-aos-delay="200">No purchases were made!</h1>
   {% else %}
+  <div class="watch-video d-flex align-items-center position-relative">
+  <a href="{{ path('pdf') }}" class="glightbox stretched-link "><a  class="submit" data-aos="fade-up" data-aos-delay="200">Generate PDF</a></a>
+  </div>
+  
+ 
+
     <h1 class="upcomming" data-aos="fade-up" data-aos-delay="200">Tickets Bought</h1>
     {% for payment in payments %}
       <div class="item" data-aos="fade-up" data-aos-delay="200">

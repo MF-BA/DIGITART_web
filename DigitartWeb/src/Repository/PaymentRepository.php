@@ -52,6 +52,18 @@ class PaymentRepository extends ServiceEntityRepository
         
         return $queryBuilder->getQuery()->getResult();
     }
+
+    public function getLastUpdatedAtByUserId()
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('MAX(p.updatedAt)');
+
+    
+        $result = $qb->getQuery()->getSingleScalarResult();
+    
+        return $result;
+    }
+    
    
 
 //    /**

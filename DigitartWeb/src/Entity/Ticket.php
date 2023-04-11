@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Gedmo\Mapping\Annotation as Gedmo; // gedmo annotations
 /**
  * Ticket
  *
@@ -57,6 +57,21 @@ class Ticket
      */
     private $ticketType;
 
+    /**
+     *
+     * @ORM\Column(name="createdAt", type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $createdAt;
+
+    /**
+     *
+     * @ORM\Column(name="updatedAt", type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updatedAt;
+
+    
     public function getTicketId(): ?int
     {
         return $this->ticketId;
