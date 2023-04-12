@@ -5,9 +5,11 @@ namespace App\Controller;
 
 use App\Entity\Payment;
 use App\Entity\Ticket;
+use App\Repository\PaymentRepository;
 use App\Form\TicketType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -119,4 +121,29 @@ class TicketController extends AbstractController
 
         return $this->redirectToRoute('app_ticket_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+    #[Route('/stat', name: 'app_ticket_stat')]
+    public function Statistics(PaymentRepository $PaymentRepository): Response
+    {   
+        $payments = $PaymentRepository->findAll();
+        
+        $totalAdult = 0;
+        $totalTeenager = 0;
+        $totalStudent = 0;
+
+        foreach ($payments as $payment) {
+            $totalAdult += $payment->getNbAdult();
+            $totalTeenager += $payment->getNbTeenager();
+            $totalStudent += $payment->getNbStudent();
+        }
+    
+        return $this->render('ticket/stats.html.twig', [
+            'totalAdult' => $totalAdult,
+            'totalTeenager' => $totalTeenager,
+            'totalStudent' => $totalStudent,
+
+        ]);
+    }
+
 }

@@ -63,8 +63,43 @@ class PaymentRepository extends ServiceEntityRepository
     
         return $result;
     }
+
     
-   
+    public function getTotalAdult()
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('SUM(p.nbAdult) as totalAdult')
+            ->getQuery();
+
+        return $qb->getSingleScalarResult();
+    }
+
+    public function getTotalTeenager()
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('SUM(p.nbTeenager) as totalTeenager')
+            ->getQuery();
+
+        return $qb->getSingleScalarResult();
+    }
+
+    public function getTotalStudent()
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('SUM(p.nbStudent) as totalStudent')
+            ->getQuery();
+
+        return $qb->getSingleScalarResult();
+    }
+
+    public function getTotalPaymentByPurchaseDate(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p.purchaseDate as purchase_date, SUM(p.totalPayment) as total_payment')
+            ->groupBy('p.purchaseDate')
+            ->getQuery()
+            ->getResult();
+    }
 
 //    /**
 //     * @return Payment[] Returns an array of Payment objects
