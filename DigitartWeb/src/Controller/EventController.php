@@ -172,6 +172,15 @@ class EventController extends AbstractController
             'events' => $events,
         ]);
     }
+    #[Route('/noparticipated/l', name: 'app_event_particip', methods: ['GET'])]
+    public function particip(EventRepository $eventRepository): Response
+    {
+        $events = $eventRepository->findAll();
+
+        return $this->render('event/congrats.html.twig', [
+            'events' => $events,
+        ]);
+    }
     
     #[Route('/{id}/participate/l', name: 'app_event_participate', methods: ['GET'])]
     public function participateAction(Event $event)
@@ -206,7 +215,7 @@ class EventController extends AbstractController
         $em->flush();
 
         // Redirect to the event page
-        return $this->redirectToRoute('app_event_show_front', ['id' => $event->getId()]);
+        return $this->redirectToRoute('app_event_particip', ['id' => $event->getId()]);
     }
     #[Route('/{id}/edit', name: 'app_event_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Event $event, EventRepository $eventRepository): Response
