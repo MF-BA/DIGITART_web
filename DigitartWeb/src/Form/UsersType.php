@@ -126,6 +126,7 @@ class UsersType extends AbstractType
     $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($currentUserId) {
         $form = $event->getForm();
         $user = $event->getData();
+        $roles = $user->getRoles();
         
         // Check if the form is being used to edit an existing user
         if ($user instanceof Users && $user->getId() !== null && $user->getId() !== $currentUserId) {
@@ -134,6 +135,7 @@ class UsersType extends AbstractType
             $form->remove('plainPassword');
             $form->remove('userImages');
             $form->remove('image');
+           
         }
         if ($user instanceof Users && $user->getId() === null) {
            
@@ -142,7 +144,11 @@ class UsersType extends AbstractType
         }
         if ($user->getId() === $currentUserId){
             $form->remove('plainPassword');
-            
+            if (in_array('ROLE_SUBSCRIBER', $roles) || in_array('ROLE_ARTIST', $roles)) {
+                $form->remove('role');
+                $form->remove('userImages');
+                $form->remove('image');
+            }
         }
        
     })

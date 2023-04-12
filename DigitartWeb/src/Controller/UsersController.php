@@ -105,12 +105,22 @@ class UsersController extends AbstractController
             'user' => $user,
         ]);
     }
-    #[Route('/profilefront/{id}', name: 'app_users_profilefront', methods: ['GET'])]
-    public function showprofilefront(Users $user): Response
+    #[Route('/profilefront/{id}', name: 'app_users_profilefront', methods: ['GET', 'POST'])]
+    public function showprofilefront(Request $request, Users $user, EntityManagerInterface $entityManager): Response
     {
-       
+        $form = $this->createForm(UsersType::class, $user);
+        $form->handleRequest($request);
+         
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_users_profilefront', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
+        }
         return $this->render('users/profile_front.html.twig', [
             'user' => $user,
+            'form' => $form->createView(),
         ]);
     }
     #[Route('/{id}/edit', name: 'app_users_edit', methods: ['GET', 'POST'])]

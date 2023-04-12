@@ -68,10 +68,145 @@
 		.option:hover {
 			color: #BD2A2E;
 		}
+    .card-item {
+  border: 1px solid rgba(82, 86, 94, 0.2);
+  background: #bebebe;
+  width: 1500px !important;
+	height: 1200px !important;
+  position: relative;
+  right: 70px !important;
+  border-radius: 0;
+}
+.color-text-table{
+  color: #333333;
+}
+body{
+    background: -webkit-linear-gradient(left, #3931af, #00c6ff);
+}
+.emp-profile{
+    padding: 3%;
+    margin-top: 3%;
+    margin-bottom: 3%;
+    border-radius: 0.5rem;
+    background: #dfdfdf;
+}
+.profile-img{
+    text-align: center;
+}
+.profile-img img{
+    width: 50%;
+    height: 50%;
+}
+.profile-img .file {
+    position: relative;
+    bottom: 120px;
+    right: 0.5px;
+    overflow: hidden;
+    margin-top: 20%;
+    width: 50%;
+    border: none;
+    border-radius: 0;
+    font-size: 15px;
+    background: #212529b8;
+}
+.profile-img .file input {
+    position: absolute;
+    opacity: 0;
+    right: 0;
+    top: 0;
+}
+.profile-head h5{
+    color: #333;
+}
+.profile-head h6{
+    color: #BD2A2E;
+}
+.profile-edit-btn{
+    border: none;
+    background:#BD2A2E;
+    border-radius: 1.5rem;
+    width: 90%;
+    padding: 2%;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+}
+.profile-edit-btn:hover{
+  background: #333333;
+    
+}
+.proile-rating{
+    font-size: 12px;
+    color: #818182;
+    margin-top: 5%;
+}
+.proile-rating span{
+    color: #495057;
+    font-size: 15px;
+    font-weight: 600;
+}
+.profile-head .nav-tabs{
+    margin-bottom:5%;
+}
+.profile-head .nav-tabs .nav-link{
+    font-weight:600;
+    border: none;
+    color: #BD2A2E;
+}
+.profile-head .nav-tabs .nav-link.active{
+    border: none;
+    border-bottom:2px solid #BD2A2E;
+}
+.profile-work{
+    padding: 14%;
+    margin-top: -15%;
+    position: relative;
+    left: 50px;
+    bottom: 50px;
+}
+.profile-work p{
+    font-size: 12px;
+    color: #818182;
+    font-weight: 600;
+    margin-top: 10%;
+}
+.profile-work a{
+    text-decoration: none;
+    color: #495057;
+    font-weight: 600;
+    font-size: 14px;
+}
+.profile-work a:hover{
+    color: #BD2A2E;
+}
+.profile-work ul{
+    list-style: none;
+}
+.profile-tab label{
+    font-weight: 600;
+}
+.profile-tab p{
+    font-weight: 600;
+    color: #BD2A2E;
+}
+.profile-tab {
+  position: relative;
+  bottom: 200px;
+}
+.fieldset {
+			border: none;
+      
+		}
+
+		.hide {
+			display: none;
+		}
 </style>
 
 		
-	
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script>
 		function toggleOptions() {
 			var options = document.getElementById('options');
@@ -193,76 +328,320 @@
           <p>here you can edit your profile</p>
         </div>
 
-        <div class="row gy-4">
-
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="card-item">
+        <div class="container emp-profile">
+        <fieldset id="step1" class="fieldset">   
               <div class="row">
-                <div class="col-xl-5">
-                  <div class="card-bg" style="background-image: url(assets/img/constructions-1.jpg);"></div>
+                <div class="col-md-4">
+                        <div class="profile-img">
+                         {% if app.user.image is not null %}
+                            <img src="{{ asset('/uploads/' ~ app.user.image) }}" alt="Image" width="30">
+                          {% else %}
+                        <img class="user-avatar" src="{{ asset('Back/images/icon-profile.png') }}" alt="Image" width="30">
+                         {% endif %}
+
+                            <div class="file btn btn-lg btn-danger">
+                                Change Photo
+                                <input type="file" name="file"/>
+                            </div>
+                        </div>
+                 </div>
+                     <div class="col-md-6">
+                        <div class="profile-head">
+                                    <h5>
+                                      <strong>  {{ app.user.firstname }} {{ app.user.lastname }} </strong>
+                                    </h5>
+                                    <h6>
+                                        {{ app.user.role }}
+                                    </h6>
+                                    <p class="proile-rating">  </br>    <span>    </span></p>
+                        </div>
+                     </div>
+                    <div class="col-md-2">
+                    <a href="">
+                    <button id="edit1" class="profile-edit-btn">Edit Profile</button>
+                     </a>
+                    </div>
                 </div>
-                <div class="col-xl-7 d-flex align-items-center">
-                  <div class="card-body">
-                    <h4 class="card-title">Eligendi omnis sunt veritatis.</h4>
-                    <p>Fuga in dolorum et iste et culpa. Commodi possimus nesciunt modi voluptatem placeat deleniti adipisci. Cum delectus doloribus non veritatis. Officia temporibus illo magnam. Dolor eos et.</p>
+                  <div class="row">
+                   <div class="col-md-4">
+                        <div class="profile-work">
+
+                            <p>SETTINGS</p>
+                            <a href="">Logout</a><br/>
+                            <a href="">Delete Account</a><br/>
+                            <a href="">Change Password</a><br/>
+                            <a href="">Return Home</a><br/>
+                           
+                        </div>
+                    </div>
+                   <div class="col-md-8">
+                        <div class="tab-content profile-tab" id="myTabContent">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><div class="color-text-table">Cin</div></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ app.user.cin }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><div class="color-text-table">Firstname</div></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ app.user.firstname }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><div class="color-text-table">Lastname</div></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ app.user.lastname }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><div class="color-text-table">Email</div></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ app.user.email }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><div class="color-text-table">Address</div></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ app.user.address }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><div class="color-text-table">PhoneNum</div></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ app.user.phoneNum }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><div class="color-text-table">BirthDate</div></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ app.user.birthDate ? user.birthDate|date('Y-m-d') : '' }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><div class="color-text-table">Gender</div></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ app.user.gender }}</p>
+                                            </div>
+                                        </div>
+                                       
+                            </div>
+                            
+                                     
                   </div>
                 </div>
               </div>
-            </div>
-          </div><!-- End Card Item -->
-
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="card-item">
+              </fieldset>
+              <fieldset id="step2" class="fieldset hide"> 
               <div class="row">
-                <div class="col-xl-5">
-                  <div class="card-bg" style="background-image: url(assets/img/constructions-2.jpg);"></div>
-                </div>
-                <div class="col-xl-7 d-flex align-items-center">
-                  <div class="card-body">
-                    <h4 class="card-title">Possimus ut sed velit assumenda</h4>
-                    <p>Sunt deserunt maiores voluptatem autem est rerum perferendis rerum blanditiis. Est laboriosam qui iste numquam laboriosam voluptatem architecto. Est laudantium sunt at quas aut hic. Eum dignissimos.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div><!-- End Card Item -->
+               <div class="col-md-4">
+                        <div class="profile-img">
+                         {% if app.user.image is not null %}
+                            <img src="{{ asset('/uploads/' ~ app.user.image) }}" alt="Image" width="30">
+                          {% else %}
+                        <img class="user-avatar" src="{{ asset('Back/images/icon-profile.png') }}" alt="Image" width="30">
+                         {% endif %}
 
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="card-item">
-              <div class="row">
-                <div class="col-xl-5">
-                  <div class="card-bg" style="background-image: url(assets/img/constructions-3.jpg);"></div>
+                            <div class="file btn btn-lg btn-danger">
+                                Change Photo
+                                <input type="file" name="file"/>
+                            </div>
+                        </div>
+                 </div>
+                     <div class="col-md-6">
+                        <div class="profile-head">
+                                    <h5>
+                                      <strong>  {{ app.user.firstname }} {{ app.user.lastname }} </strong>
+                                    </h5>
+                                    <h6>
+                                        {{ app.user.role }}
+                                    </h6>
+                                    <p class="proile-rating">  </br>    <span>    </span></p>
+                        </div>
+                     </div>
+                    <div class="col-md-2">
+                    <a href="">
+                    <button id="prev1" class="profile-edit-btn">Return</button>
+                     </a>
+                    </div>
                 </div>
-                <div class="col-xl-7 d-flex align-items-center">
-                  <div class="card-body">
-                    <h4 class="card-title">Error beatae dolor inventore aut</h4>
-                    <p>Dicta porro nobis. Velit cum in. Nesciunt dignissimos enim molestiae facilis numquam quae quaerat ipsam omnis. Neque debitis ipsum at architecto officia laboriosam odit. Ut sunt temporibus nulla culpa.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div><!-- End Card Item -->
+                  <div class="row">
+                   <div class="col-md-4">
+                        <div class="profile-work">
 
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
-            <div class="card-item">
-              <div class="row">
-                <div class="col-xl-5">
-                  <div class="card-bg" style="background-image: url(assets/img/constructions-4.jpg);"></div>
-                </div>
-                <div class="col-xl-7 d-flex align-items-center">
-                  <div class="card-body">
-                    <h4 class="card-title">Expedita voluptas ut ut nesciunt</h4>
-                    <p>Aut est quidem doloremque voluptatem magnam quis excepturi vero quia. Eum eos doloremque architecto illo at beatae dolore. Fugiat suscipit et sint ratione dolores. Aut aliquid ea dolores libero nobis.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div><!-- End Card Item -->
+                            <p>SETTINGS</p>
+                            <a href="">Logout</a><br/>
+                            <a href="">Delete Account</a><br/>
+                            <a href="">Change Password</a><br/>
+                            <a href="">Return Home</a><br/>
+                           
+                        </div>
+                    </div>
+                   <div class="col-md-8">
+                        <div class="tab-content profile-tab" id="myTabContent">
+                             {{ form_start(form,{attr:{'novalidate':'novalidate'}}) }}
 
+      
+      {# Cin #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+        <div class="color-text-table">{{ form_label(form.cin, 'Cin') }}</div>
+          
         </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.cin, {'attr': {'class': 'form-control', 'placeholder': 'Enter cin'}}) }}
+          {{ form_errors(form.cin) }}
+          <small class="form-text text-muted">Cin must contain 8 digits</small>
+        </div>
+      </div>
 
+      {# First name #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+        <div class="color-text-table">{{ form_label(form.firstname, 'First name') }}</div>
+          
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Enter First name'}}) }}
+          {{ form_errors(form.firstname) }}
+          <small class="form-text text-muted">Text</small>
+        </div>
+      </div>
+     
+{# Last name #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+        <div class="color-text-table">{{ form_label(form.lastname, 'Last name') }}</div>
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Enter Last name'}}) }}
+          {{ form_errors(form.lastname) }}
+          <small class="form-text text-muted">Text</small>
+        </div>
+      </div>
+{# Email #}
+       <div class="row form-group">
+        <div class="col col-md-2">
+        <div class="color-text-table">{{ form_label(form.email, 'Email') }}</div>
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email'}}) }}
+          {{ form_errors(form.email) }}
+          <small class="form-text text-muted">Please enter a valid email!</small>
+        </div>
+      </div>
+
+      {# Address #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+      <div class="color-text-table">{{ form_label(form.address, 'Address') }}</div>
+        </div>
+<div class="col-12 col-md-9">
+{{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter Address'}}) }}
+{{ form_errors(form.address) }}
+<small class="form-text text-muted">Text</small>
+</div>
+</div>
+{# Phone #}
+  <div class="row form-group">
+    <div class="col col-md-2">
+    <div class="color-text-table">{{ form_label(form.phoneNum, 'Phone Number') }}</div>
+      
+    </div>
+    <div class="col-12 col-md-9">
+      {{ form_widget(form.phoneNum, {'attr': {'class': 'form-control', 'placeholder': 'Enter Phone'}}) }}
+      {{ form_errors(form.phoneNum) }}
+      <small class="form-text text-muted">Phone number must contain 8 digits</small>
+    </div>
+  </div>
+  {# birth date #}
+  <div class="row form-group">
+        <div class="col col-md-2">
+        <div class="color-text-table">{{ form_label(form.birthDate, 'Birth Date') }}</div>
+    </div>
+    <div class="col-12 col-md-9">
+        {{ form_widget(form.birthDate, {'attr': {'class': 'form-control'}}) }}
+    </div>
+ </div>
+{# Gender #}
+<div class="row form-group">
+  <div class="col col-md-2">
+    <div class="color-text-table">{{ form_label(form.gender, 'Gender') }}</div>
+  </div>
+  <div class="col-12 col-md-9">
+    {{ form_widget(form.gender, {
+        'attr': {'class': 'form-control'},
+        'value': user.gender|default('male')
+    }) }}
+  </div>
+</div>
+
+
+
+
+
+
+
+
+      
+    <button type="submit" class="btn btn-success btn-sm">
+      <i class="fa fa-chevron-circle-down"></i> {{ button_label|default('Submit') }} 
+    </button>
+    <button type="reset" class="btn btn-danger btn-sm">
+      <i class="fa fa-ban"></i> Reset
+    </button>
+
+
+  </div>
+
+{{ form_end(form) }}
+                            
+                                     
+                  </div>
+                </div>
+              </div>
+              </fieldset>
+            </div>
       </div>
     </section><!-- End Constructions Section -->
 
+          <script>
+  
+
+const edit1 = document.querySelector("#edit1");
+const prev1 = document.querySelector("#prev1");
+const step1 = document.querySelector("#step1");
+const step2 = document.querySelector("#step2");
+
+edit1.addEventListener("click", function(event) {
+	event.preventDefault();
+	step1.classList.add("hide");
+	step2.classList.remove("hide");
+});
+
+prev1.addEventListener("click", function(event) {
+	event.preventDefault();
+	step2.classList.add("hide");
+	step1.classList.remove("hide");
+});
+
+   </script>
 
   {% endblock %}
