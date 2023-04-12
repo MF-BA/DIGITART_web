@@ -33,7 +33,8 @@
                 <th>StartTime</th>
                 <th>CreatedAt</th>
                 <th>UpdatedAt</th>
-                <th>Image</th>            
+                <th>Image</th>    
+                <th>Poster</th>        
                 <th>actions</th>
             </tr>
         </thead>
@@ -49,7 +50,12 @@
                 <td>{{ event.startTime }}h</td>
                 <td>{{ event.createdAt ? event.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ event.updatedAt ? event.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td><img src="{{ asset('images/' ~ event.image) }}" alt=""></td>
+                <td> {% for image in event.images %}
+            <div>
+                <img src="{{ asset('/uploads/' ~ image.name) }}" alt="Image" width="150">
+            </div>
+        {% endfor %}</td>
+                <td><img src="{{ asset('uploads/' ~ event.image) }}" alt="Image"  width="150"></td>
                 
                 <td>
                     <div class="d-flex">

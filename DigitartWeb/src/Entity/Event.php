@@ -6,6 +6,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 /**
  * Event
  *
@@ -110,8 +113,47 @@ class Event
      */
     private $updatedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Images", mappedBy="event", orphanRemoval=true, cascade={"persist"})
+     */
+    private $images;
 
+    public function __construct()
+    {
+        $this->images = new ArrayCollection();
+    }
 
+     /**
+     * @return Collection|Images[]
+     */
+
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Images $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Images $image): self
+    {
+        if ($this->images->contains($image)) {
+            $this->images->removeElement($image);
+            // set the owning side to null (unless already changed)
+            if ($image->getEvent() === $this) {
+                $image->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;

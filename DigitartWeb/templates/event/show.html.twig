@@ -35,9 +35,25 @@
                 <th>StartTime</th>
                 <td>{{ event.startTime }}</td>
             </tr>
+          <tr>
+    <th>Images</th>
+    <td>
+        <div style="display: flex; flex-wrap: wrap;">
+            {% for image in event.images %}
+                <div style="margin-right: 10px;">
+                    <img src="{{ asset('/uploads/' ~ image.name) }}" alt="Image" width="150">
+             <a href="{{ path('app_images_delete', {'id': image.id}) }}">
+                <button class="btn btn-outline-danger btn-sm">
+                <i class="fa fa-times-circle"></i>Delete</button>
+             </a>                </div>
+            {% endfor %}
+        </div>
+    </td>
+</tr>
+
             <tr>
                 <th>Image</th>
-                <td><img class="event-image" src="{{ asset('images/' ~ event.image) }}"></td>
+                <td><img class="event-image" src="{{ asset('uploads/' ~ event.image) }}"></td>
 </td>
             </tr>
         </tbody>

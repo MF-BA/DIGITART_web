@@ -21,6 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Validator\Constraints\Range;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 class EventType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -74,10 +75,21 @@ class EventType extends AbstractType
                 ],
                 
             ])
-            ->add('image')
+            ->add('image', FileType::class, [
+                'label' => false,
+                'multiple' => false,
+                'mapped' => false,
+                'required' => false
+            ])
             ->add('idRoom', EntityType::class, [                 
                 'class' => Room::class,                 
                 'choice_label' => 'nameRoom',             
+            ])
+            ->add('images', FileType::class, [
+                'label' => false,
+                'multiple' => true,
+                'mapped' => false,
+                'required' => false
             ])
         ;
     }

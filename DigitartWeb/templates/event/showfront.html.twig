@@ -179,7 +179,7 @@ if(distance<0)
 
         <div class="row position-relative">
 
-          <div class="col-lg-7 about-img" style="background-image: url({{ asset('images/' ~ event.image) }});"></div>
+          <div class="col-lg-7 about-img" style="background-image: url({{ asset('uploads/' ~ event.image) }});"></div>
 
           <div class="col-lg-7">
             <h2>Here are the event infos</h2>
@@ -202,7 +202,7 @@ if(distance<0)
                 
                 
               </div>
-              <a href="{{ path('PDF_Voyage') }}">
+                   <a href="{{ path('PDF_Voyage') }}">
                  <button>Print all the events</button>
            </a>
            
@@ -217,6 +217,37 @@ if(distance<0)
   <div class="container">
 
 </section>
+<!-- ======= Testimonials Section ======= -->
+    <section id="testimonials" class="testimonials section-bg">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-header">
+          <h2>Testimonials</h2>
+          <p>Quam sed id excepturi ccusantium dolorem ut quis dolores nisi llum nostrum enim velit qui ut et autem uia reprehenderit sunt deleniti</p>
+        </div>
+
+        <div class="slides-2 swiper">
+          <div class="swiper-wrapper">
+           
+            {% for image in event.images %}      
+  <div class="swiper-slide">
+
+
+        <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+          <img src="{{ asset('/uploads/' ~ image.name) }}" alt="Image" style="max-height: 100%; max-width: 100%;">
+        </div>
+      </div>
+
+  </div><!-- End testimonial item -->
+{% endfor %}
+
+
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+
+      </div>
+    </section><!-- End Testimonials Section -->
  <!-- Pricing Section Begin -->
     <section class="pricing-section set-bg spad" data-setbg="img/pricing-bg.jpg">
         <div class="container">

@@ -3,6 +3,7 @@
 namespace App\Controller;
 use App\Entity\Event;
 use App\Entity\Users;
+use App\Entity\Images;
 use App\Entity\Participants;
 use App\Form\EventType;
 use App\Repository\EventRepository;
@@ -22,6 +23,7 @@ use Endroid\QrCode\Logo\Logo;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Label\Font\NotoSans;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/event')]
 class EventController extends AbstractController
@@ -101,6 +103,39 @@ class EventController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $eventRepository->save($event, true);
+        // On récupère les images transmises
+        $images = $form->get('images')->getData();
+        $poster = $form->get('image')->getData();
+        if($poster != null)
+        {
+        $fichier2 = md5(uniqid()) . '.' . $poster->guessExtension();
+        $poster->move(
+            $this->getParameter('images_directory'),
+            $fichier2
+        );
+        $event->setImage($fichier2);
+           }
+        // On boucle sur les images
+            foreach($images as $image){
+          // On génère un nouveau nom de fichier
+            $fichier = md5(uniqid()) . '.' . $image->guessExtension();
+
+         // On copie le fichier dans le dossier uploads
+           $image->move(
+            $this->getParameter('images_directory'),
+            $fichier
+             );
+
+      // On stocke l'image dans la base de données (son nom)
+      $img = new Images();
+      $img->setName($fichier);
+      $event->addImage($img);
+  }
+
+  $entityManager = $this->getDoctrine()->getManager();
+  $entityManager->persist($event);
+  $entityManager->flush();
+
 
             return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -111,7 +146,7 @@ class EventController extends AbstractController
         ]);
     }
  
-
+  
     #[Route('/{id}', name: 'app_event_show', methods: ['GET'])]
     public function show(Event $event): Response
     {
@@ -181,7 +216,36 @@ class EventController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $eventRepository->save($event, true);
+            $poster = $form->get('image')->getData();
+                // On récupère les images transmises
+            $images = $form->get('images')->getData();
+            if($poster != null)
+            {
+            $fichier2 = md5(uniqid()) . '.' . $poster->guessExtension();
+            $poster->move(
+                $this->getParameter('images_directory'),
+                $fichier2
+            );
+            $event->setImage($fichier2);
+               }
+            // On boucle sur les images
+            foreach($images as $image){
+                // On génère un nouveau nom de fichier
+                $fichier = md5(uniqid()) . '.' . $image->guessExtension();
 
+                // On copie le fichier dans le dossier uploads
+                $image->move(
+                    $this->getParameter('images_directory'),
+                    $fichier
+                );
+
+                // On stocke l'image dans la base de données (son nom)
+                $img = new Images();
+                $img->setName($fichier);
+                $event->addImage($img);
+            }
+
+            $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -303,4 +367,28 @@ public function qrcode(Event $event): Response
             ->addViolation();
     }
 }
+/**
+     * @Route("/supprime/image/{id}", name="annonces_delete_image", methods={"DELETE"})
+     */
+    public function deleteImage(Images $image, Request $request){
+        $data = json_decode($request->getContent(), true);
+
+        // On vérifie si le token est valide
+        if($this->isCsrfTokenValid('delete'.$image->getId(), $data['_token'])){
+            // On récupère le nom de l'image
+            $nom = $image->getName();
+            // On supprime le fichier
+            unlink($this->getParameter('images_directory').'/'.$nom);
+
+            // On supprime l'entrée de la base
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($image);
+            $em->flush();
+
+            // On répond en json
+            return new JsonResponse(['success' => 1]);
+        }else{
+            return new JsonResponse(['error' => 'Token Invalide'], 400);
+        }
+    }
 }
