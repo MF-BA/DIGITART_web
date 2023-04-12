@@ -208,10 +208,14 @@ button {
         {% if app.user.role == 'Subscriber' or app.user.role == 'Artist' %}
          <strong class="user-name">  {{app.user.firstname}}   {{app.user.lastname}} </strong>
          <div class="circle" onclick="toggleOptions()">
+         {% if app.user.image is not null %}
 		    <img class="user-avatar rounded-circle" src="{{ asset('/uploads/' ~ app.user.image) }}" alt="Image" width="60">
+        {% else %}
+        <img class="user-avatar rounded-circle" src="{{ asset('Back/images/icon-img.png') }}" alt="Image" width="60">
+         {% endif %}
 	</div>
 	<div class="options" id="options">
-		<a class="nav-link" href="#"><div class="option"><i class="fa fa-user"></i> My profile</div></a>
+		<a class="nav-link" href="{{path('app_users_profilefront', {'id': app.user.id}) }}"><div class="option"><i class="fa fa-user"></i> My profile</div></a>
 		<a class="nav-link" href="{{path('app_logout')}}"><div class="option"><i class="fa fa-power-off"></i>  Logout</div></a>
 	</div>
   {% endif %} 

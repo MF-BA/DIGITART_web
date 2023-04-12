@@ -1,0 +1,268 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+        <style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .hero .info .btn-get-started {
+    font-family: var(--font-primary) !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    letter-spacing: 1px !important;
+    display: inline-block !important;
+    padding: 12px 40px !important; 
+    border-radius: 50px !important;
+    transition: 0.5s !important;
+    margin: 10px !important;
+    color: #fff !important;
+    border: 2px solid var(--color-primary) !important;
+}
+.circle {
+			width: 70px !important;
+			height: 70px !important;
+			border-radius: 50%;
+      background-color: #BD2A2E !important;
+			position: relative !important;
+      top: 30px !important;
+      left: 250px !important;
+      border: 2px solid var(#BD2A2E);
+			color: #fff;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			transform: translateY(-50%);
+		}
+
+		.circle-name {
+			font-size: 10px;
+			position: relative !important;
+      top: 2px !important;
+      left: 1px !important;
+		}
+    .user-name {
+      font-size: 20px;
+      color: #BD2A2E;
+			position: relative !important;
+      top: 2px !important;
+      left: 230px !important;
+    }
+		.options {
+			position: fixed;
+			top: 155px !important;
+			right: 20px !important;
+			transform: translateY(-50%);
+			background-color: #000000;
+      border-radius: 10% !important;
+			box-shadow: 0 4px 6px rgba(0,0,0,.1);
+			padding: 10px;
+			display: none;
+		}
+
+		.option {
+			margin-bottom: 10px;
+			cursor: pointer;
+		}
+
+		.option:hover {
+			color: #BD2A2E;
+		}
+</style>
+
+		
+	
+	<script>
+		function toggleOptions() {
+			var options = document.getElementById('options');
+			if (options.style.display === 'none') {
+				options.style.display = 'block';
+			} else {
+				options.style.display = 'none';
+			}
+		}
+	</script>
+           <link href="{{asset('Front/assets/img/logo-digitart-rouge.png')}}" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+ 
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{{asset('Front/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/aos/aos.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/glightbox/css/glightbox.min.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/swiper/swiper-bundle.min.css')}}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{{asset('Front/assets/css/main.css')}}" rel="stylesheet">
+        {% endblock %}
+ {% block navbar %}
+        
+          <!-- ======= Header ======= -->
+  <header id="header" class="header d-flex align-items-center">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+      <a href="{{ path('showfrontpage') }}" class="logo d-flex align-items-center">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <img src="{{asset('Front/assets/img/logo digitart.png')}}" alt=""> 
+        
+      </a>
+
+      <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+      <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="{{path('showfrontpage')}}">About</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+            <ul>
+              <li><a href="#">Dropdown 1</a></li>
+              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+                <ul>
+                  <li><a href="#">Deep Dropdown 1</a></li>
+                  <li><a href="#">Deep Dropdown 2</a></li>
+                  <li><a href="#">Deep Dropdown 3</a></li>
+                  <li><a href="#">Deep Dropdown 4</a></li>
+                  <li><a href="#">Deep Dropdown 5</a></li>
+                </ul>
+              </li>
+              <li><a href="#">Dropdown 2</a></li>
+              <li><a href="#">Dropdown 3</a></li>
+              <li><a href="#">Dropdown 4</a></li>
+            </ul>
+          </li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        {% if app.user is not null %}
+
+        {% if app.user.role == 'Subscriber' or app.user.role == 'Artist' %}
+         <strong class="user-name">  {{app.user.firstname}}   {{app.user.lastname}} </strong>
+         <div class="circle" onclick="toggleOptions()">
+         {% if app.user.image is not null %}
+		    <img class="user-avatar rounded-circle" src="{{ asset('/uploads/' ~ app.user.image) }}" alt="Image" width="60">
+        {% else %}
+        <img class="user-avatar rounded-circle" src="{{ asset('Back/images/icon-img.png') }}" alt="Image" width="60">
+         {% endif %}
+	</div>
+	<div class="options" id="options">
+		<a class="nav-link" href="{{path('app_users_profilefront', {'id': app.user.id}) }}"><div class="option"><i class="fa fa-user"></i> My profile</div></a>
+		<a class="nav-link" href="{{path('app_logout')}}"><div class="option"><i class="fa fa-power-off"></i>  Logout</div></a>
+	</div>
+  {% endif %} 
+
+  {% endif %} 
+      </nav><!-- .navbar -->
+
+
+    </div>
+    {% if app.user is null %}
+     <a href="{{path('app_login')}}"><button class="login100-form-btn"><i class="fa fa-sign-in" aria-hidden="true"></i>   Login</button></a>
+    {% endif %}
+           
+  </header><!-- End Header -->
+  
+  {% endblock %}
+
+  {% block body %}
+
+<div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/footer.jpg')}});">
+      <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
+
+        <h2>Your Profile</h2>
+        <ol>
+          <li><a href="{{ path('showfrontpage') }}">Home</a></li>
+
+        </ol>
+
+      </div>
+    </div><!-- End Breadcrumbs -->
+<!-- ======= Constructions Section ======= -->
+    <section id="constructions" class="constructions">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-header">
+          <h2>Personnal Informations</h2>
+          <p>here you can edit your profile</p>
+        </div>
+
+        <div class="row gy-4">
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="card-item">
+              <div class="row">
+                <div class="col-xl-5">
+                  <div class="card-bg" style="background-image: url(assets/img/constructions-1.jpg);"></div>
+                </div>
+                <div class="col-xl-7 d-flex align-items-center">
+                  <div class="card-body">
+                    <h4 class="card-title">Eligendi omnis sunt veritatis.</h4>
+                    <p>Fuga in dolorum et iste et culpa. Commodi possimus nesciunt modi voluptatem placeat deleniti adipisci. Cum delectus doloribus non veritatis. Officia temporibus illo magnam. Dolor eos et.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Card Item -->
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="card-item">
+              <div class="row">
+                <div class="col-xl-5">
+                  <div class="card-bg" style="background-image: url(assets/img/constructions-2.jpg);"></div>
+                </div>
+                <div class="col-xl-7 d-flex align-items-center">
+                  <div class="card-body">
+                    <h4 class="card-title">Possimus ut sed velit assumenda</h4>
+                    <p>Sunt deserunt maiores voluptatem autem est rerum perferendis rerum blanditiis. Est laboriosam qui iste numquam laboriosam voluptatem architecto. Est laudantium sunt at quas aut hic. Eum dignissimos.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Card Item -->
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="card-item">
+              <div class="row">
+                <div class="col-xl-5">
+                  <div class="card-bg" style="background-image: url(assets/img/constructions-3.jpg);"></div>
+                </div>
+                <div class="col-xl-7 d-flex align-items-center">
+                  <div class="card-body">
+                    <h4 class="card-title">Error beatae dolor inventore aut</h4>
+                    <p>Dicta porro nobis. Velit cum in. Nesciunt dignissimos enim molestiae facilis numquam quae quaerat ipsam omnis. Neque debitis ipsum at architecto officia laboriosam odit. Ut sunt temporibus nulla culpa.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Card Item -->
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="card-item">
+              <div class="row">
+                <div class="col-xl-5">
+                  <div class="card-bg" style="background-image: url(assets/img/constructions-4.jpg);"></div>
+                </div>
+                <div class="col-xl-7 d-flex align-items-center">
+                  <div class="card-body">
+                    <h4 class="card-title">Expedita voluptas ut ut nesciunt</h4>
+                    <p>Aut est quidem doloremque voluptatem magnam quis excepturi vero quia. Eum eos doloremque architecto illo at beatae dolore. Fugiat suscipit et sint ratione dolores. Aut aliquid ea dolores libero nobis.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Card Item -->
+
+        </div>
+
+      </div>
+    </section><!-- End Constructions Section -->
+
+
+  {% endblock %}

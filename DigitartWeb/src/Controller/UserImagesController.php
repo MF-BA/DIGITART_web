@@ -6,6 +6,7 @@ use App\Entity\UserImages;
 use App\Form\UserImagesType;
 use App\Repository\UserImagesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -66,13 +67,16 @@ class UserImagesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_user_images_delete', methods: ['POST'])]
-    public function delete(Request $request, UserImages $userImage, UserImagesRepository $userImagesRepository): Response
+    #[Route('delete/{id}', name: 'app_user_images_delete')]
+    public function delete(int $id,ManagerRegistry $doctrine): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$userImage->getId(), $request->request->get('_token'))) {
-            $userImagesRepository->remove($userImage, true);
-        }
+        $repoImages= $doctrine->getRepository(UserImages::class);
+        $imagedel = $repoImages->find($id);
+        
+        $em = $doctrine->getManager();
+        $em->remove($imagedel);
+        $em->flush();
 
-        return $this->redirectToRoute('app_user_images_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_users_showprofile',  ['id' => $imagedel->getusers()->getId()], Response::HTTP_SEE_OTHER);
     }
 }

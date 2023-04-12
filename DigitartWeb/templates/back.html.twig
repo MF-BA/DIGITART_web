@@ -154,10 +154,16 @@
                     </div>
                 </div>
 
+       
+         
                 <div class="widget-content-wrapper">
                     <div class="user-area dropdown float-right">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {% if app.user.image is not null %}
                         <img class="user-avatar rounded-circle" src="{{ asset('/uploads/' ~ app.user.image) }}" alt="Image" width="150">
+                        {% else %}
+                         <img class="user-avatar rounded-circle" src="{{ asset('Back/images/icon-img.png') }}" alt="Image" width="150">
+                        {% endif %}
                         </a>
 
                         <div class="user-menu dropdown-menu">

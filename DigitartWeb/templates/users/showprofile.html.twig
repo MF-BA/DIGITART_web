@@ -40,6 +40,41 @@
      
         </style>
         {% endblock %}
+         
+{% block javascripts %}
+<script src="{{asset('Back/vendors/jquery/dist/jquery.min.js')}}"></script>
+        <script src="{{asset('Back/vendors/popper.js/dist/umd/popper.min.js')}}"></script>
+        <script src="{{asset('Back/vendors/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+        <script src="{{asset('Back/assets/js/main.js')}}"></script>
+
+        <script src="{{asset('Back/vendors/chart.js/dist/Chart.bundle.min.js')}}"></script>
+        <script src="{{asset('Back/assets/js/dashboard.js')}}"></script>
+        <script src="{{asset('Back/assets/js/widgets.js')}}"></script>
+        <script src="{{asset('Back/vendors/jqvmap/dist/jquery.vmap.min.js')}}"></script>
+        <script src="{{asset('Back/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js')}}"></script>
+        <script src="{{asset('Back/vendors/jqvmap/dist/maps/jquery.vmap.world.js')}}"></script>
+<script src="{{ asset('js/images.js') }}"></script>
+<script src="{{ asset('js/delprof.js') }}"></script>
+<script src="{{ asset('js/delimg.js') }}"></script>
+<script>
+        (function($) {
+            "use strict";
+
+            jQuery('#vmap').vectorMap({
+                map: 'world_en',
+                backgroundColor: null,
+                color: '#ffffff',
+                hoverOpacity: 0.7,
+                selectedColor: '#1de9b6',
+                enableZoom: true,
+                showTooltip: true,
+                values: sample_data,
+                scaleColors: ['#1de9b6', '#03a9f5'],
+                normalizeFunction: 'polynomial'
+                    });
+                })(jQuery);
+        </script>
+{% endblock %}
 
 {% block body %}
     <h1>My Profile</h1>
@@ -89,17 +124,30 @@
             </tr>
             <tr>
                 <th>Profile Image</th>
+                {% if user.image is not null %}
                 <td><img src="{{ asset('/uploads/' ~ user.image) }}" alt="Image" width="150"></td>
+                {% else %}
+                <td>you have no profile image</td>
+                {% endif %}
             </tr>
              <tr>
                 <th>Your saved images</th>
+                {% if user.userImages is null %}
+                  <td>there is no saved images</td>
+                {% else %}
                {% for image in user.userImages %}
                <td>
                 <img src="{{ asset('/uploads/' ~ image.name) }}" alt="Image" width="150">
                 </br>
-                <a href="{{ path('users_delete_image', {'id': 'image.id'}) }}" data-delete data-token="{{ csrf_token('delete' ~ image.id) }}">Supprimer</a>
+                </br>
+                <a href="{{ path('app_user_images_delete', {'id': image.id}) }}">
+                <button class="btn btn-outline-danger btn-sm" id="delete-img-btn">
+                <i class="fa fa-times-circle"></i>Delete
+                </button>
+                </a>
                </td>
                 {% endfor %}
+                {% endif %}
             </tr>
         </tbody>
     </table>
@@ -117,12 +165,14 @@
    <button type="button" class="btn mr-2">
     <i class="fa fa-repeat"></i>change my password!</button></a>
 
-    {{ include('users/_delete_profile.html.twig') }}
+    <a href="{{ path('app_users_deleteprofile',{'id': app.user.id}) }}">
+    <button class="btn" id="delete-btn">
+        <i class="fa fa-times-circle"></i>Delete Account
+    </button>
+</a>
+
     </div>
     </div>
 {% endblock %}
 
 
-{% block javascripts %}
-    <script src="{{ asset('js/images.js') }}"></script>
-{% endblock %}

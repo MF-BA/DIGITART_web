@@ -8,11 +8,14 @@ use App\Form\UsersType;
 use App\Repository\UsersRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
 
 
 #[Route('/users')]
@@ -102,7 +105,14 @@ class UsersController extends AbstractController
             'user' => $user,
         ]);
     }
-
+    #[Route('/profilefront/{id}', name: 'app_users_profilefront', methods: ['GET'])]
+    public function showprofilefront(Users $user): Response
+    {
+       
+        return $this->render('users/profile_front.html.twig', [
+            'user' => $user,
+        ]);
+    }
     #[Route('/{id}/edit', name: 'app_users_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Users $user, EntityManagerInterface $entityManager): Response
     {
@@ -176,17 +186,23 @@ class UsersController extends AbstractController
 
         return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
     }
-    #[Route('/delprofile/{id}', name: 'app_users_deleteprofile', methods: ['POST'])]
-    public function deleteprofile(Request $request, Users $user, UsersRepository $usersRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $session = $request->getSession();
-            $session->invalidate();
-            $usersRepository->remove($user, true);
-        }
-        
-        return $this->redirectToRoute('app_logout', [], Response::HTTP_SEE_OTHER);
-    }
+   
+    #[Route('/delprofile/{id}', name: 'app_users_deleteprofile')]
+public function deleteprofile(Request $request,int $id,ManagerRegistry $doctrine): Response
+{
+    $repousers= $doctrine->getRepository(Users::class);
+    $user = $repousers->find($id);
+    
+     $session = $request->getSession();
+     $session->invalidate();
+
+     $em = $doctrine->getManager();
+     $em->remove($user);
+     $em->flush();
+
+    return $this->redirectToRoute('app_logout', [], Response::HTTP_SEE_OTHER);
+}
+
     
     #[Route('/{id}/updatestatus', name: 'app_users_updatestatus', methods: ['GET', 'POST'])]
     public function updateStatus(Request $request, $id)
@@ -212,32 +228,6 @@ class UsersController extends AbstractController
     
     return $this->json(['users' => $users]);
      }
-
-
-    #[Route('/supprime/image/{id}', name: 'users_delete_image', methods: ['DELETE'])]
-    public function deleteImage(UserImages $image, Request $request){
-        $data = json_decode($request->getContent(), true);
-
-        // On vérifie si le token est valide
-        if($this->isCsrfTokenValid('delete'.$image->getId(), $data['_token'])){
-            // On récupère le nom de l'image
-            $nom = $image->getName();
-            // On supprime le fichier
-            unlink($this->getParameter('images_directory').'/'.$nom);
-
-            // On supprime l'entrée de la base
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($image);
-            $em->flush();
-
-            // On répond en json
-            return new JsonResponse(['success' => 1]);
-        }else{
-            return new JsonResponse(['error' => 'Token Invalide'], 400);
-        }
-    }
-    
-  
     
      
 }
