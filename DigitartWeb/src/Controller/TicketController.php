@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Knp\Component\Pager\PaginatorInterface;
 #[Route('/ticket')]
 class TicketController extends AbstractController
 {
@@ -31,11 +31,14 @@ class TicketController extends AbstractController
     }
 
     #[Route('/payment', name: 'app_payment_index', methods: ['GET'])]
-    public function indexPayment(EntityManagerInterface $entityManager): Response
+    public function indexPayment(EntityManagerInterface $entityManager, PaginatorInterface $paginator, PaymentRepository $PaymentRepository,Request $request): Response
     {
-        $payments = $entityManager
-            ->getRepository(Payment::class)
-            ->findAll();
+    
+        $payments= $paginator->paginate(
+            $PaymentRepository->paginationQuery(),
+            $request->query->get('page',1),
+            5
+        );
 
         return $this->render('payment/showBack.html.twig', [
             'payments' => $payments,

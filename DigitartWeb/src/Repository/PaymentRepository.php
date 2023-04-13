@@ -101,6 +101,13 @@ class PaymentRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function paginationQuery()
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.paymentId', 'ASC') // Update to use the correct field name
+            ->getQuery();
+    }
+    
 //    /**
 //     * @return Payment[] Returns an array of Payment objects
 //     */

@@ -50,10 +50,11 @@ class Ticket
      */
     private $price;
 
-    /**
+      /**
      * @var string
      *
      * @ORM\Column(name="ticket_type", type="string", length=50, nullable=false)
+     * @Assert\Choice(choices={"Student", "Teen", "Adult"}, message="Invalid ticket type. Allowed values: Student, type2, type3")
      */
     private $ticketType;
 

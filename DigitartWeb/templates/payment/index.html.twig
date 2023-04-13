@@ -27,10 +27,13 @@
       </div>
 {% for message in app.flashes('error') %}
     <div class="sufee-alert alert with-close alert-danger alert-dismissible fade show" style="text-align: center;" id="flash-message">
-        {{ message }}
-         <li><a href="{{ path('app_payment_card') }}">Check Card</a></li>
+        <div>{{ message }} </div>
+        <div><button type="button" class="btn btn-outline-danger btn-sm" onclick="window.location.href='{{ path('app_payment_card') }}'">
+            <i class="fa fa-shopping-cart"></i>&nbsp;Check Card
+        </button></div>
     </div>
 {% endfor %}
+
       <div class="mainscreen" data-aos="fade-up" data-aos-delay="200">
       <div class="cardF" data-aos="fade-up" data-aos-delay="200">
        <div class="leftside" data-aos="fade-up" data-aos-delay="200">
@@ -203,7 +206,7 @@ const config = {
   inline: true,
   enable: enableDates
 };   
-flatpickr("[data-flatpickr]", config);
+ 
 
 
 flatpickr("[data-flatpickr]", config);
