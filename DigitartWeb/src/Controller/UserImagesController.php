@@ -76,7 +76,14 @@ class UserImagesController extends AbstractController
         $em = $doctrine->getManager();
         $em->remove($imagedel);
         $em->flush();
-
-        return $this->redirectToRoute('app_users_showprofile',  ['id' => $imagedel->getusers()->getId()], Response::HTTP_SEE_OTHER);
+         if($imagedel->getusers()->getRole() === 'Subscriber' or $imagedel->getusers()->getRole() === 'Artist')
+         {
+            return $this->redirectToRoute('app_users_profilefront',  ['id' => $imagedel->getusers()->getId()], Response::HTTP_SEE_OTHER);
+         }
+         else
+         {
+            return $this->redirectToRoute('app_users_showprofile',  ['id' => $imagedel->getusers()->getId()], Response::HTTP_SEE_OTHER);
+         }
+        
     }
 }

@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Controller;
-
+use App\Entity\Users;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+
 
 class SecurityController extends AbstractController
 {
@@ -18,8 +19,20 @@ class SecurityController extends AbstractController
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
+       
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
+
+        $user = $this->getDoctrine()->getRepository(Users::class)->findOneByEmail($lastUsername);
+       
+        // check if the user is blocked
+        if ($user && $user->getStatus() === 'blocked') {
+            return $this->render('security/login.html.twig', [
+                'last_username' => $lastUsername,
+                'error' => 'Your account is blocked.',
+                
+            ]);
+        }
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }

@@ -201,12 +201,142 @@ body{
 		.hide {
 			display: none;
 		}
+    .popup-profimg {
+	width: 1200px !important;
+	height: 600px !important;
+	background: #fff;
+  position: relative;
+  top: -200px;
+  left: 650px;
+  transform: translate(-50%,-50%) scale(0.1);
+  visibility: hidden;
+  transition: transform 0.4s, top 0.4s;
+	padding: 30px;
+	border-radius: 30px;
+  border : 2px solid #BD2A2E;
+}
+.popup-profimg h3{
+	color: #BD2A2E;
+}
+.popup-profimg p{
+	color: #333333;
+}
+.icon {
+	font-size: 100px;
+}
+.bx {
+    font-family: boxicons!important;
+    font-weight: 400;
+    font-style: normal;
+    font-variant: normal;
+    color: firebrick;
+    line-height: 1;
+    text-rendering: auto;
+    display: inline-block;
+    text-transform: none;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+ .open-popup-profimg{
+visibility: visible;
+position:relative;
+right:500px;
+bottom: 100px;
+transform: translate(-50%,-50%) scale(1);
+}
+.close-icon {
+  position: relative;
+  bottom: 530px;
+  left: 1120px;
+  background: transparent;
+  color : #BD2A2E;
+  border-radius: 250px;
+  border: 2px solid #BD2A2E;
+}
+.circle-image-container {
+  width: 60px; /* set the width and height to the desired size */
+  height: 60px;
+  border-radius: 50%; /* make the container round */
+  overflow: hidden; /* hide any parts of the image that exceed the container's boundaries */
+  background-size: cover; /* scale the image to cover the container while maintaining its aspect ratio */
+  background-position: center center; /* center the image horizontally and vertically within the container */
+}
+.image-container {
+  width: 120%;
+  height: 500px; /* Set the height to whatever you want */
+  overflow: auto; /* This will make the container scrollable */
+   display: flex; /* Set the display property to flex */
+  flex-wrap: wrap; /* Wrap the images to the next row if they exceed the container width */
+  position: relative; 
+  right: 150px;
+}
+
+.image-container img {
+  width: calc(120% / 2 );
+  height: auto;
+  display: block;
+  margin: 5px; /* Add some margin between the images */
+}
+/* Hide the default file input button */
+#image-upload-input {
+  display: none;
+}
+
+/* Style the custom file input button */
+.file-input-button {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #BD2A2E;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Style the file input button label */
+.file-input-label {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Style the file input button hover state */
+.file-input-button:hover {
+  background-color: #333333;
+}
+.position-btn-save{
+  position: relative;
+  top: 370px;
+}
+.return-edit-btn {
+    border: none;
+    background:#BD2A2E;
+    position: relative;
+    left: 430px;
+    border-radius: 1.5rem;
+    width: 90%;
+    padding: 2%;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+}
+.return-edit-btn:hover{
+  background: #333333;
+   
+}
+.center-form {
+  position: relative;
+  left: 200px;
+}
 </style>
 
 		
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
 	<script>
 		function toggleOptions() {
 			var options = document.getElementById('options');
@@ -220,6 +350,9 @@ body{
            <link href="{{asset('Front/assets/img/logo-digitart-rouge.png')}}" rel="icon">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
  
+  
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<link rel="stylesheet" href="style.css">
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -236,6 +369,7 @@ body{
   <!-- Template Main CSS File -->
   <link href="{{asset('Front/assets/css/main.css')}}" rel="stylesheet">
         {% endblock %}
+        
  {% block navbar %}
         
           <!-- ======= Header ======= -->
@@ -282,9 +416,9 @@ body{
          <strong class="user-name">  {{app.user.firstname}}   {{app.user.lastname}} </strong>
          <div class="circle" onclick="toggleOptions()">
          {% if app.user.image is not null %}
-		    <img class="user-avatar rounded-circle" src="{{ asset('/uploads/' ~ app.user.image) }}" alt="Image" width="60">
+		    <img class="circle-image-container" src="{{ asset('/uploads/' ~ app.user.image) }}" alt="Image" width="60">
         {% else %}
-        <img class="user-avatar rounded-circle" src="{{ asset('Back/images/icon-img.png') }}" alt="Image" width="60">
+        <img class="circle-image-container" src="{{ asset('Back/images/icon-img.png') }}" alt="Image" width="60">
          {% endif %}
 	</div>
 	<div class="options" id="options">
@@ -307,7 +441,7 @@ body{
   {% endblock %}
 
   {% block body %}
-
+       
 <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/footer.jpg')}});">
       <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
 
@@ -319,16 +453,25 @@ body{
 
       </div>
     </div><!-- End Breadcrumbs -->
+    
+
+	
+        	
+   
+
+	
+	
 <!-- ======= Constructions Section ======= -->
     <section id="constructions" class="constructions">
       <div class="container" data-aos="fade-up">
-
+    
         <div class="section-header">
           <h2>Personnal Informations</h2>
           <p>here you can edit your profile</p>
         </div>
-
+        
         <div class="container emp-profile">
+        
         <fieldset id="step1" class="fieldset">   
               <div class="row">
                 <div class="col-md-4">
@@ -338,11 +481,11 @@ body{
                           {% else %}
                         <img class="user-avatar" src="{{ asset('Back/images/icon-profile.png') }}" alt="Image" width="30">
                          {% endif %}
-
-                            <div class="file btn btn-lg btn-danger">
+                             {#<a href="{{ path('app_user_upload_image', {'id': app.user.id}) }}">#}
+                            <button class="file btn btn-lg btn-danger" onclick="openPopup()">
                                 Change Photo
-                                <input type="file" name="file"/>
-                            </div>
+                            </button>
+                            
                         </div>
                  </div>
                      <div class="col-md-6">
@@ -365,13 +508,24 @@ body{
                   <div class="row">
                    <div class="col-md-4">
                         <div class="profile-work">
-
-                            <p>SETTINGS</p>
-                            <a href="">Logout</a><br/>
-                            <a href="">Delete Account</a><br/>
-                            <a href="">Change Password</a><br/>
-                            <a href="">Return Home</a><br/>
-                           
+                            <div class="row">
+                            <div class="col col-md-2">
+                            <i class="fa fa-gear fa-spin" style="font-size:24px;color:#BD2A2E"></i>
+                            </div>
+                              <div class="col-6 col-md-2">
+                            <p><strong>SETTINGS</strong></p>
+                            </div>
+                            </div>
+                            <div class="col-md-9">
+                            <button class="profile-edit-btn" onclick="confirmLogout()">Logout</button><br/>
+                            </br>
+                            <button class="profile-edit-btn" onclick="confirmDelete()">Delete Account</button><br/>
+                            </br>
+                            <button class="profile-edit-btn">Change Password</button><br/>
+                            </br>
+                            <button class="profile-edit-btn">Return Home</button><br/>
+                            </br>
+                           </div>
                         </div>
                     </div>
                    <div class="col-md-8">
@@ -447,25 +601,60 @@ body{
                                      
                   </div>
                 </div>
+                
               </div>
+              
+              <div class="popup-profimg" id="popup-profimg"> 
+               <div class="row form-group"> 
+              <div class="col col-md-6">
+          <div class="row">
+          <form action="#" method="post" enctype="multipart/form-data" id="image-upload-form">
+              <div class="col-md-4">
+			  <i class='bx bxs-cloud-upload icon'></i>
+        <label for="image-upload-input" class="file-input-button">
+  <span class="file-input-label">Choose file</span>
+</label>
+        <input type="file" name="image" id="image-upload-input">
+        
+        </div>
+        <div class="position-btn-save">
+         <button type="submit" class="btn btn-outline-danger btn-sm" id="submit-btn">
+         <i class="fa fa-chevron-circle-down"></i>  Save changes
+        </button>
+        </div>
+        </form>
+        </br>
+			  <p>Image size must be less than <span>2MB</span></p>
+        </div>
+        </div>
+         <div class="col-md-6">
+        <div class="image-container">
+        {% if app.user.userImages is null %}
+           <strong>there is no saved images</strong>
+                {% else %}
+               {% for image in app.user.userImages %}
+                <img src="{{ asset('/uploads/' ~ image.name) }}" alt="Image" width="150">
+                </br>
+                <a href="{{ path('app_user_images_delete', {'id': image.id}) }}">
+                <button class="btn btn-outline-danger btn-sm" id="delete-img-btn">
+                <i class="fa fa-times-circle"></i>
+                </button>
+                </a>
+                {% endfor %}
+                {% endif %}
+               </div>
+               </div>
+               </div>
+               <button class="close-icon" onclick="closePopup()"><i class='fa fa-times'></i></button>
+	           </div>
+                
               </fieldset>
+              {{ form_start(form,{attr:{'novalidate':'novalidate'}}) }}
               <fieldset id="step2" class="fieldset hide"> 
               <div class="row">
-               <div class="col-md-4">
-                        <div class="profile-img">
-                         {% if app.user.image is not null %}
-                            <img src="{{ asset('/uploads/' ~ app.user.image) }}" alt="Image" width="30">
-                          {% else %}
-                        <img class="user-avatar" src="{{ asset('Back/images/icon-profile.png') }}" alt="Image" width="30">
-                         {% endif %}
-
-                            <div class="file btn btn-lg btn-danger">
-                                Change Photo
-                                <input type="file" name="file"/>
-                            </div>
-                        </div>
-                 </div>
+              
                      <div class="col-md-6">
+                     <div class="center-form">
                         <div class="profile-head">
                                     <h5>
                                       <strong>  {{ app.user.firstname }} {{ app.user.lastname }} </strong>
@@ -476,29 +665,14 @@ body{
                                     <p class="proile-rating">  </br>    <span>    </span></p>
                         </div>
                      </div>
+                    </div> 
                     <div class="col-md-2">
                     <a href="">
-                    <button id="prev1" class="profile-edit-btn">Return</button>
+                    <button id="prev1" class="return-edit-btn">Return</button>
                      </a>
                     </div>
-                </div>
-                  <div class="row">
-                   <div class="col-md-4">
-                        <div class="profile-work">
-
-                            <p>SETTINGS</p>
-                            <a href="">Logout</a><br/>
-                            <a href="">Delete Account</a><br/>
-                            <a href="">Change Password</a><br/>
-                            <a href="">Return Home</a><br/>
-                           
-                        </div>
-                    </div>
-                   <div class="col-md-8">
-                        <div class="tab-content profile-tab" id="myTabContent">
-                             {{ form_start(form,{attr:{'novalidate':'novalidate'}}) }}
-
-      
+                <div class="center-form">
+                 <div class="col-md-9">  
       {# Cin #}
       <div class="row form-group">
         <div class="col col-md-2">
@@ -594,12 +768,6 @@ body{
 </div>
 
 
-
-
-
-
-
-
       
     <button type="submit" class="btn btn-success btn-sm">
       <i class="fa fa-chevron-circle-down"></i> {{ button_label|default('Submit') }} 
@@ -610,26 +778,57 @@ body{
 
 
   </div>
-
-{{ form_end(form) }}
-                            
+</div>
+</div>
+    </div>                        
                                      
-                  </div>
-                </div>
-              </div>
+                
+              
               </fieldset>
+        {{ form_end(form) }}
             </div>
       </div>
+      
     </section><!-- End Constructions Section -->
 
           <script>
-  
-
-const edit1 = document.querySelector("#edit1");
+ const edit1 = document.querySelector("#edit1");
 const prev1 = document.querySelector("#prev1");
 const step1 = document.querySelector("#step1");
-const step2 = document.querySelector("#step2");
+const step2 = document.querySelector("#step2"); 
+  var form = document.querySelector('form');
+  var submitBtn = document.querySelector('#submit-btn');
+  var imageUploadInput = document.querySelector('#image-upload-input');
+  
+let popup = document.getElementById("popup-profimg");
 
+function openPopup() {
+
+popup.classList.add("open-popup-profimg");
+
+}
+
+function closePopup() {
+
+popup.classList.remove("open-popup-profimg");
+}
+ document.querySelector('#image-upload-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var imagename = document.querySelector('#image-upload-input').value.split('\\').pop();
+        var formAction = '{{ path('app_user_upload_image', {'name_img': 'YOUR_PARAM_VALUE_HERE', 'id': app.user.id }) }}'.replace('YOUR_PARAM_VALUE_HERE', imagename);
+        this.setAttribute('action', formAction);
+        this.submit();
+    });
+
+  form.addEventListener('submit', function(event) {
+    if (!imageUploadInput.value) {
+      event.preventDefault(); // Prevent the form from submitting
+      alert('Please select a file'); // Display an error message
+      var formAction = '{{ path('app_user_upload_image', {'name_img': 'YOUR_PARAM_VALUE_HERE', 'id': app.user.id }) }}'.replace('YOUR_PARAM_VALUE_HERE', 'empty');
+        this.setAttribute('action', formAction);
+        this.submit();
+    }
+  });
 edit1.addEventListener("click", function(event) {
 	event.preventDefault();
 	step1.classList.add("hide");
@@ -641,7 +840,26 @@ prev1.addEventListener("click", function(event) {
 	step2.classList.add("hide");
 	step1.classList.remove("hide");
 });
-
+function confirmLogout() {
+  if (window.confirm("Are you sure you want to disconnect?")) {
+    // User clicked "OK", do the logout
+    var formAction = '{{ path('app_logout') }}';
+        this.setAttribute('action', formAction);
+        this.submit();
+  } else {
+    // User clicked "Cancel", do nothing
+  }
+}
+function confirmDelete() {
+  if (window.confirm("Are you sure you want to delete your account? this action cannot be undone!")) {
+    // User clicked "OK", do the logout
+    var formAction = '{{ path('app_users_deleteprofile',{'id': app.user.id}) }}';
+        this.setAttribute('action', formAction);
+        this.submit();
+  } else {
+    // User clicked "Cancel", do nothing
+  }
+}
    </script>
 
   {% endblock %}

@@ -150,9 +150,22 @@ a:hover {
 				</div>
       <form class="login100-form validate-form" method="post">
 <div class="container-login100-form-btn">
-    {% if error %}
+
+ {% if error %}
+<div class="alert alert-danger">{{ error_block }}</div>
+{% if error.messageKey == 'Invalid credentials.' %}
+        <div class="alert alert-danger">Email or password incorrect!</div>
+    {% else %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
+{% endif %}
+
+   
+    
+
+   
+
+ 
 
     {% if app.user and app.user.id %}
         <div class="mb-3">
@@ -224,7 +237,7 @@ a:hover {
 						</a>
 					</div>
           
-						
+						 
 					
 
 				</form>

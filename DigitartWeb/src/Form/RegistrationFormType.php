@@ -163,11 +163,12 @@ class RegistrationFormType extends AbstractType
             ->add('birthDate',BirthdayType::class, [
                 'label' => 'Birth date',
                 'widget' => 'single_text',
-                'attr' => ['class' => 'form-control'],
+                'attr' => ['class' => 'form-control', 'max' => (new \DateTime())->format('Y-m-d')],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter your birth date',
                     ]),
+                    
                     
                 ],
             ])
@@ -195,6 +196,12 @@ class RegistrationFormType extends AbstractType
                 'expanded' => false,
                 'multiple' => false,
                 'placeholder' => 'Choose your role',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please select a role',
+                    ]),
+                    
+                ],
             ])
             
         ;

@@ -20,6 +20,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+
 
 class UsersType extends AbstractType
 {
@@ -39,7 +42,7 @@ class UsersType extends AbstractType
         
         $builder
       
-        ->add('cin', TextType::class, [
+        ->add('cin', IntegerType::class, [
             'label' => 'Cin',
             'attr' => [
                 'placeholder' => 'Enter cin',
@@ -55,6 +58,10 @@ class UsersType extends AbstractType
                     'max' => 8,
                     'exactMessage' => 'Cin must contain exactly {{ limit }} digits',
                 ]),
+                new Regex([
+                    'pattern' => '/^\d+$/',
+                    'message' => 'Cin must be a number',
+                ]),
             ],
         ])
         ->add('firstname', TextType::class, [
@@ -67,7 +74,11 @@ class UsersType extends AbstractType
             'constraints' => [
                 new NotBlank([
                     'message' => 'Please enter a first name',
-                ])
+                ]),
+                new Regex([
+                    'pattern' => '/^[a-zA-Z ]+$/',
+                    'message' => 'Please enter a valid first name',
+                ]),
             ],
         ])
         ->add('lastname', TextType::class, [
@@ -80,7 +91,11 @@ class UsersType extends AbstractType
             'constraints' => [
                 new NotBlank([
                     'message' => 'Please enter a last name',
-                ])
+                ]),
+                new Regex([
+                    'pattern' => '/^[a-zA-Z ]+$/',
+                    'message' => 'Please enter a valid last name',
+                ]),
             ],
         ]);
          // Add the email and password fields as hidden fields
@@ -165,7 +180,7 @@ class UsersType extends AbstractType
                 ])
             ],
         ])
-        ->add('phoneNum', TextType::class, [
+        ->add('phoneNum', IntegerType::class, [
             'label' => 'Phone Number',
             'attr' => [
                 'placeholder' => 'Enter phone number',
@@ -182,13 +197,17 @@ class UsersType extends AbstractType
                 'max' => 8,
                 'exactMessage' => 'Phone number must contain exactly {{ limit }} digits',
                  ]),
+                 new Regex([
+                    'pattern' => '/^\d+$/',
+                    'message' => 'Phone number must be a number',
+                ]),
                 
             ],
         ])
         ->add('birthDate',BirthdayType::class, [
             'label' => 'Birth date',
             'widget' => 'single_text',
-            'attr' => ['class' => 'form-control'],
+            'attr' => ['class' => 'form-control', 'max' => (new \DateTime())->format('Y-m-d')],
             'constraints' => [
                 new NotBlank([
                     'message' => 'Please enter a birth date',
@@ -206,7 +225,7 @@ class UsersType extends AbstractType
             'multiple' => false,
             'constraints' => [
                 new NotBlank([
-                    'message' => 'Please specify your gender',
+                    'message' => 'Please select a gender',
                 ]),
                 
             ],
@@ -226,6 +245,12 @@ class UsersType extends AbstractType
             'expanded' => false,
             'multiple' => false,
             'placeholder' => 'Choose a role',
+            'constraints' => [
+                new NotBlank([
+                    'message' => 'Please select a role',
+                ]),
+                
+            ],
             
         ])
          ->add('userImages', FileType::class, [

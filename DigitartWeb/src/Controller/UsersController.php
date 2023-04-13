@@ -153,6 +153,8 @@ class UsersController extends AbstractController
             // on boucle sur les images 
             foreach($userImages as $image)
             {
+                if  ($profileimage != $image)
+                {
                // On génère un nouveau nom de fichier
                $fichier = md5(uniqid()) . '.' . $image->guessExtension();
 
@@ -166,9 +168,11 @@ class UsersController extends AbstractController
                $img = new UserImages();
                $img->setName($fichier);
                $user->addUserImage($img); 
+               }
             }
             if($profileimage != null)
-            {
+            { 
+                
             $fichier2 = md5(uniqid()) . '.' . $profileimage->guessExtension();
             $profileimage->move(
                 $this->getParameter('images_directory'),
@@ -186,6 +190,40 @@ class UsersController extends AbstractController
             'user' => $user,
             'form' => $form,
         ]);
+    }
+    
+    #[Route('/uploadimage/{name_img}/{id}', name: 'app_user_upload_image', methods: ['GET', 'POST'])]
+    public function upload_profimage(Request $request, $name_img, $id,ManagerRegistry $doctrine, EntityManagerInterface $entityManager): Response
+    {
+        $user = new Users();
+         $repousers= $doctrine->getRepository(Users::class);
+         $user = $repousers->find($id);
+        $imageFile = $request->files->get('image');
+        if ($name_img === 'empty' )
+         {
+            return $this->redirectToRoute('app_users_profilefront', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
+         }
+         else
+         {
+
+    if (!$imageFile) {
+        throw $this->createNotFoundException('No image file was uploaded');
+    }
+    $filename = $imageFile->getClientOriginalName();
+    $fichier2 = md5(uniqid()) . '.' . $imageFile->guessExtension();
+    $imageFile->move(
+        $this->getParameter('images_directory'),
+        $fichier2
+    );
+    $user->setImage($fichier2);
+    $img = new UserImages();
+    $img->setName($fichier2);
+    $user->addUserImage($img); 
+       
+    $entityManager->persist($user);
+    $entityManager->flush();
+    return $this->redirectToRoute('app_users_profilefront', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
+    } 
     }
     #[Route('/{id}', name: 'app_users_delete', methods: ['POST'])]
     public function delete(Request $request, Users $user, UsersRepository $usersRepository): Response

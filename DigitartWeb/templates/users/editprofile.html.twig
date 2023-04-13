@@ -3,7 +3,7 @@
     <strong>Edit</strong> Profile
   </div>
   <div class="card-body card-block">
-    {{ form_start(form) }}
+    {{ form_start(form,{attr:{novalidate:'novalidate'}}) }}
 
       
       {# Cin #}
@@ -14,7 +14,7 @@
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(form.cin, {'attr': {'class': 'form-control', 'placeholder': 'Enter cin'}}) }}
-          {{ form_errors(form.cin) }}
+          {{ form_errors(form.cin,{'attr':{'class':'text-danger'}}) }}
           <small class="form-text text-muted">Cin must contain 8 digits</small>
         </div>
       </div>
@@ -27,7 +27,7 @@
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(form.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Enter First name'}}) }}
-          {{ form_errors(form.firstname) }}
+          {{ form_errors(form.firstname,{'attr':{'class':'text-danger'}}) }}
           <small class="form-text text-muted">Text</small>
         </div>
       </div>
@@ -39,7 +39,7 @@
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(form.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Enter Last name'}}) }}
-          {{ form_errors(form.lastname) }}
+          {{ form_errors(form.lastname,{'attr':{'class':'text-danger'}}) }}
           <small class="form-text text-muted">Text</small>
         </div>
       </div>
@@ -50,7 +50,7 @@
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email'}}) }}
-          {{ form_errors(form.email) }}
+          {{ form_errors(form.email,{'attr':{'class':'text-danger'}}) }}
           <small class="form-text text-muted">Please enter a valid email!</small>
         </div>
       </div>
@@ -62,7 +62,7 @@
         </div>
 <div class="col-12 col-md-9">
 {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter Address'}}) }}
-{{ form_errors(form.address) }}
+{{ form_errors(form.address,{'attr':{'class':'text-danger'}}) }}
 <small class="form-text text-muted">Text</small>
 </div>
 </div>
@@ -74,7 +74,7 @@
     </div>
     <div class="col-12 col-md-9">
       {{ form_widget(form.phoneNum, {'attr': {'class': 'form-control', 'placeholder': 'Enter Phone'}}) }}
-      {{ form_errors(form.phoneNum) }}
+      {{ form_errors(form.phoneNum,{'attr':{'class':'text-danger'}}) }}
       <small class="form-text text-muted">Phone number must contain 8 digits</small>
     </div>
   </div>
@@ -85,6 +85,7 @@
     </div>
     <div class="col-12 col-md-9">
         {{ form_widget(form.birthDate, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.birthDate,{'attr':{'class':'text-danger'}}) }}
     </div>
  </div>
 {# role #}
@@ -95,7 +96,7 @@
   </div>
   <div class="col-12 col-md-9">
     {{ form_widget(form.role, {'attr': {'class': 'form-control'}}) }}
-    {{ form_errors(form.role) }}
+    {{ form_errors(form.role,{'attr':{'class':'text-danger'}}) }}
   </div>
 </div>
 {# Gender #}
@@ -118,7 +119,7 @@
   </div>
   <div class="col-12 col-md-9">
     {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
-    {{ form_errors(form.image) }}
+    {{ form_errors(form.image,{'attr':{'class':'text-danger'}}) }}
   </div>
 </div>
 {% endif %}  
@@ -133,7 +134,7 @@
   <div class="col-12 col-md-9">
   <img src="{{ asset('/uploads/' ~ user.image) }}" alt="Image" width="150">
     {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
-    {{ form_errors(form.image) }}
+    {{ form_errors(form.image,{'attr':{'class':'text-danger'}}) }}
   </div>
 </div>
 {% endif %}  
@@ -145,7 +146,7 @@
   </div>
   <div class="col-12 col-md-9">
     {{ form_widget(form.userImages, {'attr': {'class': 'form-control'}}) }}
-    {{ form_errors(form.userImages) }}
+    {{ form_errors(form.userImages,{'attr':{'class':'text-danger'}}) }}
   </div>
 </div>
       
