@@ -197,7 +197,80 @@ class PaymentController extends AbstractController
         ]);
     }
 
+    #[Route('/pdf', name: 'pdf')]
+    public function generatePdf(PaymentRepository $PaymentRepository): Response
+    {
+        $user_id = null; // Replace with the user ID parameter
+        $lastUpdatedAt = $PaymentRepository->getLastUpdatedAtByUserId();
+        // Convert string to DateTime object
+        $lastUpdatedAt = new \DateTime($lastUpdatedAt);
+        $payments = $PaymentRepository->findBy(['user' => $user_id, 'updatedAt' => $lastUpdatedAt]);
+        // Calculate total values
+        $total_nb_adult = 0;
+        $total_nb_teenager = 0;
+        $total_nb_student = 0;
+        $total_payment = 0;
+        foreach ($payments as $payment) {
+            $total_nb_adult += $payment->getNbAdult();
+            $total_nb_teenager += $payment->getNbTeenager();
+            $total_nb_student += $payment->getNbStudent();
+            $total_payment += $payment->getTotalPayment();
+        }
+        // Create new TCPDF object
+        $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
 
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('Digitart');
+        $pdf->SetTitle('Ticket');
+        // Add a page
+        $pdf->AddPage();
+
+        // Add background image
+        $backgroundImage = 'https://cdn.discordapp.com/attachments/1095078227573219358/1095095439155527740/massive.jpg'; // Replace with your image path
+        // Save current auto page break setting
+        $auto_page_break = $pdf->getAutoPageBreak();
+        // Disable auto page break
+        $pdf->SetAutoPageBreak(false, 0);
+        // Set the background image to cover the full page
+        $pdf->Image($backgroundImage, 0, 0, $pdf->getPageWidth(), $pdf->getPageHeight(), '', '', '', true, 300, '', false, 'B');
+
+        // Reset auto page break setting to original value
+        $pdf->SetAutoPageBreak($auto_page_break);
+        $pdf->SetDrawColor(0, 0, 0); // RGB color for black
+       
+        $pdf->SetLineWidth(0.5); // Line width for border
+        $pdf->Rect(10, 70, 190, 60, 'D'); // Parameters: x, y, width, height, 'D' for border only
+
+        // Set some content
+        $pdf->SetFont('helvetica', '', 16); // Increase font size to 16
+        $pdf->SetTextColor(255, 255, 255); // Set text color to #BD2A2E (red)
+        $pdf->Cell(0,60,'', 0, 1, 'C');  
+        // Center the date
+        $pdf->Cell(0, 10, 'Date of purchase: ' .$lastUpdatedAt->format('Y-m-d'), 0, 1, 'C');  
+        $pdf->SetFont('helvetica', '', 12); // Reset font size to 12 
+        // Center the ticket number and other text
+        $pdf->Cell(0, 10, 'Number of Adult Tickets: ' . $total_nb_adult, 0, 1, 'C');
+        $pdf->Cell(0, 10, 'Number of Teenager Tickets: ' . $total_nb_teenager, 0, 1, 'C');
+        $pdf->Cell(0, 10, 'Number of Student Tickets: ' . $total_nb_student, 0, 1, 'C');
+        $pdf->Cell(0,5,'', 0, 1, 'C');  
+        $pdf->SetFont('helvetica', 'B', 14); // 'B' for bold
+        $pdf->Cell(0, 10, 'Total Payment: ' . $total_payment . ' $', 0, 1, 'C');
+        
+        // Generate QR code
+        $qrCodeUrl = 'https://chart.googleapis.com/chart?cht=qr&chl=' . urlencode('Number of Adult Tickets: ' . $total_nb_adult . ', Number of Teenager Tickets: ' . $total_nb_teenager . ', Number of Student Tickets: ' . $total_nb_student . ', Total Payment: ' . $total_payment) . '&chs=300x300&choe=UTF-8&chld=L|2'; // Increase QR code size to 300x300
+        $qrCode = file_get_contents($qrCodeUrl);
+
+        // Calculate the width of the QR code image
+        $qrCodeWidth = 60; // Set the width of the QR code image
+        $qrCodeX = ($pdf->GetPageWidth() - $qrCodeWidth) / 2; // Calculate the X coordinate to center the QR code image
+
+        // Add QR code image to the PDF and center it
+        $pdf->SetXY($qrCodeX, 150); // Set X and Y coordinates for the QR code image
+        $pdf->Image('@'.$qrCode, $qrCodeX, 150, $qrCodeWidth, 0, 'PNG'); // Set width of QR code image to $qrCodeWidth, and center it
+
+        // Output the PDF as response
+        return new Response($pdf->Output('ticket.pdf', 'I'));
+    }
     
 
 
