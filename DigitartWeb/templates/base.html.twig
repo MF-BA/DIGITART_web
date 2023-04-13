@@ -192,11 +192,21 @@ button {
 							<a href="{{path('displayAUCTION')}}"
 								{% block auctionActive %}{% endblock %}>
 								<span>auction</span>
+								{% if app.user is not null  %}
+
+								{% if app.user.role == 'Artist' %}
 								<i class="bi bi-chevron-down dropdown-indicator"></i>
+								{% endif %}
+							{% endif %}
 							</a>
+							{% if app.user is not null  %}
+								{% if app.user.role == 'Artist' %}
 							<ul>
 								<li><a href="{{path('app_auction_new')}}">Add to Auction</a></li>
 							</ul>
+							{% endif %}
+							{% endif %}
+
 						</li>
 						<!-- @formatter:on -->
 

@@ -24,6 +24,15 @@ class AuctionRepository extends ServiceEntityRepository
         parent::__construct($registry, Auction::class);
     }
 
+    public function delete(Auction $auc): void
+{
+    $auc->setDeleted(new \DateTime());
+    $entityManager = $this->getEntityManager();
+    $entityManager->persist($auc);
+    $entityManager->flush();
+}
+
+
     public function save(Auction $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);

@@ -5,55 +5,6 @@
 
 {% block body %}
 
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/pdfmake.min.js"></script>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/vfs_fonts.js"></script>
-
-	<script>
-	
-		$(document).ready(function () {
-    $("#saveAsPdf").click(function () {
-		
-        // Define the document definition
-        var docDefinition = {
-            content: [
-                { text: "{{auction.artwork.artworkName|upper}}", style: 'header' },
-                { text: "By : {{auction.artwork.idArtist.lastname|upper}} {{auction.artwork.idArtist.firstname|upper}}" },
-                { text: "The starting Price : {{auction.startingPrice}}" },
-                { text: "Increment : {{auction.increment}}" },
-{ text: 'Description: {{ auction.description|replace(["\""], ["\\\\\""]) }}' },
-                { text: "The Highest Offer : {{ highestBid is not null ? highestBid ~ '$' : 'none' }}" },
-                { text: "\n\n\n" },
-                {
-                    style: 'tableExample',
-                    table: {
-                        headerRows: 1,
-                        body: [
-                            ['Offer', 'Date and Time', 'Bidder'],
-                            {% for bid in bids %}
-                            ['{{ bid.offer }}', '{{ bid.date|date('Y-m-d H:i:s') }}', '{{ users[bid.id]|upper }}'],
-                            {% endfor %}
-                        ]
-                    }
-                }
-            ],
-            styles: {
-                header: {
-                    fontSize: 22,
-                    bold: true
-                },
-                tableExample: {
-                    margin: [0, 5, 0, 15]
-                }
-            }
-        };
-
-        // Generate the PDF
-        pdfMake.createPdf(docDefinition).download('auction.pdf');
-    });
-});
-
-	</script>
-
 	<div class="content mt-3">
 		<div class="animated fadeIn">
 			<div class="row">
@@ -61,16 +12,34 @@
 				<div class="col-md-12">
 					<div class="card">
 						<div class="card-header">
-							<a class="card-title">More Information About
-								<strong>{{auction.artwork.artworkName|upper}}</strong>
-								Auction</a>
+							<a class="card-title">
+								<H4>More Information About
+									<strong>{{auction.artwork.artworkName|upper}}</strong>
+									Auction</H4>
+							</a>
+							<a>Added :
+								{{auction.added|date('Y-m-d H:i') }}</a>
+							{% if auction.DELETED is  null and auction.added|date('Y-m-d H:i:s') != auction.updated|date('Y-m-d H:i:s') %}
+								<br>
+								<a>Modified :
+									{{auction.updated|date('Y-m-d H:i') }}</a>
+							{% endif %}
+							{% if auction.DELETED is not null %}
+								<br>
+								<a>Deleted :
+									{{auction.Deleted|date('Y-m-d H:i') }}</a>
+							{% endif %}
 						</div>
 						<div class="card-body">
-							<H3>
-								<strong>{{auction.artwork.artworkName|upper}}</strong>
-							</H3>
+							<a>
+								<H3>
+									<strong>{{auction.artwork.artworkName|upper}}</strong>
+									{% if auction.DELETED is not null %}
+										(DELETED)
+									{% endif %}
+								</H3>
+							</a>
 							<br>
-
 							<a>By :
 								<strong>
 									{{auction.artwork.idArtist.lastname|upper}}
@@ -95,7 +64,7 @@
 							<br>
 							<br>
 
-							
+
 							<a>The Highest Offer :
 								<strong>
 									{{ highestBid is not null ? highestBid ~ '$' : 'none' }}
@@ -134,13 +103,19 @@
 									{% endfor %}
 								</tbody>
 							</table>
-							<a href="#" id="saveAsPdf">Save as PDF</a>
+							{% if auction.DELETED is null %}
+								<a target="_blank" href="{{ path('PDF', {'id_auction': auction.idAuction}) }}">Save as PDF</a>
+							{% endif %}
 
 						</div>
-						
-							
+
+
 					</div>
-						<a href="{{path('DisplayAuctionBack')}}">Go Back</a>
+					<a href="{{path('DisplayAuctionBack')}}">Go Back</a>
 
 				</div>
-			{% endblock %}
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

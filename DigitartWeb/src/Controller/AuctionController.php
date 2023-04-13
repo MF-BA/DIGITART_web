@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Users;
 use App\Entity\Bid;
 use App\Form\BidType;
 use App\Entity\Auction;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\BidRepository;
+use App\Repository\UsersRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
@@ -20,13 +22,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class AuctionController extends AbstractController
 {
     #[Route('/home', name: 'displayAUCTION', methods: ['GET'])]
-    public function auctionFRONT(AuctionRepository $auctionRepository, BidRepository $BidRepository): Response
+    public function auctionFRONT(AuctionRepository $auctionRepository, BidRepository $BidRepository, Request $request): Response
     {
+        $page = $request->query->getInt('page', 1);
         $array[] = "";
         $currentDateTime = new \DateTime();
         $auction = $auctionRepository->createQueryBuilder('a')
             ->where('a.endingDate > :currentDateTime')
             ->setParameter('currentDateTime', $currentDateTime)
+            ->andWhere('a.deleted is NULL')
             ->getQuery()
             ->getResult();
 
@@ -37,7 +41,7 @@ class AuctionController extends AbstractController
             else $array[$auc->getIdAuction()] = null;
         }
         return $this->render('auction/displayAll.html.twig', [
-            'auctions' => $auction, 'highestBids' => $array,
+            'auctions' => $auction, 'highestBids' => $array, 'pageParam' => $page,
         ]);
     }
 
@@ -62,28 +66,32 @@ class AuctionController extends AbstractController
     }
 
     #[Route('/show/{id_auction}', name: 'app_auction_show', methods: ['GET', 'POST'])]
-    public function show(Request $request, Auction $auction, BidRepository $BidRepository): Response
+    public function show(Request $request, Auction $auction, BidRepository $BidRepository, UsersRepository $UR): Response
     {
         $highestBid = $BidRepository->highestBid($auction->getIdAuction());
 
-        if ($highestBid)
+        if ($highestBid) {
+            $highestBidder = $highestBid->getIdUser();
             $highestBid = $highestBid->getOffer();
-        else $highestBid = null;
-
+        } else {
+            $highestBid = null;
+            $highestBidder = null;
+        }
         $bid = new Bid();
-        $bid->setIdUser('37');
-        $bid->setIdAuction($auction);
-        $bid->setDate(new \DateTime());
-
         $form = $this->createForm(BidType::class, $bid);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            $userId = $user->getId();
+            $bid->setIdUser($userId);
+            $bid->setIdAuction($auction);
+            $bid->setDate(new \DateTime());
             $BidRepository->save($bid, true);
             return $this->redirectToRoute('app_auction_show', ['id_auction' => $auction->getIdAuction()], Response::HTTP_SEE_OTHER);
         }
         return $this->render('auction/show.html.twig', [
             'auction' => $auction, 'highestBid' => $highestBid, 'countBids' => $BidRepository->countBids($auction->getIdAuction()), 'bid' => $bid,
-            'form' => $form->createView(),
+            'form' => $form->createView(), 'highestBidder' => $highestBidder,
         ]);
     }
 
@@ -118,6 +126,7 @@ class AuctionController extends AbstractController
     #[Route('/admin', name: 'DisplayAuctionBack', methods: ['GET'])]
     public function indexBACK(AuctionRepository $auctionRepository, BidRepository $BidRepository, ArtworkRepository $artworkrepo, Request $request): Response
     {
+        $page = $request->query->getInt('page', 1);
         $array[] = "";
         $auction = $auctionRepository->findAll();
         if ($request->query->get('input_value')) {
@@ -127,9 +136,9 @@ class AuctionController extends AbstractController
                 ->setParameter('description', '%' . $inputValue . '%')
                 ->getQuery()->getResult();
         }
-        
 
-       
+
+
         if (isset($_GET['order'])) {
             $order = $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
             if (isset($_GET['sort']) && $_GET['sort'] == 'ending_date') {
@@ -176,14 +185,6 @@ class AuctionController extends AbstractController
                 $auction = array_map(function ($item) {
                     return $item[0];
                 }, $auctions);
-            } else if (isset($_GET['sort']) && $_GET['sort'] == 'increment') {
-
-
-
-                $auction = $auctionRepository->createQueryBuilder('a')
-                    ->orderBy('a.increment', $order)
-                    ->getQuery()
-                    ->getResult();
             } else if (isset($_GET['sort']) && $_GET['sort'] == 'starting_price') {
 
 
@@ -201,7 +202,7 @@ class AuctionController extends AbstractController
         }
 
         return $this->render('auction/displayAllBACK.html.twig', [
-            'auctions' => $auction, 'highestBids' => $array,
+            'auctions' => $auction, 'highestBids' => $array, 'pageParam' => $page,
         ]);
     }
 
@@ -225,9 +226,9 @@ class AuctionController extends AbstractController
     public function deleteBACK(Request $request, Auction $auction, AuctionRepository $auctionRepository): Response
     {
         if ($this->isCsrfTokenValid('delete' . $auction->getIdAuction(), $request->request->get('_token'))) {
-            $auctionRepository->remove($auction, true);
+            //$auctionRepository->remove($auction, true);
+            $auctionRepository->delete($auction);
         }
-
         return $this->redirectToRoute('DisplayAuctionBack', [], Response::HTTP_SEE_OTHER);
     }
 
@@ -235,37 +236,28 @@ class AuctionController extends AbstractController
 
 
     #[Route('/showfront', name: 'showfrontpage')]
-     public function display_front(): Response
-     {
-         return $this->render('home.html.twig', [
-
-         ]);
-     }
-     #[Route('/showdigit', name: 'showdigit')]
-     public function display_digit(): Response
-     {
-         return $this->render('base.html.twig', [
-
-         ]);
-     }
-     #[Route('/showback', name: 'showbackpage')]
-     public function display_back(): Response
-     {
-         return $this->render('back.html.twig', [
-
-         ]);
-     }
-     #[Route('/showlogin', name: 'showloginpage')]
-     public function display_login(): Response
-     {
-         return $this->render('users/login.html.twig', [
-
-         ]);
-     }
-     #[Route('/showregister', name: 'showregister')]
-     public function display_register(): Response
-     {
-         return $this->render('users/register.html.twig', [
-         ]);
-     }
+    public function display_front(): Response
+    {
+        return $this->render('base.html.twig', []);
+    }
+    #[Route('/showdigit', name: 'showdigit')]
+    public function display_digit(): Response
+    {
+        return $this->render('base.html.twig', []);
+    }
+    #[Route('/showback', name: 'showbackpage')]
+    public function display_back(): Response
+    {
+        return $this->render('back.html.twig', []);
+    }
+    #[Route('/showlogin', name: 'showloginpage')]
+    public function display_login(): Response
+    {
+        return $this->render('users/login.html.twig', []);
+    }
+    #[Route('/showregister', name: 'showregister')]
+    public function display_register(): Response
+    {
+        return $this->render('users/register.html.twig', []);
+    }
 }

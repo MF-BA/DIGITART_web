@@ -10,7 +10,10 @@ use App\Repository\UsersRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Annotation\Route;;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Knp\Snappy\Pdf;
+
 
 #[Route('/bid')]
 class BidController extends AbstractController
@@ -27,22 +30,24 @@ class BidController extends AbstractController
         $bids = $bidRepository->createQueryBuilder('b')
             ->where('b.id_auction = :auctionId')
             ->setParameter('auctionId', $auction->getIdAuction())
-            ->orderBy('b.offer','Desc')
+            ->orderBy('b.offer', 'Desc')
             ->getQuery()
             ->getResult();
+
         $users[] = "";
-        foreach ($bids as $auc) {
-            $users[$auc->getId()] = $usersrepo->createQueryBuilder('u')
+        foreach ($bids as $bid) {
+            $name = $usersrepo->createQueryBuilder('u')
                 ->select("CONCAT(u.lastname, ' ', u.firstname) as full_name")
                 ->where('u.id = :id')
-                ->setParameter(':id', $auc->getIdUser())
+                ->setParameter(':id', $bid->getIdUser())
                 ->getQuery()
                 ->getSingleScalarResult();
+            $users[$bid->getId()] = $name;
         }
 
 
         return $this->render('bid/displayBidBACK.html.twig', [
-            'bids' => $bids, 'auction' => $auction, 'users' => $users,"highestBid" =>$highestBid,
+            'bids' => $bids, 'auction' => $auction, 'users' => $users, "highestBid" => $highestBid,
         ]);
     }
 
@@ -98,5 +103,62 @@ class BidController extends AbstractController
         }
 
         return $this->redirectToRoute('app_bid_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/pdf/{id_auction}', name: 'PDF', methods: ['GET', 'POST'])]
+    public function GeneratePDF(UsersRepository $usersrepo, BidRepository $bidRepository, Auction $auction, Pdf $knpSnappyPdf)
+    {
+        // Retrieve data for the PDF
+        $highestBid = $bidRepository->highestBid($auction->getIdAuction());
+        if ($highestBid) {
+            $highestBid = $highestBid->getOffer();
+        } else {
+            $highestBid = null;
+        }
+
+        $bids = $bidRepository->createQueryBuilder('b')
+            ->where('b.id_auction = :auctionId')
+            ->setParameter('auctionId', $auction->getIdAuction())
+            ->orderBy('b.offer', 'Desc')
+            ->getQuery()
+            ->getResult();
+
+        $users = [];
+        foreach ($bids as $bid) {
+            $name = $usersrepo->createQueryBuilder('u')
+                ->select("CONCAT(u.lastname, ' ', u.firstname) as full_name")
+                ->where('u.id = :id')
+                ->setParameter(':id', $bid->getIdUser())
+                ->getQuery()
+                ->getSingleScalarResult();
+            $users[$bid->getId()] = $name;
+        }
+
+        // Render the Twig template and get the resulting HTML content
+        $html = $this->renderView('bid/PDF.html.twig', [
+            'bids' => $bids,
+            'auction' => $auction,
+            'users' => $users,
+            'highestBid' => $highestBid,
+        ]);
+
+        // Generate the PDF with custom options
+        $pdf = $knpSnappyPdf->getOutputFromHtml($html, [
+            'header-font-name' => 'Roboto',
+            'header-font-size' => '12',
+        ]);
+
+        // Create a response with the PDF as the content
+        $response = new Response($pdf);
+
+        // Set the headers for the response
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_INLINE,
+            'bid.pdf'
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', 'application/pdf');
+
+        return $response;
     }
 }

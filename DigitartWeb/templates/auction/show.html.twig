@@ -93,7 +93,7 @@ return true;
 											{% set endingDate = auction.endingDate|date('Y-m-d H:i:s') %}
 											<span id="timer_{{auction.idAuction}}" class="post-date"></span>
 											<script>
-												updateTimer("{{ endingDate }}", "timer_   {{ auction.idAuction }}");
+												updateTimer("{{ endingDate }}", "timer_{{ auction.idAuction }}");
 											</script>
 										{% else %}
 											<span class="post-date">Auction has no ending date.</span>
@@ -127,38 +127,46 @@ return true;
 
 							<div class="meta-top">
 								<a>The starting Price :
-									{{auction.startingPrice ~ '$'}}
 								</a>
+								<br>
+								<br>
+								{% if app.user is not null and  app.user.id == highestBidder %}
+									<a style="color: green;">You are the highest bidder with:
+										</a> 
+										<a>{{ highestBid is not null ? highestBid ~ '$' : 'none' }}</a>
+									
+
+								{% else %}
+									<a>The Highest Offer :
+										{{ highestBid is not null ? highestBid ~ '$' : 'none' }}
+									</a>
+								{% endif %}
 								<br>
 								<br>
 
-								<a>The Highest Offer :
-									{{ highestBid is not null ? highestBid ~ '$' : 'none' }}
-								</a>
-								<br>
-								<br>
-	
 								<a>Number of Bids :
 									{{countBids}}
 								</a>
 
 							</div>
 							<br>
-					{% if app.user is not null %}
-							<h2 class="sidebar-title" >Make An Offer :
-							</h2>
-							
-							{{ form_start(form, {'attr': {'class': 'mt-3', 'onsubmit': 'return validateBid();'}})}}
+							{% if app.user is not null %}
+								<h2 class="sidebar-title">Make An Offer :
+								</h2>
 
-							{{ form_widget(form.offer, {'attr': {'value': highestBid is not null ? highestBid + auction.increment : auction.startingPrice ,
+								{{ form_start(form, {'attr': {'class': 'mt-3', 'onsubmit': 'return validateBid();'}})}}
+
+								{{ form_widget(form.offer, {'attr': {'value': highestBid is not null ? highestBid + auction.increment : auction.startingPrice ,
 							'pattern': '[0-9]*' , 'inputmode' : 'numeric','min': highestBid is not null ? highestBid + auction.increment : auction.startingPrice}
 							}) }}
-							<button type="submit">
-								<i class="bi bi-credit-card">{{ button_label|default('') }}</i>
-							</button>
-							{{ form_end(form)  }}
+								<button type="submit">
+									<i class="bi bi-credit-card">{{ button_label|default('') }}</i>
+								</button>
+								{{ form_end(form)  }}
 							{% else %}
-						<h4> Login to be able to join the auction </h4>
+								<h4>
+									Login to be able to join the auction
+								</h4>
 							{% endif %}
 
 
