@@ -400,4 +400,57 @@ public function qrcode(Event $event): Response
             return new JsonResponse(['error' => 'Token Invalide'], 400);
         }
     }
+ /**
+     * @Route("/my-participated-events/i", name="my_participated_events")
+     */
+    public function myParticipatedEvents(): Response
+    {
+        $user = $this->getUser(); // Assuming you have a function to retrieve the current user object
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        $participantRepository = $entityManager->getRepository(Participants::class);
+        
+        $participants = $participantRepository->findBy(['idUser' => $user->getId()]);
+        
+        $participatedEvents = [];
+        
+        foreach ($participants as $participant) {
+            $participatedEvents[] = $participant->getIdEvent();
+        }
+        
+        return $this->render('event/participatedevents.html.twig', [
+            'participatedEvents' => $participatedEvents,
+        ]);
+    }
+    /**
+ * @Route("/cancel_participation/{eventId}", name="cancel_participation")
+ */
+public function cancelParticipation(Request $request, $eventId)
+{
+    // Get the current user
+    $user = $this->getUser();
+    $userId = $user->getId();
+
+    // Get the EntityManager
+    $em = $this->getDoctrine()->getManager();
+
+    // Get the Participants entity for the current user and event
+    $participant = $em->getRepository(Participants::class)->findOneBy([
+        'idUser' => $userId,
+        'idEvent' => $eventId,
+    ]);
+
+    if (!$participant) {
+        // If the user is not a participant, redirect to the events page
+        return $this->redirectToRoute('my_participated_events');
+    }
+
+    // Remove the participant entity
+    $em->remove($participant);
+    $em->flush();
+
+    // Redirect to the events page
+    return $this->redirectToRoute('my_participated_events');
+}
+
 }

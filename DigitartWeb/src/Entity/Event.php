@@ -6,7 +6,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
-
+use Symfony\Component\Validator\Constraints\NotNull;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 /**
@@ -186,7 +186,7 @@ class Event
         return $this->eventName;
     }
 
-    public function setEventName(string $eventName): self
+    public function setEventName(?string $eventName): self
     {
         $this->eventName = $eventName;
 
@@ -198,7 +198,7 @@ class Event
         return $this->startDate;
     }
 
-    public function setStartDate(\DateTimeInterface $startDate): self
+    public function setStartDate(?\DateTimeInterface $startDate): self
     {
         $this->startDate = $startDate;
 
@@ -210,7 +210,7 @@ class Event
         return $this->endDate;
     }
 
-    public function setEndDate(\DateTimeInterface $endDate): self
+    public function setEndDate(?\DateTimeInterface $endDate): self
     {
         $this->endDate = $endDate;
 
@@ -222,7 +222,7 @@ class Event
         return $this->nbParticipants;
     }
 
-    public function setNbParticipants(string $nbParticipants): self
+    public function setNbParticipants(?string $nbParticipants): self
     {
         $this->nbParticipants = $nbParticipants;
 
@@ -234,7 +234,7 @@ class Event
         return $this->detail;
     }
 
-    public function setDetail(string $detail): self
+    public function setDetail(?string $detail): self
     {
         $this->detail = $detail;
 
@@ -246,7 +246,7 @@ class Event
         return $this->startTime;
     }
 
-    public function setStartTime(int $startTime): self
+    public function setStartTime(?int $startTime): self
     {
         $this->startTime = $startTime;
 

@@ -18,7 +18,7 @@ body{
 	width:100%;
 	height:100%;
 	background: linear-gradient(90deg,#189086,#2f8198);
-background-image: linear-gradient(to bottom right,#02b3e4,#02ccba);	
+background-image: linear-gradient(to bottom right,#bd2a2e,#0d0202);	
 }
 
 .done{
@@ -33,7 +33,7 @@ background-image: linear-gradient(to bottom right,#02b3e4,#02ccba);
 .contain h1{
 	font-family: 'Julius Sans One', sans-serif;
 	font-size:1.4em;
-	color: #02b3e4;
+	color: #bd2a2e;
 }
 
 .congrats{
@@ -51,7 +51,7 @@ background-image: linear-gradient(to bottom right,#02b3e4,#02ccba);
 	background:#fff;
 	text-align:center;
 	font-size:2em;
-	color: #189086;
+	color: #bd2a2e;
 }
 
 .text{
@@ -150,31 +150,26 @@ background-image: linear-gradient(to bottom right,#02b3e4,#02ccba);
 	.regards{
 		font-size:0.55em;
 	}
-	
+	img {
+  display: block; /* Make the image a block element */
+  margin: 0 auto; /* Center the image horizontally */
+  max-width: 50%; /* Set the maximum width of the image to 50% of its container */
+  height: auto; /* Maintain aspect ratio */
+}
 }
 </style>
 
 <div class="contain">
-	<div class="congrats">
-		<h1>Congrat<span class="hide">ulation</span>s !</h1>
-		<div class="done">
-			<svg version="1.1" id="tick" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 37 37" style="enable-background:new 0 0 37 37;" xml:space="preserve">
-<path class="circ path" style="fill:#0cdcc7;stroke:#07a796;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:10;" d="
-	M30.5,6.5L30.5,6.5c6.6,6.6,6.6,17.4,0,24l0,0c-6.6,6.6-17.4,6.6-24,0l0,0c-6.6-6.6-6.6-17.4,0-24l0,0C13.1-0.2,23.9-0.2,30.5,6.5z"
-	/>
-<polyline class="tick path" style="fill:none;stroke:#fff;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:10;" points="
-	11.6,20 15.9,24.2 26.4,13.8 "/>
-</svg>
-			</div>
-		<div class="text">
-		<p>You have successfully booked an appointment with us. <br>Here are your details<br>Date: 12.12.12<br>
-			Time: 11am<br>
-			ID: 12324
-		</p>
-			<p>Eagerly awaiting your visit
-			</p>
-			</div>
-		<p class="regards">Regards, Team Tarini Netradham</p>
-	</div>
+  <div class="congrats">
+    <h1>Congrat<span class="hide">ulation</span>s !</h1>
+    <div class="done">
+      <img src="{{asset('images/icon_tick.png')}}" alt="QR code" style="display: block; margin: 0 auto; max-width: 100%; height: auto;">
+    </div>
+    <div class="text">
+      <p>You have successfully participated in the event. <br>
+      </p>
+      <p>Eagerly awaiting your visit</p>
+    </div>
+    <p class="regards">Regards, Digitart</p>
+  </div>
 </div>

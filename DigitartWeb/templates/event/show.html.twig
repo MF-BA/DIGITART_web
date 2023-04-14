@@ -42,6 +42,7 @@
             {% for image in event.images %}
                 <div style="margin-right: 10px;">
                     <img src="{{ asset('/uploads/' ~ image.name) }}" alt="Image" width="150">
+                    <br>
              <a href="{{ path('app_images_delete', {'id': image.id}) }}">
                 <button class="btn btn-outline-danger btn-sm">
                 <i class="fa fa-times-circle"></i>Delete</button>

@@ -3,6 +3,7 @@
 {% block title %}Event index{% endblock %}
 
 {% block body %}
+
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
@@ -90,10 +91,6 @@
   -o-background-size: cover;
   background-size: cover;
     }
-    .btn-danger:hover {
-  background-color: white !important;
-}
-
 </style>
 <script>
     var countDownDate = new Date("apr 15,2023 12:00:00").getTime();
@@ -123,70 +120,63 @@ if(distance<0)
 
     },1000)
 </script>
+ <section class="home-about-section spad" data-aos="fade-up" data-aos-delay="100">
     <!-- Home About Section Begin -->
     {% set now = date() %}
-  <section id="recent-blog-posts" class="recent-blog-posts">
-      <div class="container" data-aos="fade-up">
+  {% for event in participatedEvents %}
 
-    
-    
-  <div class=" section-header">
-        <h2>List of Events</h2>
-        <p>Here you can find all the events our museum provides.</p>
-      </div>
-
-      <div class="row gy-5">
-
-       
-      {% set now = date() %}
-   {% for event in events %}
-   {% if event.getEndDate > now %}
-        <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-          <div class="post-item position-relative h-100">
-
-            <div class="post-img position-relative overflow-hidden">
-               <img src="{{ asset('uploads/' ~ event.image) }}" class="img-fluid" alt="">  
-              <span class="post-date">{{ event.StartDate|date('F j') }}</span>
-            </div>
-
-            <div class="post-content d-flex flex-column">
-
-              <h3 class="post-title">{{ event.EventName }}</h3>
-
-              <div class="meta d-flex align-items-center">
-                <div class="d-flex align-items-center">
-                  <i class="bi bi-calendar-minus"></i> <span class="ps-2">Ends : {{ event.EndDate|date('F j') }}</span>
+    <!-- Home About Section Begin -->
+   
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="ha-pic">
+                        <img src="{{ asset('uploads/' ~ event.image) }}" alt="">
+                    </div>
                 </div>
-                <span class="px-3 text-black-50">/</span>
-                <div class="d-flex align-items-center">
-                  <i class="bi bi-clock"></i> <span class="ps-2">Starts at: {{event.getStartTime}} H</span>
+                <div class="col-lg-6">
+                    <div class="ha-text">
+                        <h2>{{ event.getEventName }}</h2>
+                        <p>{{ event.getDetail }}</p>
+                        <ul>
+                            <li><span class="icon_check"></span> Name : {{ event.getEventName }}</li>
+                            <li><span class="icon_check"></span> Max number of participants : {{ event.getNbParticipants }}</li>
+                            <li><span class="icon_check"></span> Start Time : {{ event.getStartTime }}h</li>
+
+
+                        </ul>
+                        <a href="{{ path('app_event_show_front', {'id': event.getId}) }}" class="ha-btn">Discover Now</a>
+                        <hr>
+                        <a href="{{ path('cancel_participation', { 'eventId': event.getId() }) }}" class="ha-btn">Cancel participation</a>
+                      
+
+
+                    </div>
                 </div>
-              </div>
-
-              <hr>
-
-              <a href="{{ path('app_event_show_front', {'id': event.getId}) }}" class="readmore stretched-link"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
-
             </div>
-
-          </div>
-        </div><!-- End post item -->
-        
-        {% endif %}
-{% endfor %}
-        
-
+        </div>
+       <hr>
+        {% endfor %}
+   </section>
+    {% if participatedEvents is empty %}    
+<!-- ======= Blog Details Section ======= -->
+    <section id="blog" class="blog">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row g-5">
+          
+            <article class="blog-details">
+              <div class="content">             
+                <blockquote>
+                  <p>
+                   You didn't participate in any of our events. Please check the events list and select an event you want to participate in.     </p>
+                </blockquote>                          
+              </div><!-- End post content -->
+            </article><!-- End blog post -->        
+                
+        </div>
       </div>
-
-      </div>
-      <hr>
-<div style="text-align: center;">
-  <a href="{{ path('my_participated_events') }}" class="btn btn-danger">Events I Participated In</a>
-</div>    </section>
-      
-
-    
-
+    </section><!-- End Blog Details Section -->
+{% endif %}
  <section id="contact" class="contact">
        <div class="container" data-aos="fade-up" data-aos-delay="100">
 
@@ -218,7 +208,6 @@ if(distance<0)
      </div>
 
        </section><!-- End Contact Section --> 
- 
  
 
  <!-- Contact Top Content Section Begin -->

@@ -20,6 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 class EventType extends AbstractType
@@ -38,22 +39,20 @@ class EventType extends AbstractType
             'widget' => 'single_text',
             'attr' => [
                 'class' => 'form-control',
+                'min' => (new \DateTime())->format('Y-m-d')
   
-            ],
-            'data' => new \DateTime(),
+            ]
         ])
         ->add('endDate', BirthdayType::class, [
             'label' => 'End date',
             'widget' => 'single_text',
             'attr' => [
                 'class' => 'form-control',
-                
+                'min' => (new \DateTime())->format('Y-m-d')
 
             ],
-
-            'data' => new \DateTime(),
         ])
-        ->add('nbParticipants', NumberType::class, [
+        ->add('nbParticipants', IntegerType::class, [
             'label' => 'nbParticipants',
             'attr' => [
                 'min' => 0,
@@ -66,7 +65,7 @@ class EventType extends AbstractType
             ->add('detail', TextType::class, [
 
             ])
-            ->add('startTime', NumberType::class, [
+            ->add('startTime', IntegerType::class, [
                 'label' => 'Start time',
                 'attr' => [
                     'class' => 'form-control',
