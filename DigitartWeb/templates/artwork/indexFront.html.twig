@@ -1,5 +1,8 @@
 {% extends 'base.html.twig' %}
+
+
 {% block body %}
+
 <!-- ======= Breadcrumbs ======= -->
     <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/photo-1554907984-15263bfd63bd.jpg')}});">
       <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
@@ -23,10 +26,27 @@
             <div class="post-item position-relative h-100">
 
               <div class="post-img position-relative overflow-hidden">
-              {% if artwork.ImageArt is not null %}
-                <img  src="{{ asset(artwork.ImageArt) }}"  class="img-fluid" style="width: 400px; height: 300px;" alt="">
+                {% if imageArtwork[ artwork.idArt ] is not null %}
+                  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                      {% for image in imageArtwork[ artwork.idArt ] %}
+                        <div class="carousel-item {% if loop.first %}active{% endif %}">
+                          <img src="{{ asset('/uploads/'~image.ImageName) }}" class="d-block w-100" style="width: 400px; height: 300px;" alt="">
+                        </div>
+                      {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </a>
+                  </div>
                 {% else %}
-                <img  src="http://localhost/images/noimage.jpg"  class="img-fluid" style="width: 400px; height: 300px;" alt="">
+                      <img  src="{{ asset('/uploads/noimage.jpg') }}"  class="d-block w-100" style="width: 400px; height: 300px;" alt="">
+
                 {% endif %}
                 <span class="post-date">{{ artwork.dateArt ? artwork.dateArt|date('d/m/Y') : '' }}</span>
               </div>

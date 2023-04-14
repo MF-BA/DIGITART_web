@@ -23,7 +23,10 @@
                                             <th>DateArt</th>
                                             <th>Description</th>
                                             <th>nameRoom</th>
+                                            <th>createdAt</th>
+                                            <th>updatedAt</th>
                                             <th>Actions</th>
+                                            
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -36,10 +39,14 @@
                                             <td>{{ artwork.dateArt ? artwork.dateArt|date('Y-m-d') : '' }}</td>
                                             <td>{{ artwork.description }}</td>
                                             <td>{{ roomNames[ artwork.idArt ] }} </td>
+                                            <td>{{ artwork.createdAt ? artwork.createdAt|date('Y-m-d H:i:s') : ''}}</td>
+                                            <td>{{ artwork.updatedAt ? artwork.updatedAt|date('Y-m-d H:i:s') : ''}}</td>
+           
+
                                             <td>
                                                  
-                                                    <a href="{{ path('app_artwork_show', {'idArt': artwork.idArt}) }}" class="btn btn-primary"><i class="fa fa-eye"></i>&nbsp;  Show</a>
-                                                    <a href="{{ path('app_artwork_edit', {'idArt': artwork.idArt}) }}" class="btn btn-warning"><i class="fa fa-pencil"></i>&nbsp; Edit</a>
+                                                    <a href="{{ path('app_artwork_show', {'idArt': artwork.idArt}) }}" class="btn btn-primary"><i class="fa fa-eye"></i>&nbsp;</a>
+                                                    <a href="{{ path('app_artwork_edit', {'idArt': artwork.idArt}) }}" class="btn btn-warning"><i class="fa fa-pencil"></i>&nbsp;</a>
                                                     <a {{ include('artwork/_delete_form.html.twig') }}</a>
                                                
                                             </td>

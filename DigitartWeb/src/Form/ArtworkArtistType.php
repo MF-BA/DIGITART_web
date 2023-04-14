@@ -27,16 +27,19 @@ class ArtworkArtistType extends AbstractType
                 
             ])
             ->add('description')
-            ->add('imageArt', FileType::class, [
-                'label' => 'Image file',
-                'required' => false, // set to false so the user can submit the form without an image
-
-            ])
+          
            
             ->add('idRoom', EntityType::class, [
                 'class' => Room::class,
                 'choice_label' => 'nameRoom',
                  'data_class' => null,
+            ])
+
+            ->add('images', FileType::class, [
+                'label' => false,
+                'multiple' => true,
+                'mapped' => false,
+                'required' => false
             ])
         ;
     }

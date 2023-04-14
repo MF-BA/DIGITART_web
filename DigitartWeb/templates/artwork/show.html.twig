@@ -3,6 +3,7 @@
 
 
 {% block body %}
+
     <h1>Artwork</h1>
 
     <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
@@ -29,10 +30,20 @@
             </tr>
             <tr>
                 <th>ImageArt</th>
-                {% if artwork.ImageArt is not null %}
-                <td><img style="width: 700px; height: 500px;" src="{{ asset(artwork.ImageArt) }}" ></td>
+                
+                {% if imageArtwork[ artwork.idArt ] is not null %}
+                  
+                    <td>
+                      {% for image in imageArtwork[ artwork.idArt ] %}
+                        
+                          <img src="{{ asset('/uploads/'~image.ImageName) }}"  style="width: 100px; height: 100px;" alt="">
+                        
+                      {% endfor %}
+                    
+                    </td>
+
                 {% else %}
-                <td><img style="width: 700px; height: 500px;" src="http://localhost/images/noimage.jpg" ></td>
+                <td><img  src="http://localhost/images/noimage.jpg" style="width: 100px; height: 100px;" ></td>
                 {% endif %}
                
             </tr>

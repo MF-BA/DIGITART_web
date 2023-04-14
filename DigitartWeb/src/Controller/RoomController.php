@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Room;
 use App\Form\RoomType;
+use App\Repository\ArtworkRepository;
 use App\Repository\RoomRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,10 +68,16 @@ class RoomController extends AbstractController
     }
 
     #[Route('/{idRoom}', name: 'app_room_delete', methods: ['POST'])]
-    public function delete(Request $request, Room $room, RoomRepository $roomRepository): Response
+    public function delete(Request $request, Room $room, RoomRepository $roomRepository,ArtworkRepository $artworkRepository): Response
     {
+
+       
         if ($this->isCsrfTokenValid('delete'.$room->getIdRoom(), $request->request->get('_token'))) {
-            $roomRepository->remove($room, true);
+
+            if (($artworkRepository->searchartworkwithroom($room->getIdRoom()))==true)
+            {$room->setState('Unavailable');
+                $roomRepository->save($room, true);}
+                else{ $roomRepository->remove($room, true);}
         }
 
         return $this->redirectToRoute('app_room_index', [], Response::HTTP_SEE_OTHER);

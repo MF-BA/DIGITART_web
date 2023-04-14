@@ -17,7 +17,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\LessThanOrEqual;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ArtworkType extends AbstractType
 {
@@ -63,12 +65,14 @@ class ArtworkType extends AbstractType
                 
             ])
             ->add('description')
-            ->add('imageArt', FileType::class, [
-                'label' => 'Image file',
-                'required' => false, // set to false so the user can submit the form without an image
-                'data_class'=>null,
 
+            ->add('images', FileType::class, [
+                'label' => false,
+                'multiple' => true,
+                'mapped' => false,
+                'required' => false
             ])
+            
             #->addViewTransformer(new StringToFileTransformer())
             ->add('idRoom', EntityType::class, [
                 'class' => Room::class,

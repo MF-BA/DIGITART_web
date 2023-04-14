@@ -1,46 +1,108 @@
 <!-- ======= Contact Section ======= -->
-    <section id="contact" class="contact">
-      <div {##}style="background-image: url({{asset('Front/assets/img/footer.jpg')}});"class="container" data-aos="fade-up" data-aos-delay="100">
-
-       
-
+<section id="constructions" class="constructions">
+      <div class="container" data-aos="fade-up">
+    
+        <div class="section-header">
+          <h2>Welcome Artist</h2>
+          <p>here you can add a new artwork</p>
+        </div>
         
-          
-          
-          {{ form_start(form, {'attr': {'class': 'form', 'enctype': 'multipart/form-data'}}) }}
-            
-               <div class="text-center" class="col col-md-3"><label class=" form-control-label">Artwork Name:</label></div>
-                <div class="text-center" class="col-lg-6 form-group">
-                  {{ form_widget(form.artworkName) }}
-                </div>
-                <div class="text-center" class="col col-md-3"><label class=" form-control-label">Artwork Date :</label></div>
-                <div class="text-center"class="col-lg-6 form-group">
-                  {{ form_widget(form.dateArt) }}
-                </div>
-              <div class="text-center" class="col col-md-3"><label class=" form-control-label">Artwork description:</label></div>
-              <div class="text-center" class="form-group">
-                <textarea {{ form_widget(form.description) }}</textarea>
-              </div>
-              <div class="text-center" class="col col-md-3"><label class=" form-control-label">Artwork Image:</label></div>
-              <div class="text-center" class="col-lg-6 form-group">
-                  {{ form_widget(form.imageArt) }}
-                 
-                </div>
-                <div class="text-center" class="col col-md-3"><label class=" form-control-label">room Name:</label></div>
-                <div class="text-center" class="col-lg-6 form-group">
-                  {{ form_widget(form.idRoom) }}
-                </div>
-             
+        <div class="container emp-profile">
+              {{ form_start(form, {'attr': {'class': 'form', 'enctype': 'multipart/form-data', 'novalidate':'novalidate'}}) }}
+              
+      
+     
 
-              <div  <button class="btn btn-success"><i class="fa fa-save (alias)"></i>&nbsp;{{ button_label|default('Add artwork') }}</button></div>
-            
-             {{ form_end(form) }} 
+ {# Date #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+        <div class="color-text-table">Artwork name</div>
           
-
-        
-
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.artworkName) }}
+         
+        </div>
+         {% if form_errors(form.artworkName) %}
+                    <div class="alert alert-danger">{{ form_errors(form.artworkName) }}</div>
+                {% endif %}
       </div>
-    </section><!-- End Contact Section -->
+
+
+        {# Date #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+        <div class="color-text-table">Date</div>
+          
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.dateArt) }}
+         
+        </div>
+         {% if form_errors(form.dateArt) %}
+                    <div class="alert alert-danger">{{ form_errors(form.dateArt) }}</div>
+                {% endif %}
+      </div>
+        
+
+      {# Description #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+        <div class="color-text-table">Description</div>
+          
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.description) }}
+         
+        </div>
+         {% if form_errors(form.description) %}
+                    <div class="alert alert-danger">{{ form_errors(form.description) }}</div>
+                {% endif %}
+      </div>
+     
+{# Images #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+        <div class="color-text-table">Images</div>
+        </div>
+        <div class="col-12 col-md-9">
+           {{ form_widget(form.images) }}
+          
+        </div>
+      </div>
+
+ {# Description #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+        <div class="color-text-table">name Room</div>
+          
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.idRoom) }}
+         
+        </div>
+         {% if form_errors(form.idRoom) %}
+                    <div class="alert alert-danger">{{ form_errors(form.idRoom) }}</div>
+                {% endif %}
+      </div>
+      
+                <div>  <button  class="btn btn-success"><i class="fa fa-save (alias)"></i>&nbsp;{{ button_label|default('Add artwork') }}</button></div>
+
+      {{ form_end(form) }}
+  </div>
+
+
+                            
+                                     
+               
+            
+      </div>
+      
+    </section><!-- End Constructions Section -->
+
+
+
+
 
 
 

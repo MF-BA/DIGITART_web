@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Room
@@ -25,13 +27,21 @@ class Room
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(message="Please enter a name for the room")
+     * @Assert\Length(
+     *     min = 3,
+     *     max = 255,
+     *     minMessage = "The name of the room must be at least {{ limit }} characters long",
+     *     maxMessage = "The name of the room cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(name="name_room", type="string", length=255, nullable=false)
      */
     private $nameRoom;
 
     /**
      * @var int
+     * @Assert\NotBlank(message="Please enter an area for the room")
+     * @Assert\Positive(message="The area of the room must be a positive number")
      *
      * @ORM\Column(name="area", type="integer", nullable=false)
      */
@@ -39,17 +49,36 @@ class Room
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="state", type="string", length=255, nullable=false)
      */
     private $state;
 
     /**
      * @var string|null
-     *
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 7,
+     *      max = 65535,
+     *      minMessage = "Artwork description must have at least {{ limit }} characters",
+     *      maxMessage = "Artwork description cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     private $description;
+
+    /**
+
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $createdAt;
+    
+     /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updatedAt;
 
     public function getIdRoom(): ?int
     {
@@ -103,6 +132,16 @@ class Room
 
         return $this;
     }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+{
+    return $this->createdAt;
+}
+
+public function getUpdatedAt(): ?\DateTimeInterface
+{
+    return $this->updatedAt;
+}
 
 
 }
