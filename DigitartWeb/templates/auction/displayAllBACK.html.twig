@@ -125,82 +125,87 @@ success: function (data) { // Handle the response from the server
 											<td>{{ highestBids[auction.idAuction] is not null ? highestBids[auction.idAuction] : 'none' }}</td>
 											<td>
 												<a href="{{ path('app_bid_index', {'id_auction': auction.idAuction}) }}">
-													<strong>More Information</a>
-													{% if highestBids[auction.idAuction] == 'No Bids yet' %}
-														{% if auction.DELETED is null %}
-															{% if auction.endingDate|date('Y-m-d') >=  'now'|date('Y-m-d') %}
 
-																<br>
-																<a href="{{ path('app_auction_edit', {'id_auction': auction.idAuction}) }}">
-																	<strong>EDIT</a>
-																	<a href="{{ path('app_auction_deleteBACK', {'id_auction': auction.idAuction}) }}" onclick="event.preventDefault(); document.getElementById('delete-form-{{ auction.idAuction }}').submit();">
-																		&nbsp;&nbsp;&nbsp;&nbsp; DELETE
-																	</a>
-																	<form id="delete-form-{{ auction.idAuction }}" action="{{ path('app_auction_deleteBACK', {'id_auction': auction.idAuction}) }}" method="POST" style="display: none;">
-																		<input type="hidden" name="_method" value="DELETE">
-																		<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ auction.idAuction) }}">
-																	</form>
-																{% endif %}
-															{% endif %}
+													<i class="fa fa-eye"></i>
+												</a>
+												{% if highestBids[auction.idAuction] == 'No Bids yet' %}
+													{% if auction.DELETED is null %}
+														{% if auction.endingDate|date('Y-m-d') >=  'now'|date('Y-m-d') %}
+
+
+															<a href="{{ path('app_auction_edit', {'id_auction': auction.idAuction}) }}">
+																&nbsp;&nbsp;&nbsp;&nbsp;
+																	<i class="fa fa-edit"></i>
+																
+															</a>
+															<a href="{{ path('app_auction_deleteBACK', {'id_auction': auction.idAuction}) }}" onclick="event.preventDefault(); document.getElementById('delete-form-{{ auction.idAuction }}').submit();">
+																&nbsp;&nbsp;&nbsp;&nbsp;
+																
+																	<i class="fa fa-trash-o"></i>
+																
+															</a>
+															<form id="delete-form-{{ auction.idAuction }}" action="{{ path('app_auction_deleteBACK', {'id_auction': auction.idAuction}) }}" method="POST" style="display: none;">
+																<input type="hidden" name="_method" value="DELETE">
+																<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ auction.idAuction) }}">
+															</form>
 														{% endif %}
-													</td>
-												</td>
+													{% endif %}
+												{% endif %}
 											</td>
 										</tr>
-									{% else %}
-										<tr>
-											<td colspan="7">no records found</td>
-										</tr>
-									{% endfor %}
+									</td>
 								</tbody>
-							</table>
-							<div class="row">
-								<div class="col-sm-12 col-md-5">
-									<div class="dataTables_info">Showing
-										{{page}}
-										to
-										{{pages}}
-										of
-										{{AuctionsLengh}}
-										entries</div>
-								</div>
-								<div class="col-sm-12 col-md-7">
-									<div class="dataTables_paginate paging_simple_numbers">
-										<ul class="pagination">
-											<li class="paginate_button page-item next" id="bootstrap-data-table-export_next">
-												{% if page == 1 %}
-													<a href="#" aria-controls="bootstrap-data-table-export" class="page-link">Previous</a>
-												{% else %}
-													<a href="{{ path('DisplayAuctionBack', {'page': page - 1 ,'sort': sort , 'order' : order }) }}" aria-controls="bootstrap-data-table-export"  class="page-link">Previous</a>
-												{% endif %}
-											</li>
-											{% for p in range(1, pages) %}
-												{% if p == page %}
-													<li class="active" class="paginate_button page-item previous" id="bootstrap-data-table-export_previous">
-														<a href="#" aria-controls="bootstrap-data-table-export" class="page-link">{{p}}</a>
-													</li>
-												{% else %}
-													<li class="paginate_button page-item previous" id="bootstrap-data-table-export_previous">
-														<a href="{{ path('DisplayAuctionBack', {'page': p ,'sort': sort , 'order' : order}) }}" aria-controls="bootstrap-data-table-export" class="page-link">{{p}}</a>
-													</li>
-												{% endif %}
-											{% endfor %}
-											<li class="paginate_button page-item next" id="bootstrap-data-table-export_next">
-												{% if page == pages %}
-													<a href="#" aria-controls="bootstrap-data-table-export" class="page-link">Next</a>
-												{% else %}
-													<a href="{{ path('DisplayAuctionBack', {'page': page + 1 ,'sort': sort , 'order' : order }) }}" aria-controls="bootstrap-data-table-export" class="page-link">Next</a>
-												{% endif %}
-											</li>
-										</li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</div>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="7">no Bids found</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<div class="row">
+				<div class="col-sm-12 col-md-5">
+					<div class="dataTables_info">Showing
+						{{page}}
+						to
+						{{pages}}
+						of
+						{{AuctionsLengh}}
+						entries</div>
+				</div>
+				<div class="col-sm-12 col-md-7">
+					<div class="dataTables_paginate paging_simple_numbers">
+						<ul class="pagination">
+							<li class="paginate_button page-item next" id="bootstrap-data-table-export_next">
+								{% if page == 1 %}
+									<a href="#" aria-controls="bootstrap-data-table-export" class="page-link">Previous</a>
+								{% else %}
+									<a href="{{ path('DisplayAuctionBack', {'page': page - 1 ,'sort': sort , 'order' : order }) }}" aria-controls="bootstrap-data-table-export" class="page-link">Previous</a>
+								{% endif %}
+							</li>
+							{% for p in range(1, pages) %}
+								{% if p == page %}
+									<li class="active" class="paginate_button page-item previous" id="bootstrap-data-table-export_previous">
+										<a href="#" aria-controls="bootstrap-data-table-export" class="page-link">{{p}}</a>
+									</li>
+								{% else %}
+									<li class="paginate_button page-item previous" id="bootstrap-data-table-export_previous">
+										<a href="{{ path('DisplayAuctionBack', {'page': p ,'sort': sort , 'order' : order}) }}" aria-controls="bootstrap-data-table-export" class="page-link">{{p}}</a>
+									</li>
+								{% endif %}
+							{% endfor %}
+							<li class="paginate_button page-item next" id="bootstrap-data-table-export_next">
+								{% if page == pages %}
+									<a href="#" aria-controls="bootstrap-data-table-export" class="page-link">Next</a>
+								{% else %}
+									<a href="{{ path('DisplayAuctionBack', {'page': page + 1 ,'sort': sort , 'order' : order }) }}" aria-controls="bootstrap-data-table-export" class="page-link">Next</a>
+								{% endif %}
+							</li>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>
-
 	</div>
-</div>{% endblock %}
+</div></div></div></div></div>{% endblock %}

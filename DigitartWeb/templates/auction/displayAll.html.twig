@@ -9,16 +9,15 @@
 {% endblock %}
 
 
-
 {% block body %}
 
 
-{% set articlesPerPage = 2 %}
-{% set page = pageParam|default(1) %}
-{% set offset = (page - 1) * articlesPerPage %}
-        {% set pages = (auctions|length / articlesPerPage)|round(0, 'ceil') %}
+	{% set articlesPerPage = 2 %}
+	{% set page = pageParam|default(1) %}
+	{% set offset = (page - 1) * articlesPerPage %}
+	{% set pages = (auctions|length / articlesPerPage)|round(0, 'ceil') %}
 
-{% set auctions = auctions|slice(offset, articlesPerPage) %}
+	{% set auctions = auctions|slice(offset, articlesPerPage) %}
 	<!-- ======= Breadcrumbs ======= -->
 	<div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/breadcrumbs-bg.jpg')}});">
 		<div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
@@ -88,20 +87,36 @@
 			</div>
 
 			<div class="blog-pagination">
-    <ul class="justify-content-center">
-        {% for p in range(1, pages) %}
-            {% if p == page %}
-            <li class="active">
-                <a href="#">{{p}}</a>
-            </li>
-            {% else %}
-            <li>
-                <a href="{{ path('displayAUCTION', {'page': p}) }}">{{p}}</a>
-            </li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-</div>
+				<ul class="justify-content-center">
+					<li>
+					{% if page == 1 %}
+						<a href="#" class="justify-content-center">Previous</a>
+					{% else %}
+						<a href="{{ path('displayAUCTION', {'page': page - 1 }) }}" >Previous</a>	
+					{% endif %}
+							</li>
+
+					{% for p in range(1, pages) %}
+						{% if p == page %}
+							<li class="active">
+								<a href="#">{{p}}</a>
+							</li>
+						{% else %}
+							<li>
+								<a href="{{ path('displayAUCTION', {'page': p}) }}">{{p}}</a>
+							</li>
+						{% endif %}
+					{% endfor %}
+					<li>
+					{% if page == 1 %}
+						<a href="#" class="justify-content-center">Next</a>
+					{% else %}
+						<a href="{{ path('displayAUCTION', {'page': page - 1}) }}" >Next</a>
+					{% endif %}
+							</li>
+
+				</ul>
+			</div>
 
 		</div>
 	</section>

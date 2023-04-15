@@ -7,7 +7,6 @@
 			{{auction.artwork.idArtist.lastname|upper}}
 			{{auction.artwork.idArtist.firstname|upper}}
 		</title>
-
 		<link rel="apple-touch-icon" href="apple-icon.png">
 		<link rel="shortcut icon" href="favicon.ico">
 		<link rel="stylesheet" href="{{absolute_url(asset('Back/vendors/bootstrap/dist/css/bootstrap.min.css'))}}">
@@ -17,16 +16,18 @@
 		<link rel="stylesheet" href="{{absolute_url(asset('Back/vendors/selectFX/css/cs-skin-elastic.css'))}}">
 		<link rel="stylesheet" href="{{absolute_url(asset('Back/vendors/jqvmap/dist/jqvmap.min.css'))}}">
 		<link rel="stylesheet" href="{{absolute_url(asset('Back/assets/css/style.css'))}}">
-
 		<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 	</head>
 	<body>
 		<div class="content mt-3">
+			<p style="text-align:center;">
+				<img src="{{absolute_url(asset('Back/images/logo_digitart_home.png'))}}" alt="Logo" style="width: 400px;">
+			</p>
 			<div class="animated fadeIn">
 				<div class="row">
-
 					<div class="col-md-12">
-						<div class="card">
+						<div class="card" style="width: 800px;">
+
 							<div class="card-header">
 								<a class="card-title">
 									<H4>More Information About
@@ -119,13 +120,13 @@
 										{% endfor %}
 									</tbody>
 								</table>
-								
+
 
 							</div>
 
 
 						</div>
-						
+
 
 					</div>
 				</div>
