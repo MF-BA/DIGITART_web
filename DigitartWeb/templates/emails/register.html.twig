@@ -1,0 +1,5 @@
+<h1>Activate your account</h1>
+<p>Greetings {{ user.firstname }},</p>
+<p>your inscription in DigitArt can be validated by clicking on the link below :</p>
+<p><a href="{{ absolute_url(path('verify_user', {token: token})) }}">{{ absolute_url(path('verify_user', {token: token})) }}</a></p>
+<p>this link will expire in 7 days.</p>

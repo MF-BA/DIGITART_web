@@ -100,7 +100,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @ORM\Column(name="status", type="string", length=255, nullable=false, options={"default"="unblocked"})
      */
-    private $status = 'unblocked';
+    private $status;
 
     /**
      * @var string|null
@@ -138,6 +138,28 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $updatedAt;
 
+     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $is_verified = false;
+
+    public function __construct()
+    {
+        $this->userImages = new ArrayCollection();
+        $this->status = 'unblocked';
+    }
+
+    public function getIsVerified(): ?bool
+    {
+        return $this->is_verified;
+    }
+
+    public function setIsVerified(bool $is_verified): self
+    {
+        $this->is_verified = $is_verified;
+
+        return $this;
+    }
 
 	public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -150,12 +172,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->updatedAt;
     }
 
-    
-
-    public function __construct()
-    {
-        $this->userImages = new ArrayCollection();
-    }
 
     /**
      * @return Collection|Images[]
@@ -279,12 +295,13 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @see PasswordAuthenticatedUserInterface
+     * @see UserInterface
      */
     public function getPassword(): string
     {
-        return $this->password;
+        return (string) $this->password;
     }
+
 
     public function setPassword(string $password): self
     {

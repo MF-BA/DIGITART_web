@@ -47,6 +47,10 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
         }
 
         $user= $token->getUser();
+        if ($user->getIsVerified() == false or $user->getStatus() == 'blocked')
+        {
+         return new RedirectResponse($this->urlGenerator->generate('app_login'));  
+        }
         if($user->getRole() == 'Admin')
         {
         return new RedirectResponse($this->urlGenerator->generate('showbackpage'));

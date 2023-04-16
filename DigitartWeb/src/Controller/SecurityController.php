@@ -24,14 +24,14 @@ class SecurityController extends AbstractController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         $user = $this->getDoctrine()->getRepository(Users::class)->findOneByEmail($lastUsername);
-       
+        
+        if ($user && $user->getIsVerified() == false) {
+            $this->addFlash('danger', 'Your account is not activated');
+        }
         // check if the user is blocked
-        if ($user && $user->getStatus() === 'blocked') {
-            return $this->render('security/login.html.twig', [
-                'last_username' => $lastUsername,
-                'error' => 'Your account is blocked.',
-                
-            ]);
+        if ($user && $user->getStatus() == 'blocked') {
+            $this->addFlash('danger', 'Your account is blocked');
+            
         }
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
