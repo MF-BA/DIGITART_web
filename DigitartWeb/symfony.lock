@@ -51,6 +51,8 @@
         "files": [
             "./config/packages/knp_snappy.yaml"
         ]
+    "knplabs/knp-paginator-bundle": {
+        "version": "v5.9.0"
     },
     "phpunit/phpunit": {
         "version": "9.5",

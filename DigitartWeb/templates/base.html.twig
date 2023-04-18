@@ -262,6 +262,12 @@ button {
 						 <li><a href="{{path('showfrontartwork')}}" {% block artworkactive %}
 									
 								{% endblock %}>Artworks</a></li>
+                 <li class="dropdown active"><a href="{{ path('app_payment_new') }}"><span>Ticket</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+                <ul>
+                  <li><a href="{{ path('app_payment_card') }}">Ticket Added to the card</a></li>
+                  <li><a href="{{ path('app_payment_CurrentcardHistory') }}">Ticket History</a></li>
+                </ul>
+            </li>
 						<li class="dropdown">
 							<a href="#">
 								<span>Dropdown</span>

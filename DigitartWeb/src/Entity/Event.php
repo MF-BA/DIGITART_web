@@ -14,7 +14,6 @@ use Doctrine\Common\Collections\Collection;
  *
  * @ORM\Table(name="event", indexes={@ORM\Index(name="id_room", columns={"id_room"})})
  * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
  */
 class Event
 {
@@ -92,7 +91,7 @@ class Event
     private $image;
 
     /**
-     * @var Room
+     * @var \Room
      *
      * @ORM\ManyToOne(targetEntity="Room")
      * @ORM\JoinColumns({

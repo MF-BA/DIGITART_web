@@ -12,7 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="room")
  * @ORM\Entity
-  * @ORM\Entity(repositoryClass="App\Repository\RoomRepository")
  */
 class Room
 {

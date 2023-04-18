@@ -14,7 +14,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="artwork", indexes={@ORM\Index(name="fk_art", columns={"id_room"})})
  * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\ArtworkRepository")
  */
 class Artwork
 {
@@ -83,11 +82,11 @@ class Artwork
     private $images;
 
     /**
-     * @var Room
+     * @var \Room
      *
      * @ORM\ManyToOne(targetEntity="Room")
      * @ORM\JoinColumns({
-     * @ORM\JoinColumn(name="id_room", referencedColumnName="id_room")
+     *   @ORM\JoinColumn(name="id_room", referencedColumnName="id_room")
      * })
      */
     private $idRoom;

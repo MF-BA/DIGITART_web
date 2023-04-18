@@ -39,20 +39,45 @@ class TicketRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Ticket[] Returns an array of Ticket objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('t.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function getTicketPrice(string $ticketType, \DateTimeInterface $selectedDate): int
+    {
+        $qb = $this->createQueryBuilder('t');
+        $qb->select('t.price')
+            ->where('t.ticketType = :ticketType')
+            ->andWhere(':selectedDate BETWEEN t.ticketDate AND t.ticketEdate')
+            ->setParameter('ticketType', $ticketType)
+            ->setParameter('selectedDate', $selectedDate->format('Y-m-d'));
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        if ($result === null) {
+            return 0;
+        }
+
+        return (int) $result['price'];
+    }
+
+    public function getEnabledDates(): array
+    {
+        $enabledDates = [];
+        $tickets = $this->createQueryBuilder('t')
+            ->getQuery()
+            ->getResult();
+
+        foreach ($tickets as $ticket) {
+            $ticketDate = $ticket->getTicketDate();
+            $ticketEdate = $ticket->getTicketEdate();
+            // Add all dates between ticket_date and ticket_edate to the enabledDates list
+            for ($date = $ticketDate; $date <= $ticketEdate; $date->modify('+1 day')) {
+                $enabledDates[] = $date->format('Y-m-d');
+            }
+        }
+
+        return $enabledDates;
+    }
+
+    
+
 
 //    public function findOneBySomeField($value): ?Ticket
 //    {

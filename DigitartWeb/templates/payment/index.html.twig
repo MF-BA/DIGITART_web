@@ -1,0 +1,398 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Payment{% endblock %}
+
+
+{% block body %}
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/front-home/museum4.jpg')}});">
+      <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
+
+        <h2>Buy Ticket</h2>
+        <ol>
+          <li><a href="">Home</a></li>
+          
+        </ol>
+
+      </div>
+    </div><!-- End Breadcrumbs -->
+
+    <!-- ======= Services Section ======= -->
+<section id="services" class="services section-bg">
+  <div class="container" data-aos="fade-up">
+      <div class="row gy-4" data-aos="fade-up" data-aos-delay="200">
+      <div class="section-header" data-aos="fade-up" data-aos-delay="200">
+        <h2>Enjoy your journey with DigitArt ! </h2>
+        <p>Here you can reserve you're ticket </p>
+      </div>
+{% for message in app.flashes('error') %}
+    <div class="sufee-alert alert with-close alert-danger alert-dismissible fade show" style="text-align: center;" id="flash-message">
+        <div>{{ message }} </div>
+        <div><button type="button" class="btn btn-outline-danger btn-sm" onclick="window.location.href='{{ path('app_payment_card') }}'">
+            <i class="fa fa-shopping-cart"></i>&nbsp;Check Card
+        </button></div>
+    </div>
+{% endfor %}
+
+      <div class="mainscreen" data-aos="fade-up" data-aos-delay="200">
+      <div class="cardF" data-aos="fade-up" data-aos-delay="200">
+       <div class="leftside" data-aos="fade-up" data-aos-delay="200">
+            <img
+            src="https://images.unsplash.com/photo-1554907984-15263bfd63bd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YXJ0JTIwbXVzZXVtfGVufDB8fDB8fA%3D%3D&w=1000&q=80"
+            class="product"
+            alt="Shoes"
+            />
+       </div>
+       <div class="rightside" data-aos="fade-up" data-aos-delay="200">
+            <form action="{{ path('app_payment_new') }}" method="POST">
+            <h2>Select a date :</h2>  
+            {{ form_row(form.purchaseDate, {'attr': {'class': 'form-control','type': 'datetime-local','data-flatpickr': {dateFormat: "Y-m-d"}|json_encode}}) }}
+            <div id="form-fields" style="display:none;">
+            <p>Adult Ticket Number</p>
+            <div class="expcvv">
+             {{ form_label(form.nbAdult) }}
+             {{ form_widget(form.nbAdult, {'attr': {'class': 'inputbox adult-spinner',  'id': 'exp_date', 'required': 'required'}}) }}   
+            <p class="expcvv_text2">  </p>
+            <span name="cvv" id="cvv", class="inputbox adult-price">$0</span>
+            </div>
+
+            <p>Teenager Ticket Number</p>
+            <div class="expcvv">
+             {{ form_label(form.nbTeenager) }}
+             {{ form_widget(form.nbTeenager, { 'attr': {'class': 'inputbox teen-spinner', 'name': 'card_number', 'id': 'card_number', 'required': 'required'} }) }}
+            <p class="expcvv_text2">  </p>
+            <span name="cvv" id="cvv", class="inputbox teen-price">$0</span>
+            </div>
+
+            <p>Student Ticket Number</p>
+            <div class="expcvv">
+            {{ form_label(form.nbStudent) }}
+             {{ form_widget(form.nbStudent, { 'attr': {'class': 'inputbox student-spinner', 'name': 'card_number', 'id': 'card_number', 'required': 'required'} }) }} 
+            <p class="expcvv_text2">  </p>
+            <span name="cvv" id="cvv", class="inputbox student-price">$0</span>
+            </div>
+            <p></p>
+
+        
+            <div class="expcvv">
+            <p>Total amount : </p>
+            <p class="expcvv_text2"> </p>
+             {{ form_row(form.totalPayment, { 'attr': {'class': 'inputbox total-amount', 'name': 'name', 'type': 'text'} }) }} 
+            </div>
+           
+            <button type="submit" class="button">{{ button_label|default('Add to Card') }}</button>
+            {{ form_end(form) }}
+          </form> 
+        </div>
+      </div>
+      </div>
+       </div>
+  </div>
+  </div>
+</section><!-- End Services Section -->
+
+
+<script>
+    const purchaseDateInput = document.querySelector('#{{ form.purchaseDate.vars.id }}');
+    const formFieldsDiv = document.querySelector('#form-fields');
+
+    purchaseDateInput.addEventListener('change', () => {
+        if (purchaseDateInput.value !== '') {
+            formFieldsDiv.style.display = 'block';
+        
+        adultSpinner.value = 0;
+        teenSpinner.value = 0;
+        studentSpinner.value = 0;
+        adultPrice.textContent = "$0";
+        teenPrice.textContent = "$0";
+        studentPrice.textContent = "$0";
+        totalAmount.value = 0;
+
+        teenSpinner.disabled = false;
+        studentSpinner.disabled = false;
+        adultSpinner.disabled = false;
+        }
+    });
+
+    // Get the spinner and price elements
+    const adultSpinner = document.querySelector('.adult-spinner');
+    const adultPrice = document.querySelector('.adult-price');
+    const teenSpinner = document.querySelector('.teen-spinner');
+    const teenPrice = document.querySelector('.teen-price');
+    const studentSpinner = document.querySelector('.student-spinner');
+    const studentPrice = document.querySelector('.student-price');
+    const totalAmount = document.querySelector('.total-amount');
+
+    // Update prices when spinner values change
+    function updateTotalAmount() {
+        const adultQty = parseInt(adultSpinner.value);
+        const adultPriceVal = parseFloat(adultPrice.textContent.replace('$', ''));
+        const teenQty = parseInt(teenSpinner.value);
+        const teenPriceVal = parseFloat(teenPrice.textContent.replace('$', ''));
+        const studentQty = parseInt(studentSpinner.value);
+        const studentPriceVal = parseFloat(studentPrice.textContent.replace('$', ''));
+        const total = adultPriceVal +teenPriceVal + studentPriceVal;
+        totalAmount.value = total.toFixed(0);
+    }
+
+    // Update prices when spinner values change
+    adultSpinner.addEventListener('change', () => {
+        const qty = parseInt(adultSpinner.value);
+        const selectedDate = document.getElementById("payment_purchaseDate").value;
+        const url = "{{ path('get_ticket_price') }}?ticketType=Adult&selectedDate=" + selectedDate;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+            if (data.price == 0 ) {
+                adultSpinner.disabled = true;
+                adultSpinner.value = 0;
+                adultPrice.textContent = "$0";
+            } else {
+                adultSpinner.disabled = false;
+                adultPrice.textContent = `$${qty * data.price}`;
+            }
+            updateTotalAmount();
+        });
+    });
+
+    teenSpinner.addEventListener('change', () => {
+        const qty = parseInt(teenSpinner.value);
+        const selectedDate = document.getElementById("payment_purchaseDate").value;
+        const url = "{{ path('get_ticket_price') }}?ticketType=Teen&selectedDate=" + selectedDate;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+            if (data.price == 0 ) {
+                teenSpinner.disabled = true;
+                teenSpinner.value = 0;
+                teenPrice.textContent = "$0";
+            } else {
+                teenSpinner.disabled = false;
+                teenPrice.textContent = `$${qty * data.price}`;
+            }
+            updateTotalAmount();
+        });
+    });
+
+    studentSpinner.addEventListener('change', () => {
+        const qty = parseInt(studentSpinner.value);
+        const selectedDate = document.getElementById("payment_purchaseDate").value;
+        const url = "{{ path('get_ticket_price') }}?ticketType=Student&selectedDate=" + selectedDate;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+            if (data.price == 0 ) {
+                studentSpinner.disabled = true;
+                studentSpinner.value = 0;
+                studentPrice.textContent = "$0";
+            } else {
+                studentSpinner.disabled = false;
+                studentPrice.textContent = `$${qty * data.price}`;
+            }
+            updateTotalAmount();
+        });
+    });
+
+// Initialize the flatpickr instance with an empty enable array
+const today = new Date();
+const startDate = new Date();
+startDate.setDate(today.getDate() - 1); // Set start date to yesterday
+
+const endDate = new Date();
+endDate.setDate(today.getDate() + 13); // Set end date to 14 days from today
+
+const enableDates = [{ from: startDate, to: endDate }];
+const config = {
+  inline: true,
+  enable: enableDates
+};   
+ 
+
+
+flatpickr("[data-flatpickr]", config);
+
+
+    setTimeout(function() {
+        var flashMessage = document.getElementById('flash-message');
+        if (flashMessage) {
+            flashMessage.classList.remove('show');
+        }
+    }, 8000);
+</script>
+
+<style>
+body {
+    font-family: 'Roboto', sans-serif!important;
+	margin:0;
+	padding:0;
+	box-sizing: border-box;
+}
+
+.mainscreen
+{
+	min-height: 100vh;
+	width: 100%;
+	display: flex;
+    flex-direction: column;
+    background-color: #DFDBE5;
+    background-image: url("{{asset('Front/assets/img/background.jpg')}}");
+    color:#BD2A2E;
+}
+
+.cardF {
+	width: 60rem;
+    margin: auto;
+    background: white;
+    position:center;
+    align-self: center;
+    top: 50rem;
+    border-radius: 1.5rem;
+    box-shadow: 4px 3px 20px #3535358c;
+    display:flex;
+    flex-direction: row;
+    
+}
+
+.leftside {
+	background: #030303;
+	width: 25rem;
+	display: inline-flex;
+    align-items: center;
+    justify-content: center;
+	border-top-left-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
+}
+
+.product {
+    object-fit: cover;
+	width: 20em;
+    height: 20em;
+    border-radius: 100%;
+}
+
+.rightside {
+    background-color: #ffffff;
+	width: 35rem;
+	border-bottom-right-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+    padding: 1rem 2rem 3rem 3rem;
+}
+
+p{
+    display:block;
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin: .8rem 0;
+}
+
+.inputbox
+{
+    color:#030303;
+	width: 100%;
+    padding: 0.5rem;
+    border: none;
+    border-bottom: 1.5px solid #ccc;
+    margin-bottom: 1rem;
+    border-radius: 0.3rem;
+    font-family: 'Roboto', sans-serif;
+    color: #615a5a;
+    font-size: 1.1rem;
+    font-weight: 500;
+  outline:none;
+}
+
+
+  .expcvv {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 0.6rem;
+  }
+  #card_number {
+    width: 70%; /* set the width of the card_number input to 70% */
+  }
+  #cvv {
+    width: 30%; /* set the width of the cvv input to 30% */
+  }
+
+
+.expcvv_text{
+    padding-right: 1rem;
+}
+.expcvv_text2{
+    padding:0 1rem;
+}
+
+.button{
+    background: linear-gradient(
+135deg
+, #BD2A2E 0%, #000000  100%);
+    padding: 15px;
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-weight: 400;
+    font-size: 1.2rem;
+    margin-top: 10px;
+    width:100%;
+    letter-spacing: .11rem;
+    outline:none;
+}
+
+.button:hover
+{
+	transform: scale(1.05) translateY(-3px);
+    box-shadow: 3px 3px 6px #38373785;
+}
+
+@media only screen and (max-width: 1000px) {
+    .cardF{
+        flex-direction: column;
+        width: auto;
+      
+    }
+
+    .leftside{
+        width: 100%;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 0;
+      border-top-right-radius:0;
+      border-radius:0;
+    }
+
+    .rightside{
+        width:auto;
+        border-bottom-left-radius: 1.5rem;
+        padding:0.5rem 3rem 3rem 2rem;
+      border-radius:0;
+    }
+}
+
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange,
+.flatpickr-day.selected.inRange,
+.flatpickr-day.startRange.inRange,
+.flatpickr-day.endRange.inRange,
+.flatpickr-day.selected:focus,
+.flatpickr-day.startRange:focus,
+.flatpickr-day.endRange:focus,
+.flatpickr-day.selected:hover,
+.flatpickr-day.startRange:hover,
+.flatpickr-day.endRange:hover,
+.flatpickr-day.selected.prevMonthDay,
+.flatpickr-day.startRange.prevMonthDay,
+.flatpickr-day.endRange.prevMonthDay,
+.flatpickr-day.selected.nextMonthDay,
+.flatpickr-day.startRange.nextMonthDay,
+.flatpickr-day.endRange.nextMonthDay {
+    background: #BD2A2E; /* Change this value to your preferred color */
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #fff; /* Change this value to the text color you prefer */
+    border-color: #000000; /* Change this value to the border color you prefer */
+}
+
+</style>
+
+{% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Payment;
+use App\Entity\Ticket;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,6 +40,74 @@ class PaymentRepository extends ServiceEntityRepository
         }
     }
 
+    public function getPaymentsByUserId(int $userId): array
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->where('p.user_id = :userId')
+            ->andWhere('p.paid = :paid')
+            ->andWhere('p.purchaseDate >= :today')
+            ->setParameter('userId', $userId)
+            ->setParameter('paid', true)
+            ->setParameter('today', new \DateTime());
+        
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function getLastUpdatedAtByUserId()
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('MAX(p.updatedAt)');
+
+    
+        $result = $qb->getQuery()->getSingleScalarResult();
+    
+        return $result;
+    }
+
+    
+    public function getTotalAdult()
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('SUM(p.nbAdult) as totalAdult')
+            ->getQuery();
+
+        return $qb->getSingleScalarResult();
+    }
+
+    public function getTotalTeenager()
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('SUM(p.nbTeenager) as totalTeenager')
+            ->getQuery();
+
+        return $qb->getSingleScalarResult();
+    }
+
+    public function getTotalStudent()
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('SUM(p.nbStudent) as totalStudent')
+            ->getQuery();
+
+        return $qb->getSingleScalarResult();
+    }
+
+    public function getTotalPaymentByPurchaseDate(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p.purchaseDate as purchase_date, SUM(p.totalPayment) as total_payment')
+            ->groupBy('p.purchaseDate')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function paginationQuery()
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.paymentId', 'ASC') // Update to use the correct field name
+            ->getQuery();
+    }
+    
 //    /**
 //     * @return Payment[] Returns an array of Payment objects
 //     */
