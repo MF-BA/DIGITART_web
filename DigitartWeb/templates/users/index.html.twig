@@ -102,45 +102,7 @@
      </div>
  </div>
  
-  <script>
-    $(document).ready(function () {
-        $('#search-input').on('keyup', function () {
-            var searchTerm = $(this).val();
-            $.ajax({
-                url: "{{ path('app_users_search') }}",
-                method: 'POST',
-                data: {searchTerm: searchTerm},
-                success: function (data) {
-                    console.log(data); // log response data to console
-                   var users = data.users;
-    var tableBody = $('#users-table tbody');
-    tableBody.empty();
-    if (users.length === 0) {
-        tableBody.append('<tr><td colspan="12">No results found</td></tr>');
-    } else {
-        users.forEach(function (user) {
-            var row = '<tr>' +
-                '<td>' + user.cin + '</td>' +
-                '<td>' + user.firstname + '</td>' +
-                '<td>' + user.lastname + '</td>' +
-                '<td>' + user.email + '</td>' +
-                '<td>' + user.password + '</td>' +
-                '<td>' + user.address + '</td>' +
-                '<td>' + user.phoneNum + '</td>' +
-                '<td>' + user.birthDate ? user.birthDate|date('Y-m-d') : '' + '</td>' +
-                '<td>' + user.gender + '</td>' +
-                '<td>' + user.role + '</td>' +
-                '<td>' + user.status + '</td>' +
-                '</tr>';
-            tableBody.append(row);
-        });
-    }
-                }
-            });
-        });
-    });
-</script>
-                    
+       
 
              
               

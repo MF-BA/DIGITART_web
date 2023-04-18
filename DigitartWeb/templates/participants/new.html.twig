@@ -1,0 +1,11 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}New Participants{% endblock %}
+
+{% block body %}
+    <h1 class="card-header text-center"><strong>Create new Participant</strong></h1>
+
+    {{ include('participants/_form.html.twig') }}
+
+    <a class="btn btn-warning" href="{{ path('app_participants_index') }}"><i class="fa fa-reply"></i> Back to list</a>
+{% endblock %}
