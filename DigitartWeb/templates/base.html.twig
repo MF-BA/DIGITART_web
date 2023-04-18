@@ -259,9 +259,9 @@ button {
 									
 								{% endblock %}>Event</a></li>
           
-						<li>
-							<a href="blog.html">Blog</a>
-						</li>
+						 <li><a href="{{path('showfrontartwork')}}" {% block artworkactive %}
+									
+								{% endblock %}>Artworks</a></li>
 						<li class="dropdown">
 							<a href="#">
 								<span>Dropdown</span>
@@ -320,6 +320,7 @@ button {
 	</div>
 	<div class="options" id="options">
 		<a class="nav-link" href="{{path('app_users_profilefront', {'id': app.user.id}) }}"><div class="option"><i class="fa fa-user"></i> My profile</div></a>
+		<a class="nav-link" href="{{path('app_artwork_newfront')}}"><div class="option"><i class="fa fa-user"></i> Add New Artwork</div></a>
 		<a class="nav-link" href="{{path('app_logout')}}"><div class="option"><i class="fa fa-power-off"></i>  Logout</div></a>
 	</div>
   {% endif %} 

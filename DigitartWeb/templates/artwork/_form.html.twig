@@ -1,0 +1,112 @@
+
+<div class="card">
+    <div class="card-header">
+        {% if app.request.attributes.get('_route') == 'app_artwork_edit' %}
+            <strong>Edit Artwork </strong>
+        {% endif %}
+        {% if app.request.attributes.get('_route') == 'app_artwork_new' %}
+            <strong>Add New Artwork </strong> 
+        {% endif %}
+     </div>
+     <div class="card-body card-block">
+                                                        
+        {{ form_start(form, {'attr': {'class': 'form', 'enctype': 'multipart/form-data', novalidate:'novalidate'}}) }}
+     
+        <div class="row form-group">
+            <div class="col col-md-3"><label for="artworkName-input" class=" form-control-label">artworkName</label></div>
+             <div class="col-12 col-md-9">{{ form_widget(form.artworkName) }} </div>
+                {% if form_errors(form.artworkName) %}
+                    <div class="alert alert-danger">{{ form_errors(form.artworkName) }}</div>
+                {% endif %}
+         </div>
+         <div class="row form-group">
+            <div class="col col-md-3"><label for="ownerType-input" class=" form-control-label">ownerType</label></div>
+             <div class="col-12 col-md-9"> {{ form_row(form.ownerType) }} </div>
+         </div>
+        
+        <div class="row form-group">
+             <div class="col col-md-3"><label for="idArtist-input" </label></div>
+            <div class="col-12 col-md-9">{{ form_widget(form.idArtist) }} </div>
+        </div>
+        <div class="row form-group">
+            <div class="col col-md-3"><label for="artistName-input" class=" form-control-label"></label></div>
+            <div class="col-12 col-md-9">{{ form_widget(form.artistName) }} </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col col-md-3"><label for="dateArt-input" class=" form-control-label">dateArt</label></div>
+            <div class="col-12 col-md-9">{{ form_widget(form.dateArt) }} </div>
+                {% if form_errors(form.dateArt) %}
+                    <div class="alert alert-danger">{{ form_errors(form.dateArt) }}</div>
+                {% endif %}
+        </div>
+        <div class="row form-group">
+            <div class="col col-md-3"><label for="description-input" class=" form-control-label">description</label></div>
+            <div class="col-12 col-md-9">{{ form_widget(form.description) }} </div>
+                {% if form_errors(form.description) %}
+                    <div class="alert alert-danger">{{ form_errors(form.description) }}</div>
+                {% endif %}
+        </div>
+
+ 
+
+        <div class="row form-group">
+            <div class="col col-md-3"><label for="description-input" class=" form-control-label">Images</label></div>
+            <div class="col-12 col-md-9">{{ form_widget(form.images) }} </div>
+                           {% if form_errors(form.images) %}
+                    <div class="alert alert-danger">{{ form_errors(form.images) }}</div>
+                {% endif %}
+        </div>
+
+        {# Vérifier si la route est "artwork_edit" on affiche les images #}
+    {% if app.request.attributes.get('_route') == 'app_artwork_edit' %}
+       
+        {% for image in images %}
+            <div>
+                <img src="{{ asset('/uploads/' ~ image.ImageName) }}" alt="Image" width="150">
+                <a href="{{ path('app_artwork_images_delete', {id: image.id}) }}" >Supprimer</a>
+            </div>
+        {% endfor %}
+    {% endif %}
+                                                            
+        <div class="row form-group">
+            <div class="col col-md-3"><label for="idRoom-input" class=" form-control-label">name room</label></div>
+            <div class="col-12 col-md-9">{{ form_widget(form.idRoom) }} </div>
+        </div>
+        <button class="btn btn-success"><i class="fa fa-save (alias)"></i>&nbsp;{{ button_label|default('Add artwork') }}</button>
+        <a href="{{ path('app_artwork_index') }}" class="btn btn-secondary"><i class="fa fa-mail-reply"></i>&nbsp; back To List</a>
+        
+        <script>
+            const ownerTypeField = document.getElementById('{{ form.ownerType.vars.id }}');
+            const idArtistField = document.getElementById('{{ form.idArtist.vars.id }}');
+            const artistNameField = document.getElementById('{{ form.artistName.vars.id }}');
+
+            ownerTypeField.addEventListener('change', (event) => {
+                if (event.target.value === 'artist') {
+                        idArtistField.style.display = 'block';
+                        artistNameField
+                        .style.display = 'none';
+                    } else if (event.target.value === 'museum') {
+                        idArtistField.style.display = 'none';
+                        artistNameField.style.display = 'block';
+                    }
+            });
+        </script> 
+      
+        {{ form_end(form) }} 
+        
+       
+        
+                                                        
+    </div>
+        <div class="card-footer">                                                  
+        </div>
+</div>
+
+                                                
+
+
+    
+ 
+
+

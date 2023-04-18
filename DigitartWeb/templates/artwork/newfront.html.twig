@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Artwork{% endblock %}
+
+{% block body %}
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/photo-1554907984-15263bfd63bd.jpg')}});">
+      <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
+
+        <h2>New Artwork</h2>
+        <ol>
+          <li><a href="{{ path('showfrontpage') }}">Your Profile</a></li>
+          <li>Add New Artwork</li>
+        </ol>
+
+      </div>
+    </div><!-- End Breadcrumbs -->
+
+    {{ include('artwork/_formfront.html.twig') }}
+
+    
+{% endblock %}

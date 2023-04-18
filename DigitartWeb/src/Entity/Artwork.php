@@ -2,8 +2,12 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Artwork
@@ -25,17 +29,21 @@ class Artwork
 
     /**
      * @var string
+     * @Assert\NotBlank(message=" artworkName doit etre non vide")
+     * @Assert\Length(
+     *      min = 5,
+     *      minMessage=" Enter artworkName with minimum 5 caracters"
      *
+     *     )
      * @ORM\Column(name="artwork_name", type="string", length=255, nullable=false)
      */
     private $artworkName;
 
     /**
-     * @var Users|null
-     *
-        * @ORM\ManyToOne(targetEntity="Users")
+     * @var Users
+      * @ORM\ManyToOne(targetEntity="Users")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_artist", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_artist", referencedColumnName="id")
      * })
      */
     private $idArtist;
@@ -49,24 +57,30 @@ class Artwork
 
     /**
      * @var \DateTime
-     *
+     * @Assert\NotBlank(message="Date of artwork creation cannot be blank")
+     * @Assert\LessThanOrEqual("today", message="Date of artwork creation cannot be in the future")
      * @ORM\Column(name="date_art", type="date", nullable=false)
      */
     private $dateArt;
 
     /**
      * @var string|null
-     *
+
+     * @Assert\NotBlank(message="Artwork description cannot be blank")
+     * @Assert\Length(
+     *      min = 7,
+     *      max = 65535,
+     *      minMessage = "Artwork description must have at least {{ limit }} characters",
+     *      maxMessage = "Artwork description cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     private $description;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="image_art", type="string", length=255, nullable=true)
+     /**
+     * @ORM\OneToMany(targetEntity="ImageArtwork",mappedBy="idArt", orphanRemoval=true, cascade={"persist"})
      */
-    private $imageArt;
+    private $images;
 
     /**
      * @var Room
@@ -79,7 +93,24 @@ class Artwork
     private $idRoom;
 
 
+     /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $createdAt;
     
+     /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updatedAt;
+
+    private $ownerType;
+
+    public function __construct()
+    {
+        $this->images = new ArrayCollection();
+    }
 
     public function getIdArt(): ?int
     {
@@ -146,17 +177,7 @@ class Artwork
         return $this;
     }
 
-    public function getImageArt(): ?string
-    {
-        return $this->imageArt;
-    }
-
-    public function setImageArt(?string $imageArt): self
-    {
-        $this->imageArt = $imageArt;
-
-        return $this;
-    }
+  
 
     public function getIdRoom(): ?Room
     {
@@ -170,5 +191,55 @@ class Artwork
         return $this;
     }
 
+    public function getOwnerType(): ?string
+    {
+        return $this->idArtist ? 'artist' : 'museum';
+    }
 
+    public function setOwnerType(string $ownerType): void
+    {
+        // Do nothing - this property is virtual and cannot be set
+    }
+
+     /**
+     * @return Collection|ImageArtwork[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(ImageArtwork $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setIdArt($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(ImageArtwork $image): self
+    {
+        if ($this->images->contains($image)) {
+            $this->images->removeElement($image);
+            // set the owning side to null (unless already changed)
+            if ($image->getIdArt() === $this) {
+                $image->setIdArt(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+{
+    return $this->createdAt;
+}
+
+public function getUpdatedAt(): ?\DateTimeInterface
+{
+    return $this->updatedAt;
+}
+    
 }

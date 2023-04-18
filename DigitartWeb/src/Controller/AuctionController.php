@@ -260,4 +260,18 @@ class AuctionController extends AbstractController
     {
         return $this->render('users/register.html.twig', []);
     }
+    #[Route('/showfront', name: 'showfrontpage')]
+    public function display_front(): Response
+    {
+        return $this->render('home.html.twig', [
+            
+        ]);
+    }
+    #[Route('/showback', name: 'showbackpage')]
+    public function display_back(): Response
+    {
+        return $this->render('back.html.twig', [
+            
+        ]);
+    }
 }
