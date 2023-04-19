@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230410210945 extends AbstractMigration
+final class Version20230419085118 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -29,7 +29,7 @@ final class Version20230410210945 extends AbstractMigration
         $this->addSql('CREATE TABLE room (id_room INT AUTO_INCREMENT NOT NULL, name_room VARCHAR(255) NOT NULL, area INT NOT NULL, state VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, PRIMARY KEY(id_room)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE ticket (ticket_id INT AUTO_INCREMENT NOT NULL, ticket_date DATE DEFAULT NULL, ticket_edate DATE DEFAULT NULL, price INT NOT NULL, ticket_type VARCHAR(50) NOT NULL, PRIMARY KEY(ticket_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user_images (id INT AUTO_INCREMENT NOT NULL, users_id INT NOT NULL, name VARCHAR(255) NOT NULL, INDEX IDX_854DA55767B3B43D (users_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE users (id INT AUTO_INCREMENT NOT NULL, cin INT DEFAULT NULL, firstname VARCHAR(255) DEFAULT NULL, lastname VARCHAR(255) DEFAULT NULL, email VARCHAR(255) DEFAULT NULL, password VARCHAR(255) DEFAULT NULL, address VARCHAR(255) DEFAULT NULL, phone_num INT DEFAULT NULL, birth_date DATE DEFAULT NULL, gender VARCHAR(255) DEFAULT NULL, role VARCHAR(255) DEFAULT \'Subscriber\', status VARCHAR(255) DEFAULT \'unblocked\' NOT NULL, image VARCHAR(255) DEFAULT NULL, secretcode VARCHAR(255) DEFAULT NULL, roles LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\', PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE users (id INT AUTO_INCREMENT NOT NULL, cin INT DEFAULT NULL, firstname VARCHAR(255) DEFAULT NULL, lastname VARCHAR(255) DEFAULT NULL, email VARCHAR(255) DEFAULT NULL, password VARCHAR(255) DEFAULT NULL, address VARCHAR(255) DEFAULT NULL, phone_num INT DEFAULT NULL, birth_date DATE DEFAULT NULL, gender VARCHAR(255) DEFAULT NULL, role VARCHAR(255) DEFAULT \'Subscriber\', status VARCHAR(255) DEFAULT \'unblocked\' NOT NULL, image VARCHAR(255) DEFAULT NULL, secretcode VARCHAR(255) DEFAULT NULL, roles LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\', created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, is_verified TINYINT(1) NOT NULL, resetToken VARCHAR(100) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE messenger_messages (id BIGINT AUTO_INCREMENT NOT NULL, body LONGTEXT NOT NULL, headers LONGTEXT NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at DATETIME NOT NULL, available_at DATETIME NOT NULL, delivered_at DATETIME DEFAULT NULL, INDEX IDX_75EA56E0FB7336F0 (queue_name), INDEX IDX_75EA56E0E3BD61CE (available_at), INDEX IDX_75EA56E016BA31DB (delivered_at), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE artwork ADD CONSTRAINT FK_881FC576F9BF4D99 FOREIGN KEY (id_room) REFERENCES room (id_room)');
         $this->addSql('ALTER TABLE auction ADD CONSTRAINT FK_DEE4F59356826C06 FOREIGN KEY (id_artwork) REFERENCES artwork (id_art)');

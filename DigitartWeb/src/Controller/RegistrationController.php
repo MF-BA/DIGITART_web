@@ -110,7 +110,7 @@ class RegistrationController extends AbstractController
         return $this->redirectToRoute('app_login');
     }
 
-    #[Route('/renvoiverif', name: 'resend_verif')]
+    #[Route('/resendverif', name: 'resend_verif')]
     public function resendVerif(JWTService $jwt, SendMailService $mail, UsersRepository $usersRepository): Response
     {
         $user = $this->getUser();
@@ -142,13 +142,13 @@ class RegistrationController extends AbstractController
 
         // On envoie un mail
         $mail->send(
-            'no-reply@monsite.net',
+            'digitart.primes@gmail.com',
             $user->getEmail(),
-            'Activation de votre compte sur le site e-commerce',
+            'Activation of your account on Digitart',
             'register',
             compact('user', 'token')
         );
-        $this->addFlash('success', 'Email de vérification envoyé');
-        return $this->redirectToRoute('profile_index');
+        $this->addFlash('success', 'Verification email sent!');
+        return $this->redirectToRoute('app_login');
     }
 }
