@@ -41,146 +41,160 @@ return true;
 {% block body %}
 
 	<!-- ======= Breadcrumbs ======= -->
-	<div class="breadcrumbs d-flex align-items-center" style="background-image: url({{auction.artwork.imageArt}});">
-		<div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
+	{% if imageArtwork is not null %}
+		<div class="breadcrumbs d-flex align-items-center" style="background-image: url({{ asset('/uploads/'~imageArtwork[auction.idAuction][0].ImageName) }});">
+		{% else %}
+			<div class="breadcrumbs d-flex align-items-center" style="background-image: url( {{ asset('/uploads/bc53385fe56f95467c51bbcb40b16412.jpg') }});">
 
-			<h2>{{auction.artwork.artworkName|upper}}</h2>
+			{% endif %}
+			<div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
 
-			<ol>
-				<li>
-					<a href="{{path('showdigit')}}">Home</a>
-				</li>
-				<li>
-					<a href="{{path('displayAUCTION')}}">Auction</a>
-				</li>
-				<li>
-					<b>{{auction.artwork.artworkName|upper}}
-						details</li>
-				</li>
-			</ol>
+				<h2>{{auction.artwork.artworkName|upper}}</h2>
 
-		</div>
-	</div>
-	<!-- End Breadcrumbs -->
+				<ol>
+					<li>
+						<a href="{{path('showdigit')}}">Home</a>
+					</li>
+					<li>
+						<a href="{{path('displayAUCTION')}}">Auction</a>
+					</li>
+					<li>
+						<b>{{auction.artwork.artworkName|upper}}
+							details</li>
+					</li>
+				</ol>
 
-	<section id="blog" class="blog">
-		<div class="container" data-aos="fade-up" data-aos-delay="100">
-
-			<div class="row g-5">
-
-				<div class="col-lg-8">
-
-					<article class="blog-details">
-
-						<div class="post-img">
-							<img src="{{auction.artwork.imageArt}}" alt="" class="img-fluid">
-						</div>
-
-
-						<div class="meta-top">
-							<ul>
-								<li class="d-flex align-items-center">
-									<i class="bi bi-person"></i>
-
-									{{auction.artwork.idArtist.lastname|upper}}
-									{{auction.artwork.idArtist.firstname|upper}}
-
-								</li>
-								<li class="d-flex align-items-center">
-									<i class="bi bi-clock"></i>
-									<a>
-										{% if auction.endingDate %}
-											{% set endingDate = auction.endingDate|date('Y-m-d H:i:s') %}
-											<span id="timer_{{auction.idAuction}}" class="post-date"></span>
-											<script>
-												updateTimer("{{ endingDate }}", "timer_{{ auction.idAuction }}");
-											</script>
-										{% else %}
-											<span class="post-date">Auction has no ending date.</span>
-										{% endif %}
-									</a>
-								</li>
-								<li class="d-flex align-items-center">
-									<i class="bi bi-people"></i>
-									<a>{{countBids}}</a>
-								</li>
-								<li class="d-flex align-items-center">
-									<i class="bi bi-cash"></i>
-									<span class="ps-2">{{ highestBid is not null ? highestBid ~ '$' : 'none' }}</span>
-
-								</li>
-							</ul>
-						</div>
-						<!-- End meta top -->
-
-						<div class="content">
-							<p>
-								<td>{{ auction.description }}</td>
-							</p>
-						</div>
-					</article>
-				</div>
-				<div class="col-lg-4">
-					<!-- start sidebar -->
-					<!-- start sidebar search formn-->
-						<div class="sidebar"> <div class="sidebar-item search-form">
-
-							<div class="meta-top">
-								<a>The starting Price :
-								</a>
-								<br>
-								<br>
-								{% if app.user is not null and  app.user.id == highestBidder %}
-									<a style="color: green;">You are the highest bidder with:
-										</a> 
-										<a>{{ highestBid is not null ? highestBid ~ '$' : 'none' }}</a>
-									
-
-								{% else %}
-									<a>The Highest Offer :
-										{{ highestBid is not null ? highestBid ~ '$' : 'none' }}
-									</a>
-								{% endif %}
-								<br>
-								<br>
-
-								<a>Number of Bids :
-									{{countBids}}
-								</a>
-
-							</div>
-							<br>
-							{% if app.user is not null %}
-								<h2 class="sidebar-title">Make An Offer :
-								</h2>
-
-								{{ form_start(form, {'attr': {'class': 'mt-3', 'onsubmit': 'return validateBid();'}})}}
-
-								{{ form_widget(form.offer, {'attr': {'value': highestBid is not null ? highestBid + auction.increment : auction.startingPrice ,
-							'pattern': '[0-9]*' , 'inputmode' : 'numeric','min': highestBid is not null ? highestBid + auction.increment : auction.startingPrice}
-							}) }}
-								<button type="submit">
-									<i class="bi bi-credit-card">{{ button_label|default('') }}</i>
-								</button>
-								{{ form_end(form)  }}
-							{% else %}
-								<h4>
-									Login to be able to join the auction
-								</h4>
-							{% endif %}
-
-
-						</div>
-						<!-- End sidebar search formn-->
-
-					</div>
-					<!-- End Blog Sidebar -->
-
-				</div>
 			</div>
 		</div>
+		<!-- End Breadcrumbs -->
 
-	</section>
+		<section id="blog" class="blog">
+			<div class="container" data-aos="fade-up" data-aos-delay="100">
+
+				<div class="row g-5">
+
+					<div class="col-lg-8">
+
+						<article class="blog-details">
+
+							<div class="post-img">
+								{% if imageArtwork[ auction.idAuction ] is not null %}
+									<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+										<div class="carousel-inner">
+											{% for image in imageArtwork[ auction.idAuction ] %}
+												<div class="carousel-item {% if loop.first %}active{% endif %}">
+													<img src="{{ asset('/uploads/'~image.ImageName) }}" class="d-block w-100" style="width: 400px; height: 300px;" alt="">
+												</div>
+											{% endfor %}
+										</div>
+									</div>
+								{% else %}
+									<img src="{{ asset('/uploads/noimage.jpg') }}" class="d-block w-100" style="width: 400px; height: 300px;" alt="">
+								{% endif %}
+							</div>
 
 
-{% endblock %}
+							<div class="meta-top">
+								<ul>
+									<li class="d-flex align-items-center">
+										<i class="bi bi-person"></i>
+
+										{{auction.artwork.idArtist.lastname|upper}}
+										{{auction.artwork.idArtist.firstname|upper}}
+
+									</li>
+									<li class="d-flex align-items-center">
+										<i class="bi bi-clock"></i>
+										<a>
+											{% if auction.endingDate %}
+												{% set endingDate = auction.endingDate|date('Y-m-d H:i:s') %}
+												<span id="timer_{{auction.idAuction}}" class="post-date"></span>
+												<script>
+													updateTimer("{{ endingDate }}", "timer_{{ auction.idAuction }}");
+												</script>
+											{% else %}
+												<span class="post-date">Auction has no ending date.</span>
+											{% endif %}
+										</a>
+									</li>
+									<li class="d-flex align-items-center">
+										<i class="bi bi-people"></i>
+										<a>{{countBids}}</a>
+									</li>
+									<li class="d-flex align-items-center">
+										<i class="bi bi-cash"></i>
+										<span class="ps-2">{{ highestBid is not null ? highestBid ~ '$' : 'none' }}</span>
+
+									</li>
+								</ul>
+							</div>
+							<!-- End meta top -->
+
+							<div class="content">
+								<p>
+									<td>{{ auction.description }}</td>
+								</p>
+							</div>
+						</article>
+					</div>
+					<div class="col-lg-4">
+						<!-- start sidebar -->
+						<!-- start sidebar search formn-->
+							<div class="sidebar"> <div class="sidebar-item search-form">
+
+								<div class="meta-top">
+									<a>The starting Price :
+									</a>
+									<br>
+									<br>
+									{% if app.user is not null and  app.user.id == highestBidder %}
+										<a style="color: green;">You are the highest bidder with:
+										</a>
+										<a>{{ highestBid is not null ? highestBid ~ '$' : 'none' }}</a>
+
+
+									{% else %}
+										<a>The Highest Offer :
+											{{ highestBid is not null ? highestBid ~ '$' : 'none' }}
+										</a>
+									{% endif %}
+									<br>
+									<br>
+
+									<a>Number of Bids :
+										{{countBids}}
+									</a>
+
+								</div>
+								<br>
+								{% if app.user is not null %}
+									<h2 class="sidebar-title">Make An Offer :
+									</h2>
+
+									{{ form_start(form, {'attr': {'class': 'mt-3', 'onsubmit': 'return validateBid();'}})}}
+
+									{{ form_widget(form.offer, {'attr': {'value': highestBid is not null ? highestBid + auction.increment : auction.startingPrice ,
+							'pattern': '[0-9]*' , 'inputmode' : 'numeric','min': highestBid is not null ? highestBid + auction.increment : auction.startingPrice}
+							}) }}
+									<button type="submit">
+										<i class="bi bi-credit-card">{{ button_label|default('') }}</i>
+									</button>
+									{{ form_end(form)  }}
+								{% else %}
+									<h4>
+										Login to be able to join the auction
+									</h4>
+								{% endif %}
+
+
+							</div>
+							<!-- End sidebar search formn-->
+
+						</div>
+						<!-- End Blog Sidebar -->
+
+					</div>
+				</div>
+			</div>
+		</section>
+	{% endblock %}

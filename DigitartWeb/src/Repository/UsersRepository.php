@@ -25,6 +25,12 @@ class UsersRepository extends ServiceEntityRepository implements PasswordUpgrade
         parent::__construct($registry, Users::class);
     }
 
+    public function getuserNameById($id)
+    {
+        $user = $this->findOneBy(['id' => $id]);
+        return $user ? $user->getLastname() : null;
+    }
+    
     public function save(Users $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);

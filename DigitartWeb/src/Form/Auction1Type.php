@@ -29,7 +29,6 @@ class Auction1Type extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-
         $user = $this->security->getUser();
         if ($user->getRole() == "Admin") {
             $builder

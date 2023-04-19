@@ -14,6 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="artwork", indexes={@ORM\Index(name="fk_art", columns={"id_room"})})
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\ArtworkRepository")
  */
 class Artwork
 {
@@ -40,7 +41,7 @@ class Artwork
 
     /**
      * @var Users
-      * @ORM\ManyToOne(targetEntity="Users")
+     * @ORM\ManyToOne(targetEntity="Users")
      * @ORM\JoinColumns({
      * @ORM\JoinColumn(name="id_artist", referencedColumnName="id")
      * })
@@ -76,7 +77,7 @@ class Artwork
      */
     private $description;
 
-     /**
+    /**
      * @ORM\OneToMany(targetEntity="ImageArtwork",mappedBy="idArt", orphanRemoval=true, cascade={"persist"})
      */
     private $images;
@@ -92,13 +93,13 @@ class Artwork
     private $idRoom;
 
 
-     /**
+    /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
     private $createdAt;
-    
-     /**
+
+    /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="update")
      */
@@ -176,7 +177,7 @@ class Artwork
         return $this;
     }
 
-  
+
 
     public function getIdRoom(): ?Room
     {
@@ -200,7 +201,7 @@ class Artwork
         // Do nothing - this property is virtual and cannot be set
     }
 
-     /**
+    /**
      * @return Collection|ImageArtwork[]
      */
     public function getImages(): Collection
@@ -232,13 +233,12 @@ class Artwork
     }
 
     public function getCreatedAt(): ?\DateTimeInterface
-{
-    return $this->createdAt;
-}
+    {
+        return $this->createdAt;
+    }
 
-public function getUpdatedAt(): ?\DateTimeInterface
-{
-    return $this->updatedAt;
-}
-    
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
 }

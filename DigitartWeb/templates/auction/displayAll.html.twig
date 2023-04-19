@@ -21,9 +21,7 @@
 	<!-- ======= Breadcrumbs ======= -->
 	<div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/breadcrumbs-bg.jpg')}});">
 		<div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
-
 			<h2>AUCTION</h2>
-
 		</div>
 	</div>
 	<!-- End Breadcrumbs -->
@@ -36,7 +34,19 @@
 					<div class="col-xl-4 col-md-6">
 						<div class="post-item position-relative h-100">
 							<div class="post-img position-relative overflow-hidden">
-								<img src="{{auction.artwork.imageArt}}" class="img-fluid" alt="">
+								{% if imageArtwork[ auction.idAuction ] is not null %}
+                  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                      {% for image in imageArtwork[ auction.idAuction ] %}
+                        <div class="carousel-item {% if loop.first %}active{% endif %}">
+                          <img src="{{ asset('/uploads/'~image.ImageName) }}" class="d-block w-100" style="width: 400px; height: 300px;" alt="">
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                {% else %}
+                      <img  src="{{ asset('/uploads/noimage.jpg') }}"  class="d-block w-100" style="width: 400px; height: 300px;" alt="">
+                {% endif %}
 								{% if auction.endingDate %}
 									{% set endingDate = auction.endingDate|date('Y-m-d H:i:s') %}
 									<span id="timer_{{auction.idAuction}}" class="post-date"></span>

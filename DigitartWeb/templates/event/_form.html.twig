@@ -51,13 +51,13 @@
                     </div>
 <hr>
                     <div class="form-group">
-                        {{ form_label(form.images, 'Image') }}
+                        {{ form_label(form.images, 'Event Images ') }}
                         {{ form_widget(form.images) }}
                          {{ form_errors(form.images, { 'attr': {'class': 'text-danger'} }) }}
                     </div>
         <hr>
          <div class="form-group">
-                        {{ form_label(form.image, 'Image') }}
+                        {{ form_label(form.image, 'Poster') }}
                         {{ form_widget(form.image, {
                             'attr': {'class': 'form-control'},
                             'type': 'file'
