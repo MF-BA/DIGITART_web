@@ -168,7 +168,12 @@ display: -webkit-box;
       </div>
                
   {% endfor %}
-  
+  {% for message in app.flashes('success') %}
+                <div class="success success-danger">
+                    {{ message }}
+      </div>
+               
+  {% endfor %}
  {% if error %}
 {% if error.messageKey == 'Invalid credentials.' %}
         <div class="alert alert-danger">Email or password incorrect!</div>
@@ -238,7 +243,7 @@ display: -webkit-box;
 						<span class="txt1">
 							Forgot
 						</span>
-						<a class="txt2" href="#">
+						<a class="txt2" href="{{path('forgotten_password')}}">
 							Password?
 						</a>
 					</div>

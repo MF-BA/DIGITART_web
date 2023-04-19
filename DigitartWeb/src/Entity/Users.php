@@ -143,6 +143,14 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $is_verified = false;
 
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="resetToken", type="string", length=100, nullable=true)
+     */
+    private $resetToken;
+
     public function __construct()
     {
         $this->userImages = new ArrayCollection();
@@ -172,6 +180,17 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->updatedAt;
     }
 
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): self
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
+    }
 
     /**
      * @return Collection|Images[]
