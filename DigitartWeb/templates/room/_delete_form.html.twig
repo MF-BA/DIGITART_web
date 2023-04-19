@@ -1,6 +1,0 @@
-<div class="form-actions form-group">    
-    <form method="post" action="{{ path('app_room_delete', {'idRoom': room.idRoom}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
-        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ room.idRoom) }}">
-        <button class="btn btn-danger"><i class="fa fa-times"></i>&nbsp;</button>
-    </form>
-</div>

@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="bid")
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\BidRepository")
  */
 class Bid
 {
@@ -25,7 +26,7 @@ class Bid
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date", type="datetime", nullable=false)
+     * @ORM\Column(name="date", type="date", nullable=false)
      */
     private $date;
 
@@ -37,14 +38,11 @@ class Bid
     private $offer;
 
     /**
-     * @var Auction
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Auction")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_auction", referencedColumnName="id_auction")
-     * })
+     * @ORM\Column(name="id_auction", type="integer", nullable=false)
      */
-    private $id_auction;
+    private $idAuction;
 
     /**
      * @var int
@@ -82,14 +80,14 @@ class Bid
         return $this;
     }
 
-    public function getIdAuction(): ?Auction
+    public function getIdAuction(): ?int
     {
-        return $this->id_auction;
+        return $this->idAuction;
     }
 
-    public function setIdAuction(Auction $id_auction): self
+    public function setIdAuction(int $idAuction): self
     {
-        $this->id_auction = $id_auction;
+        $this->idAuction = $idAuction;
 
         return $this;
     }
@@ -105,6 +103,4 @@ class Bid
 
         return $this;
     }
-
-
 }

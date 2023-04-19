@@ -1,0 +1,53 @@
+<table border="1">
+	<tr>
+		<th>
+			artwork
+		</th>
+		<th>
+			starting price
+		</th>
+		<th>
+			increment
+		</th>
+		<th>
+			end date
+		</th>
+		<th>
+			description
+		</th>
+	</tr>
+	{% for auc in auction %}
+		<tr>
+			<td>
+				{{auc.idArtwork.artworkName}}
+			</td>
+			<td>
+				{{ auc.startingPrice }}
+			</td>
+			<td>
+				{{ auc.increment }}
+			</td>
+			<td>
+				{{ auc.endingDate|date('Y-m-d') }}
+			</td>
+			<td>
+				{{ auc.description }}
+			</td>
+			<td>
+				<a href="{#{path('delete_auction',{'idAuction': auc.idAuction})}#}">
+					<button type="button">Delete</button>
+				</a>
+			</td><td>
+				<a href="{#{path('update_auction_admin',{'idAuction': auc.idAuction})}#}">
+					<button type="button">Modify</button>
+				</a>
+			</td>
+		</tr>
+	{% else %}
+		courses not found
+	{% endfor %}
+</table>
+
+<a href="{{path('AddToAuction')}}">
+					<button type="button">Add</button>
+				</a>

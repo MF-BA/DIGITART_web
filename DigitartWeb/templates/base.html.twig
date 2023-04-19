@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
@@ -141,171 +142,74 @@ button {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 
-			<!-- Google Fonts -->
-			<link rel="preconnect" href="https://fonts.googleapis.com">
-			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-			<link
-			href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <!-- Vendor CSS Files -->
+  <link href="{{asset('Front/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/aos/aos.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/glightbox/css/glightbox.min.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/swiper/swiper-bundle.min.css')}}" rel="stylesheet">
 
-			<!-- Vendor CSS Files -->
-			<link href="{{asset('Front/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
-			<link href="{{asset('Front/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet">
-			<link href="{{asset('Front/assets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet">
-			<link href="{{asset('Front/assets/vendor/aos/aos.css')}}" rel="stylesheet">
-			<link href="{{asset('Front/assets/vendor/glightbox/css/glightbox.min.css')}}" rel="stylesheet">
-			<link href="{{asset('Front/assets/vendor/swiper/swiper-bundle.min.css')}}" rel="stylesheet">
-			<link href="{{asset('Front/vendors/datatables.net-bs4/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-			<link
-			rel="stylesheet" href="{{asset('Front/vendors/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css')}}">
-			<!-- Template Main CSS File -->
-			<link href="{{asset('Front/assets/css/main.css')}}" rel="stylesheet">
-		{% endblock %}
+  <!-- Template Main CSS File -->
+  <link href="{{asset('Front/assets/css/main.css')}}" rel="stylesheet">
+        {% endblock %}
 
-		{% block javascripts %}
-			<!-- Vendor JS Files -->
-			<script src="{{asset('Front/assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-			<script src="{{asset('Front/assets/vendor/aos/aos.js')}}"></script>
-			<script src="{{asset('Front/assets/vendor/glightbox/js/glightbox.min.js')}}"></script>
-			<script src="{{asset('Front/assets/vendor/isotope-layout/isotope.pkgd.min.js')}}"></script>
-			<script src="{{asset('Front/assets/vendor/swiper/swiper-bundle.min.js')}}"></script>
-			<script src="{{asset('Front/assets/vendor/purecounter/purecounter_vanilla.js')}}"></script>
-			<script src="{{asset('Front/assets/vendor/php-email-form/validate.js')}}"></script>
+        {% block javascripts %}
+            <!-- Vendor JS Files -->
+  <script src="{{asset('Front/assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+  <script src="{{asset('Front/assets/vendor/aos/aos.js')}}"></script>
+  <script src="{{asset('Front/assets/vendor/glightbox/js/glightbox.min.js')}}"></script>
+  <script src="{{asset('Front/assets/vendor/isotope-layout/isotope.pkgd.min.js')}}"></script>
+  <script src="{{asset('Front/assets/vendor/swiper/swiper-bundle.min.js')}}"></script>
+  <script src="{{asset('Front/assets/vendor/purecounter/purecounter_vanilla.js')}}"></script>
+  <script src="{{asset('Front/assets/vendor/php-email-form/validate.js')}}"></script>
 
-			<!-- Template Main JS File -->
-			<script src="{{asset('Front/assets/js/main.js')}}"></script>
-
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-			<script>
-				function updateTimer(endingDate, timerId) {
-    var remainingTime = moment(endingDate).diff(moment(), 'seconds');
-    var duration = moment.duration(remainingTime, 'seconds');
-
-    // Update the timer
-    if (remainingTime <= 0) { // Auction has ended
-        document.getElementById(timerId).innerHTML = "Auction has ended";
-    } else { // Auction is still active
-        var years = duration.years();
-        var months = duration.months();
-        var days = duration.days();
-        var hours = duration.hours();
-        var minutes = duration.minutes();
-        var seconds = duration.seconds();
+  <!-- Template Main JS File -->
+  <script src="{{asset('Front/assets/js/main.js')}}"></script>
+        {% endblock %}
+    
+     </head>
+    
+        {% block navbar %}
         
-        var timeStr = "";
-        if (years > 0) {
-            timeStr += years + "y ";
-        }
-        if (months > 0) {
-            timeStr += months + "mo ";
-        }
-        if (days > 0) {
-            timeStr += days + "d ";
-        }
-        if (hours > 0) {
-            timeStr += hours + "h ";
-        }
-        if (minutes > 0) {
-            timeStr += minutes + "m ";
-        }
-        timeStr += seconds + "s";
+          <!-- ======= Header ======= -->
+  <header id="header" class="header d-flex align-items-center">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+      <a href="{{ path('showfrontpage') }}" class="logo d-flex align-items-center">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <img src="{{asset('Front/assets/img/logo digitart.png')}}" alt=""> 
         
       </a>
 
       <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
       <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
       <nav id="navbar" class="navbar">
-    
-          
-          <ul>
-						<li>
-							<a href="{{path('showdigit')}}"
-								{% block homeActive %}
-									class="active"
-								{% endblock %}>
-
-								Home</a>
-						</li>
-						<li>
-							<a href="about.html"
-								{% block aboutActive %}{% endblock %}>
-
-
-								About</a>
-						</li>
-						<!-- @formatter:off -->
-						<li class="dropdown">
-							<a href="{{path('displayAUCTION')}}"
-								{% block auctionActive %}{% endblock %}>
-								<span>auction</span>
-								{% if app.user is not null  %}
-
-								{% if app.user.role == 'Artist' %}
-								<i class="bi bi-chevron-down dropdown-indicator"></i>
-								{% endif %}
-							{% endif %}
-							</a>
-							{% if app.user is not null  %}
-								{% if app.user.role == 'Artist' %}
-							<ul>
-								<li><a href="{{path('app_auction_new')}}">Add to Auction</a></li>
-							</ul>
-							{% endif %}
-							{% endif %}
-
-						</li>
-						<!-- @formatter:on -->
-
-						<li><a href="{{ path('app_event_front_index') }}" {% block eventactive %}
-									
-								{% endblock %}>Event</a></li>
-          
-						 <li><a href="{{path('showfrontartwork')}}" {% block artworkactive %}
-									
-								{% endblock %}>Artworks</a></li>
-                 <li class="dropdown active"><a href="{{ path('app_payment_new') }}"><span>Ticket</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html" class="active">About</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+            <ul>
+              <li><a href="#">Dropdown 1</a></li>
+              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
                 <ul>
-                  <li><a href="{{ path('app_payment_card') }}">Ticket Added to the card</a></li>
-                  <li><a href="{{ path('app_payment_CurrentcardHistory') }}">Ticket History</a></li>
+                  <li><a href="#">Deep Dropdown 1</a></li>
+                  <li><a href="#">Deep Dropdown 2</a></li>
+                  <li><a href="#">Deep Dropdown 3</a></li>
+                  <li><a href="#">Deep Dropdown 4</a></li>
+                  <li><a href="#">Deep Dropdown 5</a></li>
                 </ul>
-            </li>
-						<li class="dropdown">
-							<a href="#">
-								<span>Dropdown</span>
-								<i class="bi bi-chevron-down dropdown-indicator"></i>
-							</a>
-							<ul>
-								<li>
-									<a href="#">Dropdown 1</a>
-								</li>
-								<li class="dropdown">
-									<a href="#">
-										<span>Deep Dropdown</span>
-										<i class="bi bi-chevron-down dropdown-indicator"></i>
-									</a>
-									<ul>
-										<li><a href="#">Deep Dropdown 1</a></li>
-										<li><a href="#">Deep Dropdown 2</a></li>
-										<li><a href="#">Deep Dropdown 3</a></li>
-										<li><a href="#">Deep Dropdown 4</a></li>
-										<li><a href="#">Deep Dropdown 5</a></li>
-									</ul>
-								</li>
-								<li>
-									<a href="#">Dropdown 2</a>
-								</li>
-								<li>
-									<a href="#">Dropdown 3</a>
-								</li>
-								<li>
-									<a href="#">Dropdown 4</a>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<a href="contact.html">Contact</a>
-						</li>
-					</ul>
-       
+              </li>
+              <li><a href="#">Dropdown 2</a></li>
+              <li><a href="#">Dropdown 3</a></li>
+              <li><a href="#">Dropdown 4</a></li>
+            </ul>
+          </li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
          {% for label, messages in app.flashes(['success', 'error']) %}
                             {% for message in messages %}
                                 <div class="flash-{{ label }}">
@@ -326,7 +230,6 @@ button {
 	</div>
 	<div class="options" id="options">
 		<a class="nav-link" href="{{path('app_users_profilefront', {'id': app.user.id}) }}"><div class="option"><i class="fa fa-user"></i> My profile</div></a>
-		<a class="nav-link" href="{{path('app_artwork_newfront')}}"><div class="option"><i class="fa fa-user"></i> Add New Artwork</div></a>
 		<a class="nav-link" href="{{path('app_logout')}}"><div class="option"><i class="fa fa-power-off"></i>  Logout</div></a>
 	</div>
   {% endif %} 

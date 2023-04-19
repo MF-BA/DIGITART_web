@@ -2,11 +2,11 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}DigitArt{% endblock %}</title>
-          <link href="{{asset('Front/assets/img/logo-digitart-rouge.png')}}" rel="icon">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
-            <link href="{{asset('Front/assets/img/logo-digitart-rouge.png')}}" rel="icon">
+            
         <link rel="apple-touch-icon" href="apple-icon.png">
         <link rel="shortcut icon" href="favicon.ico">
 
@@ -29,10 +29,7 @@
      .color-app{
         color: #BD2A2E;
      }
-     img {
-  max-width: 100% !important; 
-}
-
+     
         </style>
         {% endblock %}
 
@@ -82,7 +79,7 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="/showback"><img src="{{asset('Back/images/logo_digitart_home.png')}}" alt="Logo"></a>
+                <a class="navbar-brand" href="./"><img src="{{asset('Back/images/logo_digitart_home.png')}}" alt="Logo"></a>
             </div>
 
             <div id="main-menu" class="main-menu collapse navbar-collapse">
@@ -101,24 +98,17 @@
                         </ul>
                     </li>
                     <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-picture-o"></i>Artworks</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Artworks</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-table"></i><a href="/artwork">Show Artworks</a></li>
-                            <li><i class="fa  fa-plus-square"></i><a href="/artwork/new">Add New Artwork</a></li>
-                        </ul>
-                    </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-building-o"></i>Rooms</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-table"></i><a href="/room">Show Rooms</a></li>
-                            <li><i class="fa  fa-plus-square"></i><a href="/room/new">Add New Room</a></li>
+                            <li><i class="fa fa-table"></i><a href="tables-basic.html">Basic Table</a></li>
+                            <li><i class="fa fa-table"></i><a href="tables-data.html">Data Table</a></li>
                         </ul>
                     </li>
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th"></i>Event</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="menu-icon fa fa-th"></i><a href="{{path('app_event_index')}}">List Of Events</a></li>
-                            <li><i class="menu-icon fa fa-th"></i><a href="{{path('app_participants_index')}}">List of Participants</a></li>
+                            <li><i class="menu-icon fa fa-th"></i><a href="forms-basic.html">Basic Form</a></li>
+                            <li><i class="menu-icon fa fa-th"></i><a href="forms-advanced.html">Advanced Form</a></li>
                         </ul>
                     </li>
                     <li class="menu-item-has-children dropdown">
@@ -129,30 +119,12 @@
                         </ul>
                     </li>
                     <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-ticket"></i>Ticket</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th"></i>Auction</a>
                         <ul class="sub-menu children dropdown-menu">
-                       
-                           <li><i class="menu-icon fa fa-list"></i><a href="{{ path('app_ticket_index') }}">Tickets List</a></li>
-                           <li><i class="menu-icon fa fa-plus-square"></i><a href="{{ path('app_ticket_new') }}">Add new ticket</a></li>
-                            <li><i class="menu-icon fa fa-money"></i><a href="{{ path('app_payment_index') }}">Payment List</a></li>
-                             <li><i class="menu-icon fa fa-bar-chart-o"></i><a href="{{ path('app_ticket_stat') }}">Statistics</a></li>
+                            <li><i class="menu-icon fa fa-th"></i><a href="forms-basic.html">Basic Form</a></li>
+                            <li><i class="menu-icon fa fa-th"></i><a href="forms-advanced.html">Advanced Form</a></li>
                         </ul>
                     </li>
-                   <li class="menu-item-has-children dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<i class="menu-icon fa fa-gavel"></i>Auction</a>
-					<ul class="sub-menu children dropdown-menu">
-						<li>
-							<i class="menu-icon fa fa-shopping-cart"></i>
-							<a href="{{path('DisplayAuctionBack')}}">Auction</a>
-						</li>
-						<li>
-							<i class="menu-icon fa fa-plus"></i>
-							<a href="{{path('adminAddAUCTION')}}">Add to auction</a>
-						</li>
-					</ul>
-				</li>
-				   
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav>
@@ -222,7 +194,7 @@
 <div class="example-wrapper">
     <h1>Hello {{ app.user.firstname }}! ✅</h1>
 
-   Welcome to our Dashboard!
+   Welcome to your Dashboard!
     <ul>
         <li>Your controller at <code><a href="{{ 'C:/Users/venom-1/OneDrive/Documents/Symfonyprojects/FirstProject/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
         <li>Your template at <code><a href="{{ 'C:/Users/venom-1/OneDrive/Documents/Symfonyprojects/FirstProject/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>

@@ -2,12 +2,8 @@
 
 namespace App\Entity;
 
-use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use PhpParser\Node\Name;
-use Gedmo\Mapping\Annotation as Gedmo; // gedmo annotations
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Auction
@@ -25,7 +21,7 @@ class Auction
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id_auction;
+    private $idAuction;
 
     /**
      * @var int
@@ -45,7 +41,6 @@ class Auction
      * @var \DateTime
      *
      * @ORM\Column(name="ending_date", type="date", nullable=false)
-     * @Assert\GreaterThan("today", message="The ending date must be greater than or equal to tomorrow.")
      */
     private $endingDate;
 
@@ -53,7 +48,6 @@ class Auction
      * @var string
      *
      * @ORM\Column(name="description", type="text", length=65535, nullable=false)
-     * @Assert\Length(min=10, minMessage="The description must exceed 10 characters long.")
      */
     private $description;
 
@@ -62,38 +56,21 @@ class Auction
      *
      * @ORM\Column(name="state", type="string", length=10, nullable=true)
      */
-    private $state = null ;
+    private $state;
 
     /**
-     * @ORM\Column(name="added", type="datetime", nullable=false)
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $added;
-
-    /**
-     * @ORM\Column(name="updated", type="datetime", nullable=false)
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-
-    /**
-     * @ORM\Column(name="deleted", type="datetime", nullable=true)
-     */
-    private $deleted = null;
-
-    /**
-     * @var artwork
+     * @var Artwork
      *
      * @ORM\ManyToOne(targetEntity="Artwork")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_artwork", referencedColumnName="id_art")
      * })
      */
-    private $artwork;
+    private $idArtwork;
 
     public function getIdAuction(): ?int
     {
-        return $this->id_auction;
+        return $this->idAuction;
     }
 
     public function getStartingPrice(): ?int
@@ -156,32 +133,14 @@ class Auction
         return $this;
     }
 
-    public function getartwork(): ?Artwork
+    public function getIdArtwork(): ?Artwork
     {
-        return $this->artwork;
-    }
-    public function getAdded()
-    {
-        return $this->added;
-    }
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-    public function getDeleted(): ?DateTime
-    {
-        return $this->deleted;
+        return $this->idArtwork;
     }
 
-    public function setDeleted(?DateTime $deleted): self
+    public function setIdArtwork(?Artwork $idArtwork): self
     {
-        $this->deleted = $deleted;
-        return $this;
-    }
-
-    public function setartwork(?Artwork $artwork): self
-    {
-        $this->artwork = $artwork;
+        $this->idArtwork = $idArtwork;
         return $this;
     }
 }

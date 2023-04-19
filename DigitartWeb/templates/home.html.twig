@@ -117,10 +117,10 @@
       <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a href="{{path('showfrontpage')}}" class="active">Home</a></li>
+          <li><a href="index.html" class="active">Home</a></li>
           <li><a href="about.html">About</a></li>
-          <li><a href="{{path('showfrontartwork')}}">Artworks</a></li>
-          <li><a href="{{ path('app_event_front_index') }}">Events</a></li>
+          <li><a href="services.html">Artworks</a></li>
+          <li><a href="projects.html">Events</a></li>
           <li><a href="blog.html">Auction</a></li>
           <li><a href="blog.html">Ticket</a></li>
           <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
@@ -144,10 +144,7 @@
           
           
         </ul>
-        {% if app.user is not null %} 
-    <strong class="user-name">  {{app.user.firstname}}   {{app.user.lastname}} </strong>
-{% endif %}
-
+        <strong class="user-name">  {{app.user.firstname}}   {{app.user.lastname}} </strong>
          <div class="circle" onclick="toggleOptions()">
 		
 		<div class="circle-name">user image</div>
@@ -200,12 +197,7 @@
 
   </section><!-- End Hero Section -->
 <div class="example-wrapper">
-
-{% if app.user is not null %} 
-        <h1>Hello {{ app.user.firstname }}! ✅</h1>
-{% endif %}
-
-
+    <h1>Hello {{ app.user.firstname }}! ✅</h1>
 
     This friendly message is coming from:
     <ul>

@@ -39,13 +39,6 @@ class RoomRepository extends ServiceEntityRepository
         }
     }
 
-    public function getRoomNameById($id)
-    {
-        $room = $this->findOneBy(['idRoom' => $id]);
-        return $room ? $room->getNameRoom() : null;
-    }
-
-
 //    /**
 //     * @return Room[] Returns an array of Room objects
 //     */

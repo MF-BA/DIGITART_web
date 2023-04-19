@@ -39,17 +39,6 @@ class ArtworkRepository extends ServiceEntityRepository
         }
     }
 
-
-    public function searchArtworkWithRoom(int $roomId): bool
-{
-    $artwork = $this->getEntityManager()->getRepository(Artwork::class)->findOneBy(['idRoom' => $roomId]);
-
-    return ($artwork !== null);
-}
-
-
-
-
 //    /**
 //     * @return Artwork[] Returns an array of Artwork objects
 //     */
