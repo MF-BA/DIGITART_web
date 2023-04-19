@@ -33,15 +33,16 @@ class PaymentController extends AbstractController
     }
     
     #[Route('/', name: 'app_payment_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, int $userId = null): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $userId = $this->getUser();
         $paymentCount = $entityManager
             ->getRepository(Payment::class)
             ->count([
                 'user' => $userId,
                 'paid' => null
             ]);
-    
+         
         $payment = new Payment();
         $form = $this->createForm(PaymentType::class, $payment);
         $form->handleRequest($request);
@@ -56,7 +57,7 @@ class PaymentController extends AbstractController
                 $this->addFlash('error', 'You have reached the maximum limit of payments. Please finalize your purchases first!');
                 return $this->redirectToRoute('app_payment_new');
             } 
-    
+            $payment->setUser($userId);
             $entityManager->persist($payment);
             $entityManager->flush();
     
@@ -70,8 +71,9 @@ class PaymentController extends AbstractController
     }
     
     #[Route('/card', name: 'app_payment_card', methods: ['GET', 'POST'])]
-    public function payment(Request $request, EntityManagerInterface $entityManager, int $userId = null): Response
+    public function payment(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $userId = $this->getUser()->getId();
         // find any unpaid payment records for the user
         $payments = $entityManager
             ->getRepository(Payment::class)
@@ -114,8 +116,9 @@ class PaymentController extends AbstractController
 
    
     #[Route('/cardHistory', name: 'app_payment_CurrentcardHistory')]
-    public function CurrentcardHistory( EntityManagerInterface $entityManager, int $userId = null): Response
+    public function CurrentcardHistory( EntityManagerInterface $entityManager): Response
     {
+        $userId = $this->getUser()->getId();
         // update any unpaid payment records for the user after successful payment
         $paymentRepository = $entityManager->getRepository(Payment::class);
         $paymentsToUpdate = $paymentRepository->findBy([
@@ -200,7 +203,8 @@ class PaymentController extends AbstractController
     #[Route('/pdf', name: 'pdf')]
     public function generatePdf(PaymentRepository $PaymentRepository): Response
     {
-        $user_id = null; // Replace with the user ID parameter
+        $user_id = $this->getUser()->getId();
+         
         $lastUpdatedAt = $PaymentRepository->getLastUpdatedAtByUserId();
         // Convert string to DateTime object
         $lastUpdatedAt = new \DateTime($lastUpdatedAt);

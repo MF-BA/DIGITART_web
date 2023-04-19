@@ -117,11 +117,8 @@ class ArtworkController extends AbstractController
     public function newfront(Request $request, ArtworkRepository $artworkRepository,UsersRepository $userrepo): Response
     {   
 
-        $user = $userrepo->createQueryBuilder('u')
-                ->orderBy('u.id', 'ASC')
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getOneOrNullResult();
+        $user =  $this->getUser();
+
         $artwork = new Artwork();
         $artwork->setIdArtist($user);
         $artwork->setDateArt(new \DateTime());

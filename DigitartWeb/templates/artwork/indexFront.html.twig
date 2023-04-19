@@ -1,5 +1,8 @@
 {% extends 'base.html.twig' %}
-
+{% block homeActive %}{% endblock %}
+{% block artworkactive %}
+	class="active"
+{% endblock %}
 
 {% block body %}
 
@@ -35,14 +38,7 @@
                         </div>
                       {% endfor %}
                     </div>
-                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
-                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span class="visually-hidden">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">
-                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span class="visually-hidden">Next</span>
-                    </a>
+                   
                   </div>
                 {% else %}
                       <img  src="{{ asset('/uploads/noimage.jpg') }}"  class="d-block w-100" style="width: 400px; height: 300px;" alt="">

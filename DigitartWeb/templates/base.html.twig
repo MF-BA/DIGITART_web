@@ -264,12 +264,7 @@ updateTimer(endingDate, timerId);
 
 							Home</a>
 					</li>
-					<li>
-						<a href="about.html" {% block aboutActive %} {% endblock %}>
-
-
-							About</a>
-					</li>
+					
 					<!-- @formatter:off -->
 					<li class="dropdown">
 						<a href="{{path('displayAUCTION')}}" {% block auctionActive %} {% endblock %}>
@@ -284,7 +279,7 @@ updateTimer(endingDate, timerId);
 						{% if app.user is not null  %}
 							{% if app.user.role == 'Artist' %}
 								<ul>
-									<li><ahref="{{path('app_auction_new')}}">Add to Auction</a></li>
+									<li><a href="{{path('app_auction_new')}}">Add to Auction</a></li>
 								</ul>
 							{% endif %}
 						{% endif %}
@@ -297,54 +292,18 @@ updateTimer(endingDate, timerId);
 					</li>
 
 					<li>
-						<a href="{{path('showfrontartwork')}}">
-							{% block artworkactive %} {% endblock %}Artworks</a>
+						<a href="{{path('showfrontartwork')}}" 	
+							{% block artworkactive %} {% endblock %}> Artworks</a>
 						</li>
 						<li class="dropdown active">
-							<a href="{{ path('app_payment_new') }}">
+							<a href="{{ path('app_payment_new') }}" {% block ticketactive %} {% endblock %}>
 								<span>Ticket</span>
 								<i class="bi bi-chevron-down dropdown-indicator"></i>
 							</a>
 							<ul>
-								<li><ahref="{{ path('app_payment_card') }}">Ticket Added to the card</a></li>
-								<li><ahref="{{ path('app_payment_CurrentcardHistory') }}">Ticket History</a></li>
+								<li><a href="{{ path('app_payment_card') }}">Ticket Added to the card</a></li>
+								<li><a href="{{ path('app_payment_CurrentcardHistory') }}">Ticket History</a></li>
 							</ul>
-						</li>
-						<li class="dropdown">
-							<a href="#">
-								<span>Dropdown</span>
-								<i class="bi bi-chevron-down dropdown-indicator"></i>
-							</a>
-							<ul>
-								<li>
-									<a href="#">Dropdown 1</a>
-								</li>
-								<li class="dropdown">
-									<a href="#">
-										<span>Deep Dropdown</span>
-										<i class="bi bi-chevron-down dropdown-indicator"></i>
-									</a>
-									<ul>
-										<li><a href="#">Deep Dropdown 1</a></li>
-										<li><a href="#">Deep Dropdown 2</a></li>
-										<li><a href="#">Deep Dropdown 3</a></li>
-										<li><a href="#">Deep Dropdown 4</a></li>
-										<li><a href="#">Deep Dropdown 5</a></li>
-									</ul>
-								</li>
-								<li>
-									<a href="#">Dropdown 2</a>
-								</li>
-								<li>
-									<a href="#">Dropdown 3</a>
-								</li>
-								<li>
-									<a href="#">Dropdown 4</a>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<a href="contact.html">Contact</a>
 						</li>
 					</ul>
 
@@ -525,7 +484,7 @@ updateTimer(endingDate, timerId);
 							<div class="card-item">
 								<div class="row">
 									<div class="col-xl-5">
-										<div class="card-bg" style="background-image: url(assets/img/constructions-1.jpg);"></div>
+										<div class="card-bg" ></div>
 									</div>
 									<div class="col-xl-7 d-flex align-items-center">
 										<div class="card-body">
@@ -542,7 +501,7 @@ updateTimer(endingDate, timerId);
 							<div class="card-item">
 								<div class="row">
 									<div class="col-xl-5">
-										<div class="card-bg" style="background-image: url(assets/img/constructions-2.jpg);"></div>
+										<div class="card-bg" ></div>
 									</div>
 									<div class="col-xl-7 d-flex align-items-center">
 										<div class="card-body">
@@ -559,7 +518,7 @@ updateTimer(endingDate, timerId);
 							<div class="card-item">
 								<div class="row">
 									<div class="col-xl-5">
-										<div class="card-bg" style="background-image: url(assets/img/constructions-3.jpg);"></div>
+										<div class="card-bg" ></div>
 									</div>
 									<div class="col-xl-7 d-flex align-items-center">
 										<div class="card-body">
@@ -576,7 +535,7 @@ updateTimer(endingDate, timerId);
 							<div class="card-item">
 								<div class="row">
 									<div class="col-xl-5">
-										<div class="card-bg" style="background-image: url(assets/img/constructions-4.jpg);"></div>
+										<div class="card-bg" ></div>
 									</div>
 									<div class="col-xl-7 d-flex align-items-center">
 										<div class="card-body">
@@ -1145,87 +1104,7 @@ updateTimer(endingDate, timerId);
 			</section>
 			<!-- End Our Projects Section -->
 
-			<!-- ======= Testimonials Section ======= -->
-			<section id="testimonials" class="testimonials section-bg">
-				<div class="container" data-aos="fade-up">
-
-					<div class="section-header">
-						<h2>Testimonials</h2>
-						<p>Quam sed id excepturi ccusantium dolorem ut quis dolores nisi llum nostrum enim velit qui ut et autem uia reprehenderit sunt deleniti</p>
-					</div>
-
-					<div class="slides-2 swiper">
-						<div class="swiper-wrapper">
-
-							<div class="swiper-slide">
-								<div class="testimonial-wrap">
-									<div class="testimonial-item">
-										<img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
-										<h3>Saul Goodman</h3>
-										<h4>Ceo &amp; Founder</h4>
-										<div class="stars">
-											<i class="bi bi-star-fill"></i>
-											<i class="bi bi-star-fill"></i>
-											<i class="bi bi-star-fill"></i>
-											<i class="bi bi-star-fill"></i>
-											<i class="bi bi-star-fill"></i>
-										</div>
-										<p>
-											<i class="bi bi-quote quote-icon-left"></i>
-											Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
-											<i class="bi bi-quote quote-icon-right"></i>
-										</p>
-									</div>
-								</div>
-							</div>
-							<!-- End testimonial item -->
-
-							<div class="swiper-slide">
-								<div class="testimonial-wrap">
-									<div class="testimonial-item">
-										<img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
-										<h3>Sara Wilsson</h3>
-										<h4>Designer</h4>
-										<div class="stars">
-											<i class="bi bi-star-fill"></i>
-											<i class="bi bi-star-fill"></i>
-											<i class="bi bi-star-fill"></i>
-											<i class="bi bi-star-fill"></i>
-											<i class="bi bi-star-fill"></i>
-										</div>
-										<p>
-											<i class="bi bi-quote quote-icon-left"></i>
-											Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.
-											<i class="bi bi-quote quote-icon-right"></i>
-										</p>
-									</div>
-								</div>
-							</div>
-							<!-- End testimonial item -->
-
-							<div class="swiper-slide">
-								<div class="testimonial-wrap">
-									<div class="testimonial-item">
-										<img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
-										<h3>Jena Karlis</h3>
-										<h4>Store Owner</h4>
-										<div class="stars">
-											<i class="bi bi-star-fill"></i>
-											<i class="bi bi-star-fill"></i>
-											<i class="bi bi-star-fill"></i>
-											<i class="bi bi-star-fill"></i>
-											<i class="bi bi-star-fill"></i>
-										</div>
-										<p>
-											<i class="bi bi-quote quote-icon-left"></i>
-											Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.
-											<i class="bi bi-quote quote-icon-right"></i>
-										</p>
-									</div>
-								</div>
-							</div>
-							<!-- End testimonial item -->
-
+			
 							<div class="swiper-slide">
 								<div class="testimonial-wrap">
 									<div class="testimonial-item">
