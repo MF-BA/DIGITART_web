@@ -68,7 +68,7 @@ class UsersController extends AbstractController
             }
             if($form->get('role')->getData()==='Events manager')
             {
-                $user->setRoles(['ROLE_EVENT8MANAGER']);
+                $user->setRoles(['ROLE_EVENT_MANAGER']);
             }
             if($form->get('role')->getData()==='Tickets manager')
             {
