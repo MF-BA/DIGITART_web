@@ -49,12 +49,12 @@ class PaymentController extends AbstractController
     
         if ($form->isSubmitted() && $form->isValid()) {
             if ($payment->getTotalPayment() == 0) {
-                $this->addFlash('error', 'Please select a ticket to continue purchasing!');
+                $this->addFlash('errors', 'Please select a ticket to continue purchasing!');
                 return $this->redirectToRoute('app_payment_new');
             }
     
            if ($paymentCount >= 4) {
-                $this->addFlash('error', 'You have reached the maximum limit of payments. Please finalize your purchases first!');
+                $this->addFlash('errors', 'You have reached the maximum limit of payments. Please finalize your purchases first!');
                 return $this->redirectToRoute('app_payment_new');
             } 
             $payment->setUser($userId);
@@ -138,6 +138,22 @@ class PaymentController extends AbstractController
             ]);
     
         
+        return $this->render('payment/cardHistory.html.twig', [
+            'payments' => $payments,
+        ]);
+    }
+
+    #[Route('/cardHistoryy', name: 'app_payment_CurrentcardHistoryNoUpdate')]
+    public function CurrentcardHistoryNoUpdate( EntityManagerInterface $entityManager): Response
+    {
+        $userId = $this->getUser()->getId();
+        $entityManager->flush();
+        $payments = $entityManager
+            ->getRepository(Payment::class)
+            ->findBy([
+                'user' => $userId,
+                'paid' => true
+            ]);
         return $this->render('payment/cardHistory.html.twig', [
             'payments' => $payments,
         ]);
