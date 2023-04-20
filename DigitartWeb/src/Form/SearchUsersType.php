@@ -17,13 +17,28 @@ class SearchUsersType extends AbstractType
             'label' => false,
             'attr' => [
                 'class' => 'form-control',
-                'placeholder' => 'Enter a user'
+                'placeholder' => 'Search for users',
+                'style' => 'width: 800px;
+                position: relative;
+                left: 230px;
+                top: 20px;'
             ],
             'required' => false
         ])
         ->add('Search', SubmitType::class, [
             'attr' => [
-                'class' => 'btn danger',
+                'style' => 'font-family: cursive;
+                font-size: 15px;
+                line-height: 1.5;
+                color: #fff;
+                height: 38px;
+                text-transform: uppercase;
+                border-color: #BD2A2E;
+                border-radius: 10px;
+                background: #BD2A2E !important;
+                position: relative;
+                bottom: 18px;
+                left: 980px;',
             ]
         ])
         ;
