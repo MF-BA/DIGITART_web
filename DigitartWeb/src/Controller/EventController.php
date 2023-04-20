@@ -24,6 +24,7 @@ use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Label\Font\NotoSans;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use TCPDF;
 
 #[Route('/event')]
 class EventController extends AbstractController
