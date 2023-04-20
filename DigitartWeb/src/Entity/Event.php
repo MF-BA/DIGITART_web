@@ -117,6 +117,11 @@ class Event
      * @ORM\OneToMany(targetEntity="App\Entity\Images", mappedBy="event", orphanRemoval=true, cascade={"persist"})
      */
     private $images;
+    /**
+     * @ORM\Column(type="string", length=7, nullable=true)
+     */
+    private $color;
+
 
     public function __construct()
     {
@@ -278,5 +283,15 @@ class Event
     }
   
 
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
 
+    public function setColor(?string $color): self
+    {
+        $this->color = $color;
+
+        return $this;
+    }
 }

@@ -93,6 +93,13 @@
     .btn-danger:hover {
   background-color: white !important;
 }
+.pagin{
+    color: var(--color-secondary);
+    padding: 7px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 </style>
 <script>
@@ -171,9 +178,18 @@ if(distance<0)
 
           </div>
         </div><!-- End post item -->
-        
+      
         {% endif %}
 {% endfor %}
+          <section id="blog" class="blog">
+        <div class="blog-pagination">
+          <ul class="justify-content-center">
+            
+            <li><a href="#">{{ knp_pagination_render(events) }}</a></li>
+            
+          </ul>
+        </div><!-- End blog pagination -->
+        </section>
         
 
       </div>

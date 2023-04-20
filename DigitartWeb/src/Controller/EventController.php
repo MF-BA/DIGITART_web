@@ -25,6 +25,7 @@ use Endroid\QrCode\Label\Font\NotoSans;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use TCPDF;
+use Knp\Component\Pager\PaginatorInterface;
 
 #[Route('/event')]
 class EventController extends AbstractController
@@ -86,14 +87,29 @@ class EventController extends AbstractController
         return $this->render('event/index.html.twig', $qrCodes);
     }
     #[Route('/front', name: 'app_event_front_index', methods: ['GET'])]
-    public function indexfront(EventRepository $eventRepository): Response
+    public function indexfront(Request $request, EventRepository $eventRepository, PaginatorInterface $paginator): Response
     {
-        $events = $eventRepository->findAll();
-
+        // get today's date
+        $today = new \DateTime();
+    
+        // fetch events whose end date is greater than or equal to today's date
+        $query = $eventRepository->createQueryBuilder('e')
+            ->where('e.endDate >= :today')
+            ->setParameter('today', $today)
+            ->getQuery();
+    
+        // use Knp paginator to paginate the filtered events
+        $events = $paginator->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1),
+            2
+        );
+    
         return $this->render('event/eventfront.html.twig', [
             'events' => $events,
         ]);
     }
+    
 
     #[Route('/new', name: 'app_event_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EventRepository $eventRepository): Response
@@ -155,6 +171,7 @@ class EventController extends AbstractController
             'event' => $event,
         ]);
     }
+    
 
     #[Route('/{id}/front', name: 'app_event_show_front', methods: ['GET'])]
     public function showfront(Event $event): Response
@@ -182,16 +199,23 @@ class EventController extends AbstractController
             'events' => $events,
         ]);
     }
-    
-    #[Route('/{id}/participate/l', name: 'app_event_participate', methods: ['GET'])]
-    public function participateAction(Event $event)
+    #[Route('/noparticipants/l', name: 'app_event_no_participants', methods: ['GET'])]
+    public function zeroparticipants(EventRepository $eventRepository): Response
     {
-        
-        // Get the Participants entity manager
-        $em = $this->getDoctrine()->getManager();
-        $user=$this->getUser();
-        // Get the current user
-          // Check if the user has already participated
+        $events = $eventRepository->findAll();
+
+        return $this->render('event/no_participants.html.twig', [
+            'events' => $events,
+        ]);
+    }
+    #[Route('/{id}/participate/l', name: 'app_event_participate', methods: ['GET'])]
+public function participateAction(Event $event)
+{
+    // Get the Participants entity manager
+    $em = $this->getDoctrine()->getManager();
+    $user = $this->getUser();
+
+    // Check if the user has already participated
     $participantRepository = $em->getRepository(Participants::class);
     $existingParticipant = $participantRepository->findOneBy([
         'idUser' => $user->getId(),
@@ -202,22 +226,37 @@ class EventController extends AbstractController
         // User has already participated, do not create a new participant
         return $this->redirectToRoute('app_event_already', [], Response::HTTP_SEE_OTHER);
     }
-        // Create a new Participants entity
-        $participant = new Participants();
-        // Set the properties
-        $participant->setFirstName($user->getFirstName());
-        $participant->setIdUser($user);
-        $participant->setLastName($user->getLastName());
-        $participant->setAdress($user->getAddress());
-        $participant->setGender($user->getGender());
-        $participant->setIdEvent($event);
-        // Save the entity
-        $em->persist($participant);
-        $em->flush();
-
-        // Redirect to the event page
-        return $this->redirectToRoute('app_event_particip', ['id' => $event->getId()]);
+    
+    // Check if the number of available slots is greater than 0
+    if ($event->getNbparticipants() <= 0) {
+        // No more available slots, redirect to another page
+        return $this->redirectToRoute('app_event_no_participants', [], Response::HTTP_SEE_OTHER);
     }
+    
+    // Create a new Participants entity
+    $participant = new Participants();
+    // Set the properties
+    $participant->setFirstName($user->getFirstName());
+    $participant->setIdUser($user);
+    $participant->setLastName($user->getLastName());
+    $participant->setAdress($user->getAddress());
+    $participant->setGender($user->getGender());
+    $participant->setIdEvent($event);
+
+    // Decrement the number of available slots
+    $event->setNbparticipants($event->getNbparticipants() - 1);
+    $em->persist($event);
+    $em->flush();
+
+    // Save the entity
+    $em->persist($participant);
+    $em->flush();
+
+    // Redirect to the event page
+    return $this->redirectToRoute('app_event_particip', ['id' => $event->getId()]);
+}
+
+
     #[Route('/{id}/edit', name: 'app_event_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Event $event, EventRepository $eventRepository): Response
     {
@@ -440,12 +479,15 @@ public function cancelParticipation(Request $request, $eventId)
         'idUser' => $userId,
         'idEvent' => $eventId,
     ]);
+    $event = $em->getRepository(Event::class)->findOneBy([
+        'id' => $eventId,
+    ]);
 
     if (!$participant) {
         // If the user is not a participant, redirect to the events page
         return $this->redirectToRoute('my_participated_events');
     }
-
+    $event->setNbparticipants($event->getNbparticipants() + 1);
     // Remove the participant entity
     $em->remove($participant);
     $em->flush();
@@ -453,5 +495,32 @@ public function cancelParticipation(Request $request, $eventId)
     // Redirect to the events page
     return $this->redirectToRoute('my_participated_events');
 }
+/**
+     * @Route("/stat/show", name="stats")
+     */
+    public function statistiques(EventRepository $eventRepo){
+        // On va chercher toutes les catégories
+        $events = $eventRepo->findAll();
+
+        $eventName = [];
+        $eventColor = [];
+        $eventparticipants = [];
+
+        // On "démonte" les données pour les séparer tel qu'attendu par ChartJS
+        foreach($events as $event){
+            $eventName[] = $event->getEventName();
+            $eventColor[] = $event->getColor();
+            $eventparticipants[] = $event->getNbParticipants();
+        }
+
+        
+
+        return $this->render('event/stats.html.twig', [
+            'eventName' => json_encode($eventName),
+            'eventColor' => json_encode($eventColor),
+            'eventparticipants' => json_encode($eventparticipants),
+            
+        ]);
+    }
 
 }
