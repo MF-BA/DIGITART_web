@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Users;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Func;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -27,10 +28,11 @@ class UsersRepository extends ServiceEntityRepository implements PasswordUpgrade
 
     public function search($mots = null){
         $query = $this->createQueryBuilder('u');
-        $query->where('u.is_verified = 1');
+        
         if($mots != null){
-            $query->andWhere('MATCH_AGAINST(u.firstname, u.lastname) AGAINST (:mots boolean)>0')
-                ->setParameter('mots', $mots);
+            $query->addSelect(new Func('MATCH_AGAINST', array('u.firstname, u.lastname', ':mots boolean')) . ' AS HIDDEN score')
+            ->andWhere($query->expr()->gt(new Func('MATCH_AGAINST', array('u.firstname, u.lastname', ':mots boolean')), 0))
+            ->setParameter('mots', $mots);
         } 
         return $query->getQuery()->getResult();
     }

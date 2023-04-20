@@ -47,8 +47,8 @@ class UsersController extends AbstractController
                 $search->get('mots')->getData()
             );
         }
-
-        return $this->render('users/index.html.twig',compact('users','total','limit','page'));
+          $form=$form->createView();
+        return $this->render('users/index.html.twig',compact('users','total','limit','page','form'));
     }
 
     #[Route('/new', name: 'app_users_new', methods: ['GET', 'POST'])]
