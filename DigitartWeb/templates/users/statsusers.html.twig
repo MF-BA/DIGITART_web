@@ -57,15 +57,35 @@
   cursor: not-allowed;
 }
 
-     
+     .custom-card {
+  width: 80%;
+}
         </style>
         {% endblock %}
 {% block body %}
 
 
-<div class="container">
-<h1> Users Gender Stats</h1>
-<canvas id="users" style="width: 30% !important; height: 30% !important;"></canvas>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card custom-card">
+      <div class="card-body">
+        <h4 class="mb-3">Gender Stats</h4>
+        <div class="flot-container" style="width: 500px; height: 500px;">
+          <canvas id="users1" style="width: 40% !important; height: 40% !important; position: relative; right: 30px;"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card custom-card">
+      <div class="card-body">
+        <h4 class="mb-3">Roles Stats</h4>
+        <div class="flot-container" style="width: 500px; height: 500px;">
+          <canvas id="users2" style="width: 30% !important; height: 30% !important;position: relative; right: 30px;"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}
@@ -104,9 +124,28 @@
                 })(jQuery);
         </script>      
       <script>
+      
 window.onload = function() {
-  var ctx = document.getElementById('users').getContext('2d');
-  var myChart = new Chart(ctx, {
+  var ctx1 = document.getElementById('users1').getContext('2d');
+  var ctx2 = document.getElementById('users2').getContext('2d');
+  var myChart2 = new Chart(ctx2, {
+      type: 'doughnut',
+      data: {
+          labels: ['Admin', 'Artist', 'Subscriber'],
+          datasets: [{
+              data: [{{ totalAdmin }},{{ totalArtist }},{{ totalSubscriber }}],
+              backgroundColor: [
+                'red',
+                  'green',
+                  'blue',
+              ],
+          }]
+      },
+      options: {
+          // Customize the appearance of the pie chart
+      }
+  });
+  var myChart1 = new Chart(ctx1, {
       type: 'pie',
       data: {
           labels: ['Male', 'Female'],
@@ -124,5 +163,7 @@ window.onload = function() {
   });
 }
 </script>
+ 
+
 
         {% endblock %}

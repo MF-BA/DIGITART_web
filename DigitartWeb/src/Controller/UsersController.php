@@ -57,7 +57,9 @@ class UsersController extends AbstractController
         
         $totalMale = 0;
         $totalFemale = 0;
-        
+        $totalAdmin = 0;
+        $totalArtist = 0;
+        $totalSubscriber = 0;
 
         foreach ($users as $user) {
             if($user->getGender() == 'Male')
@@ -68,11 +70,26 @@ class UsersController extends AbstractController
             {
                 $totalFemale +=1;
             }
+            if($user->getRole() == 'Artist')
+            {
+                $totalArtist +=1;
+            }
+            if($user->getRole() == 'Admin')
+            {
+                $totalAdmin +=1;
+            }
+            if($user->getRole() == 'Subscriber')
+            {
+                $totalSubscriber +=1;
+            }
         }
     
         return $this->render('users/statsusers.html.twig', [
             'totalMale' => $totalMale,
             'totalFemale' => $totalFemale,
+            'totalAdmin' => $totalAdmin,
+            'totalArtist' => $totalArtist,
+            'totalSubscriber' => $totalSubscriber
 
         ]);
     }
@@ -104,23 +121,23 @@ class UsersController extends AbstractController
             {
                 $user->setRoles(['ROLE_ADMIN']);
             }
-            if($form->get('role')->getData()==='Gallery manager')
+            if($form->get('role')->getData()==='Gallery Manager')
             {
                 $user->setRoles(['ROLE_GALLERY_MANAGER']);
             }
-            if($form->get('role')->getData()==='Auction manager')
+            if($form->get('role')->getData()==='Auction Manager')
             {
                 $user->setRoles(['ROLE_AUCTION_MANAGER']);
             }
-            if($form->get('role')->getData()==='Events manager')
+            if($form->get('role')->getData()==='Events Manager')
             {
                 $user->setRoles(['ROLE_EVENT_MANAGER']);
             }
-            if($form->get('role')->getData()==='Tickets manager')
+            if($form->get('role')->getData()==='Tickets Manager')
             {
                 $user->setRoles(['ROLE_TICKETS_MANAGER']);
             }
-            if($form->get('role')->getData()==='Users manager')
+            if($form->get('role')->getData()==='Users Manager')
             {
                 $user->setRoles(['ROLE_USERS_MANAGER']);
             }
