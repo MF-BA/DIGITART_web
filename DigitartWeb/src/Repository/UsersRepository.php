@@ -25,6 +25,16 @@ class UsersRepository extends ServiceEntityRepository implements PasswordUpgrade
         parent::__construct($registry, Users::class);
     }
 
+    public function search($mots = null){
+        $query = $this->createQueryBuilder('u');
+        $query->where('u.is_verified = 1');
+        if($mots != null){
+            $query->andWhere('MATCH_AGAINST(u.firstname, u.lastname) AGAINST (:mots boolean)>0')
+                ->setParameter('mots', $mots);
+        } 
+        return $query->getQuery()->getResult();
+    }
+
     public function save(Users $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
@@ -67,6 +77,40 @@ class UsersRepository extends ServiceEntityRepository implements PasswordUpgrade
         ->getOneOrNullResult()
     ;
 }
+
+
+public function getPaginatedusers($page, $limit, $filters = null){
+    $query = $this->createQueryBuilder('u');
+   /* ->where('u.is_verified = 1');*/
+       
+
+    // On filtre les données
+    if($filters != null){
+        $query->andWhere('u.role IN(:Subscriber)')
+            ->setParameter(':Subscriber', array_values($filters));
+    }
+
+    $query->orderBy('u.createdAt')
+        ->setFirstResult(($page * $limit) - $limit)
+        ->setMaxResults($limit)
+    ;
+    return $query->getQuery()->getResult();
+}
+
+public function getTotalUsers($filters){
+    $query = $this->createQueryBuilder('u')
+            ->select('COUNT(u)');
+            /*->where('u.is_verified = 1');*/
+        // On filtre les données
+        if($filters != null){
+            $query->andWhere('u.role IN(:Subscriber)')
+                ->setParameter(':Subscriber', array_values($filters));
+        }
+
+        return $query->getQuery()->getSingleScalarResult();
+}
+
+
 //    /**
 //     * @return Users[] Returns an array of Users objects
 //     */

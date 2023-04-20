@@ -20,6 +20,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Karser\Recaptcha3Bundle\Form\Recaptcha3Type;
+use Karser\Recaptcha3Bundle\Validator\Constraints\Recaptcha3;
+use Symfony\Config\KarserRecaptcha3Config;
 
 class RegistrationFormType extends AbstractType
 {
@@ -202,6 +205,10 @@ class RegistrationFormType extends AbstractType
                     ]),
                     
                 ],
+            ])
+            ->add('captcha', Recaptcha3Type::class, [
+                'constraints' => new Recaptcha3(['message' => 'There were problems with your captcha. Please try again or contact with support and provide following code(s): {{ errorCodes }}']),
+                'action_name' => 'contact',
             ])
             
         ;

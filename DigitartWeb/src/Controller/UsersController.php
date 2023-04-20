@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Users;
 use App\Entity\UserImages;
+use App\Form\SearchUsersType;
 use App\Form\UsersType;
 use App\Repository\UsersRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,12 +23,32 @@ use Symfony\Component\Serializer\SerializerInterface;
 class UsersController extends AbstractController
 {
     
-    #[Route('/', name: 'app_users_index', methods: ['GET'])]
-    public function index(UsersRepository $usersRepository): Response
+    #[Route('/', name: 'app_users_index')]
+    public function index(Request $request, UsersRepository $usersRepository): Response
     {
-        return $this->render('users/index.html.twig', [
-            'users' => $usersRepository->findAll(),
-        ]);
+        $limit = 5;
+
+        // retreive filters
+        $filters = $request->get("role");
+
+        $page = (int)$request->query->get("page", 1);
+        // retreive the total number of users
+        $total = $usersRepository->getTotalUsers($filters);
+
+        //$users = $usersRepository->findBy(['role' => 'subscriber'],['createdAt' => 'desc'], 5);
+        $users = $usersRepository->getPaginatedusers($page, $limit);
+        $form = $this->createForm(SearchUsersType::class);
+        
+        $search = $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            // On recherche les annonces correspondant aux mots clés
+            $users = $usersRepository->search(
+                $search->get('mots')->getData()
+            );
+        }
+
+        return $this->render('users/index.html.twig',compact('users','total','limit','page'));
     }
 
     #[Route('/new', name: 'app_users_new', methods: ['GET', 'POST'])]

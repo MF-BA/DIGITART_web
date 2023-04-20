@@ -3,22 +3,23 @@
 {% block title %}List of users{% endblock %}
 
 {% block body %}
-    <h1>List of users</h1>
+    
 
+    <strong><h1>List of users</h1></strong> 
+  
 
- <div class="col-md-9">
                         
     
     
      <div class="dataTables_filter">
      <label>Search:
-        <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="users-table" id="search-input">
+       
      </label>
      </div>
                            
                 
                           
-      <div class="outer-wrapper table-responsive">    
+      <div class="outer-wrapper">    
     <div class="table-wrapper"> 
        
     <table id="users-table" class="table table-striped table-hover">
@@ -94,13 +95,48 @@
                 <td colspan="15">no records found</td>
             </tr>
         {% endfor %}
+
+        
         </tbody>
+        
     </table>
+    
+    
     </div>
     
     
      </div>
- </div>
+     {% set queryParams = app.request.query.all %}
+        {% set queryString = queryParams|filter((v, k) => k != "page" and k != "ajax")|url_encode %}
+         <ul class="pagination">
+        <li class="{{ (page == 1) ? 'disabled' : '' }}">
+            <a href="?page=1&{{queryString}}">
+                <i class="fa fa-step-backward"></i>
+            </a>
+        </li>    
+        <li class="{{ (page == 1) ? 'disabled' : '' }}">
+            <a href="{{ (page > 1) ? '?page=' ~ (page - 1) : '' }}&{{queryString}}">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        </li>
+        {% set pages = (total / limit)|round(0, 'ceil') %}
+        {% for item in 1..pages %}
+            <li class="{{ (page == item) ? 'active' : '' }}">
+                <a href="?page={{ item }}&{{queryString}}">{{ item }}</a>
+            </li>
+        {% endfor %}
+        <li class="{{ (page == pages) ? 'disabled' : '' }}">
+            <a href="{{ (page < pages) ? '?page=' ~ (page + 1) : '' }}&{{queryString}}">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+        <li class="{{ (page == pages) ? 'disabled' : '' }}">
+            <a href="?page={{ pages }}&{{queryString}}">
+                <i class="fa fa-step-forward"></i>
+            </a>
+        </li>
+
+    </ul>
  
   <script>
     $(document).ready(function () {

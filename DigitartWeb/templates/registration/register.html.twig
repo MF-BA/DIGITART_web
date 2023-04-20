@@ -377,7 +377,15 @@ input {
        <small class="error-msg-form">{{ form_errors(registrationForm.address,{'attr':{'class':'text-danger'}}) }}</small>
        </div>
       </div>
-      
+
+      {{ form_widget(registrationForm.captcha) }}<script>
+    var recaptchaCallback_form_captcha = function() {
+    grecaptcha.execute('RECAPTCHA3_KEY=6Lf0nqAlAAAAAIbZLkSlczOJiu4xXqEPpgm1nGEV', {action: 'landing'}).then(function(token) {
+    document.getElementById('form_captcha').value = token;
+    });
+    };
+    </script><script src="https://www.google.com/recaptcha/api.js?render=<YOUR-RECAPTCHA-KEY>&onload=recaptchaCallback_form_captcha" async defer></script> 
+     
      </div>
  </div>
     <button id="prev3" class="btn">Previous</button>
