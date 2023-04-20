@@ -52,25 +52,28 @@ class UsersController extends AbstractController
     }
     #[Route('/stats', name: 'app_users_statsusers', methods: ['GET'])]
     public function statsusers(UsersRepository $userRepo)
-    {// On va chercher toutes les catégories
+    {
         $users = $userRepo->findAll();
-
-        $usersGender = [];
         
-        $usersCount = [];
-
-        // On "démonte" les données pour les séparer tel qu'attendu par ChartJS
-        foreach($users as $user){
-            $usersGender[] = $user->getGender();
+        $totalMale = 0;
+        $totalFemale = 0;
         
-            $usersCount[] = count($users);
+
+        foreach ($users as $user) {
+            if($user->getGender() == 'Male')
+            {
+                $totalMale +=1;
+            }
+            if($user->getGender() == 'Female')
+            {
+                $totalFemale +=1;
+            }
         }
-
-       
-
+    
         return $this->render('users/statsusers.html.twig', [
-            'usersGender' => json_encode($usersGender),
-            'usersCount' => json_encode($usersCount),
+            'totalMale' => $totalMale,
+            'totalFemale' => $totalFemale,
+
         ]);
     }
     #[Route('/new', name: 'app_users_new', methods: ['GET', 'POST'])]
