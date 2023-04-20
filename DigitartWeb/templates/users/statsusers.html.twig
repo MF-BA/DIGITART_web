@@ -1,0 +1,149 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Stats of users{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous">
+        <link rel="apple-touch-icon" href="apple-icon.png">
+        <link rel="shortcut icon" href="favicon.ico">
+
+        <link rel="stylesheet" href="{{asset('Back/vendors/bootstrap/dist/css/bootstrap.min.css')}}">
+        <link rel="stylesheet" href="{{asset('Back/vendors/font-awesome/css/font-awesome.min.css')}}">
+        <link rel="stylesheet" href="{{asset('Back/vendors/themify-icons/css/themify-icons.css')}}">
+        <link rel="stylesheet" href="{{asset('Back/vendors/flag-icon-css/css/flag-icon.min.css')}}">
+        <link rel="stylesheet" href="{{asset('Back/vendors/selectFX/css/cs-skin-elastic.css')}}">
+        <link rel="stylesheet" href="{{asset('Back/vendors/jqvmap/dist/jqvmap.min.css')}}">
+
+        <link rel="stylesheet" href="{{asset('Back/assets/css/style.css')}}">
+
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+        <style>
+      .widget-content-right {
+    position: relative;
+    top: 7px;
+    right: 15px;
+      }
+     .color-app{
+        color: #BD2A2E;
+     }
+  .pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination li {
+  list-style: none;
+  margin: 0 5px;
+}
+
+.pagination li a {
+  text-decoration: none;
+  color: #333;
+  display: block;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.pagination li.disabled a,
+.pagination li.active a {
+  color: #fff;
+  background-color: #BD2A2E;
+  border-color: #000000;
+}
+
+.pagination li.disabled a {
+  cursor: not-allowed;
+}
+
+     
+        </style>
+        {% endblock %}
+{% block body %}
+
+<div class="container">
+    <h1>Stats</h1>
+    <canvas id="users" width="400" height="100"></canvas>
+
+</div>
+
+
+{% endblock %}
+
+
+
+ {% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+        <script src="{{asset('Back/vendors/jquery/dist/jquery.min.js')}}"></script>
+        <script src="{{asset('Back/vendors/popper.js/dist/umd/popper.min.js')}}"></script>
+        <script src="{{asset('Back/vendors/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+        <script src="{{asset('Back/assets/js/main.js')}}"></script>
+
+        <script src="{{asset('Back/vendors/chart.js/dist/Chart.bundle.min.js')}}"></script>
+        <script src="{{asset('Back/assets/js/dashboard.js')}}"></script>
+        <script src="{{asset('Back/assets/js/widgets.js')}}"></script>
+        <script src="{{asset('Back/vendors/jqvmap/dist/jquery.vmap.min.js')}}"></script>
+        <script src="{{asset('Back/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js')}}"></script>
+        <script src="{{asset('Back/vendors/jqvmap/dist/maps/jquery.vmap.world.js')}}"></script>
+        <script>
+        (function($) {
+            "use strict";
+
+            jQuery('#vmap').vectorMap({
+                map: 'world_en',
+                backgroundColor: null,
+                color: '#ffffff',
+                hoverOpacity: 0.7,
+                selectedColor: '#1de9b6',
+                enableZoom: true,
+                showTooltip: true,
+                values: sample_data,
+                scaleColors: ['#1de9b6', '#03a9f5'],
+                normalizeFunction: 'polynomial'
+                    });
+                })(jQuery);
+        </script>
+        <script>
+    
+   var ctx = document.getElementById('users');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+    
+    
+</script>
+        {% endblock %}
