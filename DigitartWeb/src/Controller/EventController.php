@@ -30,6 +30,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Comments;
 use Symfony\Component\Validator\Constraints\DateTime;
 
+
 #[Route('/event')]
 class EventController extends AbstractController
 {
@@ -563,5 +564,63 @@ public function cancelParticipation(Request $request, $eventId)
             
         ]);
     }
+ /**
+ * @Route("/pdf/{eventId}", name="pdf_qrcode")
+ */
+public function generateEventPdf($eventId)
+{
+    // Retrieve event data from the database using the event ID
+    $event = $this->getDoctrine()->getRepository(Event::class)->find($eventId);
+    $eventName = $event->getEventName();
+    $startDate = $event->getStartDate()->format('Y-m-d');
+    $endDate = $event->getEndDate()->format('Y-m-d');
+    $details = $event->getDetail();
+
+    // Generate QR code
+    $qrCodeUrl = 'https://chart.googleapis.com/chart?cht=qr&chl=' . urlencode('Event Name: ' . $eventName . ', Start Date: ' . $startDate . ', End Date: ' . $endDate) . '&chs=300x300&choe=UTF-8&chld=L|2';
+    $qrCode = file_get_contents($qrCodeUrl);
+
+    // Create PDF
+    $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+    $pdf->SetMargins(10, 10, 10);
+    $pdf->AddPage();
+
+    // Set background color to grey
+    $pdf->SetFillColor(192, 192, 192);
+    $pdf->Rect(0, 0, $pdf->getPageWidth(), $pdf->getPageHeight(), 'F');
+
+    // Add logo to PDF
+    $pdf->Image('images/logo_digitart.jpg', 10, 15, 80, 50, '', '', '', false, 300, '', false, false, 0);
+
+    // Add QR code container to PDF
+    $pdf->SetXY(50, 100);
+    $pdf->SetFont('helvetica', 'B', 16);
+    $pdf->Cell(100, 10, 'QR Code', 0, 1, 'C');
+    $pdf->SetXY(50, 110);
+    $pdf->SetFillColor(192, 192, 192);
+    $pdf->Rect(10, 110, 60, 60, 'F');
+    $pdf->Image('@'.$qrCode, 75, 115, 50, 50, 'PNG', '', '', true, 300, '', false, false, 0);
+
+    // Add event data to PDF
+$pdf->SetFont('helvetica', 'B', 18);
+$pdf->SetTextColor(255, 0, 0);
+$pdf->SetXY(20, 110);
+$pdf->Cell(0, 10, $eventName, 0, 1, 'L');
+$pdf->SetFont('helvetica', '', 14);
+$pdf->SetTextColor(0, 0, 0);
+$pdf->SetXY(20, 130);
+$pdf->Cell(0, 10, 'Start Date: ' . $startDate, 0, 1, 'L');
+$pdf->SetXY(20, 140);
+$pdf->Cell(0, 10, 'End Date: ' . $endDate, 0, 1, 'L');
+
+$pdf->SetXY(20, 170);
+$pdf->Cell(0, 10, 'Details: ' . $details, 0, 1, 'L');
+
+
+    // Output PDF as response
+    return new Response($pdf->Output('event.pdf', 'I'));
+}
+
+
 
 }
