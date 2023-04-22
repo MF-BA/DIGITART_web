@@ -106,7 +106,7 @@ class EventController extends AbstractController
         $events = $paginator->paginate(
             $query, /* query NOT result */
             $request->query->getInt('page', 1),
-            2
+            2   
         );
     
         return $this->render('event/eventfront.html.twig', [
@@ -620,7 +620,31 @@ $pdf->Cell(0, 10, 'Details: ' . $details, 0, 1, 'L');
     // Output PDF as response
     return new Response($pdf->Output('event.pdf', 'I'));
 }
+  /**
+     * @Route("/calendar/show", name="main")
+     */
+    public function calendar(EventRepository $calendar)
+    {
+        $events = $calendar->findAll();
 
+        $rdvs = [];
+
+        foreach($events as $event){
+            $rdvs[] = [
+                'id' => $event->getId(),
+                'start' => $event->getStartDate()->format('Y-m-d H:i:s'),
+                'end' => $event->getEndDate()->format('Y-m-d H:i:s'),
+                'title' => $event->getEventName(),
+                'description' => $event->getDetail(),
+                'backgroundColor' => $event->getColor(),
+                
+            ];
+        }
+
+        $data = json_encode($rdvs);
+
+        return $this->render('event/fullcalendar.html.twig', compact('data'));
+    }
 
 
 }
