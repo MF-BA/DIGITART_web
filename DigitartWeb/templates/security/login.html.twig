@@ -86,6 +86,37 @@ a:hover {
 .login100-form-btn:hover {
   background: #333333 !important;
 }
+.social-connect-btn {
+  font-family: Montserrat-Bold;
+  font-size: 10px;
+  line-height: 1.5;
+  color: #fff;
+  text-transform: uppercase;
+
+  width: 200px;
+  height: 50px;
+  border-radius: 25px;
+  background: #000000 !important;
+  position: relative;
+  top: 100px;
+  right: 70px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 25px;
+
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+.social-connect-btn:hover {
+  background: blue !important;
+}
 .container-login100 {
   width: 100% !important;  
   min-height: 100vh !important;
@@ -237,8 +268,10 @@ display: -webkit-box;
 						<button class="login100-form-btn" type="submit">
 							Login
 						</button>
-					</div>
 
+              
+					</div>
+          
 					<div class="text-center p-t-12">
 						<span class="txt1">
 							Forgot
@@ -248,6 +281,21 @@ display: -webkit-box;
 						</a>
 					</div>
 
+
+
+          
+          
+						 
+					
+
+				</form>
+        	<div class="text-center">
+           <a href="{{ path('github_connect') }}">
+            <button class="social-connect-btn">
+							Connect with github
+						</button>
+            </a>
+            </div>
 					<div class="text-center p-t-136">
 						<a class="txt2" href="{{path('app_register')}}">
 							Create your Account
@@ -259,12 +307,6 @@ display: -webkit-box;
             Return to home	
 						</a>
 					</div>
-          
-						 
-					
-
-				</form>
-
                 </div>
 		</div>
 	</div>
