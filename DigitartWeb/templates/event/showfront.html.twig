@@ -342,7 +342,63 @@ Respect Restricted Areas: Some exhibits or areas may be off-limits to visitors. 
 We want you to have an enjoyable experience at our event and to fully appreciate the exhibits on display. Please take your time to explore each exhibit, read the information provided, and immerse yourself in the stories and history behind them. Our knowledgeable staff members will be available to answer any questions you may have and to provide additional information about the exhibits. We hope you have a wonderful time at our event and create lasting memories.                </p>
                
               </div><!-- End post content -->
+ <div class="comments">
 
+              <h4 class="comments-count">{{ event.comments|length }} Comment{{ event.comments|length == 1 ? '' : 's' }}</h4>
+{% for comment in event.comments %}
+{% if comment.parent == null %}
+              <div id="comment-1" class="comment">
+                <div class="d-flex">
+                  <div class="comment-img"><img src="{{asset('images/event_bg.jpg')}}" alt=""></div>
+                  <div>
+                    <h5><a href="">{{comment.getNickname().firstname()}}</a>
+                     <a href="#ajout-commentaire" data-reply data-id="{{comment.id}}" class="reply"><i class="bi bi-reply-fill"></i> Reply</a></h5>
+                    <time datetime="2020-01-01">{{comment.createdAt|date("d/m/Y H:i") }}</time>
+                    <p style="color: white;">
+                      {{comment.content|raw}}
+                    </p>
+                  </div>
+                </div>
+                {% for reply in comment.replies %}
+                 <div id="comment-reply-2" class="comment comment-reply">
+                    <div class="d-flex">
+                      <div class="comment-img"><img src="{{asset('images/event_bg.jpg')}}" alt=""></div>
+                      <div>
+                     <a href="#ajout-commentaire" data-reply data-id="{{comment.id}}" class="reply"><i class="bi bi-reply-fill"></i> Reply</a></h5>
+                        <time datetime="2020-01-01">{{reply.createdAt|date("d/m/Y H:i") }}</time>
+                        <p>
+                               {{reply.content|raw}}                        </p>
+                      </div>
+                    </div>
+
+                  </div><!-- End comment reply #2-->
+                  {% endfor %}
+              </div><!-- End comment #1 -->
+            
+					{% endif %}
+{% endfor %}
+
+              <div class="reply-form">
+
+                <h4>Leave a Reply</h4>
+                <p>Your email address will not be published. Required fields are marked * </p>
+                 <form action="" method="post" id="ajout-commentaire">
+  {{ form_start(commentForm, {attr: {novalidate: 'novalidate','id': 'comment-form'}}) }}
+  <div class="row">
+    <div class="col form-group">
+      {{ form_label(commentForm.content, 'Send Comment') }}
+      {{ form_widget(commentForm.content, { 'attr': {'class': 'form-control', 'placeholder': 'Enter your comment'} }) }}
+    </div>
+  </div>
+  {{ form_widget(commentForm) }}
+  <button type="submit" class="btn btn-primary">Submit</button>
+  {{ form_end(commentForm) }}
+</form>
+
+
+              </div>
+
+            </div><!-- End blog comments -->
               <div class="meta-bottom">
                 <i class="bi bi-folder"></i>
                 <ul class="cats">
@@ -409,5 +465,59 @@ We want you to have an enjoyable experience at our event and to fully appreciate
 
       </div>
     </section><!-- End Blog Details Section -->
-    
+  <script src="{{ asset('ckeditor5/ckeditor.js') }}"></script>
+    <script src="{{ asset('js/ckeditor.js') }}"></script>
+	<script>
+		window.onload = () => {
+
+			// On met un écouteur d'évènements sur tous les boutons répondre
+			document.querySelectorAll("[data-reply]").forEach(element => {
+				element.addEventListener("click", function(){
+					document.querySelector("#comments_parentid").value = this.dataset.id;
+				});
+			});
+		}
+		let caroulix = new Caroulix('#carousel');
+		let modal = new Modal('#modale-contact');
+	</script>
+   <script>
+    $(function() {
+      var commentForm = $('#comment-form');
+      var commentList = $('#comment-list');
+
+      // Submit the form asynchronously when the user submits it
+      commentForm.submit(function(event) {
+        event.preventDefault();
+
+        var url = commentForm.attr('action');
+        var data = commentForm.serialize();
+
+        $.ajax({
+          type: commentForm.attr('method'),
+          url: url,
+          data: data,
+          success: function(response) {
+            // Update the comment list with the new comment
+            commentList.html(response.comments);
+            commentForm.get(0).reset();
+          },
+          error: function(xhr, textStatus, errorThrown) {
+            alert('An error occurred while submitting the comment.');
+          }
+        });
+      });
+
+      // Load the comments asynchronously when the page loads
+      $.ajax({
+        type: 'GET',
+        url: '{{ path('app_event_show_front', {'id': event.id}) }}',
+        success: function(response) {
+          commentList.html(response.comments);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+          alert('An error occurred while loading the comments.');
+        }
+      });
+    });
+  </script>
 {% endblock %}

@@ -6,6 +6,7 @@ use App\Entity\Users;
 use App\Entity\Images;
 use App\Entity\Participants;
 use App\Form\EventType;
+use App\Form\CommentsType;
 use App\Repository\EventRepository;
 use App\Repository\ParticipantsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,6 +27,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use TCPDF;
 use Knp\Component\Pager\PaginatorInterface;
+use App\Entity\Comments;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 #[Route('/event')]
 class EventController extends AbstractController
@@ -173,14 +176,52 @@ class EventController extends AbstractController
     }
     
 
-    #[Route('/{id}/front', name: 'app_event_show_front', methods: ['GET'])]
-    public function showfront(Event $event): Response
-    {
+    #[Route('/{id}/front', name: 'app_event_show_front', methods: ['POST', 'GET'])]
+public function showfront(Event $event, Request $request): Response
+{
+    $user = $this->getUser();
+    // Partie commentaires
+    // On crée le commentaire "vierge"
+    $comment = new Comments;
+
+    // On génère le formulaire
+    $commentForm = $this->createForm(CommentsType::class, $comment);
+
+    $commentForm->handleRequest($request);
+
+    // Traitement du formulaire
+    if($commentForm->isSubmitted() && $commentForm->isValid()){
+        $comment->setCreatedAt(new \DateTime());
+        $comment->setEvent($event);
+        $comment->setNickname($user);
+
+        // On récupère le contenu du champ parentid
+        $parentid = $commentForm->get("parentid")->getData();
+
+        // On va chercher le commentaire correspondant
+        $em = $this->getDoctrine()->getManager();
+
+        if($parentid != null){
+            $parent = $em->getRepository(Comments::class)->find($parentid);
+        }
+
+        // On définit le parent
+        $comment->setParent($parent ?? null);
         
-        return $this->render('event/showfront.html.twig', [
-            'event' => $event,
-        ]);
+        $em->persist($comment);
+        $em->flush();
+        $this->addFlash('message', 'Votre commentaire a bien été envoyé');
+        return $this->redirectToRoute('app_event_show_front', ['id' => $event->getId()]);
     }
+
+    return $this->render('event/showfront.html.twig', [
+        'event' => $event,
+        'commentForm' => $commentForm->createView()
+        
+    ]);
+}
+
+
     #[Route('/participated/a', name: 'app_event_already', methods: ['GET'])]
     public function already(EventRepository $eventRepository): Response
     {
