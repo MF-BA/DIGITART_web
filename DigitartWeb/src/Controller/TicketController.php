@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\Payment;
 use App\Entity\Ticket;
 use App\Repository\PaymentRepository;
+use App\Repository\EventRepository;
 use App\Form\TicketType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -134,19 +135,48 @@ class TicketController extends AbstractController
         $totalAdult = 0;
         $totalTeenager = 0;
         $totalStudent = 0;
+        $totalAmount1 = 0;
+        $totalAmountToday = 0;
+        $totalTickets = 0;
+        $totalTicketsToday = 0;
+        
+        $today = new \DateTime();
 
         foreach ($payments as $payment) {
             $totalAdult += $payment->getNbAdult();
             $totalTeenager += $payment->getNbTeenager();
             $totalStudent += $payment->getNbStudent();
+            $totalAmount1 += $payment->getTotalPayment();
+            $totalTickets += $payment->getNbAdult() + $payment->getNbTeenager() + $payment->getNbStudent();
+            if ($payment->getPurchaseDate() && $payment->getPurchaseDate()->format('Y-m-d') == $today->format('Y-m-d')) {
+                $totalAmountToday += $payment->getTotalPayment();
+                $totalTicketsToday+=$payment->getNbAdult() + $payment->getNbTeenager() + $payment->getNbStudent();
+            }
+        }
+
+        $drive = $PaymentRepository->getTotalPaymentByPurchaseDate();
+
+        $paymentDate = [];
+        $totalAmount = [];
+    
+        foreach ($drive as $drives) {
+            $paymentDate[] = $drives['purchase_date']->format('Y-m-d'); // Format date as needed
+            $totalAmount[] = $drives['total_payment'];
         }
     
         return $this->render('ticket/stats.html.twig', [
             'totalAdult' => $totalAdult,
             'totalTeenager' => $totalTeenager,
             'totalStudent' => $totalStudent,
-
+            'totalAmount1' => $totalAmount1,
+            'totalAmountToday' => $totalAmountToday,
+            'totalTickets' => $totalTickets,
+            'totalTicketsToday' => $totalTicketsToday,
+            'paymentDate' => json_encode($paymentDate),
+            'totalAmount' => json_encode($totalAmount),
         ]);
     }
+
+
 
 }

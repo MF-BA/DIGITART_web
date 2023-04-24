@@ -92,6 +92,13 @@ class PaymentRepository extends ServiceEntityRepository
         return $qb->getSingleScalarResult();
     }
 
+    public function paginationQuery()
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.paymentId', 'ASC') // Update to use the correct field name
+            ->getQuery();
+    }
+    
     public function getTotalPaymentByPurchaseDate(): array
     {
         return $this->createQueryBuilder('p')
@@ -100,14 +107,6 @@ class PaymentRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-    public function paginationQuery()
-    {
-        return $this->createQueryBuilder('p')
-            ->orderBy('p.paymentId', 'ASC') // Update to use the correct field name
-            ->getQuery();
-    }
-    
 //    /**
 //     * @return Payment[] Returns an array of Payment objects
 //     */
