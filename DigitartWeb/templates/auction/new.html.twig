@@ -3,18 +3,113 @@
 {% block title %}Add an Artwork to the Auction{% endblock %}
 {% block homeActive %}{% endblock %}
 {% block auctionActive %} class="active" {% endblock %}
+
 {% block body %}
+<style>
+@import url("https://fonts.googleapis.com/css?family=Saira+Semi+Condensed&display=swap");
+* {
+  font-family: "Saira Semi Condensed", sans-serif;
+  transition: all 0.5s ease;
+}
+
+body {
+  background: linear-gradient(to bottom, #e6e6e6, #1a1a1a); /* gradient from light gray to dark gray */
+}
+
+.containerr {
+  width: 100%;
+  height: 100%;
+  padding: 0 16px;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+form {
+  width: 400px;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  justify-content: center;
+}
+form div, form label, form input, form textarea {
+  width: 100%;
+}
+
+.field:nth-of-type(2) {
+  margin: 16px 0;
+}
+
+label, input, textarea {
+  padding: 8px;
+  font-size: 18px;
+}
+
+label, [placeholder] {
+  color: #555;
+}
+
+label i {
+  margin: 0 10px 0 0;
+}
+
+.field:focus-within label {
+  color: #000;
+  letter-spacing: 2px;
+}
+
+input, textarea {
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0 8px 6px -6px #555;
+}
+input:focus, textarea:focus {
+  background: red;
+  box-shadow: none;
+}
+
+textarea {
+  resize: none;
+}
+textarea::-webkit-scrollbar {
+  width: 0;
+}
+
+button {
+  background: #4d4d4d;
+  margin: 16px 0 50px 0;
+  padding: 8px 16px;
+  color: #2f4ad0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 8px 6px -6px #555;
+}
+button:hover {
+  letter-spacing: 2px;
+  box-shadow: none;
+}
+@media (max-width: 425px) {
+  form {
+    width: 100%;
+  }
+}
+label, button {
+  color: #fff;
+}
+  
+</style>
 <!-- ======= Breadcrumbs ======= -->
-    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/breadcrumbs-bg.jpg')}});">
+    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/front-home/museum1.png')}})">
       <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
 
-        <h2>Auction</h2>
+        <h2>AUCTION</h2>
 
-      </div>
-    </div><!-- End Breadcrumbs -->
-    <h1>Add an Artwork to the Auction</h1>
-
+      
     {{ include('auction/_form.html.twig') }}
+    </div>
 
-    <a href="{{ path('displayAUCTION') }}">back to list</a>
+</div>
 {% endblock %}

@@ -9,6 +9,7 @@
 		rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
 		{# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
 		{% block stylesheets %}
+		
 			<style>
 				.example-wrapper {
 					margin: 1em auto;
@@ -135,6 +136,7 @@
 					background-position: center center; /* center the image horizontally and vertically within the container */
 				}
 			</style>
+
 			<script>
 				function toggleOptions() {
 var options = document.getElementById('options');
@@ -175,6 +177,9 @@ options.style.display = 'none';
 			<!-- Template Main CSS File -->
 			<link href="{{asset('Front/assets/css/main.css')}}" rel="stylesheet">
 		{% endblock %}
+
+{% block javascript %}
+{% endblock %}
 
 		{% block javascripts %}
 			<!-- Vendor JS Files -->
@@ -268,7 +273,7 @@ updateTimer(endingDate, timerId);
 					<!-- @formatter:off -->
 					<li class="dropdown">
 						<a href="{{path('displayAUCTION')}}" {% block auctionActive %} {% endblock %}>
-							<span>auction</span>
+							auction
 							{% if app.user is not null  %}
 
 								{% if app.user.role == 'Artist' %}
@@ -285,7 +290,7 @@ updateTimer(endingDate, timerId);
 						{% endif %}
 
 					</li>
-					<!-- @formatter:on -->
+
 
 					<li>
 						<a href="{{ path('app_event_front_index') }}" {% block eventactive %} {% endblock %}>Event</a>
@@ -297,7 +302,7 @@ updateTimer(endingDate, timerId);
 						</li>
 						<li class="dropdown active">
 							<a href="{{ path('app_payment_new') }}" {% block ticketactive %} {% endblock %}>
-								<span>Ticket</span>
+								Ticket
 								<i class="bi bi-chevron-down dropdown-indicator"></i>
 							</a>
 							<ul>
@@ -316,7 +321,7 @@ updateTimer(endingDate, timerId);
 					{% endfor %}
 					{% if app.user is not null %}
 
-						{% if app.user.role == 'Subscriber' or app.user.role == 'Artist' %}
+						
 							<strong class="user-name">
 								{{app.user.firstname}}
 								{{app.user.lastname}}
@@ -345,7 +350,7 @@ updateTimer(endingDate, timerId);
 										Logout</div>
 								</a>
 							</div>
-						{% endif %}
+						
 
 					{% endif %}
 				</nav>

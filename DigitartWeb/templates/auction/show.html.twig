@@ -98,10 +98,8 @@ return true;
 								<ul>
 									<li class="d-flex align-items-center">
 										<i class="bi bi-person"></i>
-
 										{{auction.artwork.idArtist.lastname|upper}}
 										{{auction.artwork.idArtist.firstname|upper}}
-
 									</li>
 									<li class="d-flex align-items-center">
 										<i class="bi bi-clock"></i>
@@ -142,22 +140,33 @@ return true;
 						<!-- start sidebar search formn-->
 							<div class="sidebar"> <div class="sidebar-item search-form">
 
+
 								<div class="meta-top">
 									<a>The starting Price :
 									</a>
 									<br>
 									<br>
+
+
 									{% if app.user is not null and  app.user.id == highestBidder %}
 										<a style="color: green;">You are the highest bidder with:
 										</a>
 										<a>{{ highestBid is not null ? highestBid ~ '$' : 'none' }}</a>
-
 
 									{% else %}
 										<a>The Highest Offer :
 											{{ highestBid is not null ? highestBid ~ '$' : 'none' }}
 										</a>
 									{% endif %}
+									<a id="search_link" class="search_link"><a>
+									<br><br>
+									{% if highestBid is not null %}
+										<a>
+											Change the currency to:
+										</a>
+										<select id="symbolComboBox"></select>
+									{% endif %}
+
 									<br>
 									<br>
 
@@ -197,4 +206,57 @@ return true;
 				</div>
 			</div>
 		</section>
+
+
+		<script>
+			
+var myHeaders = new Headers();
+myHeaders.append("apikey", "90bvVgraQiEn2QC6KuN8OOayRnaSqbIx");
+
+var requestOptions = {
+method: 'GET',
+redirect: 'follow',
+headers: myHeaders
+};
+
+fetch("https://api.apilayer.com/fixer/symbols", requestOptions).then(response => response.json()).then(result => { // get reference to combo box element
+const comboBox = document.getElementById("symbolComboBox");
+
+// loop through symbols and create option elements
+Object.keys(result.symbols).forEach(symbol => {
+const option = document.createElement("option");
+const currencyShortName = symbol;
+option.value = currencyShortName;
+option.text = currencyShortName;
+comboBox.add(option);
+});
+comboBox.value = "USD"; // Set default selected value to USD
+
+}).catch(error => console.log('error', error));
+		</script>
+
+
+		<script>
+symbolComboBox.addEventListener("change", handleCurrencyChange);
+
+function handleCurrencyChange() {
+const selectedCurrency = symbolComboBox.value;
+const amount = {{ highestBid }}; // assuming `highestBid` contains the amount in USD
+const url = `https://api.apilayer.com/fixer/convert?from=USD&to=${selectedCurrency}&amount=${amount}`;
+const requestOptions = {
+method: 'GET',
+redirect: 'follow',
+headers: {
+"apikey": "90bvVgraQiEn2QC6KuN8OOayRnaSqbIx"
+}
+};
+
+fetch(url, requestOptions).then(response => response.json()).then(result => {
+  const convertedAmount = Math.round(result.result); // approximate the converted amount to an integer
+  // do something with the converted amount, e.g. display it on the page
+  document.getElementById("search_link").textContent = `(≈ ${convertedAmount} ${selectedCurrency})`;
+  console.log(`${amount} USD is equivalent to ${convertedAmount} ${selectedCurrency}`);
+}).catch(error => console.log('error', error));	
+}
+		</script>
 	{% endblock %}

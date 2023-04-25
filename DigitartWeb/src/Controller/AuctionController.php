@@ -16,23 +16,18 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\BidRepository;
 use App\Repository\ImageArtworkRepository;
 use App\Repository\UsersRepository;
-
-
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/auction')]
 class AuctionController extends AbstractController
 {
-    #[Route('/home', name: 'displayAUCTION', methods: ['GET'])]
-    public function auctionFRONT(AuctionRepository $auctionRepository, BidRepository $BidRepository, ImageArtworkRepository $ImageartworkRepository,Request $request): Response
+    #[Route('/home', name: 'displayAUCTION', methods: ['GET', 'POST'])]
+    public function auctionFRONT(AuctionRepository $auctionRepository, BidRepository $BidRepository, ImageArtworkRepository $ImageartworkRepository, Request $request): Response
     {
-        
+
         $page = $request->query->getInt('page', 1);
         $array[] = "";
-        $images = []; 
-
-        
-
-
+        $images = [];
         $currentDateTime = new \DateTime();
         $auction = $auctionRepository->createQueryBuilder('a')
             ->where('a.endingDate > :currentDateTime')
@@ -42,20 +37,39 @@ class AuctionController extends AbstractController
             ->getResult();
 
         foreach ($auction as $auc) {
-            $images [$auc->getIdAuction()]= $ImageartworkRepository->createQueryBuilder('u')
-            ->where('u.idArt = :epreuve')
-            ->setParameter('epreuve',$auc->getartwork()->getIdArt())
-            ->getQuery()
-            ->getResult();
+            $images[$auc->getIdAuction()] = $ImageartworkRepository->createQueryBuilder('u')
+                ->where('u.idArt = :epreuve')
+                ->setParameter('epreuve', $auc->getartwork()->getIdArt())
+                ->getQuery()
+                ->getResult();
             $highestBid = $BidRepository->highestBid($auc->getIdAuction());
             if ($highestBid)
                 $array[$auc->getIdAuction()] = $highestBid->getOffer();
             else $array[$auc->getIdAuction()] = null;
         }
+
+
+
+        if ($request->isXmlHttpRequest()) {
+            // Render the updated HTML content as a string
+            $html = [
+                'auctions' => $auction,
+                'highestBids' => $array,
+                'pageParam' => $page,
+                'imageArtwork' => $images,
+            ];
+            return new JsonResponse(['html' => $html]);
+        }
+
         return $this->render('auction/displayAll.html.twig', [
-            'auctions' => $auction, 'highestBids' => $array, 'pageParam' => $page,'imageArtwork' => $images,
+            'auctions' => $auction,
+            'highestBids' => $array,
+            'pageParam' => $page,
+            'imageArtwork' => $images,
         ]);
     }
+
+
 
 
     #[Route('/new', name: 'app_auction_new', methods: ['GET', 'POST'])]
@@ -80,7 +94,7 @@ class AuctionController extends AbstractController
     #[Route('/show/{id_auction}', name: 'app_auction_show', methods: ['GET', 'POST'])]
     public function show(Request $request, Auction $auction, BidRepository $BidRepository, ImageArtworkRepository $ImageartworkRepository): Response
     {
-       
+
 
         $highestBid = $BidRepository->highestBid($auction->getIdAuction());
 
@@ -90,12 +104,13 @@ class AuctionController extends AbstractController
         } else {
             $highestBid = null;
             $highestBidder = null;
-        } $images = []; 
-        $images [$auction->getIdAuction()]= $ImageartworkRepository->createQueryBuilder('u')
-        ->where('u.idArt = :epreuve')
-        ->setParameter('epreuve',$auction->getartwork()->getIdArt())
-        ->getQuery()
-        ->getResult();
+        }
+        $images = [];
+        $images[$auction->getIdAuction()] = $ImageartworkRepository->createQueryBuilder('u')
+            ->where('u.idArt = :epreuve')
+            ->setParameter('epreuve', $auction->getartwork()->getIdArt())
+            ->getQuery()
+            ->getResult();
 
         $bid = new Bid();
         $form = $this->createForm(BidType::class, $bid);
@@ -111,21 +126,21 @@ class AuctionController extends AbstractController
         }
         return $this->render('auction/show.html.twig', [
             'auction' => $auction, 'highestBid' => $highestBid, 'countBids' => $BidRepository->countBids($auction->getIdAuction()), 'bid' => $bid,
-            'form' => $form->createView(), 'highestBidder' => $highestBidder,'imageArtwork' => $images,
+            'form' => $form->createView(), 'highestBidder' => $highestBidder, 'imageArtwork' => $images,
         ]);
     }
 
     #[Route('/edit/{id_auction}', name: 'app_auction_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Auction $auction, AuctionRepository $auctionRepository,ImageArtworkRepository $ImageartworkRepository): Response
+    public function edit(Request $request, Auction $auction, AuctionRepository $auctionRepository, ImageArtworkRepository $ImageartworkRepository): Response
     {
         $form = $this->createForm(Auction1Type::class, $auction);
         $form->handleRequest($request);
-        $images = []; 
-        $images [$auction->getIdAuction()]= $ImageartworkRepository->createQueryBuilder('u')
-        ->where('u.idArt = :epreuve')
-        ->setParameter('epreuve',$auction->getartwork()->getIdArt())
-        ->getQuery()
-        ->getResult();
+        $images = [];
+        $images[$auction->getIdAuction()] = $ImageartworkRepository->createQueryBuilder('u')
+            ->where('u.idArt = :epreuve')
+            ->setParameter('epreuve', $auction->getartwork()->getIdArt())
+            ->getQuery()
+            ->getResult();
         if ($form->isSubmitted() && $form->isValid()) {
             $auctionRepository->save($auction, true);
 
@@ -134,7 +149,7 @@ class AuctionController extends AbstractController
 
         return $this->renderForm('auction/edit.html.twig', [
             'auction' => $auction,
-            'form' => $form,'imageArtwork' => $images,
+            'form' => $form, 'imageArtwork' => $images,
         ]);
     }
 
@@ -146,6 +161,49 @@ class AuctionController extends AbstractController
         }
 
         return $this->redirectToRoute('displayAUCTION', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/statistics', name: 'statistics_back')]
+    public function statistics_back(AuctionRepository $auctionRepository, BidRepository $BidRepository, ArtworkRepository $artworkrepo, Request $request): Response
+    {
+        $data1 = [];
+        $queryBuilder = $BidRepository->createQueryBuilder('b');
+$queryBuilder->groupBy('b.id_auction');
+$results = $queryBuilder->getQuery()->getResult();
+
+            
+           
+            foreach ($results as $row) {
+                $query = $BidRepository->createQueryBuilder('s')
+                    ->select('COUNT(s.id)')
+                    ->where('s.id_auction = :id_auction')
+                    ->setParameter(':id_auction', $row->getIdAuction())->getQuery()->getSingleScalarResult();
+                $data1[] = [
+                    'id_auction' => $row->getIdAuction() , 'count' => $query,
+                ];
+            }
+
+
+        $data = [];
+
+        foreach ($data1 as $row) {
+            $auctionId = $row['id_auction'];
+            $count = $row['count'];
+
+            $auction = $auctionRepository->findOneBy(['id_auction' => $auctionId]);
+            $artworkId = $auction->getArtwork()->getIdArt();
+
+            $artwork = $artworkrepo->findOneBy(['idArt' => $artworkId]);
+            $artworkName = $artwork->getArtworkName();
+
+            $data[] = [
+                'artwork_name' => $artworkName,
+                'count' => $count
+            ];
+        }
+
+
+        return $this->render('auction/statistics.html.twig', ['data' => $data]);
     }
 
     #[Route('/admin', name: 'DisplayAuctionBack', methods: ['GET'])]
@@ -285,6 +343,4 @@ class AuctionController extends AbstractController
     {
         return $this->render('users/register.html.twig', []);
     }
-    
-    
 }

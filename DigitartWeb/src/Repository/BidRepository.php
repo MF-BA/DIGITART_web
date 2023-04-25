@@ -33,7 +33,7 @@ class BidRepository extends ServiceEntityRepository
             ->setParameter('id_auction', $var)
             ->orderBy('s.offer', 'DESC')
             ->setMaxResults(1);
-
+           
         $result = $queryBuilder->getQuery()->getOneOrNullResult();
 
         return $result;
@@ -43,10 +43,8 @@ class BidRepository extends ServiceEntityRepository
         $queryBuilder = $this->createQueryBuilder('s')
             ->select('COUNT(s.id)')
             ->where('s.id_auction = :id_auction')
-            ->setParameter('id_auction', $var);
-
-        $result = $queryBuilder->getQuery()->getSingleScalarResult();
-
+            ->setParameter('id_auction', $var)->getQuery()->getSingleScalarResult();
+        $result = $queryBuilder;
         return $result;
     }
 

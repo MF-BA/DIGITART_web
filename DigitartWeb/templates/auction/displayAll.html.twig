@@ -10,6 +10,55 @@
 
 
 {% block body %}
+<!--
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<form id="my-form">
+  <input type="hidden" id="auctions-input" name="auctions" value="" />
+  <input type="hidden" id="highestBids-input" name="highestBids" value="" />
+  <input type="hidden" id="pageParam-input" name="pageParam" value="" />
+  <input type="hidden" id="imageArtwork-input" name="imageArtwork" value="" />
+</form>
+-->
+
+<script>
+  $(document).ready(function() {
+    setInterval(function() {
+      $.ajax({
+        url: "/auction/home",
+        type: 'GET',
+        success: function(response) {
+          var auctions = response.html.auctions;
+          var highestBids = response.html.highestBids;
+          var pageParam = response.html.pageParam;
+          var imageArtwork = response.html.imageArtwork;
+
+          // Update the relevant parts of the page
+          $('#auctions').html(auctions);
+          $('#auctions-input').val(auctions);
+          $('#highest-bids').html(highestBids);
+          $('#page-param').html(pageParam);
+          $('#image-artwork').html(imageArtwork);
+        },
+        error: function() {
+          console.log("Error");
+        }
+      });
+    }, 5000);
+  });
+</script>
+
+<!-- Update the HTML with the values -->
+<div id="auctions"></div>
+<div id="highest-bids"></div>
+<div id="page-param"></div>
+<div id="image-artwork"></div>
+
+
+
+
+
+
+
 
 
 	{% set articlesPerPage = 2 %}
@@ -27,26 +76,27 @@
 	<!-- End Breadcrumbs -->
 
 
+
 	<section id="blog" class="blog">
-		<div class="container" data-aos="fade-up" data-aos-delay="100">
-			<div class="row gy-4 posts-list">
+			<div class="container" data-aos="fade-up" data-aos-delay="100">
+			<div id="auction-list" class="row gy-4 posts-list">
 				{% for auction in auctions %}
 					<div class="col-xl-4 col-md-6">
 						<div class="post-item position-relative h-100">
 							<div class="post-img position-relative overflow-hidden">
 								{% if imageArtwork[ auction.idAuction ] is not null %}
-                  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
+                  		<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                    	<div class="carousel-inner">
                       {% for image in imageArtwork[ auction.idAuction ] %}
                         <div class="carousel-item {% if loop.first %}active{% endif %}">
                           <img src="{{ asset('/uploads/'~image.ImageName) }}" class="d-block w-100" style="width: 400px; height: 300px;" alt="">
                         </div>
                       {% endfor %}
-                    </div>
-                  </div>
-                {% else %}
+                 		   </div>
+                			  </div>
+               				 {% else %}
                       <img  src="{{ asset('/uploads/noimage.jpg') }}"  class="d-block w-100" style="width: 400px; height: 300px;" alt="">
-                {% endif %}
+               				 {% endif %}
 								{% if auction.endingDate %}
 									{% set endingDate = auction.endingDate|date('Y-m-d H:i:s') %}
 									<span id="timer_{{auction.idAuction}}" class="post-date"></span>
@@ -131,5 +181,6 @@
 		</div>
 	</section>
 
-
 {% endblock %}
+
+
