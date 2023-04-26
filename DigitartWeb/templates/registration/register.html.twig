@@ -378,14 +378,25 @@ input {
        </div>
       </div>
 
-      {{ form_widget(registrationForm.captcha) }}<script>
-    var recaptchaCallback_form_captcha = function() {
-    grecaptcha.execute('RECAPTCHA3_KEY=6Lf0nqAlAAAAAIbZLkSlczOJiu4xXqEPpgm1nGEV', {action: 'landing'}).then(function(token) {
-    document.getElementById('form_captcha').value = token;
-    });
-    };
-    </script><script src="https://www.google.com/recaptcha/api.js?render=<YOUR-RECAPTCHA-KEY>&onload=recaptchaCallback_form_captcha" async defer></script> 
-     
+       <div class="row form-group">
+        <div class="col col-md-6">
+       {{ form_label(registrationForm.captchaCode, 'Captcha Code') }}
+        </div>
+       <div class="col-12 col-md-9">
+       {{ form_widget(registrationForm.captchaCode, {'attr': {'class': 'form-control', 'placeholder': 'Enter captcha code'}}) }}
+       <small class="error-msg-form">{{ form_errors(registrationForm.captchaCode,{'attr':{'class':'text-danger'}}) }}</small>
+       </div>
+      </div> 
+     {# {% form_theme registrationForm '@EWZRecaptcha/Form/ewz_recaptcha_widget.html.twig' %}
+
+{{ form_widget(registrationForm.recaptcha, { 'attr': {
+    'options' : {
+        'theme': 'light',
+        'type': 'image',
+        'size': 'normal'
+    },
+} }) }}
+     #}
      </div>
  </div>
     <button id="prev3" class="btn">Previous</button>

@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 use App\Entity\Users;
+use Twilio\Rest\Client;
 use App\Repository\UsersRepository;
 use App\Form\ResetPasswordFormType;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use App\Form\ResetPasswordRequestFormType;
 use App\Service\SendMailService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,8 +21,10 @@ use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class SecurityController extends AbstractController
 {
+    
+
     #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(FlashyNotifier $flashy,AuthenticationUtils $authenticationUtils): Response
     {
         // if ($this->getUser()) {
         //     return $this->redirectToRoute('target_path');
@@ -35,16 +39,19 @@ class SecurityController extends AbstractController
         $user = $this->getDoctrine()->getRepository(Users::class)->findOneByEmail($lastUsername);
         
         if ($user && $user->getIsVerified() == false) {
-            $this->addFlash('danger', 'Your account is not activated');
+         $flashy->error('Your account is not activated');
         }
         // check if the user is blocked
         if ($user && $user->getStatus() == 'blocked') {
-            $this->addFlash('danger', 'Your account is blocked');
+            $flashy->error('your account is blocked!');
             
         }
+        
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
+
+    
 
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): \Symfony\Component\HttpFoundation\RedirectResponse
@@ -55,6 +62,7 @@ class SecurityController extends AbstractController
     #[Route('/forgot-pwd', name:'forgotten_password')]
     public function forgottenPassword(
         Request $request,
+        FlashyNotifier $flashy,
         UsersRepository $usersRepository,
         TokenGeneratorInterface $tokenGenerator,
         EntityManagerInterface $entityManager,
@@ -91,12 +99,11 @@ class SecurityController extends AbstractController
                     'password_reset',
                     $context
                 );
-
-                $this->addFlash('success', 'Mail sent successfully');
+                $flashy->success('Mail sent successfully');
                 return $this->redirectToRoute('app_login');
             }
             // $user est null
-            $this->addFlash('danger', 'Problem detected try again!');
+            $flashy->error('Problem detected try again!');
             return $this->redirectToRoute('app_login');
         }
 
@@ -109,6 +116,7 @@ class SecurityController extends AbstractController
     public function resetPass(
         string $token,
         Request $request,
+        FlashyNotifier $flashy,
         UsersRepository $usersRepository,
         EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $passwordHasher
@@ -134,7 +142,7 @@ class SecurityController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'password changed successfully');
+                $flashy->success('password changed successfully');
                 return $this->redirectToRoute('app_login');
             }
 
@@ -142,7 +150,9 @@ class SecurityController extends AbstractController
                 'passForm' => $form->createView()
             ]);
         }
-        $this->addFlash('danger', 'Invalid token');
+        $flashy->error('Invalid token');
         return $this->redirectToRoute('app_login');
     }
+
+  
 }

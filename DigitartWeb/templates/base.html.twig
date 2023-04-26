@@ -4,6 +4,7 @@
         <meta charset="UTF-8" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}DigitArt{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        <link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
         <style>
@@ -123,6 +124,29 @@ button {
   background-size: cover; /* scale the image to cover the container while maintaining its aspect ratio */
   background-position: center center; /* center the image horizontally and vertically within the container */
 }
+#popup-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid black;
+  padding: 20px;
+}
+
+#popup-message {
+  font-size: 18px;
+  text-align: center;
+}
+
+#popup-message.success {
+  color: green;
+}
+
+#popup-message.error {
+  color: red;
+}
+
 </style>
 <script>
 		function toggleOptions() {
@@ -133,7 +157,35 @@ button {
 				options.style.display = 'none';
 			}
 		}
-	</script>
+// Get the success and error messages from Flask
+var success_messages = JSON.parse('{{ app.flashes('success')|default('[]') }}');
+var error_messages = JSON.parse('{{ app.flashes('error')|default('[]') }}');
+
+// Escape the messages before inserting them into the HTML code
+for (var i = 0; i < success_messages.length; i++) {
+  success_messages[i] = escape(success_messages[i]);
+}
+for (var i = 0; i < error_messages.length; i++) {
+  error_messages[i] = escape(error_messages[i]);
+}
+
+// Display the success message in the popup window
+if (success_messages.length > 0) {
+  var popup = document.getElementById('popup-message');
+  popup.innerHTML = unescape(success_messages[0]);
+  popup.classList.add('success');
+  document.getElementById('popup-container').style.display = 'block';
+}
+
+// Display the error message in the popup window
+if (error_messages.length > 0) {
+  var popup = document.getElementById('popup-message');
+  popup.innerHTML = unescape(error_messages[0]);
+  popup.classList.add('error');
+  document.getElementById('popup-container').style.display = 'block';
+}
+
+    	</script>
       <link href="{{asset('Front/assets/img/logo-digitart-rouge.png')}}" rel="icon">
   
  
@@ -163,6 +215,12 @@ button {
   <script src="{{asset('Front/assets/vendor/swiper/swiper-bundle.min.js')}}"></script>
   <script src="{{asset('Front/assets/vendor/purecounter/purecounter_vanilla.js')}}"></script>
   <script src="{{asset('Front/assets/vendor/php-email-form/validate.js')}}"></script>
+
+<!-- Flashy depends on jQuery -->
+    <script src="//code.jquery.com/jquery.js"></script>
+    <!-- Load Flashy default JavaScript -->
+    <script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
+    <!-- Include Flashy default partial -->
 
   <!-- Template Main JS File -->
   <script src="{{asset('Front/assets/js/main.js')}}"></script>
@@ -213,9 +271,9 @@ button {
         </ul>
          {% for label, messages in app.flashes(['success', 'error']) %}
                             {% for message in messages %}
-                                <div class="flash-{{ label }}">
-                                    {{ message }}
-                                </div>
+                            <div id="popup-container">
+                             <div id="popup-message">{{ message }}</div>
+                              </div>
                             {% endfor %}
                         {% endfor %}
         {% if app.user is not null %}
@@ -249,6 +307,7 @@ button {
   {% endblock %}
   
 {% block body %}
+{{ include('@MercurySeriesFlashy/flashy.html.twig') }}
 <!-- =========================================================== main ================================================== -->
  {% if app.user and app.user.isVerified == false %}
 			<div class="alert alert-warning alert-dismissible" role="alert">

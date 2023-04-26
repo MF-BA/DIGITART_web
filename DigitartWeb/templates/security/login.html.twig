@@ -117,6 +117,38 @@ a:hover {
 .social-connect-btn:hover {
   background: blue !important;
 }
+.facebook-connect-btn {
+  font-family: Montserrat-Bold;
+  font-size: 10px;
+  line-height: 1.5;
+  color: #fff;
+  text-transform: uppercase;
+
+  width: 150px;
+  height: 50px;
+  border-radius: 25px;
+  background: blue !important;
+  position: relative !important;
+  bottom: 160px !important;
+  left: 370px !important;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 25px;
+
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+.facebook-connect-btn:hover {
+  background: white !important;
+  color: blue !important;
+}
 .container-login100 {
   width: 100% !important;  
   min-height: 100vh !important;
@@ -145,10 +177,15 @@ display: -webkit-box;
   left: 980px !important;
   bottom: 700px !important;
 }
-
+.position-footer{
+  position: relative !important;
+  bottom: 100px;
+  
+}
 	</style>
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="{{asset('login/images/icons/favicon.ico')}}">
+  <link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{{asset('login/vendor/bootstrap/css/bootstrap.min.css')}}">
 <!--===============================================================================================-->
@@ -176,6 +213,13 @@ display: -webkit-box;
 	<script src="{{asset('login/vendor/select2/select2.min.js')}}"></script>
 <!--===============================================================================================-->
 	<script src="{{asset('login/vendor/tilt/tilt.jquery.min.js')}}"></script>
+
+  <!-- Flashy depends on jQuery -->
+    <script src="//code.jquery.com/jquery.js"></script>
+    <!-- Load Flashy default JavaScript -->
+    <script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
+    <!-- Include Flashy default partial -->
+
 	<script >
 		$('.js-tilt').tilt({
 			scale: 1.1 
@@ -191,7 +235,7 @@ display: -webkit-box;
 <div class="limiter">
 
 		<div class="container-login100">
-    
+    {{ include('@MercurySeriesFlashy/flashy.html.twig') }}
     <div class="top-login-form">
   {% for message in app.flashes('danger') %}
                 <div class="alert alert-danger">
@@ -232,7 +276,7 @@ display: -webkit-box;
 					</span> 
 
     <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-	<input class="input100" type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" placeholder="Email" required autofocus>
+	<input class="input100"class="input100" type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" placeholder="Email" required autofocus>
 		<span class="focus-input100"></span>
 			<span class="symbol-input100">
 			<i class="fa fa-envelope" aria-hidden="true"></i>
@@ -290,13 +334,21 @@ display: -webkit-box;
 
 				</form>
         	<div class="text-center">
-           <a href="{{ path('github_connect') }}">
+           <a href="#">
             <button class="social-connect-btn">
 							Connect with github
 						</button>
             </a>
             </div>
-					<div class="text-center p-t-136">
+            <div class="text-center">
+           <a href="{{path('app_facebook_login')}}">
+            <button class="facebook-connect-btn">
+							Connect with facebook
+						</button>
+            </a>
+            </div>
+
+					<div class="text-center position-footer">
 						<a class="txt2" href="{{path('app_register')}}">
 							Create your Account
 							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>

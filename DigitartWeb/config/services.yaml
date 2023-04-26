@@ -4,9 +4,26 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+  recaptcha_site_key: "%env(RECAPTCHA3_KEY)%"
   images_directory: "%kernel.project_dir%/public/Uploads"
   app.jwtsecret: "%env(JWT_SECRET)%"
+  twilio.account_sid: "AC26070345014e8efbf7d72d5d825f598f"
+  twilio.auth_token: "3b6816ab952f256614bbb9ef8ca44745"
 services:
+  authenticator.2FAmail:
+    class: FAuthenticator\FAmail
+    arguments:
+      $mailer: "@mailer"
+  Twilio\Rest\Client:
+    alias: twilio.client
+  twilio.client:
+    class: Twilio\Rest\Client
+    arguments:
+      - "%twilio.account_sid%"
+      - "%twilio.auth_token%"
+  Captcha\Bundle\CaptchaBundle\Controller\:
+    resource: "../vendor/carlos-mg89/symfony-captcha-bundle/Controller"
+    autowire: true
   # default configuration for services in *this* file
   _defaults:
     autowire: true # Automatically injects dependencies in your services.

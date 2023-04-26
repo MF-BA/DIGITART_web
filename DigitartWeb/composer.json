@@ -7,16 +7,24 @@
         "php": ">=7.2.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "carlos-mg89/symfony-captcha-bundle": "^4.2",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.8",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.14",
+        "excelwebzone/recaptcha-bundle": "^1.5",
         "fzaninotto/faker": "^1.5",
+        "giggsey/libphonenumber-for-php": "^8.13",
+        "google/auth": "*",
         "karser/karser-recaptcha3-bundle": "^0.1.23",
         "knpuniversity/oauth2-client-bundle": "^2.14",
+        "league/oauth2-facebook": "^2.2",
         "league/oauth2-github": "^3.1",
+        "mercuryseries/flashy-bundle": "^5.1",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.15",
+        "scheb/2fa-bundle": "^6.8",
+        "scheb/2fa-email": "^6.8",
         "sensio/framework-extra-bundle": "^6.1",
         "stof/doctrine-extensions-bundle": "^1.7",
         "symfony/asset": "5.4.*",
@@ -28,7 +36,6 @@
         "symfony/form": "5.4.*",
         "symfony/framework-bundle": "5.4.*",
         "symfony/google-mailer": "5.4.*",
-        "symfony/http-client": "5.4.*",
         "symfony/intl": "5.4.*",
         "symfony/mailer": "5.4.*",
         "symfony/mime": "5.4.*",
@@ -48,13 +55,15 @@
         "symfony/yaml": "5.4.*",
         "symfonycasts/verify-email-bundle": "^1.13",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "twig/twig": "^2.12|^3.0",
+        "twilio/sdk": "^7.3"
     },
     "config": {
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "symfony/flex": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "php-http/discovery": true
         },
         "optimize-autoloader": true,
         "preferred-install": {
@@ -71,6 +80,7 @@
         "psr-4": {
             "App\\Tests\\": "tests/"
         }
+        
     },
     "replace": {
         "symfony/polyfill-ctype": "*",

@@ -6,6 +6,7 @@ use App\Entity\Users;
 use App\Form\RegistrationFormType;
 use App\Repository\UsersRepository;
 use App\Security\AppCustomAuthenticator;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,12 +23,12 @@ class RegistrationController extends AbstractController
 {
     
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher,UserAuthenticatorInterface $userAuthenticator, AppCustomAuthenticator $authenticator, EntityManagerInterface $entityManager, SendMailService $mail, JWTService $jwt): Response
+    public function register(Request $request,FlashyNotifier $flashy,UsersRepository $usersRepository,UserPasswordHasherInterface $userPasswordHasher,UserAuthenticatorInterface $userAuthenticator, AppCustomAuthenticator $authenticator, EntityManagerInterface $entityManager, SendMailService $mail, JWTService $jwt): Response
     {
         $user = new Users();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
@@ -36,7 +37,14 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-           
+            $user_exist= $usersRepository->findOneByEmail($form->get('email')->getData());
+            if ($user_exist)
+            {
+            $flashy->error('You already have an account with this email!');
+            return $this->redirectToRoute('app_login');
+            }
+            else
+            {
             if($form->get('role')->getData()==='Artist')
             {
                 $user->setRoles(['ROLE_ARTIST']);
@@ -45,6 +53,7 @@ class RegistrationController extends AbstractController
             {
                 $user->setRoles(['ROLE_SUBSCRIBER']);
             }
+            
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
@@ -77,7 +86,7 @@ class RegistrationController extends AbstractController
                 $request
             );
            
-
+           }
 
         }
 
@@ -87,7 +96,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/verif/{token}', name: 'verify_user')]
-    public function verifyUser($token, JWTService $jwt, UsersRepository $usersRepository, EntityManagerInterface $em): Response
+    public function verifyUser($token, FlashyNotifier $flashy,JWTService $jwt, UsersRepository $usersRepository, EntityManagerInterface $em): Response
     {
         //On vérifie si le token est valide, n'a pas expiré et n'a pas été modifié
         if($jwt->isValid($token) && !$jwt->isExpired($token) && $jwt->check($token, $this->getParameter('app.jwtsecret'))){
@@ -101,27 +110,27 @@ class RegistrationController extends AbstractController
             if($user && !$user->getIsVerified()){
                 $user->setIsVerified(true);
                 $em->flush($user);
-                $this->addFlash('success', 'Account Activated');
+                $flashy->success('Account Activated');
                 return $this->redirectToRoute('showfrontpage');
             }
         }
         // Ici un problème se pose dans le token
-        $this->addFlash('danger', 'Your account is invalide or expired');
+        $flashy->primaryDark('Your account is invalide or expired');
         return $this->redirectToRoute('app_login');
     }
 
     #[Route('/resendverif', name: 'resend_verif')]
-    public function resendVerif(JWTService $jwt, SendMailService $mail, UsersRepository $usersRepository): Response
+    public function resendVerif(JWTService $jwt, FlashyNotifier $flashy,SendMailService $mail, UsersRepository $usersRepository): Response
     {
         $user = $this->getUser();
 
         if(!$user){
-            $this->addFlash('danger', 'Vous devez être connecté pour accéder à cette page');
+            $flashy->error('You need to log in in order to access this page!');
             return $this->redirectToRoute('app_login');    
         }
 
         if($user->getIsVerified()){
-            $this->addFlash('warning', 'this account is already activated');
+            $flashy->info('this account is already activated!');
             return $this->redirectToRoute('showfrontpage');    
         }
 
@@ -148,7 +157,7 @@ class RegistrationController extends AbstractController
             'register',
             compact('user', 'token')
         );
-        $this->addFlash('success', 'Verification email sent!');
+        $flashy->success('Verification email sent!');
         return $this->redirectToRoute('app_login');
     }
 }

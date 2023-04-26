@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Users;
+use Twilio\Rest\Client;
 use App\Entity\UserImages;
 use App\Form\SearchUsersType;
 use App\Form\UsersType;
@@ -16,13 +17,20 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\SerializerInterface;
-
-
+use libphonenumber\PhoneNumberUtil;
+use libphonenumber\NumberParseException;
+use League\OAuth2\Client\Provider\Facebook;
 
 #[Route('/users')]
 class UsersController extends AbstractController
 {
-    
+    private $twilio;
+   
+    public function __construct(Client $twilio)
+    {
+        $this->twilio = $twilio;
+       
+    }
     #[Route('/', name: 'app_users_index')]
     public function index(Request $request, UsersRepository $usersRepository): Response
     {
@@ -167,6 +175,73 @@ class UsersController extends AbstractController
         return $this->render('users/showprofile.html.twig', [
             'user' => $user,
         ]);
+    }
+    #[Route('/sendSms/{user}', name: 'app_send_sms', methods: ['GET'])]
+    public function sendSms(Request $request, Users $user): Response
+    {
+       // Check if the user's phone number is set
+       $phoneNumber = $user->getPhoneNum();
+       if (!$phoneNumber) {
+           $this->addFlash('danger', 'Your phone number is not set.');
+           return $this->redirectToRoute('app_logout', [], Response::HTTP_SEE_OTHER);
+       }
+       
+       // Send the SMS verification code
+       $code = $this->generateCode();
+       $message = "Your verification code is: $code";
+      // $account_sid = getenv('TWILIO_ACCOUNT_SID');
+       //$auth_token = getenv('TWILIO_AUTH_TOKEN');
+// In production, these should be environment variables. E.g.:
+// $auth_token = $_ENV["TWILIO_AUTH_TOKEN"]
+
+// A Twilio number you own with SMS capabilities
+//$twilio_number = getenv('TWILIO_FROM');
+$phoneNumberUtil = PhoneNumberUtil::getInstance();
+$client = new Client('AC94856cb34627a72a0c023f6fa317849d', '54523a02fecb01ad5ff85ad2c6791dac');
+try {
+$phoneNumber = $phoneNumberUtil->parse($phoneNumber, 'TN');
+$client->messages->create(
+    // Where to send a text message (your cell phone?)
+    "+21699717964", // to
+        array(
+          "from" => "+14405309354",
+          "messagingServiceSid" => "MGa45cade48202a7ca44043bac9f088e3a",
+          "body" => "Your verification code is: $code"
+        )
+);
+}catch (\Exception $e) {
+    $this->addFlash('danger', 'Error sending SMS: ' . $e->getMessage());
+    //throw $e;
+    //return $this->redirectToRoute('app_logout', [], Response::HTTP_SEE_OTHER);
+}
+
+       // Redirect to the SMS verification route
+       return $this->redirectToRoute('app_sms_verification', [
+        'phone_number' => $phoneNumber,
+       'code' => $code,
+       ], Response::HTTP_SEE_OTHER);
+       
+      
+    }
+    #[Route('/sms-verification', name: 'app_sms_verification')]
+    public function smsVerification(Request $request): Response
+    {
+    $phoneNumber = $request->query->get('phone_number');
+    $code = $request->query->get('code');
+
+    return $this->render('security/sms_verification.html.twig', [
+        'phone_number' => $phoneNumber,
+        'code' => $code,
+    ]);
+    }
+    private function generateCode(): string
+    {
+        $code = '';
+        $characters = '0123456789';
+        for ($i = 0; $i < 6; $i++) {
+            $code .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        return $code;
     }
     #[Route('/profilefront/{id}', name: 'app_users_profilefront', methods: ['GET', 'POST'])]
     public function showprofilefront(Request $request, Users $user, EntityManagerInterface $entityManager): Response
@@ -340,5 +415,5 @@ public function deleteprofile(Request $request,int $id,ManagerRegistry $doctrine
     return $this->json(['users' => $users]);
      }
     
-     
+    
 }

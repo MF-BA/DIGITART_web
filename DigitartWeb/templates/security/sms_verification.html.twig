@@ -185,12 +185,10 @@ display: -webkit-box;
   
 }
 	</style>
-
 {% block body %}
 <div class="limiter">
-
-		<div class="container-login100">
-    
+   
+   <div class="container-login100">
     <div class="top-login-form">
  
     </div>
@@ -204,18 +202,21 @@ display: -webkit-box;
 <div class="container-login100-form-btn">
           
               <span class="login100-form-title">
-						Reset Password
+						SMS Verification
 					</span> 
-{{ form_start(requestPassForm,{attr:{novalidate:'novalidate'}}) }}
+<form action="{{ path('app_verify_sms') }}" method="post">
+        
+  
     <div class="wrap-input100 validate-input">
     
-    {{ form_row(requestPassForm.email) }}
-    
-		<span class="focus-input100"></span>
+    <div class="form-group">
+            <label for="code">Verification Code:</label>
+            <input type="text" class="form-control" name="code" required>
+        </div>
 			
 	</div>
     
-                <button type="submit" class="login100-form-btn">Send</button>
+                <button type="submit" class="login100-form-btn">Verify</button>
             
    
 
@@ -248,7 +249,7 @@ display: -webkit-box;
 						</a>
 					</div>
           
-						 {{ form_end(requestPassForm) }}
+						
 					
 
 				</form>
@@ -256,12 +257,6 @@ display: -webkit-box;
                 </div>
 		</div>
 	</div>
+
+    
 {% endblock %}
-
-
-
-
-
-
-
-

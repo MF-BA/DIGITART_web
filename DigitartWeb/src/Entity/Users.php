@@ -9,12 +9,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
+use EWZ\Bundle\RecaptchaBundle\Validator\Constraints as Recaptcha;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=UsersRepository::class)
  */
-class Users implements UserInterface, PasswordAuthenticatedUserInterface
+class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFactorInterface
 {
      /**
      * @var int
@@ -143,6 +145,11 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $is_verified = false;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $authCode;
+
 
     /**
      * @var string|null
@@ -150,6 +157,21 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(name="resetToken", type="string", length=100, nullable=true)
      */
     private $resetToken;
+ /**
+ * @Recaptcha\IsTrueV3
+ */
+public $recaptcha;
+    protected $captchaCode;
+    
+    public function getCaptchaCode()
+    {
+      return $this->captchaCode;
+    }
+
+    public function setCaptchaCode($captchaCode)
+    {
+      $this->captchaCode = $captchaCode;
+    }
 
     public function __construct()
     {
@@ -443,8 +465,30 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-
+ 
+    public function isEmailAuthEnabled(): bool
+    { 
+        return true;
+    }
     
+    public function getEmailAuthRecipient(): string
+    {
+     return $this->email;
+    }
+    
+    public function getEmailAuthCode(): ?string
+    {
+    if(null === $this->authCode){
+        throw new \LogicException('the email authentication code was not set');
+     }
+
+     return $this->authCode;
+    }
+    
+    public function setEmailAuthCode(string $authCode): void
+    {
+    $this->authCode= $authCode;
+    }
 
     
 }
