@@ -29,7 +29,7 @@
             <div class="post-item position-relative h-100">
 
               <div class="post-img position-relative overflow-hidden">
-                {% if imageArtwork[ artwork.idArt ] is not null %}
+                {% if imageArtwork[ artwork.idArt ]|length != 0 %}
                   <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                       {% for image in imageArtwork[ artwork.idArt ] %}

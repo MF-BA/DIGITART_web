@@ -26,15 +26,11 @@
 			<div class="animated fadeIn">
 				<div class="row">
 					<div class="col-md-12">
-						<div class="card" style="width: 800px;">
+						<div class="card" style="width: 870px;">
 
 							<div class="card-header">
 								<a class="card-title">
-									<H4>More Information About
-										<strong>{{auction.artwork.artworkName|upper}}</strong>
-										Auction</H4>
-								</a>
-								<a>Added :
+									Added :
 									{{auction.added|date('Y-m-d H:i') }}</a>
 								{% if auction.DELETED is  null and auction.added|date('Y-m-d H:i:s') != auction.updated|date('Y-m-d H:i:s') %}
 									<br>
@@ -57,35 +53,36 @@
 									</H3>
 								</a>
 								<br>
+								
 								<a>By :
-									<strong>
-										{{auction.artwork.idArtist.lastname|upper}}
-										{{auction.artwork.idArtist.firstname|upper}}
-									</strong>
+
+									{{auction.artwork.idArtist.lastname|upper}}
+									{{auction.artwork.idArtist.firstname|upper}}
+
 								</a>
 								<br>
 								<br>
 								<a>The starting Price :
-									<strong>{{auction.startingPrice}}</strong>
+									{{auction.startingPrice ~ '$'}}
 								</a>
 								<br>
 								<br>
 								<a>Increment :
-									<strong>{{auction.increment}}</strong>
+									{{auction.increment ~ '$'}}
 								</a>
 								<br>
 								<br>
 								<a>Description :
-									<strong>{{auction.description}}</strong>
+									{{auction.description}}
 								</a>
 								<br>
 								<br>
 
 
 								<a>The Highest Offer :
-									<strong>
-										{{ highestBid is not null ? highestBid ~ '$' : 'none' }}
-									</strong>
+
+									{{ highestBid is not null ? highestBid ~ '$' : 'none' }}
+
 								</a>
 								<br>
 								<br>
@@ -109,7 +106,7 @@
 									<tbody>
 										{% for bid in bids %}
 											<tr>
-												<td>{{ bid.offer }}</td>
+												<td>{{ bid.offer ~ '$' }}</td>
 												<td>{{ bid.date|date('Y-m-d H:i:s') }}</td>
 												<td>{{ users[bid.id]|upper }}</td>
 											</tr>

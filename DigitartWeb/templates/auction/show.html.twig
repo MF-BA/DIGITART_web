@@ -9,7 +9,11 @@
 {% endblock %}
 
 {% block BID_CONDITION %}
-
+<style>
+.sidebar {
+  width: 400px;
+}
+</style>
 	<script>
 		function validateBid() {
 var bidInput = document.getElementById('bid_offer');
@@ -41,16 +45,13 @@ return true;
 {% block body %}
 
 	<!-- ======= Breadcrumbs ======= -->
-	{% if imageArtwork is not null %}
+	{% if auction.idAuction in imageArtwork %}
 		<div class="breadcrumbs d-flex align-items-center" style="background-image: url({{ asset('/uploads/'~imageArtwork[auction.idAuction][0].ImageName) }});">
 		{% else %}
 			<div class="breadcrumbs d-flex align-items-center" style="background-image: url( {{ asset('/uploads/bc53385fe56f95467c51bbcb40b16412.jpg') }});">
-
 			{% endif %}
 			<div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
-
 				<h2>{{auction.artwork.artworkName|upper}}</h2>
-
 				<ol>
 					<li>
 						<a href="{{path('showdigit')}}">Home</a>
@@ -63,11 +64,9 @@ return true;
 							details</li>
 					</li>
 				</ol>
-
 			</div>
 		</div>
 		<!-- End Breadcrumbs -->
-
 		<section id="blog" class="blog">
 			<div class="container" data-aos="fade-up" data-aos-delay="100">
 
@@ -78,7 +77,7 @@ return true;
 						<article class="blog-details">
 
 							<div class="post-img">
-								{% if imageArtwork[ auction.idAuction ] is not null %}
+								{% if imageArtwork[ auction.idAuction ]|length != 0 %}
 									<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
 										<div class="carousel-inner">
 											{% for image in imageArtwork[ auction.idAuction ] %}
@@ -139,8 +138,6 @@ return true;
 						<!-- start sidebar -->
 						<!-- start sidebar search formn-->
 							<div class="sidebar"> <div class="sidebar-item search-form">
-
-
 								<div class="meta-top">
 									<a>The starting Price :
 									</a>
@@ -158,59 +155,61 @@ return true;
 											{{ highestBid is not null ? highestBid ~ '$' : 'none' }}
 										</a>
 									{% endif %}
-									<a id="search_link" class="search_link"><a>
-									<br><br>
-									{% if highestBid is not null %}
+									<a id="search_link" class="search_link">
 										<a>
-											Change the currency to:
-										</a>
-										<select id="symbolComboBox"></select>
-									{% endif %}
+											<br><br>
+											{% if highestBid is not null %}
+												<a>
+													Change the currency to:
+												</a>
+												<select id="symbolComboBox"></select>
+											{% endif %}
 
-									<br>
-									<br>
+											<br>
+											<br>
 
-									<a>Number of Bids :
-										{{countBids}}
-									</a>
+											<a>Number of Bids :
+												{{countBids}}
+											</a>
 
-								</div>
-								<br>
-								{% if app.user is not null %}
-									<h2 class="sidebar-title">Make An Offer :
-									</h2>
+										</div>
+										<br>
+										{% if app.user is not null %}
+											<h2 class="sidebar-title">Make An Offer :
+											</h2>
 
-									{{ form_start(form, {'attr': {'class': 'mt-3', 'onsubmit': 'return validateBid();'}})}}
+											{{ form_start(form,{attr:{novalidate:'novalidate'}}, {'attr': {'class': 'mt-3', 'onsubmit': 'return validateBid();'}})}}
 
-									{{ form_widget(form.offer, {'attr': {'value': highestBid is not null ? highestBid + auction.increment : auction.startingPrice ,
+											{{ form_widget(form.offer, {'attr': {'value': highestBid is not null ? highestBid + auction.increment : auction.startingPrice ,
 							'pattern': '[0-9]*' , 'inputmode' : 'numeric','min': highestBid is not null ? highestBid + auction.increment : auction.startingPrice}
 							}) }}
-									<button type="submit">
-										<i class="bi bi-credit-card">{{ button_label|default('') }}</i>
-									</button>
-									{{ form_end(form)  }}
-								{% else %}
-									<h4>
-										Login to be able to join the auction
-									</h4>
-								{% endif %}
+							{{ form_errors(form.offer) }}
+											<button type="submit">
+												<i class="bi bi-credit-card">{{ button_label|default('') }}</i>
+											</button>
+											{{ form_end(form)  }}
+										{% else %}
+											<h4>
+												Login to be able to join the auction
+											</h4>
+										{% endif %}
 
+
+									</div>
+									<!-- End sidebar search formn-->
+
+								</div>
+								<!-- End Blog Sidebar -->
 
 							</div>
-							<!-- End sidebar search formn-->
-
 						</div>
-						<!-- End Blog Sidebar -->
-
 					</div>
-				</div>
-			</div>
-		</section>
+				</section>
 
 
-		<script>
-			
-var myHeaders = new Headers();
+				<script>
+
+					var myHeaders = new Headers();
 myHeaders.append("apikey", "90bvVgraQiEn2QC6KuN8OOayRnaSqbIx");
 
 var requestOptions = {
@@ -233,11 +232,11 @@ comboBox.add(option);
 comboBox.value = "USD"; // Set default selected value to USD
 
 }).catch(error => console.log('error', error));
-		</script>
+				</script>
 
 
-		<script>
-symbolComboBox.addEventListener("change", handleCurrencyChange);
+				<script>
+					symbolComboBox.addEventListener("change", handleCurrencyChange);
 
 function handleCurrencyChange() {
 const selectedCurrency = symbolComboBox.value;
@@ -252,11 +251,12 @@ headers: {
 };
 
 fetch(url, requestOptions).then(response => response.json()).then(result => {
-  const convertedAmount = Math.round(result.result); // approximate the converted amount to an integer
-  // do something with the converted amount, e.g. display it on the page
-  document.getElementById("search_link").textContent = `(≈ ${convertedAmount} ${selectedCurrency})`;
-  console.log(`${amount} USD is equivalent to ${convertedAmount} ${selectedCurrency}`);
-}).catch(error => console.log('error', error));	
+const convertedAmount = Math.round(result.result);
+// approximate the converted amount to an integer
+// do something with the converted amount, e.g. display it on the page
+document.getElementById("search_link").textContent = `(≈ ${convertedAmount} ${selectedCurrency})`;
+console.log(`${amount} USD is equivalent to ${convertedAmount} ${selectedCurrency}`);
+}).catch(error => console.log('error', error));
 }
-		</script>
-	{% endblock %}
+				</script>
+			{% endblock %}

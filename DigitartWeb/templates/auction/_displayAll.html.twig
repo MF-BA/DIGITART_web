@@ -2,7 +2,7 @@
     <div class="col-xl-4 col-md-6">
         <div class="post-item position-relative h-100">
             <div class="post-img position-relative overflow-hidden">
-                {% if imageArtwork[auction.idAuction] is not null %}
+                {% if imageArtwork[auction.idAuction]|length != 0  %}
                     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
                             {% for image in imageArtwork[auction.idAuction] %}

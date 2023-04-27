@@ -1,5 +1,5 @@
 <div class="containerr">
-    {{ form_start(form) }}
+    {{ form_start(form,{attr:{novalidate:'novalidate'}}) }}
     <div class="field" tabindex="1">    
         {{ form_label(form.startingPrice, 'Starting Price (USD)') }}
         {{ form_widget(form.startingPrice, { 'attr': {'class': 'form-control form-control-lg'} }) }}

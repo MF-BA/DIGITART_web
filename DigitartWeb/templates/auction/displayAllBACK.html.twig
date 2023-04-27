@@ -5,7 +5,7 @@
 
 
 {% block body %}
-	{% set articlesPerPage = 2 %}
+	{% set articlesPerPage = 10 %}
 	{% set page = pageParam|default(1) %}
 	{% set offset = (page - 1) * articlesPerPage %}
 	{% set pages = (auctions|length / articlesPerPage)|round(0, 'ceil') %}
@@ -121,7 +121,7 @@ success: function (data) { // Handle the response from the server
 													{% endif %}
 												</td>
 											</td>
-											<td>{{ auction.description }}</td>
+											<td>{{ auction.description|slice(0, 100) }}{{ (auction.description|length > 100 ? '...' : '') }}</td>
 											<td>{{ highestBids[auction.idAuction] is not null ? highestBids[auction.idAuction] : 'none' }}</td>
 											<td>
 												<a href="{{ path('app_bid_index', {'id_auction': auction.idAuction}) }}">

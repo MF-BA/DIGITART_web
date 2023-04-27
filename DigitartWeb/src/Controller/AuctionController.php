@@ -113,7 +113,13 @@ class AuctionController extends AbstractController
             ->getResult();
 
         $bid = new Bid();
-        $form = $this->createForm(BidType::class, $bid);
+        $form = $this->createForm(BidType::class, $bid, [
+            'highest_bid' => $highestBid,
+            'auction_increment' => $auction->getIncrement(),
+            'starting_price' => $auction->getStartingPrice(),
+        ]);
+        
+        
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getUser();
@@ -144,7 +150,7 @@ class AuctionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $auctionRepository->save($auction, true);
 
-            return $this->redirectToRoute('displayAUCTION', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('DisplayAuctionBack', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('auction/edit.html.twig', [
@@ -168,24 +174,21 @@ class AuctionController extends AbstractController
     {
         $data1 = [];
         $queryBuilder = $BidRepository->createQueryBuilder('b');
-$queryBuilder->groupBy('b.id_auction');
-$results = $queryBuilder->getQuery()->getResult();
-
-            
-           
-            foreach ($results as $row) {
-                $query = $BidRepository->createQueryBuilder('s')
-                    ->select('COUNT(s.id)')
-                    ->where('s.id_auction = :id_auction')
-                    ->setParameter(':id_auction', $row->getIdAuction())->getQuery()->getSingleScalarResult();
-                $data1[] = [
-                    'id_auction' => $row->getIdAuction() , 'count' => $query,
-                ];
-            }
+        $queryBuilder->groupBy('b.id_auction');
+        $results = $queryBuilder->getQuery()->getResult();
 
 
+
+        foreach ($results as $row) {
+            $query = $BidRepository->createQueryBuilder('s')
+                ->select('COUNT(s.id)')
+                ->where('s.id_auction = :id_auction')
+                ->setParameter(':id_auction', $row->getIdAuction())->getQuery()->getSingleScalarResult();
+            $data1[] = [
+                'id_auction' => $row->getIdAuction(), 'count' => $query,
+            ];
+        }
         $data = [];
-
         foreach ($data1 as $row) {
             $auctionId = $row['id_auction'];
             $count = $row['count'];
@@ -201,9 +204,26 @@ $results = $queryBuilder->getQuery()->getResult();
                 'count' => $count
             ];
         }
+        $auctions = $auctionRepository->findAll();
+        $highestBids = [];
+        foreach ($auctions as $auction) {
+            $highestbid = $BidRepository->highestBid($auction->getIdAuction());
+            if ($highestbid) {
+                $highestBids[] = [
+                    'artwork_name' => $auction->getartwork()->getArtworkName(),
+                    'highestbid' => $highestbid->getOffer()
+                ];
+            } else {
+                $highestBids[] = [
+                    'artwork_name' => $auction->getartwork()->getArtworkName(),
+                    'highestbid' => 0
+                ];
+            }
+        }
 
 
-        return $this->render('auction/statistics.html.twig', ['data' => $data]);
+
+        return $this->render('auction/statistics.html.twig', ['data' => $data , 'highestBids' => $highestBids ]);
     }
 
     #[Route('/admin', name: 'DisplayAuctionBack', methods: ['GET'])]
