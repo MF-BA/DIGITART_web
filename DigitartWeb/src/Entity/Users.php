@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use EWZ\Bundle\RecaptchaBundle\Validator\Constraints as Recaptcha;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UsersRepository::class)
@@ -29,36 +30,68 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
 
     /**
      * @var int|null
-     *
+     * 
      * @ORM\Column(name="cin", type="integer", nullable=true)
+     * @Assert\NotBlank(message="Please enter a cin")
+     * @Assert\Length(
+     *      min = 8,
+     *      max = 8,
+     *      exactMessage = "Cin must contain exactly {{ limit }} digits"
+     * )
+     * @Assert\Regex(
+     *      pattern = "/^\d+$/",
+     *      message = "Cin must be a number"
+     * )
      */
     private $cin;
 
     /**
      * @var string|null
-     *
+     * 
      * @ORM\Column(name="firstname", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Please enter a first name")
+     * @Assert\Regex(
+     *      pattern = "/^[a-zA-Z ]+$/",
+     *      message = "Please enter a valid first name"
+     * )
      */
     private $firstname;
 
-    /**
+     /**
      * @var string|null
-     *
+     * 
      * @ORM\Column(name="lastname", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Please enter a last name")
+     * @Assert\Regex(
+     *      pattern = "/^[a-zA-Z ]+$/",
+     *      message = "Please enter a valid last name"
+     * )
      */
     private $lastname;
 
     /**
      * @var string|null
-     *
+     * 
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Please enter an email")
+     * @Assert\Email(message="Please enter a valid email address")
      */
     private $email;
 
     /**
      * @var string|null
-     *
+     * 
      * @ORM\Column(name="password", type="string", length=255, nullable=true)
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 4096,
+     *      minMessage = "Your password should be at least {{ limit }} characters",
+     *      maxMessage = "Your password is too long"
+     * )
+     * @Assert\Regex(
+     *      pattern = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#\$%\^&\*\(\)]).+$/",
+     *      message = "Password should contain at least one uppercase letter, one lowercase letter, and one special character (!@#$%^&*())"
+     * )
      */
     private $password;
 
@@ -66,13 +99,24 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var string|null
      *
      * @ORM\Column(name="address", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Please enter an address")
      */
     private $address;
 
     /**
      * @var int|null
-     *
+     * 
      * @ORM\Column(name="phone_num", type="integer", nullable=true)
+     * @Assert\NotBlank(message="Please enter a phone number")
+     * @Assert\Length(
+     *      min = 8,
+     *      max = 8,
+     *      exactMessage = "Phone number must contain exactly {{ limit }} digits"
+     * )
+     * @Assert\Regex(
+     *      pattern = "/^\d+$/",
+     *      message = "Phone number must be a number"
+     * )
      */
     private $phoneNum;
 
@@ -80,6 +124,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var \DateTime|null
      *
      * @ORM\Column(name="birth_date", type="date", nullable=true)
+     * @Assert\NotBlank(message="Please enter a birth date")
      */
     private $birthDate;
 
@@ -87,6 +132,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var string|null
      *
      * @ORM\Column(name="gender", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Please select a gender")
      */
     private $gender;
 
@@ -94,6 +140,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var string|null
      *
      * @ORM\Column(name="role", type="string", length=255, nullable=true, options={"default"="Subscriber"})
+     * @Assert\NotBlank(message="Please select a role")
      */
     private $role = 'Subscriber';
 
@@ -157,10 +204,13 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @ORM\Column(name="resetToken", type="string", length=100, nullable=true)
      */
     private $resetToken;
- /**
- * @Recaptcha\IsTrueV3
- */
-public $recaptcha;
+ 
+    /**
+    * @Recaptcha\IsTrueV3
+    */
+    
+    public $recaptcha;
+
     protected $captchaCode;
     
     public function getCaptchaCode()

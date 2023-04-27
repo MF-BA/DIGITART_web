@@ -31,44 +31,13 @@ class FacebookRegisterType extends AbstractType
                 'class' => 'form-control',
                 'id' => 'cin-input', // Define the id attribute here
             ],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please enter a cin',
-                ]),
-                new Length([
-                    'min' => 8,
-                    'max' => 8,
-                    'exactMessage' => 'Cin must contain exactly {{ limit }} digits',
-                ]),
-                new Regex([
-                    'pattern' => '/^\d+$/',
-                    'message' => 'Cin must be a number',
-                ]),
-            ],
         ])
         
         
     
-    ->add('plainPassword', PasswordType::class, [
-        // instead of being set onto the object directly,
-        // this is read and encoded in the controller
-        'mapped' => false,
+    ->add('password', PasswordType::class, [
+       
         'attr' => ['autocomplete' => 'new-password'],
-        'constraints' => [
-            new NotBlank([
-                'message' => 'Please enter a password',
-            ]),
-            new Length([
-                'min' => 6,
-                'minMessage' => 'Your password should be at least {{ limit }} characters',
-                // max length allowed by Symfony for security reasons
-                'max' => 4096,
-            ]),
-            new Regex([
-                'pattern' => '/^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#\$%\^&\*\(\)]).+$/',
-                'message' => 'Password should contain at least one uppercase letter, one lowercase letter, and one special character (!@#$%^&*())',
-            ]),
-        ],
     ])
 
         ->add('address', TextType::class, [
@@ -78,11 +47,6 @@ class FacebookRegisterType extends AbstractType
                 'class' => 'form-control',
                 'id' => 'address-input', // Define the id attribute here
             ],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please enter an address',
-                ])
-            ],
         ])
         ->add('phoneNum', IntegerType::class, [
             'label' => 'Phone Number',
@@ -91,34 +55,12 @@ class FacebookRegisterType extends AbstractType
                 'class' => 'form-control',
                 'id' => 'phoneNum-input', // Define the id attribute here
             ],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please enter a phone number',
-                ]),
-                
-                new Length([
-                'min' => 8,
-                'max' => 8,
-                'exactMessage' => 'Phone number must contain exactly {{ limit }} digits',
-                 ]),
-                 new Regex([
-                    'pattern' => '/^\d+$/',
-                    'message' => 'Phone number must be a number',
-                ]),
-                
-            ],
         ])
         ->add('birthDate',BirthdayType::class, [
             'label' => 'Birth date',
             'widget' => 'single_text',
             'attr' => ['class' => 'form-control', 'max' => (new \DateTime())->format('Y-m-d')],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please enter your birth date',
-                ]),
-                
-                
-            ],
+            
         ])
         ->add('gender', ChoiceType::class, [
             'choices' => [
@@ -128,13 +70,7 @@ class FacebookRegisterType extends AbstractType
             ],
             'expanded' => true,
             'multiple' => false,
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please specify your gender',
-                ]),
-                
-            ],
-           
+            
         ])
         ->add('role', ChoiceType::class, [
             'choices' => [
@@ -144,12 +80,7 @@ class FacebookRegisterType extends AbstractType
             'expanded' => false,
             'multiple' => false,
             'placeholder' => 'Choose your role',
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please select a role',
-                ]),
-                
-            ],
+            
         ])
         ;
     }

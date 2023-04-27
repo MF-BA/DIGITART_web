@@ -41,12 +41,12 @@ class SecurityController extends AbstractController
         if ($user && $user->getIsVerified() == false) {
          $flashy->error('Your account is not activated');
         }
+       
         // check if the user is blocked
         if ($user && $user->getStatus() == 'blocked') {
             $flashy->error('your account is blocked!');
             
         }
-        
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }

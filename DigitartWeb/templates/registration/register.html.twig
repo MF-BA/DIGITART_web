@@ -1,6 +1,140 @@
 {% extends 'security/login.html.twig' %}
 {% block stylesheets %}
 	<style>
+  /*custom font*/
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+/*basic reset*/
+* {margin: 0; padding: 0;}
+
+html {
+	height: 100%;
+	/*Image only BG fallback*/
+	
+	/*background = gradient + image pattern combo*/
+	background: 
+		linear-gradient(rgba(196, 102, 0, 0.6), rgba(155, 89, 182, 0.6));
+}
+
+body {
+	font-family: montserrat, arial, verdana;
+}
+/*form styles*/
+#msform {
+	width: 900px;
+	margin: 80px auto;
+	text-align: center;
+	position: relative;
+}
+#msform fieldset {
+	background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+	
+	/*stacking fieldsets above each other*/
+	position: relative;
+}
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+	display: none;
+}
+/*inputs*/
+#msform input, #msform textarea {
+	padding: 15px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	margin-bottom: 10px;
+	width: 100%;
+	box-sizing: border-box;
+	font-family: montserrat;
+	color: #2C3E50;
+	font-size: 13px;
+}
+/*buttons*/
+#msform .action-button {
+	width: 100px;
+	background: #BD2A2E;
+	font-weight: bold;
+	color: white;
+	border: 0 none;
+	border-radius: 1px;
+	cursor: pointer;
+	padding: 10px;
+	margin: 10px 5px;
+  text-decoration: none;
+  font-size: 14px;
+}
+#msform .action-button:hover, #msform .action-button:focus {
+	box-shadow: 0 0 0 2px white, 0 0 0 3px #BD2A2E;
+}
+/*headings*/
+.fs-title {
+	font-size: 15px;
+	text-transform: uppercase;
+	color: #2C3E50;
+	margin-bottom: 10px;
+}
+.fs-subtitle {
+	font-weight: normal;
+	font-size: 13px;
+	color: #666;
+	margin-bottom: 20px;
+}
+/*progressbar*/
+#progressbar {
+	margin-bottom: 30px;
+	overflow: hidden;
+	/*CSS counters to number the steps*/
+	counter-reset: step;
+}
+#progressbar li {
+	list-style-type: none;
+	color: white;
+	text-transform: uppercase;
+	font-size: 9px;
+	width: 33.33%;
+	float: left;
+	position: relative;
+}
+#progressbar li:before {
+	content: counter(step);
+	counter-increment: step;
+	width: 20px;
+	line-height: 20px;
+	display: block;
+	font-size: 10px;
+	color: #333;
+	background: white;
+	border-radius: 3px;
+	margin: 0 auto 5px auto;
+}
+/*progressbar connectors*/
+#progressbar li:after {
+	content: '';
+	width: 100%;
+	height: 2px;
+	background: white;
+	position: absolute;
+	left: -50%;
+	top: 9px;
+	z-index: -1; /*put it behind the numbers*/
+}
+#progressbar li:first-child:after {
+	/*connector not needed before the first step*/
+	content: none; 
+}
+/*marking active/completed steps green*/
+/*The number of the step and the connector before it = green*/
+#progressbar li.active:before,  #progressbar li.active:after{
+	background: #BD2A2E;
+	color: white;
+}
+
     .wrap-login100 {
   width: 900px !important;
   height: 500px !important;
@@ -33,9 +167,10 @@
 .login100-form-title {
   font-family: Poppins-Bold;
   font-size: 24px;
-  position: relative !important;
+  position: center !important;
   right: 20px !important;
-  color: #333333;
+  color: #BD2A2E !important;
+  border-color: #fff !important;
   line-height: 1.2;
   text-align: center;
   width: 100%;
@@ -220,66 +355,72 @@ input {
 {% block body %}
    <div class="limiter">
 		<div class="container-login100">
-            <div class="wrap-login100">
-           
-    {{ form_start(registrationForm,{attr:{'id': 'registration-form','novalidate':'novalidate'}}) }}
+          <div id="msform">
+          {{ form_start(registrationForm,{attr:{'id': 'registration-form','novalidate':'novalidate'}}) }}
+  <!-- progressbar -->
+  <ul id="progressbar">
+    <li class="active">First Step</li>
+    <li>Personal Details</li>
+    <li>Final Step</li>
+  </ul>
+    
     <span class="login100-form-title">
 						Register
 					</span>
 
-<fieldset id="step1" class="fieldset">     
+<fieldset>     
+<h2 class="fs-title">Create your account</h2>
+<h3 class="fs-subtitle">This is step 1</h3>
+<div class="row form-group">
+<div class="col col-md-6">
   <div class="row form-group">
-    <div class="col col-md-6">
-         {# Cin #}
-      <div class="row form-group">
         <div class="col col-md-6">
-        {{ form_label(registrationForm.cin, 'Cin') }}
+            {# Cin #}
+            Cin
         </div>
-        <div class="col-12 col-md-9">
-          {{ form_widget(registrationForm.cin, {'attr': {'class': 'form-control', 'placeholder': 'Enter cin'}}) }}
-          <small class="error-msg-form">{{ form_errors(registrationForm.cin,{'attr':{'class':'text-danger'}}) }}</small>
-          <small class="form-text text-muted">Cin must contain 8 digits</small>
+        <div class="col-9 col-md-9">
+            {{ form_widget(registrationForm.cin, {'attr': {'class': 'form-control', 'placeholder': 'Enter cin'}}) }}
+            <small class="error-msg-form">{{ form_errors(registrationForm.cin,{'attr':{'class':'text-danger'}}) }}</small>
+            <small class="form-text text-muted">Cin must contain 8 digits</small>
         </div>
-      </div>
-       {# Last name #}
-      <div class="row form-group">
-        <div class="col col-md-6">
-        {{ form_label(registrationForm.lastname, 'Last name') }}
-        </div>
-        <div class="col-12 col-md-9">
-          {{ form_widget(registrationForm.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Enter Last name'}}) }}
-          <small class="error-msg-form">{{ form_errors(registrationForm.lastname,{'attr':{'class':'text-danger'}}) }}</small>
-        </div>
-      </div>
-       
-   </div>
-
-    <div class="col col-md-6">
-      {# First name #}
-      <div class="row form-group">
-        <div class="col col-md-6">
-        {{ form_label(registrationForm.firstname, 'First name') }}
-        </div>
-        <div class="col-12 col-md-9">
-          {{ form_widget(registrationForm.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Enter First name'}}) }}
-          <small class="error-msg-form">{{ form_errors(registrationForm.firstname,{'attr':{'class':'text-danger'}}) }}</small>
-        </div>
-      </div>
-       {# Email #}
-      <div class="row form-group">
-        <div class="col col-md-6">
-        {{ form_label(registrationForm.email, 'Email') }}
-        </div>
-        <div class="col-12 col-md-9">
-          {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email'}}) }}
-          <small class="error-msg-form">{{ form_errors(registrationForm.email,{'attr':{'class':'text-danger'}}) }}</small>
-          <small class="form-text text-muted">Please enter a valid email!</small>
-        </div>
-      </div>
-      
     </div>
- </div>
- <button id="next1" class="btn">Next</button>
+    <div class="row form-group">
+        <div class="col col-md-6">
+            {# Last name #}
+            Last Name
+        </div>
+        <div class="col-9 col-md-9">
+            {{ form_widget(registrationForm.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Enter Last name'}}) }}
+            <small class="error-msg-form">{{ form_errors(registrationForm.lastname,{'attr':{'class':'text-danger'}}) }}</small>
+        </div>
+    </div>
+  </div>
+  
+  <div class="col col-md-6">
+    <div class="row form-group">
+        <div class="col col-md-6">
+            {# First name #}
+            First Name
+        </div>
+        <div class="col-9 col-md-9">
+            {{ form_widget(registrationForm.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Enter First name'}}) }}
+            <small class="error-msg-form">{{ form_errors(registrationForm.firstname,{'attr':{'class':'text-danger'}}) }}</small>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col col-md-6">
+            {# Email #}
+            Email
+        </div>
+        <div class="col-9 col-md-9">
+            {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email'}}) }}
+            <small class="error-msg-form">{{ form_errors(registrationForm.email,{'attr':{'class':'text-danger'}}) }}</small>
+            <small class="form-text text-muted">Please enter a valid email!</small>
+        </div>
+    </div>
+</div>
+</div>
+ <input type="button" name="next" class="next action-button" value="Next" />
 
  <div class="text-center1 p-t-12">
 						<span class="txt1">
@@ -289,60 +430,65 @@ input {
 							an account?
 						</a>
 					</div>
+
 </fieldset>
-<fieldset id="step2" class="fieldset hide">      
+<fieldset>      
+<h2 class="fs-title">Personnal infomations</h2>
+    <h3 class="fs-subtitle">second step 2</h3>
   <div class="row form-group">
-    <div class="col col-md-6">
-         {# birth date #}
-      <div class="row form-group">
-        <div class="col col-md-6">
-        {{ form_label(registrationForm.birthDate, 'Birth Date') }}
-        </div>
-        <div class="col-12 col-md-9">
+  <div class="col col-md-6">
+    <!-- Birth Date -->
+    <div class="row form-group">
+      <div class="col col-md-6">
+        Birth Date
+      </div>
+      <div class="col-12 col-md-9">
         {{ form_widget(registrationForm.birthDate, {'attr': {'class': 'form-control'}}) }}
         <small class="error-msg-form">{{ form_errors(registrationForm.birthDate,{'attr':{'class':'text-danger'}}) }}</small>
-        </div>
       </div>
-       {# Gender #}
-     <div class="row form-group">
-     <div class="col col-md-6">
-        {{ form_label(registrationForm.gender, 'Gender') }}
-        </div>
-     <div class="col-6 col-md-9">
+    </div>
+
+    <!-- Gender -->
+    <div class="row form-group">
+      <div class="col col-md-6">
+        Gender
+      </div>
+      <div class="col-6 col-md-9">
         {{ form_widget(registrationForm.gender) }}
         <small class="error-msg-form">{{ form_errors(registrationForm.gender,{'attr':{'class':'text-danger'}}) }}</small>
-     </div>
-     </div>
-       
-   </div>
-
-    <div class="col col-md-6">
-      {# Password #}
-      <div class="row form-group">
-        <div class="col col-md-6">
-        {{ form_label(registrationForm.plainPassword, 'Password') }}
-        </div>
-        <div class="col-12 col-md-9">
-          {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Enter Password'}}) }}
-          <small class="error-msg-form">{{ form_errors(registrationForm.plainPassword,{'attr':{'class':'text-danger'}}) }}</small>
-          <small class="form-text text-muted">Please enter a complex password</small>
-        </div>
       </div>
-       {# Phone #}
-       <div class="row form-group">
-       <div class="col col-md-6">
-       {{ form_label(registrationForm.phoneNum, 'Phone Number') }}
-       </div>
-       <div class="col-12 col-md-9">
-      {{ form_widget(registrationForm.phoneNum, {'attr': {'class': 'form-control', 'placeholder': 'Enter Phone'}}) }}
-      <small class="error-msg-form">{{ form_errors(registrationForm.phoneNum,{'attr':{'class':'text-danger'}}) }}</small>
-      <small class="form-text text-muted">Phone number must contain 8 digits</small>
-     </div>
-     </div>
     </div>
- </div>
- <button id="next2" class="btn">Next</button>
- <button id="prev2" class="btn">Previous</button>
+  </div>
+
+  <div class="col col-md-6">
+    <!-- Phone Number -->
+    <div class="row form-group">
+      <div class="col col-md-6">
+        Phone Number
+      </div>
+      <div class="col-12 col-md-9">
+        {{ form_widget(registrationForm.phoneNum, {'attr': {'class': 'form-control', 'placeholder': 'Enter Phone'}}) }}
+        <small class="error-msg-form">{{ form_errors(registrationForm.phoneNum,{'attr':{'class':'text-danger'}}) }}</small>
+        <small class="form-text text-muted">Phone number must contain 8 digits</small>
+      </div>
+    </div>
+
+    <!-- Password -->
+    <div class="row form-group">
+      <div class="col col-md-6">
+        Password
+      </div>
+      <div class="col-12 col-md-9">
+        {{ form_widget(registrationForm.password) }}
+        <small class="error-msg-form">{{ form_errors(registrationForm.password,{'attr':{'class':'text-danger'}}) }}</small>
+        <small class="form-text text-muted">Please enter a complex password</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <input type="button" name="previous" class="previous action-button" value="Previous" />
+    <input type="button" name="next" class="next action-button" value="Next" />
  <div class="text-center2 p-t-12">
 						<span class="txt1">
 							Already have
@@ -352,13 +498,15 @@ input {
 						</a>
 					</div>
 </fieldset>
-<fieldset id="step3" class="fieldset hide">        
+<fieldset> 
+<h2 class="fs-title">Register!</h2>
+    <h3 class="fs-subtitle">Final Step</h3>       
   <div class="row form-group">
         <div class="col col-md-6">
         {# role #}
         <div class="row form-group">
         <div class="col col-md-6">
-        {{ form_label(registrationForm.role, 'Role') }}
+       Role
         </div>
        <div class="col-12 col-md-9">
        {{ form_widget(registrationForm.role, {'attr': {'class': 'form-control'}}) }}
@@ -370,14 +518,14 @@ input {
     {# Address #}
       <div class="row form-group">
         <div class="col col-md-6">
-       {{ form_label(registrationForm.address, 'Address') }}
+       Address
         </div>
        <div class="col-12 col-md-9">
        {{ form_widget(registrationForm.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter Address'}}) }}
        <small class="error-msg-form">{{ form_errors(registrationForm.address,{'attr':{'class':'text-danger'}}) }}</small>
        </div>
       </div>
-
+{#
        <div class="row form-group">
         <div class="col col-md-6">
        {{ form_label(registrationForm.captchaCode, 'Captcha Code') }}
@@ -399,10 +547,11 @@ input {
      #}
      </div>
  </div>
-    <button id="prev3" class="btn">Previous</button>
-		<button type="submit" class="btn">
+    <input type="button" name="previous" class="previous action-button" value="Previous" />
+    <button type="submit" class="btn">
 		<i class="fa fa-check-square-o"></i>  Register
 		</button>
+    
 		<div class="text-center3 p-t-12">
 						<span class="txt1">
 							Already have
@@ -417,47 +566,100 @@ input {
        
     {{ form_end(registrationForm) }}
    
-
+  </div>
 
     </div>
         </div>
 	</div>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 <script>
-  
-const step1 = document.querySelector("#step1");
-const step2 = document.querySelector("#step2");
-const step3 = document.querySelector("#step3");
-const next1 = document.querySelector("#next1");
-const prev2 = document.querySelector("#prev2");
-const next2 = document.querySelector("#next2");
-const prev3 = document.querySelector("#prev3");
+//jQuery time
+var current_fs, next_fs, previous_fs; //fieldsets
+var left, opacity, scale; //fieldset properties which we will animate
+var animating; //flag to prevent quick multi-click glitches
 
-next1.addEventListener("click", function(event) {
-	event.preventDefault();
-	step1.classList.add("hide");
-	step2.classList.remove("hide");
+$(".next").click(function () {
+  if (animating) return false;
+  animating = true;
+
+  current_fs = $(this).parent();
+  next_fs = $(this).parent().next();
+
+  //activate next step on progressbar using the index of next_fs
+  $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+
+  //show the next fieldset
+  next_fs.show();
+  //hide the current fieldset with style
+  current_fs.animate(
+    { opacity: 0 },
+    {
+      step: function (now, mx) {
+        //as the opacity of current_fs reduces to 0 - stored in "now"
+        //1. scale current_fs down to 80%
+        scale = 1 - (1 - now) * 0.2;
+        //2. bring next_fs from the right(50%)
+        left = now * 50 + "%";
+        //3. increase opacity of next_fs to 1 as it moves in
+        opacity = 1 - now;
+        current_fs.css({
+          transform: "scale(" + scale + ")",
+          position: "absolute"
+        });
+        next_fs.css({ left: left, opacity: opacity });
+      },
+      duration: 800,
+      complete: function () {
+        current_fs.hide();
+        animating = false;
+      },
+      //this comes from the custom easing plugin
+      easing: "easeInOutBack"
+    }
+  );
 });
 
-prev2.addEventListener("click", function(event) {
-	event.preventDefault();
-	step2.classList.add("hide");
-	step1.classList.remove("hide");
+$(".previous").click(function () {
+  if (animating) return false;
+  animating = true;
+
+  current_fs = $(this).parent();
+  previous_fs = $(this).parent().prev();
+
+  //de-activate current step on progressbar
+  $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+  //show the previous fieldset
+  previous_fs.show();
+  //hide the current fieldset with style
+  current_fs.animate(
+    { opacity: 0 },
+    {
+      step: function (now, mx) {
+        //as the opacity of current_fs reduces to 0 - stored in "now"
+        //1. scale previous_fs from 80% to 100%
+        scale = 0.8 + (1 - now) * 0.2;
+        //2. take current_fs to the right(50%) - from 0%
+        left = (1 - now) * 50 + "%";
+        //3. increase opacity of previous_fs to 1 as it moves in
+        opacity = 1 - now;
+        current_fs.css({ left: left });
+        previous_fs.css({
+          transform: "scale(" + scale + ")",
+          opacity: opacity
+        });
+      },
+      duration: 800,
+      complete: function () {
+        current_fs.hide();
+        animating = false;
+      },
+      //this comes from the custom easing plugin
+      easing: "easeInOutBack"
+    }
+  );
 });
-
-next2.addEventListener("click", function(event) {
-	event.preventDefault();
-	step2.classList.add("hide");
-	step3.classList.remove("hide");
-});
-
-prev3.addEventListener("click", function(event) {
-	event.preventDefault();
-	step3.classList.add("hide");
-	step2.classList.remove("hide");
-});
-
-
 
 
    </script>

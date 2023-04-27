@@ -10,7 +10,7 @@
       {# Cin #}
       <div class="row form-group">
         <div class="col col-md-2">
-        {{ form_label(form.cin, 'Cin') }}
+        Cin
           
         </div>
         <div class="col-12 col-md-9">
@@ -23,7 +23,7 @@
       {# First name #}
       <div class="row form-group">
         <div class="col col-md-2">
-        {{ form_label(form.firstname, 'First name') }}
+        First name
           
         </div>
         <div class="col-12 col-md-9">
@@ -36,7 +36,7 @@
 {# Last name #}
       <div class="row form-group">
         <div class="col col-md-2">
-        {{ form_label(form.lastname, 'Last name') }}
+         Last name
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(form.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Enter Last name'}}) }}
@@ -47,7 +47,7 @@
       {# Email #}
        <div class="row form-group">
         <div class="col col-md-2">
-        {{ form_label(form.email, 'Email') }}
+        Email
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email'}}) }}
@@ -58,11 +58,11 @@
       {# Password #}
       <div class="row form-group">
         <div class="col col-md-2">
-        {{ form_label(form.plainPassword, 'Password') }}
+        Password
         </div>
         <div class="col-12 col-md-9">
-          {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Enter Password'}}) }}
-          {{ form_errors(form.plainPassword,{'attr':{'class':'text-danger'}}) }}
+          {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Enter Password'}}) }}
+          {{ form_errors(form.password,{'attr':{'class':'text-danger'}}) }}
           <small class="form-text text-muted">Please enter a complex password</small>
         </div>
       </div>
@@ -71,7 +71,7 @@
       {# Address #}
       <div class="row form-group">
         <div class="col col-md-2">
-      {{ form_label(form.address, 'Address') }}
+        Address
         </div>
 <div class="col-12 col-md-9">
 {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter Address'}}) }}
@@ -82,7 +82,7 @@
 {# Phone #}
   <div class="row form-group">
     <div class="col col-md-2">
-    {{ form_label(form.phoneNum, 'Phone Number') }}
+    Phone Number
       
     </div>
     <div class="col-12 col-md-9">
@@ -94,7 +94,7 @@
   {# birth date #}
   <div class="row form-group">
         <div class="col col-md-2">
-        {{ form_label(form.birthDate, 'Birth Date') }}
+        Birth Date
     </div>
     <div class="col-12 col-md-9">
         {{ form_widget(form.birthDate, {'attr': {'class': 'form-control'}}) }}
@@ -104,7 +104,7 @@
 {# role #}
   <div class="row form-group">
   <div class="col col-md-2">
-  {{ form_label(form.role, 'Role') }}
+  Role
     
   </div>
   <div class="col-12 col-md-9">
@@ -116,10 +116,10 @@
 {# Gender #}
   <div class="row form-group">
         <div class="col col-md-2">
-        {{ form_label(form.gender, 'Gender') }}
+        Gender
         </div>
     <div class="col-12 col-md-9">
-        {{ form_widget(form.gender, {'attr': {'class': 'form-control'}}) }}
+        {{ form_widget(form.gender) }}
          {{ form_errors(form.gender,{'attr':{'class':'text-danger'}}) }}
     </div>
  </div>

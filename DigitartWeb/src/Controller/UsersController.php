@@ -68,7 +68,10 @@ class UsersController extends AbstractController
         $totalAdmin = 0;
         $totalArtist = 0;
         $totalSubscriber = 0;
+        $ageRanges = array_fill(0, 10, 0);
 
+
+        $currentYear = (int) date('Y');
         foreach ($users as $user) {
             if($user->getGender() == 'Male')
             {
@@ -90,6 +93,24 @@ class UsersController extends AbstractController
             {
                 $totalSubscriber +=1;
             }
+
+            // Calculate user's age and increment the corresponding age range
+            $birthDate = $user->getBirthDate();
+         if ($birthDate) {
+           $birthYear = $birthDate->format('Y');
+           $age = (new \DateTime())->diff($birthDate)->y;
+        } else {
+           $birthYear = '';
+           $age = 0;
+         }
+        $ageRangeIndex = floor($age / 10);
+        if ($ageRangeIndex < 0) {
+            $ageRangeIndex = 0;
+        }
+        if ($ageRangeIndex > 9) {
+            $ageRangeIndex = 9;
+        }
+        $ageRanges[$ageRangeIndex] += 1;
         }
     
         return $this->render('users/statsusers.html.twig', [
@@ -97,7 +118,8 @@ class UsersController extends AbstractController
             'totalFemale' => $totalFemale,
             'totalAdmin' => $totalAdmin,
             'totalArtist' => $totalArtist,
-            'totalSubscriber' => $totalSubscriber
+            'totalSubscriber' => $totalSubscriber,
+            'ageRanges' => $ageRanges
 
         ]);
     }
@@ -113,7 +135,7 @@ class UsersController extends AbstractController
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
-                    $form->get('plainPassword')->getData()
+                    $form->get('password')->getData()
                 )
             );
             

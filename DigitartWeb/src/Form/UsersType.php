@@ -49,20 +49,6 @@ class UsersType extends AbstractType
                 'class' => 'form-control',
                 'id' => 'cin-input', // Define the id attribute here
             ],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please enter a cin',
-                ]),
-                new Length([
-                    'min' => 8,
-                    'max' => 8,
-                    'exactMessage' => 'Cin must contain exactly {{ limit }} digits',
-                ]),
-                new Regex([
-                    'pattern' => '/^\d+$/',
-                    'message' => 'Cin must be a number',
-                ]),
-            ],
         ])
         ->add('firstname', TextType::class, [
             'label' => 'Firstname',
@@ -71,15 +57,6 @@ class UsersType extends AbstractType
                 'class' => 'form-control',
                 'id' => 'firstname-input', // Define the id attribute here
             ],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please enter a first name',
-                ]),
-                new Regex([
-                    'pattern' => '/^[a-zA-Z ]+$/',
-                    'message' => 'Please enter a valid first name',
-                ]),
-            ],
         ])
         ->add('lastname', TextType::class, [
             'label' => 'Lastname',
@@ -87,15 +64,6 @@ class UsersType extends AbstractType
                 'placeholder' => 'Enter last name',
                 'class' => 'form-control',
                 'id' => 'lastname-input', // Define the id attribute here
-            ],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please enter a last name',
-                ]),
-                new Regex([
-                    'pattern' => '/^[a-zA-Z ]+$/',
-                    'message' => 'Please enter a valid last name',
-                ]),
             ],
         ]);
          // Add the email and password fields as hidden fields
@@ -107,34 +75,19 @@ class UsersType extends AbstractType
                 'class' => 'form-control',
                 'id' => 'email-input', // Define the id attribute here
             ],
-            'constraints' => [
-                new Assert\NotBlank([
-                    'message' => 'Please enter an email',
-                ]),
-                new Assert\Email([
-                    'message' => 'Please enter a valid email address',
-                ]),
-            ],
         ]);
-        $builder->add('plainPassword', PasswordType::class, [
-            // instead of being set onto the object directly,
-            // this is read and encoded in the controller
+        $builder->add('password', PasswordType::class, [
             'mapped' => false,
-            'attr' => ['autocomplete' => 'new-password'],
-            'constraints' => [
+            'label' => 'Password',
+            'attr' => [
+                'placeholder' => 'Enter Password',
+                'class' => 'form-control',
+                'id' => 'password-input', // Define the id attribute here
+            ],
+            'constraints'=> [
                 new NotBlank([
-                    'message' => 'Please enter a password',
-                ]),
-                new Length([
-                    'min' => 6,
-                    'minMessage' => 'Your password should be at least {{ limit }} characters',
-                    // max length allowed by Symfony for security reasons
-                    'max' => 4096,
-                ]),
-                new Regex([
-                    'pattern' => '/^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#\$%\^&\*\(\)]).+$/',
-                    'message' => 'Password should contain at least one uppercase letter, one lowercase letter, and one special character (!@#$%^&*())',
-                ]),
+                    'message' => 'Please enter a Password',
+                ]), 
             ],
         ]);
        
@@ -147,7 +100,7 @@ class UsersType extends AbstractType
         if ($user instanceof Users && $user->getId() !== null && $user->getId() !== $currentUserId) {
             // If so, remove the email and password fields from the form
             $form->remove('email');
-            $form->remove('plainPassword');
+            $form->remove('password');
             $form->remove('userImages');
             $form->remove('image');
            
@@ -158,7 +111,7 @@ class UsersType extends AbstractType
             $form->remove('image');
         }
         if ($user->getId() === $currentUserId){
-            $form->remove('plainPassword');
+            $form->remove('password');
             if (in_array('ROLE_SUBSCRIBER', $roles) || in_array('ROLE_ARTIST', $roles)) {
                 $form->remove('role');
                 $form->remove('userImages');
@@ -174,11 +127,6 @@ class UsersType extends AbstractType
                 'class' => 'form-control',
                 'id' => 'address-input', // Define the id attribute here
             ],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please enter an address',
-                ])
-            ],
         ])
         ->add('phoneNum', IntegerType::class, [
             'label' => 'Phone Number',
@@ -187,34 +135,13 @@ class UsersType extends AbstractType
                 'class' => 'form-control',
                 'id' => 'phoneNum-input', // Define the id attribute here
             ],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please enter a phone number',
-                ]),
-                
-                new Length([
-                'min' => 8,
-                'max' => 8,
-                'exactMessage' => 'Phone number must contain exactly {{ limit }} digits',
-                 ]),
-                 new Regex([
-                    'pattern' => '/^\d+$/',
-                    'message' => 'Phone number must be a number',
-                ]),
-                
-            ],
         ])
         ->add('birthDate',BirthdayType::class, [
             'label' => 'Birth date',
             'widget' => 'single_text',
             'attr' => ['class' => 'form-control', 'max' => (new \DateTime())->format('Y-m-d')],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please enter a birth date',
-                ]),
-                
-            ],
         ])
+
         ->add('gender', ChoiceType::class, [
             'choices' => [
                 'Male' => 'Male',
@@ -223,13 +150,9 @@ class UsersType extends AbstractType
             ],
             'expanded' => true,
             'multiple' => false,
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please select a gender',
-                ]),
-                
-            ],
-           
+            'attr' => [
+                'class' => 'form-check-inline' // add this line
+            ]
         ])
         ->add('role', ChoiceType::class, [
             'choices' => [
@@ -245,12 +168,6 @@ class UsersType extends AbstractType
             'expanded' => false,
             'multiple' => false,
             'placeholder' => 'Choose a role',
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please select a role',
-                ]),
-                
-            ],
             
         ])
          ->add('userImages', FileType::class, [

@@ -269,6 +269,7 @@ if (error_messages.length > 0) {
           </li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
+        {{ include('@MercurySeriesFlashy/flashy.html.twig') }}
          {% for label, messages in app.flashes(['success', 'error']) %}
                             {% for message in messages %}
                             <div id="popup-container">
@@ -307,7 +308,7 @@ if (error_messages.length > 0) {
   {% endblock %}
   
 {% block body %}
-{{ include('@MercurySeriesFlashy/flashy.html.twig') }}
+
 <!-- =========================================================== main ================================================== -->
  {% if app.user and app.user.isVerified == false %}
 			<div class="alert alert-warning alert-dismissible" role="alert">

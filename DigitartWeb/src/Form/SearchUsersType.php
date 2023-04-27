@@ -38,7 +38,7 @@ class SearchUsersType extends AbstractType
                 background: #BD2A2E !important;
                 position: relative;
                 bottom: 18px;
-                left: 980px;',
+                left: 1050px;',
             ]
         ])
         ;
