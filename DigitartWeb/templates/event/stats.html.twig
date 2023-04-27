@@ -35,9 +35,14 @@
     <h1><strong>Stats</strong></h1>
     <div>
   <canvas id="categories"></canvas>
+  <hr>
+  <canvas id="gender"></canvas>
+  <hr>
    <canvas id="annonces"></canvas>
-   <canvas id="doughnut"></canvas>
+   
+   <hr>
    <canvas id="bar"></canvas>
+   
 </div>
 
 
@@ -57,19 +62,7 @@
             
         }
     })
-       let doughnut = document.querySelector("#doughnut")
-    let dougGraph = new Chart(doughnut, {
-        type: "doughnut",
-        data: {
-            labels: {{ eventName|raw }},
-            datasets: [{
-                label: "Statistics",
-                data: {{ eventparticipants|raw }},
-                  backgroundColor: {{ eventColor|raw }}
-            }]
-            
-        }
-    })
+    
       let annonces = document.querySelector("#annonces")
     let annGraph = new Chart(annonces, {
         type: "line",
@@ -92,6 +85,23 @@
             }
         }
     })
+   let gender = document.querySelector("#gender")
+    let genGraph = new Chart(gender, {
+      type: 'doughnut',
+      data: {
+          labels: ['Male', 'Female'],
+          datasets: [{
+              data: [{{ Male }},{{ Female }}],
+              backgroundColor: [
+                'rgb(73, 105, 211)',
+                  'rgb(242, 17, 62)',
+              ],
+          }]
+      },
+      options: {
+          // Customize the appearance of the pie chart
+      }
+  });
      let bar = document.querySelector("#bar")
     let barGraph = new Chart(bar, {
         type: "bar",
@@ -99,7 +109,7 @@
             labels: {{ eventName|raw }},
             datasets: [{
                 label: "Statistics",
-                data: {{ eventparticipants|raw }},
+                data: {{ eventDurations|raw }},
                   backgroundColor: {{ eventColor|raw }}
             }]
             

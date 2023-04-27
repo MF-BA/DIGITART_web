@@ -34,6 +34,15 @@ class Comments
      */
     private $nickname;
 
+     /**
+     * @var Users
+     * @ORM\OneToOne(targetEntity="Users")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_user", referencedColumnName="id")
+     * })
+     */
+    private $image;
+
     /**
      * @ORM\Column(type="datetime")
      */
@@ -84,9 +93,19 @@ class Comments
         return $this->nickname;
     }
 
+    public function getImage(): ?Users
+    {
+        return $this->image;
+    }
     public function setNickname(?Users $nickname): self
     {
         $this->nickname = $nickname;
+
+        return $this;
+    }
+    public function setImage(?Users $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

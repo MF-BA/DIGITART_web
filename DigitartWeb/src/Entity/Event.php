@@ -71,7 +71,7 @@ class Event
      *
      * @ORM\Column(name="detail", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="Event details cannot be empty")
-     * @Assert\Length(min=5, max=100, minMessage="doit etre plus que 5", maxMessage="doit etre moins que 100")
+     * @Assert\Length(min=5, max=500, minMessage="doit etre plus que 5", maxMessage="doit etre moins que 500")
      */
     private $detail;
 

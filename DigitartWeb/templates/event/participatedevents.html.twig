@@ -148,9 +148,7 @@ if(distance<0)
                         <a href="{{ path('app_event_show_front', {'id': event.getId}) }}" class="ha-btn">Discover Now</a>
                         <hr>
                         <a href="{{ path('cancel_participation', { 'eventId': event.getId() }) }}" class="ha-btn">Cancel participation</a>
-                      <a href="{{ path('pdf_qrcode', { 'eventId': event.id }) }}" class="btn btn-primary">
-    Generate QR Code
-</a>
+                      <a href="{{ path('pdf_qrcode', { 'eventId': event.id }) }}" class="ha-btn"> Generate QR Code </a>
 
 
 

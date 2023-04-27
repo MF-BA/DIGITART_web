@@ -2,7 +2,9 @@
 <html>
 <head>
 	<title>You Already Participated</title>
-	<style>
+	{% block stylesheets %}
+	    <link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
+		<style>
 		body {
 			background-color: #f1f1f1;
 			font-family: Arial, sans-serif;
@@ -51,12 +53,20 @@
 			background-color: #3e8e41;
 		}
 	</style>
+{% endblock %}
+
+	
 </head>
 <body>
+ {{ include('@MercurySeriesFlashy/flashy.html.twig') }}
  <div class="container">
     <h1>There are no more slots</h1>
     <p>We're sorry, but it looks like all the places have been taken.</p>
-    <a href="{{ path('app_event_front_index') }}"><button>Back to Home</button></a>
+    <a href="{{ path('reload') }}"><button>Back to Home</button></a>
 </div>
+
 </body>
+{% block javascript %}
+	    <script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
+{% endblock %}
 </html>

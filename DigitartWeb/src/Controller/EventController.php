@@ -30,6 +30,12 @@ use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Comments;
 use Symfony\Component\Validator\Constraints\DateTime;
 use MercurySeries\FlashyBundle\FlashyNotifier;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
+use App\Service\SendMailService;
+
 
 #[Route('/event')]
 class EventController extends AbstractController
@@ -90,12 +96,18 @@ class EventController extends AbstractController
  
         return $this->render('event/index.html.twig', $qrCodes);
     }
+    #[Route('/reload', name: 'reload', methods: ['GET'])]
+    public function example(FlashyNotifier $flashy): Response
+    {
+        $flashy->success('Event created!', 'http://your-awesome-link.com');
+        return $this->redirectToRoute('app_event_no_participants');
+    }
     #[Route('/front', name: 'app_event_front_index', methods: ['GET'])]
-    public function indexfront(Request $request, EventRepository $eventRepository, PaginatorInterface $paginator): Response
+    public function indexfront(FlashyNotifier $flashy,Request $request, EventRepository $eventRepository, PaginatorInterface $paginator): Response
     {
         // get today's date
         $today = new \DateTime();
-    
+        $flashy->success('Event created!', 'http://your-awesome-link.com');
         // fetch events whose end date is greater than or equal to today's date
         $query = $eventRepository->createQueryBuilder('e')
             ->where('e.endDate >= :today')
@@ -106,7 +118,7 @@ class EventController extends AbstractController
         $events = $paginator->paginate(
             $query, /* query NOT result */
             $request->query->getInt('page', 1),
-            2   
+            3
         );
     
         return $this->render('event/eventfront.html.twig', [
@@ -176,7 +188,31 @@ class EventController extends AbstractController
         ]);
     }
     
-
+    #[Route('/test/mail', name: 'mailing')] 
+    public function Test(MailerInterface $mailer,SendMailService $mail)
+    {
+        $amount=0;
+        $currency="";
+        $to = 'bedhiefkoussay2015@gmail.com';
+        $subject = 'Test Email';
+        $context = ['amount' => '10.00', 'currency' => 'USD'];
+    
+       // $body = $this->renderView($template, $context);
+    
+        $mail->send(
+            'digitart.primes@gmail.com',
+            $to,
+            $subject,
+            'eventmail',
+            $context
+        );
+        
+    
+        return $this->render('event/test.html.twig', [
+            'amount' => $amount,
+            'currency' => $currency 
+        ]);
+    }
     #[Route('/{id}/front', name: 'app_event_show_front', methods: ['POST', 'GET'])]
 public function showfront(FlashyNotifier $flashy,Event $event, Request $request): Response
 {
@@ -195,6 +231,8 @@ public function showfront(FlashyNotifier $flashy,Event $event, Request $request)
         $comment->setCreatedAt(new \DateTime());
         $comment->setEvent($event);
         $comment->setNickname($user);
+        $comment->setImage($user);
+
 
         // On récupère le contenu du champ parentid
         $parentid = $commentForm->get("parentid")->getData();
@@ -252,54 +290,59 @@ public function showfront(FlashyNotifier $flashy,Event $event, Request $request)
             'events' => $events,
         ]);
     }
+
+
+ 
     #[Route('/{id}/participate/l', name: 'app_event_participate', methods: ['GET'])]
-public function participateAction(Event $event)
-{
-    // Get the Participants entity manager
-    $em = $this->getDoctrine()->getManager();
-    $user = $this->getUser();
+    public function participateAction(Event $event)
+    {
+        // Get the Participants entity manager
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+       
 
-    // Check if the user has already participated
-    $participantRepository = $em->getRepository(Participants::class);
-    $existingParticipant = $participantRepository->findOneBy([
-        'idUser' => $user->getId(),
-        'idEvent' => $event->getId(),
-    ]);
+
+        // Check if the user has already participated
+        $participantRepository = $em->getRepository(Participants::class);
+        $existingParticipant = $participantRepository->findOneBy([
+            'idUser' => $user->getId(),
+            'idEvent' => $event->getId(),
+        ]);
+        
+        if ($existingParticipant) {
+            // User has already participated, do not create a new participant
+            return $this->redirectToRoute('app_event_already', [], Response::HTTP_SEE_OTHER);
+        }
+        
+        // Check if the number of available slots is greater than 0
+        if ($event->getNbparticipants() <= 0) {
+            // No more available slots, redirect to another page
+            return $this->redirectToRoute('app_event_no_participants', [], Response::HTTP_SEE_OTHER);
+        }
+        
+        // Create a new Participants entity
+        $participant = new Participants();
+        // Set the properties
+        $participant->setFirstName($user->getFirstName());
+        $participant->setIdUser($user);
+        $participant->setLastName($user->getLastName());
+        $participant->setAdress($user->getAddress());
+        $participant->setGender($user->getGender());
+        $participant->setIdEvent($event);
     
-    if ($existingParticipant) {
-        // User has already participated, do not create a new participant
-        return $this->redirectToRoute('app_event_already', [], Response::HTTP_SEE_OTHER);
+        // Decrement the number of available slots
+        $event->setNbparticipants($event->getNbparticipants() - 1);
+        $em->persist($event);
+        $em->flush();
+    
+        // Save the entity
+        $em->persist($participant);
+        $em->flush();
+    
+        // Redirect to the event page
+        return $this->redirectToRoute('app_event_particip', ['id' => $event->getId()]);
     }
     
-    // Check if the number of available slots is greater than 0
-    if ($event->getNbparticipants() <= 0) {
-        // No more available slots, redirect to another page
-        return $this->redirectToRoute('app_event_no_participants', [], Response::HTTP_SEE_OTHER);
-    }
-    
-    // Create a new Participants entity
-    $participant = new Participants();
-    // Set the properties
-    $participant->setFirstName($user->getFirstName());
-    $participant->setIdUser($user);
-    $participant->setLastName($user->getLastName());
-    $participant->setAdress($user->getAddress());
-    $participant->setGender($user->getGender());
-    $participant->setIdEvent($event);
-
-    // Decrement the number of available slots
-    $event->setNbparticipants($event->getNbparticipants() - 1);
-    $em->persist($event);
-    $em->flush();
-
-    // Save the entity
-    $em->persist($participant);
-    $em->flush();
-
-    // Redirect to the event page
-    return $this->redirectToRoute('app_event_particip', ['id' => $event->getId()]);
-}
-
 
     #[Route('/{id}/edit', name: 'app_event_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Event $event, EventRepository $eventRepository): Response
@@ -539,33 +582,57 @@ public function cancelParticipation(Request $request, $eventId)
     // Redirect to the events page
     return $this->redirectToRoute('my_participated_events');
 }
-/**
-     * @Route("/stat/show", name="stats")
-     */
-    public function statistiques(EventRepository $eventRepo){
-        // On va chercher toutes les catégories
-        $events = $eventRepo->findAll();
+     /**
+ * @Route("/stat/show", name="stats")
+ */
+public function statistiques(EventRepository $eventRepo, ParticipantsRepository $participRepo)
+{
+    // On va chercher toutes les catégories
+    $events = $eventRepo->findAll();
+    $participants = $participRepo->findAll();
+    $eventName = [];
+    $eventColor = [];
+    $eventparticipants = [];
+    $eventDurations = [];
+    $Male = 0;
+    $Female = 0;
 
-        $eventName = [];
-        $eventColor = [];
-        $eventparticipants = [];
-
-        // On "démonte" les données pour les séparer tel qu'attendu par ChartJS
-        foreach($events as $event){
-            $eventName[] = $event->getEventName();
-            $eventColor[] = $event->getColor();
-            $eventparticipants[] = $event->getNbParticipants();
-        }
-
+    // On "démonte" les données pour les séparer tel qu'attendu par ChartJS
+    foreach($events as $event){
+        $eventName[] = $event->getEventName();
+        $eventColor[] = $event->getColor();
+        $eventparticipants[] = $event->getNbParticipants();
         
-
-        return $this->render('event/stats.html.twig', [
-            'eventName' => json_encode($eventName),
-            'eventColor' => json_encode($eventColor),
-            'eventparticipants' => json_encode($eventparticipants),
-            
-        ]);
+        $startDate = $event->getStartDate();
+        $endDate = $event->getEndDate();
+        $startDateTime = new \DateTime($startDate->format('Y-m-d'));
+        $endDateTime = new \DateTime($endDate->format('Y-m-d'));
+        $eventDuration = $endDateTime->diff($startDateTime)->days;
+        $eventDurations[] = max(1, $eventDuration);
     }
+    
+    foreach($participants as $participant){
+        if($participant->getGender() == 'Male')
+        {
+            $Male +=1;
+        }
+        if($participant->getGender() == 'Female')
+        {
+            $Female +=1;
+        }
+    }
+
+    return $this->render('event/stats.html.twig', [
+        'eventName' => json_encode($eventName),
+        'eventColor' => json_encode($eventColor),
+        'eventparticipants' => json_encode($eventparticipants),
+        'eventDurations' => json_encode($eventDurations),
+        'Male' => $Male,
+        'Female' => $Female,
+    ]);
+}
+
+
  /**
  * @Route("/pdf/{eventId}", name="pdf_qrcode")
  */
@@ -615,15 +682,13 @@ $pdf->Cell(0, 10, 'Start Date: ' . $startDate, 0, 1, 'L');
 $pdf->SetXY(20, 140);
 $pdf->Cell(0, 10, 'End Date: ' . $endDate, 0, 1, 'L');
 
-$pdf->SetXY(20, 170);
-$pdf->Cell(0, 10, 'Details: ' . $details, 0, 1, 'L');
 
 
     // Output PDF as response
     return new Response($pdf->Output('event.pdf', 'I'));
 }
   /**
-     * @Route("/calendar/show", name="main")
+     * @Route("/calendar/show", name="calendar")
      */
     public function calendar(EventRepository $calendar)
     {
