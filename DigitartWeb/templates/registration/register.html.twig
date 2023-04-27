@@ -7,17 +7,9 @@
 /*basic reset*/
 * {margin: 0; padding: 0;}
 
-html {
-	height: 100%;
-	/*Image only BG fallback*/
-	
-	/*background = gradient + image pattern combo*/
-	background: 
-		linear-gradient(rgba(196, 102, 0, 0.6), rgba(155, 89, 182, 0.6));
-}
 
 body {
-	font-family: montserrat, arial, verdana;
+	font-family: "Gill Sans", sans-serif;
 }
 /*form styles*/
 #msform {
@@ -25,6 +17,7 @@ body {
 	margin: 80px auto;
 	text-align: center;
 	position: relative;
+  height: 800px;
 }
 #msform fieldset {
 	background: white;
@@ -35,9 +28,53 @@ body {
 	box-sizing: border-box;
 	width: 80%;
 	margin: 0 10%;
+	 height: 550px; /* add a fixed height to each fieldset */
+  position: absolute; /* change position to absolute */
+  top: 120px !important; /* add top and left properties */
+  left: 0;
 	
-	/*stacking fieldsets above each other*/
-	position: relative;
+}
+#msform .fieldset1 {
+  background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+	 height: 530px; /* add a fixed height to each fieldset */
+  position: absolute; /* change position to absolute */
+  top: 120px !important; /* add top and left properties */
+  left: 0;
+}
+#msform .fieldset2 {
+  background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+	 height: 530px; /* add a fixed height to each fieldset */
+  position: absolute; /* change position to absolute */
+  top: 120px !important; /* add top and left properties */
+  left: 0;
+}
+#msform .fieldset3 {
+  background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+	 height: 300px; /* add a fixed height to each fieldset */
+  position: absolute; /* change position to absolute */
+  top: 120px !important; /* add top and left properties */
+  left: 0;
 }
 /*Hide all except first fieldset*/
 #msform fieldset:not(:first-of-type) {
@@ -51,9 +88,9 @@ body {
 	margin-bottom: 10px;
 	width: 100%;
 	box-sizing: border-box;
-	font-family: montserrat;
+	font-family: "Gill Sans", sans-serif;
 	color: #2C3E50;
-	font-size: 13px;
+	font-size: 15px;
 }
 /*buttons*/
 #msform .action-button {
@@ -169,7 +206,7 @@ body {
   font-size: 24px;
   position: center !important;
   right: 20px !important;
-  color: #BD2A2E !important;
+  color: #fff !important;
   border-color: #fff !important;
   line-height: 1.2;
   text-align: center;
@@ -368,58 +405,57 @@ input {
 						Register
 					</span>
 
-<fieldset>     
+<fieldset class="fieldset1">     
 <h2 class="fs-title">Create your account</h2>
 <h3 class="fs-subtitle">This is step 1</h3>
-<div class="row form-group">
-<div class="col col-md-6">
-  <div class="row form-group">
-        <div class="col col-md-6">
-            {# Cin #}
-            Cin
-        </div>
-        <div class="col-9 col-md-9">
-            {{ form_widget(registrationForm.cin, {'attr': {'class': 'form-control', 'placeholder': 'Enter cin'}}) }}
-            <small class="error-msg-form">{{ form_errors(registrationForm.cin,{'attr':{'class':'text-danger'}}) }}</small>
-            <small class="form-text text-muted">Cin must contain 8 digits</small>
-        </div>
-    </div>
-    <div class="row form-group">
-        <div class="col col-md-6">
-            {# Last name #}
-            Last Name
-        </div>
-        <div class="col-9 col-md-9">
-            {{ form_widget(registrationForm.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Enter Last name'}}) }}
-            <small class="error-msg-form">{{ form_errors(registrationForm.lastname,{'attr':{'class':'text-danger'}}) }}</small>
-        </div>
-    </div>
-  </div>
   
-  <div class="col col-md-6">
-    <div class="row form-group">
-        <div class="col col-md-6">
-            {# First name #}
-            First Name
+      {# Cin #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+        <strong>Cin</strong>
         </div>
-        <div class="col-9 col-md-9">
-            {{ form_widget(registrationForm.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Enter First name'}}) }}
-            <small class="error-msg-form">{{ form_errors(registrationForm.firstname,{'attr':{'class':'text-danger'}}) }}</small>
+        <div class="col-12 col-md-9">
+          {{ form_widget(registrationForm.cin, {'attr': {'class': 'form-control', 'placeholder': 'Enter cin'}}) }}
+          {{ form_errors(registrationForm.cin,{'attr':{'class':'text-danger'}}) }}
+          <small class="form-text text-muted">Cin must contain 8 digits</small>
         </div>
-    </div>
-    <div class="row form-group">
-        <div class="col col-md-6">
-            {# Email #}
-            Email
+      </div>
+
+      {# First name #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+        <strong>First name</strong>
+          
         </div>
-        <div class="col-9 col-md-9">
-            {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email'}}) }}
-            <small class="error-msg-form">{{ form_errors(registrationForm.email,{'attr':{'class':'text-danger'}}) }}</small>
-            <small class="form-text text-muted">Please enter a valid email!</small>
+        <div class="col-12 col-md-9">
+          {{ form_widget(registrationForm.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Enter First name'}}) }}
+          {{ form_errors(registrationForm.firstname,{'attr':{'class':'text-danger'}}) }}
+          
         </div>
-    </div>
-</div>
-</div>
+      </div>
+     
+{# Last name #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+         <strong>Last name</strong>
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(registrationForm.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Enter Last name'}}) }}
+          {{ form_errors(registrationForm.lastname,{'attr':{'class':'text-danger'}}) }}
+          
+        </div>
+      </div>
+      {# Email #}
+       <div class="row form-group">
+        <div class="col col-md-2">
+        <strong>Email</strong>
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email'}}) }}
+          {{ form_errors(registrationForm.email,{'attr':{'class':'text-danger'}}) }}
+          <small class="form-text text-muted">Please enter a valid email!</small>
+        </div>
+      </div>
  <input type="button" name="next" class="next action-button" value="Next" />
 
  <div class="text-center1 p-t-12">
@@ -432,99 +468,92 @@ input {
 					</div>
 
 </fieldset>
-<fieldset>      
-<h2 class="fs-title">Personnal infomations</h2>
-    <h3 class="fs-subtitle">second step 2</h3>
-  <div class="row form-group">
-  <div class="col col-md-6">
-    <!-- Birth Date -->
-    <div class="row form-group">
-      <div class="col col-md-6">
-        Birth Date
+<fieldset class="fieldset2">
+  <h2 class="fs-title">Personnal infomations</h2>
+  <h3 class="fs-subtitle">second step 2</h3>
+  
+      <div class="row form-group">
+        <div class="col col-md-2">
+          <strong>Birth Date</strong>
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(registrationForm.birthDate, {'attr': {'class': 'form-control'}}) }}
+          <small class="error-msg-form">{{ form_errors(registrationForm.birthDate,{'attr':{'class':'text-danger'}}) }}</small>
+        </div>
       </div>
-      <div class="col-12 col-md-9">
-        {{ form_widget(registrationForm.birthDate, {'attr': {'class': 'form-control'}}) }}
-        <small class="error-msg-form">{{ form_errors(registrationForm.birthDate,{'attr':{'class':'text-danger'}}) }}</small>
+    
+    
+      <div class="row form-group">
+        <div class="col col-md-2">
+          <strong>Phone Number</strong>
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(registrationForm.phoneNum, {'attr': {'class': 'form-control', 'placeholder': 'Enter Phone'}}) }}
+          <small class="error-msg-form">{{ form_errors(registrationForm.phoneNum,{'attr':{'class':'text-danger'}}) }}</small>
+          <small class="form-text text-muted">Phone number must contain 8 digits</small>
+        </div>
       </div>
-    </div>
 
-    <!-- Gender -->
-    <div class="row form-group">
-      <div class="col col-md-6">
-        Gender
+      <div class="row form-group">
+        <div class="col col-md-2">
+          <strong>Password</strong>
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(registrationForm.password) }}
+          <small class="error-msg-form">{{ form_errors(registrationForm.password,{'attr':{'class':'text-danger'}}) }}</small>
+          <small class="form-text text-muted">Please enter a complex password</small>
+        </div>
       </div>
-      <div class="col-6 col-md-9">
-        {{ form_widget(registrationForm.gender) }}
-        <small class="error-msg-form">{{ form_errors(registrationForm.gender,{'attr':{'class':'text-danger'}}) }}</small>
-      </div>
-    </div>
-  </div>
 
-  <div class="col col-md-6">
-    <!-- Phone Number -->
-    <div class="row form-group">
-      <div class="col col-md-6">
-        Phone Number
-      </div>
-      <div class="col-12 col-md-9">
-        {{ form_widget(registrationForm.phoneNum, {'attr': {'class': 'form-control', 'placeholder': 'Enter Phone'}}) }}
-        <small class="error-msg-form">{{ form_errors(registrationForm.phoneNum,{'attr':{'class':'text-danger'}}) }}</small>
-        <small class="form-text text-muted">Phone number must contain 8 digits</small>
-      </div>
-    </div>
 
-    <!-- Password -->
-    <div class="row form-group">
-      <div class="col col-md-6">
-        Password
+      <div class="row form-group">
+        <div class="col col-md-2">
+          <strong>Gender</strong>
+        </div>
+        <div class="col-6 col-md-4">
+          {{ form_widget(registrationForm.gender) }}
+          <small class="error-msg-form">{{ form_errors(registrationForm.gender,{'attr':{'class':'text-danger'}}) }}</small>
+        </div>
       </div>
-      <div class="col-12 col-md-9">
-        {{ form_widget(registrationForm.password) }}
-        <small class="error-msg-form">{{ form_errors(registrationForm.password,{'attr':{'class':'text-danger'}}) }}</small>
-        <small class="form-text text-muted">Please enter a complex password</small>
-      </div>
-    </div>
-  </div>
-</div>
-
+   
+  
   <input type="button" name="previous" class="previous action-button" value="Previous" />
-    <input type="button" name="next" class="next action-button" value="Next" />
- <div class="text-center2 p-t-12">
-						<span class="txt1">
-							Already have
-						</span>
-						<a class="txt2" href="{{ path('app_login') }}">
-							an account?
-						</a>
-					</div>
+  <input type="button" name="next" class="next action-button" value="Next" />
+  <div class="text-center2 p-t-12">
+    <span class="txt1">
+      Already have
+    </span>
+    <a class="txt2" href="{{ path('app_login') }}">
+      an account?
+    </a>
+  </div>
 </fieldset>
-<fieldset> 
+
+<fieldset class="fieldset3"> 
 <h2 class="fs-title">Register!</h2>
     <h3 class="fs-subtitle">Final Step</h3>       
-  <div class="row form-group">
-        <div class="col col-md-6">
-        {# role #}
-        <div class="row form-group">
-        <div class="col col-md-6">
-       Role
-        </div>
-       <div class="col-12 col-md-9">
-       {{ form_widget(registrationForm.role, {'attr': {'class': 'form-control'}}) }}
-       <small class="error-msg-form">{{ form_errors(registrationForm.role,{'attr':{'class':'text-danger'}}) }}</small>
-       </div>
-       </div>
-       </div>
-    <div class="col col-md-6">
+  
     {# Address #}
       <div class="row form-group">
-        <div class="col col-md-6">
-       Address
+        <div class="col col-md-2">
+       <strong>Address</strong>
         </div>
        <div class="col-12 col-md-9">
        {{ form_widget(registrationForm.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter Address'}}) }}
        <small class="error-msg-form">{{ form_errors(registrationForm.address,{'attr':{'class':'text-danger'}}) }}</small>
        </div>
       </div>
+
+      {# role #}
+        <div class="row form-group">
+        <div class="col col-md-2">
+       <strong>Role</strong>
+        </div>
+       <div class="col-12 col-md-9">
+       {{ form_widget(registrationForm.role, {'attr': {'class': 'form-control'}}) }}
+       <small class="error-msg-form">{{ form_errors(registrationForm.role,{'attr':{'class':'text-danger'}}) }}</small>
+       </div>
+       </div>
 {#
        <div class="row form-group">
         <div class="col col-md-6">
@@ -545,8 +574,7 @@ input {
     },
 } }) }}
      #}
-     </div>
- </div>
+     
     <input type="button" name="previous" class="previous action-button" value="Previous" />
     <button type="submit" class="btn">
 		<i class="fa fa-check-square-o"></i>  Register

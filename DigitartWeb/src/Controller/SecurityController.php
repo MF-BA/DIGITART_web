@@ -47,6 +47,18 @@ class SecurityController extends AbstractController
             $flashy->error('your account is blocked!');
             
         }
+        
+        if ($error !== null && $error->getMessageKey() == 'Invalid credentials.') {
+            if($lastUsername == null)
+        {
+            $flashy->error('Please enter your email and password!');
+        }
+        else
+        {
+            $flashy->error('Email or password incorrect!');
+        }
+            
+        }
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }

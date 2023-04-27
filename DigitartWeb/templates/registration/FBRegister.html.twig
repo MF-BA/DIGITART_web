@@ -2,9 +2,116 @@
 
 {% block stylesheets %}
 	<style>
+  .background_page {
+	
+	/*background = gradient + image pattern combo*/
+background: linear-gradient(rgba(358, 88, 85), rgba(0,0,0)) !important;
+
+}
+  body {
+	font-family: "Gill Sans", sans-serif;
+}
+/*form styles*/
+#msform {
+	width: 900px;
+	margin: 80px auto;
+	text-align: center;
+	position: relative;
+  height: 800px;
+}
+#msform fieldset {
+	background: #E6E6E6 !important;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+	 height: 550px; /* add a fixed height to each fieldset */
+  position: absolute; /* change position to absolute */
+  top: 120px !important; /* add top and left properties */
+  left: 0;
+	
+}
+#msform .fieldset1 {
+  background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+	 height: 800px; /* add a fixed height to each fieldset */
+  position: absolute; /* change position to absolute */
+  top: 70px !important; /* add top and left properties */
+  left: 0;
+}
+#msform .fieldset2 {
+  background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+	 height: 530px; /* add a fixed height to each fieldset */
+  position: absolute; /* change position to absolute */
+  top: 120px !important; /* add top and left properties */
+  left: 0;
+}
+#msform .fieldset3 {
+  background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+	 height: 300px; /* add a fixed height to each fieldset */
+  position: absolute; /* change position to absolute */
+  top: 120px !important; /* add top and left properties */
+  left: 0;
+}
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+	display: none;
+}
+/*inputs*/
+#msform input, #msform textarea {
+	padding: 15px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	margin-bottom: 10px;
+	width: 100%;
+	box-sizing: border-box;
+	font-family: "Gill Sans", sans-serif;
+	color: #2C3E50;
+	font-size: 16px;
+}
+/*buttons*/
+#msform .action-button {
+	width: 100px;
+	background: #BD2A2E;
+	font-weight: bold;
+	color: white;
+	border: 0 none;
+	border-radius: 1px;
+	cursor: pointer;
+	padding: 10px;
+	margin: 10px 5px;
+  text-decoration: none;
+  font-size: 14px;
+}
+#msform .action-button:hover, #msform .action-button:focus {
+	box-shadow: 0 0 0 2px white, 0 0 0 3px #BD2A2E;
+}
     .wrap-login100 {
-  width: 900px !important;
-  height: 500px !important;
+  width: 200px !important;
+  height: 200px !important;
   background: #fff;
   border-radius: 10px;
   overflow: hidden;
@@ -34,9 +141,9 @@
 .login100-form-title {
   font-family: Poppins-Bold;
   font-size: 24px;
-  position: relative !important;
-  right: 20px !important;
-  color: #333333;
+  position: center !important;
+  
+  color: #fff !important;
   line-height: 1.2;
   text-align: center;
   width: 100%;
@@ -103,7 +210,7 @@ a:hover {
   justify-content: center !important;
   align-items: center !important;
   padding: 15px !important;
-  background-image: url("login/images/background.jpg") !important;
+  background-image: url('footer.jpg') !important;
 
 }
 .container-login100-form-btn {
@@ -259,41 +366,120 @@ input[type="submit"]:hover {
    {% endblock %}
 
 {% block body %}
+<div class="background_page">
    <div class="limiter">
 		<div class="container-login100">
-            <div class="wrap-login100">
-           
+    <div id="msform">
+              
     {{ form_start(Facebookregister,{attr:{'id': 'registration-form','novalidate':'novalidate'}}) }}
     <span class="login100-form-title">
 						Please complete registration
 					</span>
     
 
-    {{ form_row(Facebookregister.cin) }}
 
-    {{ form_row(Facebookregister.birthDate) }}
+  <fieldset class="fieldset1">  
+<h2 class="fs-title">Create your account</h2>
 
-    {{ form_row(Facebookregister.gender) }}
+  </br>
+  </br>
+  </br>
 
-    {{ form_row(Facebookregister.plainPassword) }}
+      {# Cin #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+        <strong>Cin</strong>
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(Facebookregister.cin, {'attr': {'class': 'form-control', 'placeholder': 'Enter cin'}}) }}
+          {{ form_errors(Facebookregister.cin,{'attr':{'class':'text-danger'}}) }}
+          <small class="form-text text-muted">Cin must contain 8 digits</small>
+        </div>
+      </div>
 
-    {{ form_row(Facebookregister.phoneNum) }}
+      <div class="row form-group">
+        <div class="col col-md-2">
+          <strong>Birth Date</strong>
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(Facebookregister.birthDate, {'attr': {'class': 'form-control'}}) }}
+          <small class="error-msg-form">{{ form_errors(Facebookregister.birthDate,{'attr':{'class':'text-danger'}}) }}</small>
+        </div>
+      </div>
+    
+    
+      <div class="row form-group">
+        <div class="col col-md-2">
+          <strong>Phone Number</strong>
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(Facebookregister.phoneNum, {'attr': {'class': 'form-control', 'placeholder': 'Enter Phone'}}) }}
+          <small class="error-msg-form">{{ form_errors(Facebookregister.phoneNum,{'attr':{'class':'text-danger'}}) }}</small>
+          <small class="form-text text-muted">Phone number must contain 8 digits</small>
+        </div>
+      </div>
 
-    {{ form_row(Facebookregister.address) }}
+      <div class="row form-group">
+        <div class="col col-md-2">
+          <strong>Password</strong>
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(Facebookregister.password) }}
+          <small class="error-msg-form">{{ form_errors(Facebookregister.password,{'attr':{'class':'text-danger'}}) }}</small>
+          <small class="form-text text-muted">Please enter a complex password</small>
+        </div>
+      </div>
 
-    {{ form_row(Facebookregister.role) }}
+
+      <div class="row form-group">
+        <div class="col col-md-2">
+       <strong>Address</strong>
+        </div>
+       <div class="col-12 col-md-9">
+       {{ form_widget(Facebookregister.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter Address'}}) }}
+       <small class="error-msg-form">{{ form_errors(Facebookregister.address,{'attr':{'class':'text-danger'}}) }}</small>
+       </div>
+      </div>
+
+      {# role #}
+        <div class="row form-group">
+        <div class="col col-md-2">
+       <strong>Role</strong>
+        </div>
+       <div class="col-12 col-md-9">
+       {{ form_widget(Facebookregister.role, {'attr': {'class': 'form-control'}}) }}
+       <small class="error-msg-form">{{ form_errors(Facebookregister.role,{'attr':{'class':'text-danger'}}) }}</small>
+       </div>
+       </div>
+      
+        <div class="row form-group">
+        <div class="col col-md-2">
+       <strong>Gender</strong>
+        </div>
+        {{ form_widget(Facebookregister.gender) }}
+        <div class="form-group">
+
+          
+          <small class="error-msg-form">{{ form_errors(Facebookregister.gender,{'attr':{'class':'text-danger'}}) }}</small>
+       </div>
+      </div>
 
       <button type="submit" class="btn">
 		<i class="fa fa-check-square-o"></i>  Register
 		</button>
+</fieldset>
+
+
 
 
 
     {{ form_end(Facebookregister) }}
 
-    </div>
+
+</div>
+    
         </div>
 	</div>
 
-
+</div>
 {% endblock %}

@@ -24,7 +24,7 @@
       background-color: #BD2A2E !important;
 			position: relative !important;
       top: 30px !important;
-      left: 250px !important;
+      left: 100px !important;
       border: 2px solid var(#BD2A2E);
 			color: #fff;
 			display: flex;
@@ -46,12 +46,12 @@
       color: #BD2A2E;
 			position: relative !important;
       top: 2px !important;
-      left: 230px !important;
+      left: 80px !important;
     }
 		.options {
 			position: fixed;
 			top: 155px !important;
-			right: 20px !important;
+			right: 25px !important;
 			transform: translateY(-50%);
 			background-color: #000000;
       border-radius: 10% !important;
@@ -693,7 +693,7 @@ border: none;
       {# Cin #}
       <div class="row form-group">
         <div class="col col-md-2">
-        <div class="color-text-table">{{ form_label(form.cin, 'Cin') }}</div>
+        <strong style="color: #000000;">Cin</strong>
           
         </div>
         <div class="col-12 col-md-9">
@@ -706,7 +706,7 @@ border: none;
       {# First name #}
       <div class="row form-group">
         <div class="col col-md-2">
-        <div class="color-text-table">{{ form_label(form.firstname, 'First name') }}</div>
+        <strong style="color: #000000;">First name</strong>
           
         </div>
         <div class="col-12 col-md-9">
@@ -719,7 +719,7 @@ border: none;
 {# Last name #}
       <div class="row form-group">
         <div class="col col-md-2">
-        <div class="color-text-table">{{ form_label(form.lastname, 'Last name') }}</div>
+        <strong style="color: #000000;">Last name</strong>
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(form.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Enter Last name'}}) }}
@@ -730,7 +730,7 @@ border: none;
 {# Email #}
        <div class="row form-group">
         <div class="col col-md-2">
-        <div class="color-text-table">{{ form_label(form.email, 'Email') }}</div>
+        <strong style="color: #000000;">Email</strong>
         </div>
         <div class="col-12 col-md-9">
           {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email'}}) }}
@@ -742,7 +742,7 @@ border: none;
       {# Address #}
       <div class="row form-group">
         <div class="col col-md-2">
-      <div class="color-text-table">{{ form_label(form.address, 'Address') }}</div>
+      <strong style="color: #000000;">Address</strong>
         </div>
 <div class="col-12 col-md-9">
 {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter Address'}}) }}
@@ -753,7 +753,7 @@ border: none;
 {# Phone #}
   <div class="row form-group">
     <div class="col col-md-2">
-    <div class="color-text-table">{{ form_label(form.phoneNum, 'Phone Number') }}</div>
+    <strong style="color: #000000;">Phone Number</strong>
       
     </div>
     <div class="col-12 col-md-9">
@@ -765,7 +765,7 @@ border: none;
   {# birth date #}
   <div class="row form-group">
         <div class="col col-md-2">
-        <div class="color-text-table">{{ form_label(form.birthDate, 'Birth Date') }}</div>
+        <strong style="color: #000000;">Birth Date</strong>
     </div>
     <div class="col-12 col-md-9">
         {{ form_widget(form.birthDate, {'attr': {'class': 'form-control'}}) }}
@@ -774,7 +774,7 @@ border: none;
 {# Gender #}
 <div class="row form-group">
   <div class="col col-md-2">
-    <div class="color-text-table">{{ form_label(form.gender, 'Gender') }}</div>
+    <strong style="color: #000000;">Gender</strong>
   </div>
   <div class="col-12 col-md-9">
     {{ form_widget(form.gender, {

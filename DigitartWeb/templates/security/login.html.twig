@@ -96,7 +96,7 @@ a:hover {
   width: 200px;
   height: 50px;
   border-radius: 25px;
-  background: #000000 !important;
+  background: blue !important;
   position: relative;
   top: 100px;
   right: 70px;
@@ -115,40 +115,10 @@ a:hover {
   transition: all 0.4s;
 }
 .social-connect-btn:hover {
-  background: blue !important;
+  background: #333333 !important;
 }
-.facebook-connect-btn {
-  font-family: Montserrat-Bold;
-  font-size: 10px;
-  line-height: 1.5;
-  color: #fff;
-  text-transform: uppercase;
 
-  width: 150px;
-  height: 50px;
-  border-radius: 25px;
-  background: blue !important;
-  position: relative !important;
-  bottom: 160px !important;
-  left: 370px !important;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0 25px;
 
-  -webkit-transition: all 0.4s;
-  -o-transition: all 0.4s;
-  -moz-transition: all 0.4s;
-  transition: all 0.4s;
-}
-.facebook-connect-btn:hover {
-  background: white !important;
-  color: blue !important;
-}
 .container-login100 {
   width: 100% !important;  
   min-height: 100vh !important;
@@ -249,13 +219,7 @@ display: -webkit-box;
       </div>
                
   {% endfor %}
- {% if error %}
-{% if error.messageKey == 'Invalid credentials.' %}
-        <div class="alert alert-danger">Email or password incorrect!</div>
-    {% else %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
-{% endif %}
+ 
 {% if app.user and app.user.id and app.user.isVerified == true and app.user.status == 'unblocked'%}
         <div class="mb-3">
             You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
@@ -268,7 +232,7 @@ display: -webkit-box;
 				<div class="login100-pic js-tilt" data-tilt style="will-change: transform !important; transform: perspective(300px) rotateX(0deg) rotateY(0deg) !important;">
 					<img src="{{asset('login/images/logo-digitart-rouge.png')}}" alt="IMG">
 				</div>
-      <form class="login100-form validate-form" method="post">
+      <form class="login100-form validate-form" method="post" novalidate>
 <div class="container-login100-form-btn">
           
               <span class="login100-form-title">
@@ -333,16 +297,11 @@ display: -webkit-box;
 					
 
 				</form>
-        	<div class="text-center">
-           <a href="#">
-            <button class="social-connect-btn">
-							Connect with github
-						</button>
-            </a>
-            </div>
+        	
             <div class="text-center">
            <a href="{{path('app_facebook_login')}}">
-            <button class="facebook-connect-btn">
+            <button class="social-connect-btn">
+            <i class="fa fa-facebook bg" style="color: white; font-size: 20px;" aria-hidden="true"></i>
 							Connect with facebook
 						</button>
             </a>

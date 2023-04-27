@@ -36,8 +36,18 @@ class FacebookRegisterType extends AbstractType
         
     
     ->add('password', PasswordType::class, [
-       
-        'attr' => ['autocomplete' => 'new-password'],
+        'mapped' => false,
+        'label' => 'Password',
+        'attr' => [
+            'placeholder' => 'Enter Password',
+            'class' => 'form-control',
+            'id' => 'password-input', // Define the id attribute here
+        ],
+        'constraints'=> [
+            new NotBlank([
+                'message' => 'Please enter a Password',
+            ]), 
+        ],
     ])
 
         ->add('address', TextType::class, [
@@ -70,6 +80,7 @@ class FacebookRegisterType extends AbstractType
             ],
             'expanded' => true,
             'multiple' => false,
+           
             
         ])
         ->add('role', ChoiceType::class, [

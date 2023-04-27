@@ -146,12 +146,17 @@ class UsersType extends AbstractType
             'choices' => [
                 'Male' => 'Male',
                 'Female' => 'Female',
-               
             ],
             'expanded' => true,
             'multiple' => false,
             'attr' => [
                 'class' => 'form-check-inline' // add this line
+            ],
+            'label_attr' => [
+                'class' => 'mr-3' // add this line to create space between radio buttons and text field
+            ],
+            'choice_attr' => [
+                'class' => 'mr-2' // add this line to create space between radio buttons
             ]
         ])
         ->add('role', ChoiceType::class, [

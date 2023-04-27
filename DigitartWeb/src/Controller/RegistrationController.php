@@ -80,12 +80,14 @@ class RegistrationController extends AbstractController
                 'register',
                 compact('user', 'token')
             );
-            return $userAuthenticator->authenticateUser(
+            $flashy->info('Activate your account via email!');
+            $userAuthenticator->authenticateUser(
                 $user,
                 $authenticator,
                 $request
             );
             
+            return $this->redirectToRoute('app_login');
            }
 
         }

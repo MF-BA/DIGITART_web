@@ -107,14 +107,23 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['class' => 'form-control', 'max' => (new \DateTime())->format('Y-m-d')],
             ])
             ->add('gender', ChoiceType::class, [
+                'expanded' => true,
+                'multiple' => false,
+                'attr' => [
+                    'class' => 'form-check-inline' // add this line
+                ],
+                'label_attr' => [
+                    'class' => 'mr-3' // add this line to create space between radio buttons and text field
+                ],
+                'choice_attr' => [
+                    'class' => 'mr-2' // add this line to create space between radio buttons
+                ],
                 'choices' => [
                     'Male' => 'Male',
                     'Female' => 'Female',
                    
-                ],
-                'expanded' => true,
-                'multiple' => false,
-               
+                ]
+                
             ])
             ->add('role', ChoiceType::class, [
                 'choices' => [
@@ -139,6 +148,11 @@ class RegistrationFormType extends AbstractType
                     new IsTrueV3()
                 )
             ));*/
+            ->add('captcha', Recaptcha3Type::class, [
+                'constraints' => new Recaptcha3(['message' => 'There were problems with your captcha. Please try again or contact with support and provide following code(s): {{ errorCodes }}']),
+                'action_name' => 'register',
+            ]);
+
             
             
         ;

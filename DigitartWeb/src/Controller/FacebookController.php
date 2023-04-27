@@ -26,7 +26,7 @@ class FacebookController extends AbstractController
             'clientId'          => $_ENV['FCB_ID'],
             'clientSecret'      => $_ENV['FCB_SECRET'],
             'redirectUri'       => $_ENV['FCB_CALLBACK'],
-            'graphApiVersion'   => 'v16.0',
+            'graphApiVersion'   => 'v15.0',
         ]);
     }
    
@@ -49,7 +49,7 @@ class FacebookController extends AbstractController
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
-                    $form->get('plainPassword')->getData()
+                    $form->get('password')->getData()
                 )
             );
             
