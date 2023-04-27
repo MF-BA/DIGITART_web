@@ -15,6 +15,8 @@ use Stripe\Checkout\Session;
 use Stripe\Stripe;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use TCPDF;
 
 #[Route('/payment')]
@@ -104,6 +106,7 @@ class PaymentController extends AbstractController
             return $this->render('payment/your_custom_form.html.twig', [
                 'clientSecret' => $intent->client_secret,
                 'Amount' =>$Amount,
+                
             ]);
         }
         
@@ -169,15 +172,6 @@ class PaymentController extends AbstractController
         }
 
         return $this->redirectToRoute('app_payment_card', [], Response::HTTP_SEE_OTHER);
-    }
-
-  
-    #[Route('/test', name: 'calendar')]
-    public function Test( )
-    {
-        
-        return $this->render('payment/test.html.twig', [
-        ]);
     }
    
 
@@ -292,6 +286,25 @@ class PaymentController extends AbstractController
         return new Response($pdf->Output('ticket.pdf', 'I'));
     }
     
+    #[Route('/test', name: 'calendar')]
+    public function Test(MailerInterface $mailer)
+    {
+      // Get the Mailer service
+    $mailer = $this->get('mailer');
 
+    // Create a new Email object
+    $email = (new Email())
+    ->from('from@example.com')
+    ->to('to@example.com')
+    ->subject('Test email')
+    ->html('<html><body><h1>Hello World!</h1><p>This is a test email.</p></body></html>');
+
+    // Send the email
+    $mailer->send($email);
+
+
+        return $this->render('payment/test.html.twig', [
+        ]);
+    }
 
 }

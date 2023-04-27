@@ -23,7 +23,7 @@
   <div class="container" data-aos="fade-up">
       <div class="row gy-4" data-aos="fade-up" data-aos-delay="200">
       <div class="section-header" data-aos="fade-up" data-aos-delay="200">
-        <h2>Finalize you're payment Mr Anonym </h2>
+        <h2>Finalize you're payment Sir " {{app.user.firstname}} {{app.user.lastname}} " </h2>
         <p>All ticket bought are not refundable! </p>
       </div>
 
@@ -31,6 +31,7 @@
     <form method="post">
     <div id="errors"></div>
     <input type="text" id="cardholder-name" placeholder="Titulaire de la carte">
+    <input type="text" id="cardholder-name" value="{{app.user.email}}">
     <div id="card-elements"></div>
     <div id="card-errors" role="alert"></div>
     <button id="card-button" type="button" data-secret="{{ clientSecret }}">Pay
