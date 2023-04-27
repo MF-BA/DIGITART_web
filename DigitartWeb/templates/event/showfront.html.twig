@@ -3,6 +3,8 @@
 {% block title %}{{ event.getEventName }}{% endblock %}
 
 {% block body %}
+    {{ include('@MercurySeriesFlashy/flashy.html.twig') }}
+
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
@@ -86,6 +88,12 @@
     border: 1px solid #ccc;
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.blog .comments .reply-form .btn-primary {
+    border-radius: 4px;
+    padding: 10px 20px;
+    border: 0;
+    background-color: #BD2A2E !important ;
 }
 
 </style>
@@ -229,19 +237,46 @@ if(distance<0)
         <div class="slides-2 swiper">
           <div class="swiper-wrapper">
            
-            {% for image in event.images %}      
-  <div class="swiper-slide">
-
-
-        <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
-          <img src="{{ asset('/uploads/' ~ image.name) }}" alt="Image" style="max-height: 100%; max-width: 100%;">
-        </div>
-      </div>
-
+    
   </div><!-- End testimonial item -->
   
-{% endfor %}
+    <!-- ======= Our Projects Section ======= -->
+    <section id="projects" class="projects">
+      <div class="container" data-aos="fade-up">
 
+        <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry" data-portfolio-sort="original-order">
+
+          <ul class="portfolio-flters" data-aos="fade-up" data-aos-delay="100">
+            <li data-filter="*" class="filter-active">All</li>
+            <li data-filter=".filter-remodeling">Remodeling</li>
+            <li data-filter=".filter-construction">Construction</li>
+            <li data-filter=".filter-repairs">Repairs</li>
+            <li data-filter=".filter-design">Design</li>
+          </ul><!-- End Projects Filters -->
+
+          <div class="row gy-4 portfolio-container" data-aos="fade-up" data-aos-delay="200">
+             {% for image in event.images %}      
+
+            <div class="col-lg-4 col-md-6 portfolio-item filter-remodeling">
+              <div class="portfolio-content h-100">
+                <img src="{{ asset('/uploads/' ~ image.name) }}" class="img-fluid" alt="">
+                <div class="portfolio-info">
+                  <h4>Remodeling 1</h4>
+                  <p>Lorem ipsum, dolor sit amet consectetur</p>
+                  <a href="{{ asset('/uploads/' ~ image.name) }}" title="Remodeling 1" data-gallery="portfolio-gallery-remodeling" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                  <a href="project-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+                </div>
+              </div>
+            </div><!-- End Projects Item -->
+       {% endfor %}
+
+          </div><!-- End Projects Container -->
+
+        </div>
+
+      </div>
+    </section><!-- End Our Projects Section -->
+      
 
           </div>
           <div class="swiper-pagination"></div>
@@ -364,7 +399,7 @@ We want you to have an enjoyable experience at our event and to fully appreciate
                     <div class="d-flex">
                       <div class="comment-img"><img src="{{asset('images/event_bg.jpg')}}" alt=""></div>
                       <div>
-                     <a href="#ajout-commentaire" data-reply data-id="{{comment.id}}" class="reply"><i class="bi bi-reply-fill"></i> Reply</a></h5>
+                       <h5><a href="">{{comment.getNickname().firstname()}}</a>
                         <time datetime="2020-01-01">{{reply.createdAt|date("d/m/Y H:i") }}</time>
                         <p>
                                {{reply.content|raw}}                        </p>

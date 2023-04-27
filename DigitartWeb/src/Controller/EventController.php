@@ -29,7 +29,7 @@ use TCPDF;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Comments;
 use Symfony\Component\Validator\Constraints\DateTime;
-
+use MercurySeries\FlashyBundle\FlashyNotifier;
 
 #[Route('/event')]
 class EventController extends AbstractController
@@ -178,7 +178,7 @@ class EventController extends AbstractController
     
 
     #[Route('/{id}/front', name: 'app_event_show_front', methods: ['POST', 'GET'])]
-public function showfront(Event $event, Request $request): Response
+public function showfront(FlashyNotifier $flashy,Event $event, Request $request): Response
 {
     $user = $this->getUser();
     // Partie commentaires
@@ -212,6 +212,8 @@ public function showfront(Event $event, Request $request): Response
         $em->persist($comment);
         $em->flush();
         $this->addFlash('message', 'Votre commentaire a bien été envoyé');
+        $flashy->success('Event created!', 'http://your-awesome-link.com');
+
         return $this->redirectToRoute('app_event_show_front', ['id' => $event->getId()]);
     }
 
@@ -224,7 +226,7 @@ public function showfront(Event $event, Request $request): Response
 
 
     #[Route('/participated/a', name: 'app_event_already', methods: ['GET'])]
-    public function already(EventRepository $eventRepository): Response
+    public function already(FlashyNotifier $flashy,EventRepository $eventRepository): Response
     {
         $events = $eventRepository->findAll();
 
