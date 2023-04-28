@@ -94,6 +94,14 @@ class Payment
         return $this->paymentId;
     }
 
+    public function setPaymentId(?int $paymentId): ?self
+    {
+        $this->paymentId=$paymentId;
+        return $this;
+    }
+
+   
+
     public function getPurchaseDate(): ?\DateTimeInterface
     {
         return $this->purchaseDate;
@@ -178,5 +186,18 @@ class Payment
         return $this;
     }
 
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+    $this->createdAt = $createdAt;
+
+    return $this;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+    $this->updatedAt = $updatedAt;
+
+    return $this;
+    }
 
 }

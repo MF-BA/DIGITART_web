@@ -38,7 +38,7 @@ class TicketController extends AbstractController
         $payments= $paginator->paginate(
             $PaymentRepository->paginationQuery(),
             $request->query->get('page',1),
-            5
+            9
         );
 
         return $this->render('payment/showBack.html.twig', [
