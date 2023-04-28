@@ -81,13 +81,13 @@ class RegistrationController extends AbstractController
                 compact('user', 'token')
             );
             $flashy->info('Activate your account via email!');
-            $userAuthenticator->authenticateUser(
+            return $userAuthenticator->authenticateUser(
                 $user,
                 $authenticator,
                 $request
             );
             
-            return $this->redirectToRoute('app_login');
+             $this->redirectToRoute('app_login');
            }
 
         }
@@ -113,7 +113,7 @@ class RegistrationController extends AbstractController
                 $user->setIsVerified(true);
                 $em->flush($user);
                 $flashy->success('Account Activated');
-                return $this->redirectToRoute('showfrontpage');
+                return $this->redirectToRoute('app_login');
             }
         }
         // Ici un problème se pose dans le token

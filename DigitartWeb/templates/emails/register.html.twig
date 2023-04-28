@@ -43,11 +43,11 @@
 </head>
 <body>
 	<div class="container">
-		<img src="{{ asset('Front/assets/img/logo-digitart.png') }}" alt="DigitArt Logo" style="max-width: 100px; height: auto; margin-bottom: 20px;">
+		<img src="https://cdn.discordapp.com/attachments/866163650824896592/1101423432870150225/logo_digitart.png" alt="DigitArt Logo" style="max-width: 100px; height: auto; margin-bottom: 20px;">
 		<h1>Activate your account</h1>
 		<p>Greetings {{ user.firstname }},</p>
 		<p>Your inscription in DigitArt can be validated by clicking on the link below:</p>
-		<p><a href="{{ absolute_url(path('verify_user', {token: token})) }}">{{ absolute_url(path('verify_user', {token: token})) }}</a></p>
+		<p><a href="{{ absolute_url(path('verify_user', {token: token})) }}" style="display: inline-block; padding: 10px 20px; background-color: #BD2A2E; color: white; text-decoration: none;">Click on this link!</a></p>
 		<p>This link will expire in 7 days.</p>
 		<p>Thank you!</p>
 	</div>
