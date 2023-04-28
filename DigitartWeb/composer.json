@@ -15,10 +15,13 @@
         "dompdf/dompdf": "^2.0",
         "endroid/qr-code": "^4.8",
         "endroid/qr-code-bundle": "^4.3",
+        "fzaninotto/faker": "^1.5",
         "knplabs/knp-paginator-bundle": "^5.9",
         "knplabs/knp-snappy": "^1.4",
         "knplabs/knp-snappy-bundle": "^1.9",
         "mikehaertl/phpwkhtmltopdf": "^2.5",
+        "nyholm/psr7": "*",
+        "openai-php/client": "^0.4.2",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.15",
         "sensio/framework-extra-bundle": "^6.1",
@@ -48,6 +51,7 @@
         "symfony/string": "5.4.*",
         "symfony/translation": "5.4.*",
         "symfony/twig-bundle": "5.4.*",
+        "symfony/ux-typed": "^2.7",
         "symfony/validator": "5.4.*",
         "symfony/web-link": "5.4.*",
         "symfony/yaml": "5.4.*",
@@ -62,7 +66,8 @@
             "composer/package-versions-deprecated": true,
             "symfony/flex": true,
             "symfony/runtime": true,
-            "endroid/installer": true
+            "endroid/installer": true,
+            "php-http/discovery": true
         },
         "optimize-autoloader": true,
         "preferred-install": {
@@ -108,6 +113,7 @@
         }
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "5.4.*",
         "symfony/css-selector": "5.4.*",

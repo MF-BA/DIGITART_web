@@ -1,0 +1,354 @@
+
+
+
+
+{% block body %}
+<style>
+     .containerchat
+     {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0px;
+
+        position: relative;
+        width: 874px;
+        height: 428px;
+        left: 20%;
+        top: 48px;
+
+        /* Neutrals/Gray 80 */
+
+        background: #343541;
+
+        transform:scale(0.8);
+     }
+
+     .headerchat
+     {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 24px 48px;
+        gap: 24px;
+
+        width: 874px;
+        height: 78px;
+
+        /* Inside auto layout */
+
+        flex: none;
+        order: 0;
+        align-self: stretch;
+        flex-grow: 0;
+     }
+
+     .titlechat
+     {
+      width: 656px;
+      height: 28px;
+
+      font-family: 'Segoe UI';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 28px;
+      /* identical to box height, or 175% */
+
+      display: flex;
+      align-items: center;
+
+      /* Neutrals/Gray 20 */
+
+      color: #D1D5DB;
+
+      /* Inside auto layout */
+
+      flex: none;
+      order: 1;
+      flex-grow: 1;
+
+      position: absolute;
+      top: -11px;
+      left: 313px;
+      font-size: xx-large;
+      font-weight: 600;
+     }
+
+     .avatarchat
+     {
+        width: 30px;
+        height: 30px;
+
+        /* Accents/Avatar */
+
+        
+        border-radius: 2px;
+
+        /* Inside auto layout */
+
+        flex: none;
+        order: 0;
+        flex-grow: 0;
+        position: absolute;
+        top: 64px;
+     }
+
+     .questionchat
+     {
+        width: 656px;
+        height: 28px;
+
+        font-family: 'Segoe UI';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 28px;
+        /* identical to box height, or 175% */
+
+        display: flex;
+        align-items: center;
+
+        /* Neutrals/Gray 20 */
+
+        color: #D1D5DB;
+
+        /* Inside auto layout */
+
+        flex: none;
+        order: 1;
+        flex-grow: 1;
+        position: absolute;
+        top: 64px;
+        left: 100px;
+     }
+
+     .gpt-response
+     {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 24px 48px;
+        gap: 24px;
+
+      
+        height: 216px;
+
+        /* Neutrals/Gray 60 */
+
+        background: #444654;
+
+        /* Inside auto layout */
+
+        flex: none;
+        order: 1;
+        align-self: stretch;
+        flex-grow: 0;
+     }
+
+     .gpt-logo
+     {
+        width: 30px;
+        height: 30px;
+
+        /* Accents/ChatGPT */
+
+        
+        border-radius: 2px;
+
+        /* Inside auto layout */
+
+        flex: none;
+        order: 0;
+        flex-grow: 0;
+     }
+
+     .gpt
+     {
+        width: 656px;
+        height: 168px;
+
+        font-family: 'Segoe UI';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 28px;
+        /* or 175% */
+
+        display: flex;
+        align-items: center;
+
+        /* Neutrals/Gray 20 */
+
+        color: #D1D5DB;
+
+        /* Inside auto layout */
+
+        flex: none;
+        order: 1;
+        flex-grow: 1;
+     }
+
+     .streamchat
+     {
+      color:white; 
+      font-size:larger;
+     }
+
+     .typechat
+     {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px 0px;
+        gap: 4px;
+        width: 874px;
+        height: 134px;
+        flex: none;
+        order: 2;
+        align-self: stretch;
+        flex-grow: 0;
+        background: #343541;
+      }
+
+      .input-divchat
+      {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0px 48px;
+        gap: 8px;
+
+        width: 874px;
+        height: 50px;
+
+        /* Inside auto layout */
+
+        flex: none;
+        order: 0;
+        align-self: stretch;
+        flex-grow: 0;
+      }
+     .text-inputchat
+     {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        width: 778px;
+        height: 50px;
+
+        /* Neutrals/Gray 60 */
+
+        background: #444654;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+
+        /* Inside auto layout */
+
+        flex: none;
+        order: 0;
+        align-self: stretch;
+        flex-grow: 0;
+     }
+
+     .textchat
+     {
+    
+        left: 98px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        width: 778px;
+        height: 50px;
+        background: #444654;
+        box-shadow: 0px 0px 15px rgb(0 0 0 / 10%);
+        /* border-radius: 6px; */
+        flex: none;
+        order: 0;
+        align-self: stretch;
+        flex-grow: 0;
+        border: none;
+        top: 419px;
+        color: white;
+        text-decoration: none;
+        outline: none;
+        }
+
+     .sendchat
+     {
+      width: 26px;
+      height: 30px;
+      flex: none;
+      order: 0;
+      flex-grow: 0;
+      position: absolute;
+      left: 728px;
+      top: -38px;
+      cursor: pointer;
+    }
+    .btnchat
+    {
+      position: absolute;
+      border: none;
+      background: none;
+    }
+    .info-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+
+</style>
+
+ <div class="info-container">
+  <h2>If you want more information about the artwork {{ artwork.artworkName }} or the artist {% if artwork.idArtist is not null %}{{ users[ artwork.idArt ] }}{% else %} {{ artwork.artistName }}{% endif %} don't hesitate to ask Digitart-GPT (OpenAI API)</h2>
+</div>
+
+<div class="containerchat">
+      <div class="headerchat">
+                <img src="{{asset('/images/avatar.png')}}" alt="avatar" class="gpt-logo">
+                <span > {{question}}</span>
+                
+            </div>
+
+            <div class="gpt-response">
+
+                <img src="{{asset('/images/gpt.png')}}" alt="gpt" class="gpt-logo">
+              
+                  <span >  {{response}}</span>
+            </div>  
+        
+        <div class="typechat">
+            
+            <div class="input-divchat">
+
+                <form action="{{path('send_chat')}}" method="post">
+                    <div class="text-inputchat">
+                    
+                    <input type="text" name="text"  id="text"  placeholder="" class="textchat" >
+                    
+
+                    </div>
+                     
+                     <button type="submit" class="btnchat">
+
+                       <img src="{{asset('/images/send.png')}}" alt="send" class="sendchat">
+
+                      </button>
+
+                </form>
+               
+            </div>
+
+        </div>
+   
+
+</div>
+
+{% endblock %}
+
+

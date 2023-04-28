@@ -19,7 +19,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use OpenAI;
+use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Email;
 
 class ArtworkController extends AbstractController
 {
@@ -41,13 +44,13 @@ class ArtworkController extends AbstractController
     }
 
     #[Route('/showfront/artwork', name: 'showfrontartwork', methods: ['GET'])]
-    public function display_front(ArtworkRepository $artworkRepository,RoomRepository $roomRepository,UsersRepository $userRepository,ImageArtworkRepository $ImageartworkRepository): Response
+    public function display_front(Request $request,ArtworkRepository $artworkRepository,RoomRepository $roomRepository,UsersRepository $userRepository,ImageArtworkRepository $ImageartworkRepository): Response
     {
         $artworks = $artworkRepository->findAll();
         $roomNames = [];
         $users = [];
         $images = []; 
-        $image = []; 
+     $rooms = $roomRepository->findAll();
     
         foreach ($artworks as $artwork) {
             $roomNames[$artwork->getIdArt()] = $roomRepository->getRoomNameById($artwork->getIdroom());
@@ -64,6 +67,9 @@ class ArtworkController extends AbstractController
             'roomNames' =>$roomNames,
             'users' =>$users,
             'imageArtwork' => $images,
+            'rooms' => $rooms,
+            
+
         ]);
     }
    
@@ -154,6 +160,84 @@ class ArtworkController extends AbstractController
           }
             $artworkRepository->save($artwork, true);
 
+            // envoie email
+
+            $email=(new Email())
+            ->from('digitart.primes@gmail.com')
+            ->to($user->getEmail())
+            ->subject('Artwork Added In Digitart')
+            ->html(
+                '<html>
+                    <head>
+                    <style>
+                    /* Define your CSS styles here */
+                    body {
+                       
+                        font-size: 14px;
+                     
+                        margin: 0;
+                        padding: 0;
+                    }
+                    .container {
+                        max-width: 600px;
+                        margin: 0 auto;
+                    }
+                    .header {
+                        background-color: black;
+                        padding: 20px;
+                        text-align: center;
+                    }
+                    .header h1 {
+                        color: black;
+                        font-size: 24px;
+                        margin: 0;
+                    }
+                    .logo {
+                        max-width: 100px;
+                    }
+                    .content {
+                        padding: 20px;
+                        background-color: black;
+                        font-family: Arial, sans-serif;
+                        color:  #FF0000; 
+                        font-weight: bold;
+                    }
+                    .footer {
+                        background-color: black;
+                        padding: 20px;
+                        text-align: center;
+                    }
+                    .footer p {
+                        margin: 0;
+                        color: #FF0000;
+                        font-weight: bold;
+                    }
+                </style>
+                
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div class="header">
+                                <img src="https://cdn.discordapp.com/attachments/1068664672498241577/1088590451973574706/logo_digitart_rouge.png" alt="Digitart Logo" class="logo">
+                                <h1>Artwork Added In Digitart</h1>
+                            </div>
+                            <div class="content">
+                                <p>Dear '.$user->getLastname().' '.$user->getFirstname().',</p>
+                                <p>We are pleased to inform you that your artwork "'.$artwork->getArtworkName().'" has been added to Digitart.</p>
+                                <p>Thank you for sharing your artwork with our community.</p>
+                                <p>Best regards,</p>
+                                <p>The Digitart team</p>
+                            </div>
+                            <div class="footer">
+                                <p>© 2023 Digitart. All rights reserved.</p>
+                            </div>
+                        </div>
+                    </body>
+                </html>'
+            );
+            $transport=new GmailSmtpTransport('digitart.primes@gmail.com','ktknrunncnveaidz');
+            $mailer=new Mailer($transport);
+            $mailer->send($email);
 
             return $this->redirectToRoute('showfrontartwork', [], Response::HTTP_SEE_OTHER);
         }
@@ -184,10 +268,12 @@ class ArtworkController extends AbstractController
     }
 
     #[Route('showfront/artwork/{idArt}', name: 'app_artwork_showfront', methods: ['GET'])]
-    public function showfront(Artwork $artwork,RoomRepository $roomRepository,ImageArtworkRepository $ImageartworkRepository): Response
+    public function showfront(Artwork $artwork,RoomRepository $roomRepository,UsersRepository $userRepository,ImageArtworkRepository $ImageartworkRepository,? string $question, ? string $response): Response
     {
         $roomNames = [];
         $roomNames[$artwork->getIdArt()] = $roomRepository->getRoomNameById($artwork->getIdroom());
+        $users = []; 
+        $users[$artwork->getIdArt()] = $userRepository->getuserNameById($artwork->getIdArtist());
         $images [$artwork->getIdArt()]= $ImageartworkRepository->createQueryBuilder('u')
         ->where('u.idArt = :epreuve')
         ->setParameter('epreuve',$artwork->getIdArt())
@@ -198,6 +284,9 @@ class ArtworkController extends AbstractController
             'artwork' => $artwork,
             'roomNames' =>$roomNames,
             'imageArtwork' => $images,
+            'question' => $question,
+            'response' => $response,
+            'users' =>$users
           
 
         ]);
@@ -280,9 +369,89 @@ class ArtworkController extends AbstractController
         }
     }
 
+
+
+    #[Route('/chat', name: 'send_chat', methods:"POST")]
+    public function chat(Request $request): Response
+    {
+        $question=$request->request->get('text');
+
+        //Implémentation du chat gpt
+
+        $myApiKey = $_ENV['OPENAI_KEY'];
+
+
+        $client =OpenAI::client($myApiKey);
+
+        $result = $client->completions()->create([
+            'model' => 'text-davinci-003',
+            'prompt' => $question,
+            'max_tokens'=>2048
+        ]);
+        
+        $response=$result->choices[0]->text;
+        
+        
+        
+        return $this->forward('App\Controller\ArtworkController::display_front', [
+           
+            'question' => $question,
+            'response' => $response
+        ]);
+    }
+
+
+    #[Route('/artwork/stats/show', name: 'stats')]
+    public function statistiques(RoomRepository $roomRepo, ArtworkRepository $artRepo){
+        $nrbartwork = $artRepo->countArtworks();
+        $rooms=$roomRepo->findAll();
+        $nbavailable=$roomRepo->countAvailable();
+        $nbunavailable=$roomRepo->countUnavailable();
+        $nbrooms=$roomRepo->countrooms();
+        $nameroomhighestarea = $roomRepo->getRoomWithHighestArea() ? $roomRepo->getRoomWithHighestArea()->getNameRoom() : '';
+        $maxroomarea=$roomRepo->getMaxRoomArea();
+        $lastArtwork = $artRepo->findLastCreatedArtwork();
+        $lastupdatedArtwork = $artRepo->findLastUpdatedArtwork();
+        $artworksPerRoom = $artRepo->getArtworksPerRoom();
+
+        $labels = [];
+        $values = [];
+    
+        foreach ($artworksPerRoom as $artworks) {
+            $labels[] = $artworks['nameRoom'];
+            $values[] = $artworks['artworksCount'];
+        }
+    
+        $data = [
+            'labels' => $labels,
+            'values' => $values
+        ];
+    
+       
+      //  $roomNames[]=;
+       // $roomNbr[]=;
+        return $this->render('artwork/stats.html.twig', [
+            'nbartwork' => $nrbartwork,
+            'nbavailable' => $nbavailable,
+            'nbunavailable' => $nbunavailable,
+            'nbrooms' => $nbrooms,
+            'maxroomarea' => $maxroomarea,
+            'nameroomhighestarea' => $nameroomhighestarea,
+            'data' => $data,
+            'lastArtworkName' => $lastArtwork->getArtworkName(),
+            'lastArtworkCreatedAt' => $lastArtwork->getCreatedAt(),
+            'lastupdatedArtworkName' => $lastupdatedArtwork->getArtworkName(),
+            'lastupdatedArtwork' => $lastupdatedArtwork->getUpdatedAt(),
+        ]);
+    }
+
+}
+
+
+
    
 
 
 
 
-}
+

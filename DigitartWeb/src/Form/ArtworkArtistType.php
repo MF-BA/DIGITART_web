@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Artwork;
 use App\Entity\Room;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -31,6 +32,12 @@ class ArtworkArtistType extends AbstractType
            
             ->add('idRoom', EntityType::class, [
                 'class' => Room::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('r')
+                        ->andWhere('r.state = :state')
+                        ->setParameter('state', 'Available')
+                        ->orderBy('r.nameRoom', 'ASC');
+                },
                 'choice_label' => 'nameRoom',
                  'data_class' => null,
             ])

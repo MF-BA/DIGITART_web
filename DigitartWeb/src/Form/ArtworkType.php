@@ -76,6 +76,12 @@ class ArtworkType extends AbstractType
             #->addViewTransformer(new StringToFileTransformer())
             ->add('idRoom', EntityType::class, [
                 'class' => Room::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('r')
+                        ->andWhere('r.state = :state')
+                        ->setParameter('state', 'Available')
+                        ->orderBy('r.nameRoom', 'ASC');
+                },
                 'choice_label' => 'nameRoom',
                  'data_class' => null,
             ]);

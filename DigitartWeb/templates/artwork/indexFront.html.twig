@@ -1,7 +1,8 @@
+
 {% extends 'base.html.twig' %}
 {% block homeActive %}{% endblock %}
 {% block artworkactive %}
-	class="active"
+  class="active"
 {% endblock %}
 
 {% block body %}
@@ -19,17 +20,30 @@
       </div>
     </div><!-- End Breadcrumbs -->
 
-    <!-- ======= Blog Section ======= -->
+
+   <!-- ======= Our Projects Section ======= -->
+<section id="projects" class="projects">
+  <div class="container" data-aos="fade-up">
+    <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry" data-portfolio-sort="original-order">
+      <ul class="portfolio-flters" data-aos="fade-up" data-aos-delay="100" id="artwork-filters">
+        <li data-filter="*" class="filter-active">All</li>
+        {% for room in rooms %}
+          <li data-filter=".filter-{{ room.nameRoom|lower }}">{{ room.nameRoom }}</li>
+        {% endfor %}
+      </ul><!-- End Projects Filters -->
+
+      <div class="row gy-4 portfolio-container" data-aos="fade-up" data-aos-delay="200">
+        <!-- ======= Blog Section ======= -->
     <section id="blog" class="blog">
       <div class="container" data-aos="fade-up" data-aos-delay="100">
 
         <div class="row gy-4 posts-list">
           {% for artwork in artworks %}
-          <div class="col-xl-4 col-md-6">
+           <div class="col-lg-4 col-md-6 portfolio-item filter-{{ artwork.idRoom.nameRoom|lower }}">
             <div class="post-item position-relative h-100">
 
               <div class="post-img position-relative overflow-hidden">
-                {% if imageArtwork[ artwork.idArt ] is not null %}
+                {% if imageArtwork[ artwork.idArt ] is not empty %}
                   <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                       {% for image in imageArtwork[ artwork.idArt ] %}
@@ -95,7 +109,15 @@
 
        
       </div>
+    
+      
+    
     </section><!-- End Blog Section -->
-
-
+      </div><!-- End Projects Container -->
+    </div>
+  </div>
+</section><!-- End Our Projects Section -->
 {% endblock %}
+
+
+
