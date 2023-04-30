@@ -50,6 +50,8 @@
    <strong><div class="text-center"> <h1>List of users</h1> </div></strong>
 
 {{ form(form) }}
+</br>
+</br>
 
 <div class="center-table"> 
       <div class="outer-wrapper">    
@@ -74,62 +76,8 @@
                 <th>actions</th>
             </tr>
         </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                {% if user.image is not null %}
-                <td><img src="{{ asset('/uploads/' ~ user.image) }}" alt="Image" width="150"></td>
-                {% else %}
-                <td><img src="{{ asset('Back/images/icon-profile.png') }}" alt="Image" width="150"></td>
-                {% endif %}
-                <td>{{ user.cin }}</td>
-                <td>{{ user.firstname }}</td>
-                <td>{{ user.lastname }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.address }}</td>
-                <td>{{ user.phoneNum }}</td>
-                <td>{{ user.birthDate ? user.birthDate|date('Y-m-d') : '' }}</td>
-                <td>{{ user.gender }}</td>
-                <td>{{ user.role }}</td>
-                <td>{{ user.status }}</td>
-                <td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ user.updatedAt ? user.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-
-                 <div class="d-flex">
-                    <a href="{{ path('app_users_show', {'id': user.id}) }}">
-                    <button type="button" class="btn btn-outline-info mr-2">
-                    <i class="fa fa-question-circle"></i>
-                    </button></a>
-
-                    <a href="{{ path('app_users_edit', {'id': user.id}) }}">
-                    <button type="button" class="btn btn-outline-dark mr-2">
-                    <i class="fa fa-pencil-square"></i>
-                    </button></a>
-
-                    <a href="{{ path('app_users_updatestatus', {'id': user.id, 'newStatus': 'blocked'}) }}">
-               <button type="button" class="btn btn-outline-danger mr-2">
-               <i class="fa fa-lock"></i>
-              </button>
-              </a>
-
-<a href="{{ path('app_users_updatestatus', {'id': user.id, 'newStatus': 'unblocked'}) }}">
-    <button type="button" class="btn btn-outline-success mr-2">
-    <i class="fa  fa-unlock"></i>
-    </button>
-</a>
-
-                  </div>
-
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="15">no records found</td>
-            </tr>
-        {% endfor %}
-
-        
+        <tbody id="table-body">
+              {% include 'users/tablecontent.html.twig' %}
         </tbody>
         
     </table>
@@ -138,7 +86,7 @@
     </div>
      </div>
      </div>
-     {% set queryParams = app.request.query.all %}
+    {# {% set queryParams = app.request.query.all %}
         {% set queryString = queryParams|filter((v, k) => k != "page" and k != "ajax")|url_encode %}
          <ul class="pagination">
         <li class="{{ (page == 1) ? 'disabled' : '' }}">
@@ -168,50 +116,59 @@
             </a>
         </li>
 
-    </ul>
+    </ul> #}
+   <div class="col-sm-12 col-md-7">
+    <div class="dataTables_paginate paging_simple_numbers">
+    {% set queryParams = app.request.query.all %}
+        {% set queryString = queryParams|filter((v, k) => k != "page" and k != "ajax")|url_encode %}
+        <ul class="pagination">
+            <li class="paginate_button page-item {% if page == 1 %}disabled{% endif %}">
+                <a href="?page=1&{{queryString}}" class="page-link">
+                    Previous
+                </a>
+            </li>    
+            <li class="paginate_button page-item {% if page == 1 %}disabled{% endif %}">
+                <a href="{{ (page > 1) ? '?page=' ~ (page - 1) : '' }}&{{queryString}}" class="page-link">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            </li>
+            {% set pages = (total / limit)|round(0, 'ceil') %}
+            {% for item in 1..pages %}
+                <li class="paginate_button page-item {% if page == item %}active{% endif %}">
+                    <a href="?page={{ item }}&{{queryString}}" class="page-link">{{ item }}</a>
+                </li>
+            {% endfor %}
+            <li class="paginate_button page-item {% if page == pages %}disabled{% endif %}">
+                <a href="{{ (page < pages) ? '?page=' ~ (page + 1) : '' }}&{{queryString}}" class="page-link">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+            <li class="paginate_button page-item {% if page == pages %}disabled{% endif %}">
+                <a href="?page={{ pages }}&{{queryString}}" class="page-link">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
 
-  <script>
-    $(document).ready(function () {
-        $('#search-input').on('keyup', function () {
-            var searchTerm = $(this).val();
-            $.ajax({
-                url: "{{ path('app_users_search') }}",
-                method: 'POST',
-                data: {searchTerm: searchTerm},
-                success: function (data) {
-                    console.log(data); // log response data to console
-                   var users = data.users;
-    var tableBody = $('#users-table tbody');
-    tableBody.empty();
-    if (users.length === 0) {
-        tableBody.append('<tr><td colspan="12">No results found</td></tr>');
-    } else {
-        users.forEach(function (user) {
-            var row = '<tr>' +
-                '<td>' + user.cin + '</td>' +
-                '<td>' + user.firstname + '</td>' +
-                '<td>' + user.lastname + '</td>' +
-                '<td>' + user.email + '</td>' +
-                '<td>' + user.password + '</td>' +
-                '<td>' + user.address + '</td>' +
-                '<td>' + user.phoneNum + '</td>' +
-                '<td>' + user.birthDate ? user.birthDate|date('Y-m-d') : '' + '</td>' +
-                '<td>' + user.gender + '</td>' +
-                '<td>' + user.role + '</td>' +
-                '<td>' + user.status + '</td>' +
-                '</tr>';
-            tableBody.append(row);
-        });
-    }
-                }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script type="text/javascript">
+    
+        $(document).ready(function(){
+            $("#search-form input").on("input", function(e) {
+                
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: "{{ path('app_users_index') }}",
+                    data: $("#search-form").serialize(),
+                    success: function(data){
+                        $("#table-body").html(data);
+                    }
+                });
             });
         });
-    });
 </script>
-                    
-
-             
-              
-   
 
 {% endblock %}

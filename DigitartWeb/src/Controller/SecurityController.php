@@ -96,7 +96,7 @@ class SecurityController extends AbstractController
                 $user->setResetToken($token);
                 $entityManager->persist($user);
                 $entityManager->flush();
-
+                
                 // On génère un lien de réinitialisation du mot de passe
                 $url = $this->generateUrl('reset_pass', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
                 

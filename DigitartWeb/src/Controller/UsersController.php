@@ -47,14 +47,22 @@ class UsersController extends AbstractController
         $users = $usersRepository->getPaginatedusers($page, $limit);
         $form = $this->createForm(SearchUsersType::class);
         
-        $search = $form->handleRequest($request);
+        $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
             // On recherche les annonces correspondant aux mots clés
+            $data = $form->getData();
             $users = $usersRepository->search(
-                $search->get('mots')->getData()
+                $data["mots"],
+                $data["role"]
             );
+
+            $table = $this->renderView('users/tablecontent.html.twig', [
+                'users' => $users,
+            ]);
+            return new JsonResponse($table);
         }
+
           $form=$form->createView();
         return $this->render('users/index.html.twig',compact('users','total','limit','page','form'));
     }

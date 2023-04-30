@@ -26,14 +26,20 @@ class UsersRepository extends ServiceEntityRepository implements PasswordUpgrade
         parent::__construct($registry, Users::class);
     }
 
-    public function search($mots = null){
+    public function search(string $mots = null ,string $roles = null): array
+    {
         $query = $this->createQueryBuilder('u');
         
-        if($mots != null){
-            $query->addSelect(new Func('MATCH_AGAINST', array('u.firstname, u.lastname', ':mots boolean')) . ' AS HIDDEN score')
-            ->andWhere($query->expr()->gt(new Func('MATCH_AGAINST', array('u.firstname, u.lastname', ':mots boolean')), 0))
-            ->setParameter('mots', $mots);
+        if($mots !== null){
+           
+                $query->andWhere('u.firstname LIKE :mots or u.lastname LIKE :mots or u.email LIKE :mots or u.cin LIKE :mots or u.address LIKE :mots or u.phoneNum LIKE :mots')
+                ->setParameter('mots', '%' . $mots . '%');
         } 
+        if ($roles !== null)
+        {
+           $query->andWhere('u.role LIKE :roles')
+           ->setParameter('roles', '%' . $roles . '%');
+        }
         return $query->getQuery()->getResult();
     }
 

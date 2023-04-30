@@ -7,6 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class SearchUsersType extends AbstractType
 {
@@ -25,21 +26,29 @@ class SearchUsersType extends AbstractType
             ],
             'required' => false
         ])
-        ->add('Search', SubmitType::class, [
+        ->add('role', ChoiceType::class, [
+            'choices' => [
+                'Admin' => 'Admin',
+                'Artist' => 'Artist',
+                'Subscriber' => 'Subscriber',
+                'Gallery manager' => 'Gallery Manager',
+                'Auction manager' => 'Auction Manager',
+                'Events manager' => 'Events Manager',
+                'Tickets manager' => 'Tickets Manager',
+                'Users manager' => 'Users Manager',
+            ],
+            'expanded' => false,
+            'multiple' => false,
+            'label' => false,
+            'placeholder' => 'Search with role',
             'attr' => [
-                'style' => 'font-family: cursive;
-                font-size: 15px;
-                line-height: 1.5;
-                color: #fff;
-                height: 38px;
-                text-transform: uppercase;
-                border-color: #BD2A2E;
-                border-radius: 10px;
-                background: #BD2A2E !important;
+                'class' => 'form-control',
+                'style' => 'width: 200px;
                 position: relative;
-                bottom: 18px;
-                left: 1050px;',
-            ]
+                left: 230px;
+                top: 20px;'
+            ],
+            'required' => false
         ])
         ;
     }
@@ -47,7 +56,7 @@ class SearchUsersType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            // Configure your form options here
+            'attr' => ['id' => 'search-form']
         ]);
     }
 }
