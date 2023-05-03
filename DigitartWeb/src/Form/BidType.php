@@ -24,7 +24,7 @@ class BidType extends AbstractType
                 ],
                 'label' => false,
                 'constraints' => [
-                    new Assert\GreaterThan([
+                    new Assert\GreaterThanOrEqual([
                         'value' => $highestBid > 0 ? $highestBid + $auctionIncrement : $startingPrice,
                         'message' => 'The offer is too low'
                     ])

@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Users;
+
 use App\Entity\Artwork;
 use App\Entity\Auction;
 use Symfony\Component\Form\AbstractType;
@@ -10,8 +10,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Repository\ArtworkRepository;
-use App\Repository\AuctionRepository;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Security\Core\Security;
 
@@ -46,13 +44,14 @@ class Auction1Type extends AbstractType
                     'choice_label' => 'artworkName',
                     'query_builder' => function (ArtworkRepository $er) {
                         $sub = $er->createQueryBuilder('s')
-                            ->select('s.idArt, a.idArt as artwork_id')
-                            ->from(Auction::class, 'ac')
-                            ->join('ac.artwork', 'a')
-                            ->where('ac.deleted is null')
-                            ->getQuery()
-                            ->getResult();
-
+                        ->select('s.idArt, a.idArt as artwork_id')
+                        ->from(Auction::class, 'ac')
+                        ->join('ac.artwork', 'a')
+                        ->where('ac.state = :sold')
+                        ->orWhere('ac.deleted is null')
+                        ->setParameter('sold', 'sold')
+                        ->getQuery()
+                        ->getResult();
                         $artworkIds = array_map(function ($row) {
                             return $row['artwork_id'];
                         }, $sub);
@@ -89,8 +88,12 @@ class Auction1Type extends AbstractType
                             ->from(Auction::class, 'ac')
                             ->join('ac.artwork', 'a')
                             ->where('ac.deleted is null')
+                            ->orWhere('ac.state = :sold')
+                            ->setParameter('sold', 'sold')
                             ->getQuery()
                             ->getResult();
+
+
                         $artworkIds = array_map(function ($row) {
                             return $row['artwork_id'];
                         }, $sub);

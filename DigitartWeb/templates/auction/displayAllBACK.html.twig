@@ -135,14 +135,14 @@ success: function (data) { // Handle the response from the server
 
 															<a href="{{ path('app_auction_edit', {'id_auction': auction.idAuction}) }}">
 																&nbsp;&nbsp;&nbsp;&nbsp;
-																	<i class="fa fa-edit"></i>
-																
+																<i class="fa fa-edit"></i>
+
 															</a>
 															<a href="{{ path('app_auction_deleteBACK', {'id_auction': auction.idAuction}) }}" onclick="event.preventDefault(); document.getElementById('delete-form-{{ auction.idAuction }}').submit();">
 																&nbsp;&nbsp;&nbsp;&nbsp;
-																
-																	<i class="fa fa-trash-o"></i>
-																
+
+																<i class="fa fa-trash-o"></i>
+
 															</a>
 															<form id="delete-form-{{ auction.idAuction }}" action="{{ path('app_auction_deleteBACK', {'id_auction': auction.idAuction}) }}" method="POST" style="display: none;">
 																<input type="hidden" name="_method" value="DELETE">

@@ -14,6 +14,26 @@
   width: 400px;
 }
 </style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+function updateAuctionValues() {
+  // Send an AJAX request to the server
+  $.ajax({
+    url: '{{ path("app_auction_upppdatee", {"id_auction": auction.idAuction}) }}', // Replace with your endpoint URL and auction ID
+    dataType: 'json',
+    success: function(data) {
+      // Update the values on the page
+      $('#highest-bid').text(data.highestBid);
+      $('#num-bidders').text(data.numBidders);
+    }
+  });
+}
+
+// Execute the function every 5 seconds
+setInterval(updateAuctionValues, 5000);
+
+</script>
+
 	<script>
 		function validateBid() {
 var bidInput = document.getElementById('bid_offer');
@@ -103,15 +123,11 @@ return true;
 									<li class="d-flex align-items-center">
 										<i class="bi bi-clock"></i>
 										<a>
-											{% if auction.endingDate %}
 												{% set endingDate = auction.endingDate|date('Y-m-d H:i:s') %}
 												<span id="timer_{{auction.idAuction}}" class="post-date"></span>
 												<script>
 													updateTimer("{{ endingDate }}", "timer_{{ auction.idAuction }}");
 												</script>
-											{% else %}
-												<span class="post-date">Auction has no ending date.</span>
-											{% endif %}
 										</a>
 									</li>
 									<li class="d-flex align-items-center">
@@ -148,11 +164,11 @@ return true;
 									{% if app.user is not null and  app.user.id == highestBidder %}
 										<a style="color: green;">You are the highest bidder with:
 										</a>
-										<a>{{ highestBid is not null ? highestBid ~ '$' : 'none' }}</a>
+										<a id="highest-bid">{{ highestBid is not null ? highestBid ~ '$' : 'none' }}</a>
 
 									{% else %}
 										<a>The Highest Offer :
-											{{ highestBid is not null ? highestBid ~ '$' : 'none' }}
+											<a id="highest-bid">{{ highestBid is not null ? highestBid ~ '$' : 'none' }}</a>
 										</a>
 									{% endif %}
 									<a id="search_link" class="search_link">
@@ -169,7 +185,7 @@ return true;
 											<br>
 
 											<a>Number of Bids :
-												{{countBids}}
+												<a id="num-bidders">{{countBids}}</a>
 											</a>
 
 										</div>
@@ -178,7 +194,7 @@ return true;
 											<h2 class="sidebar-title">Make An Offer :
 											</h2>
 
-											{{ form_start(form,{attr:{novalidate:'novalidate'}}, {'attr': {'class': 'mt-3', 'onsubmit': 'return validateBid();'}})}}
+											{{ form_start(form,{attr:{novalidate:'novalidate','class': 'mt-3', 'onsubmit': 'return validateBid();'}})}}
 
 											{{ form_widget(form.offer, {'attr': {'value': highestBid is not null ? highestBid + auction.increment : auction.startingPrice ,
 							'pattern': '[0-9]*' , 'inputmode' : 'numeric','min': highestBid is not null ? highestBid + auction.increment : auction.startingPrice}

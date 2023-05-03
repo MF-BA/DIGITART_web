@@ -24,7 +24,39 @@ class AuctionController extends AbstractController
     #[Route('/home', name: 'displayAUCTION', methods: ['GET', 'POST'])]
     public function auctionFRONT(AuctionRepository $auctionRepository, BidRepository $BidRepository, ImageArtworkRepository $ImageartworkRepository, Request $request): Response
     {
-
+        $page = $request->query->getInt('page', 1);
+        $array[] = "";
+        $images = [];
+        $currentDateTime = new \DateTime();
+        $auction = $auctionRepository->createQueryBuilder('a')
+            ->where('a.endingDate > :currentDateTime')
+            ->setParameter('currentDateTime', $currentDateTime)
+            ->andWhere('a.deleted is NULL')
+            ->getQuery()
+            ->getResult();
+        foreach ($auction as $auc) {
+            $images[$auc->getIdAuction()] = $ImageartworkRepository->createQueryBuilder('u')
+                ->where('u.idArt = :epreuve')
+                ->setParameter('epreuve', $auc->getartwork()->getIdArt())
+                ->getQuery()
+                ->getResult();
+            $highestBid = $BidRepository->highestBid($auc->getIdAuction());
+            if ($highestBid)
+                $array[$auc->getIdAuction()] = $highestBid->getOffer();
+            else $array[$auc->getIdAuction()] = null;
+        }
+            
+        return $this->render('auction/displayAll.html.twig', [
+            'auctions' => $auction,
+            'highestBids' => $array,
+            'pageParam' => $page,
+            'imageArtwork' => $images,
+        ]);
+    }
+    
+    #[Route('/showww', name: 'show_updatee', methods: ['GET', 'POST'])]
+    public function auctionfrontJSON(AuctionRepository $auctionRepository, BidRepository $BidRepository, ImageArtworkRepository $ImageartworkRepository, Request $request)
+    {
         $page = $request->query->getInt('page', 1);
         $array[] = "";
         $images = [];
@@ -48,24 +80,20 @@ class AuctionController extends AbstractController
             else $array[$auc->getIdAuction()] = null;
         }
 
-
-
-        if ($request->isXmlHttpRequest()) {
-            // Render the updated HTML content as a string
-            $html = [
+        if (count($auction)> 0) {
+            $html = $this->renderView('auction/displayFRONT.html.twig',[
                 'auctions' => $auction,
                 'highestBids' => $array,
                 'pageParam' => $page,
                 'imageArtwork' => $images,
-            ];
-            return new JsonResponse(['html' => $html]);
+            ]);
+        } else {
+            $html = '<p>No auctions found.</p>';
         }
-
-        return $this->render('auction/displayAll.html.twig', [
-            'auctions' => $auction,
-            'highestBids' => $array,
-            'pageParam' => $page,
-            'imageArtwork' => $images,
+        
+        // Return the values in JSON format
+        return new JsonResponse([
+            'html' => $html
         ]);
     }
 
@@ -94,8 +122,6 @@ class AuctionController extends AbstractController
     #[Route('/show/{id_auction}', name: 'app_auction_show', methods: ['GET', 'POST'])]
     public function show(Request $request, Auction $auction, BidRepository $BidRepository, ImageArtworkRepository $ImageartworkRepository): Response
     {
-
-
         $highestBid = $BidRepository->highestBid($auction->getIdAuction());
 
         if ($highestBid) {
@@ -118,8 +144,8 @@ class AuctionController extends AbstractController
             'auction_increment' => $auction->getIncrement(),
             'starting_price' => $auction->getStartingPrice(),
         ]);
-        
-        
+
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getUser();
@@ -135,6 +161,28 @@ class AuctionController extends AbstractController
             'form' => $form->createView(), 'highestBidder' => $highestBidder, 'imageArtwork' => $images,
         ]);
     }
+
+    #[Route('/upppdate/{id_auction}', name: 'app_auction_upppdatee', methods: ['GET', 'POST'])]
+    public function auctionValues(Auction $auction, BidRepository $BidRepository)
+    {
+
+        $highestBid = $BidRepository->highestBid($auction->getIdAuction());
+
+        if ($highestBid) {
+
+            $highestBid = $highestBid->getOffer();
+        } else {
+            $highestBid = null;
+        } // Retrieve the updated highest bid from the database
+        $numBidders = $BidRepository->countBids($auction->getIdAuction()); // Retrieve the updated number of bidders from the database
+
+        // Return the values in JSON format
+        return new JsonResponse(array(
+            'highestBid' => $highestBid,
+            'numBidders' => $numBidders
+        ));
+    }
+
 
     #[Route('/edit/{id_auction}', name: 'app_auction_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Auction $auction, AuctionRepository $auctionRepository, ImageArtworkRepository $ImageartworkRepository): Response
@@ -223,7 +271,7 @@ class AuctionController extends AbstractController
 
 
 
-        return $this->render('auction/statistics.html.twig', ['data' => $data , 'highestBids' => $highestBids ]);
+        return $this->render('auction/statistics.html.twig', ['data' => $data, 'highestBids' => $highestBids]);
     }
 
     #[Route('/admin', name: 'DisplayAuctionBack', methods: ['GET'])]
