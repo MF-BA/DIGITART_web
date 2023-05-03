@@ -207,7 +207,7 @@ class PaymentController extends AbstractController
                 'user' => $userId,
                 'paid' => true
             ]);
-        return $this->render('payment/cardHistory.html.twig', [
+        return $this->render('payment/cardHistoryy.html.twig', [
             'payments' => $payments,
         ]);
     }

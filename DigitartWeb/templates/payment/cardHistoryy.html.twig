@@ -97,18 +97,6 @@
   
 </section><!-- End Services Section --> 
 
-<div class="bodyT">
-  <input type="checkbox" id="toggle" checked>
-  <label for="toggle">Open Overlay</label>
-  <dialog>
-    <p>  
-      Thanks for your purchase! 
-      An email will be sent to your email address. Check it! 
-      Don't forget to bring your receipt with you.
-    </p> 
-    <label for="toggle">Close </label>
-  </dialog>
-</div>
 
 <script>
   function togglePayments() {
@@ -276,49 +264,5 @@ div.container {
   }
 }
 
-
-
-.bodyT {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-  }
-  
-  #toggle {
-    display: none;
-  }
-  
-  #toggle:checked + label + dialog {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: green;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-  
-  #toggle:checked + label + dialog p {
-    font-size: 20px;
-    color: #fff;
-    text-align: center;
-  }
-  
-  #toggle:checked + label + dialog label {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background-color: #fff;
-    padding: 10px 20px;
-    cursor: pointer;
-  }
 </style>
 {% endblock %}
