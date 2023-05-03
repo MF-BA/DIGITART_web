@@ -44,7 +44,7 @@ class ArtworkController extends AbstractController
     }
 
     #[Route('/showfront/artwork', name: 'showfrontartwork', methods: ['GET'])]
-    public function display_front(Request $request,ArtworkRepository $artworkRepository,RoomRepository $roomRepository,UsersRepository $userRepository,ImageArtworkRepository $ImageartworkRepository): Response
+    public function display_front(Request $request,ArtworkRepository $artworkRepository,RoomRepository $roomRepository,UsersRepository $userRepository,ImageArtworkRepository $ImageartworkRepository,? string $question, ? string $response): Response
     {
         $artworks = $artworkRepository->findAll();
         $roomNames = [];
@@ -68,6 +68,8 @@ class ArtworkController extends AbstractController
             'users' =>$users,
             'imageArtwork' => $images,
             'rooms' => $rooms,
+            'question' => $question,
+            'response' => $response,
             
 
         ]);
