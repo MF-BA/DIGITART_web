@@ -6,6 +6,8 @@
 	class="active"
 {% endblock %}
 {% block body %}
+    {{ include('@MercurySeriesFlashy/flashy.html.twig') }}
+
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
@@ -89,6 +91,12 @@
     border: 1px solid #ccc;
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.blog .comments .reply-form .btn-primary {
+    border-radius: 4px;
+    padding: 10px 20px;
+    border: 0;
+    background-color: #BD2A2E !important ;
 }
 
 </style>
@@ -187,17 +195,15 @@ if(distance<0)
           <div class="col-lg-7">
             <h2>Here are the event infos</h2>
             <div class="our-story">
-              <h4>Est 1988</h4>
               <h3>{{ event.getEventName }}</h3>
-         <p>{{ event.getDetail }}</p>      
+         <p>The infos you need :</p>      
                  <ul>
                <li><span class="icon_check"></span> <span class="color-event">Name : </span><span class="color-event-text"> {{ event.getEventName }}</span></li>
             <li><span class="icon_check"></span> <span class="color-event">Max number of participants : </span><span class="color-event-text"> {{ event.getNbParticipants }}</span></li>
             <li><span class="icon_check"></span> <span class="color-event">Start Time : </span><span class="color-event-text"> {{ event.getStartTime }}h</span></li>
-             <li><img src="{{ path('app_event_front_index', {'id': event.getId}) }}" alt="QR code"></li>
              
               </ul>
-              <p>Vitae autem velit excepturi fugit. Animi ad non. Eligendi et non nesciunt suscipit repellendus porro in quo eveniet. Molestias in maxime doloremque.</p>
+              <p>{{ event.getDetail }}</p>
 
               <div class="watch-video d-flex align-items-center position-relative">
                 <i class="bi bi-play-circle"></i>
@@ -232,19 +238,38 @@ if(distance<0)
         <div class="slides-2 swiper">
           <div class="swiper-wrapper">
            
-            {% for image in event.images %}      
-  <div class="swiper-slide">
-
-
-        <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
-          <img src="{{ asset('/uploads/' ~ image.name) }}" alt="Image" style="max-height: 100%; max-width: 100%;">
-        </div>
-      </div>
-
+    
   </div><!-- End testimonial item -->
   
-{% endfor %}
+    <!-- ======= Our Projects Section ======= -->
+    <section id="projects" class="projects">
+      <div class="container" data-aos="fade-up">
 
+        <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry" data-portfolio-sort="original-order">
+
+          <div class="row gy-4 portfolio-container" data-aos="fade-up" data-aos-delay="200">
+             {% for image in event.images %}      
+
+            <div class="col-lg-4 col-md-6 portfolio-item filter-remodeling">
+              <div class="portfolio-content h-100">
+                <img src="{{ asset('/uploads/' ~ image.name) }}" class="img-fluid" alt="">
+                <div class="portfolio-info">
+                  <h4>Event Image</h4>
+                  <p>Click Zoom for more details</p>
+                  <a href="{{ asset('/uploads/' ~ image.name) }}" title="This is an image from the event last year" data-gallery="portfolio-gallery-remodeling" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                  <a href="#" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+                </div>
+              </div>
+            </div><!-- End Projects Item -->
+       {% endfor %}
+
+          </div><!-- End Projects Container -->
+
+        </div>
+
+      </div>
+    </section><!-- End Our Projects Section -->
+      
 
           </div>
           <div class="swiper-pagination"></div>
@@ -345,7 +370,63 @@ Respect Restricted Areas: Some exhibits or areas may be off-limits to visitors. 
 We want you to have an enjoyable experience at our event and to fully appreciate the exhibits on display. Please take your time to explore each exhibit, read the information provided, and immerse yourself in the stories and history behind them. Our knowledgeable staff members will be available to answer any questions you may have and to provide additional information about the exhibits. We hope you have a wonderful time at our event and create lasting memories.                </p>
                
               </div><!-- End post content -->
+ <div class="comments">
 
+              <h4 class="comments-count">{{ event.comments|length }} Comment{{ event.comments|length == 1 ? '' : 's' }}</h4>
+{% for comment in event.comments %}
+{% if comment.parent == null %}
+              <div id="comment-1" class="comment">
+                <div class="d-flex">
+                  <div class="comment-img"><img src="{{asset('uploads/' ~ comment.getNickname().image())}}" alt=""></div>
+                  <div>
+                    <h5><a href="">{{comment.getNickname().firstname()}}</a>
+                     <a href="#ajout-commentaire" data-reply data-id="{{comment.id}}" class="reply"><i class="bi bi-reply-fill"></i> Reply</a></h5>
+                    <time datetime="2020-01-01">{{comment.createdAt|date("d/m/Y H:i") }}</time>
+                    <p style="color: white;">
+                      {{comment.content|raw}}
+                    </p>
+                  </div>
+                </div>
+                {% for reply in comment.replies %}
+                 <div id="comment-reply-2" class="comment comment-reply">
+                    <div class="d-flex">
+                      <div class="comment-img"><img src="{{asset('uploads/' ~ comment.getNickname().image())}}" alt=""></div>
+                      <div>
+                       <h5><a href="">{{comment.getNickname().firstname()}}</a>
+                        <time datetime="2020-01-01">{{reply.createdAt|date("d/m/Y H:i") }}</time>
+                        <p>
+                               {{reply.content|raw}}                        </p>
+                      </div>
+                    </div>
+
+                  </div><!-- End comment reply #2-->
+                  {% endfor %}
+              </div><!-- End comment #1 -->
+            
+					{% endif %}
+{% endfor %}
+
+              <div class="reply-form">
+
+                <h4>Leave a Reply</h4>
+                <p>Your email address will not be published. Required fields are marked * </p>
+                 <form action="" method="post" id="ajout-commentaire">
+  {{ form_start(commentForm, {attr: {novalidate: 'novalidate','id': 'comment-form'}}) }}
+  <div class="row">
+    <div class="col form-group">
+      {{ form_label(commentForm.content, 'Send Comment') }}
+      {{ form_widget(commentForm.content, { 'attr': {'class': 'form-control', 'placeholder': 'Enter your comment'} }) }}
+    </div>
+  </div>
+  {{ form_widget(commentForm) }}
+  <button type="submit" class="btn btn-primary">Submit</button>
+  {{ form_end(commentForm) }}
+</form>
+
+
+              </div>
+
+            </div><!-- End blog comments -->
               <div class="meta-bottom">
                 <i class="bi bi-folder"></i>
                 <ul class="cats">
@@ -412,5 +493,59 @@ We want you to have an enjoyable experience at our event and to fully appreciate
 
       </div>
     </section><!-- End Blog Details Section -->
-    
+  <script src="{{ asset('ckeditor5/ckeditor.js') }}"></script>
+    <script src="{{ asset('js/ckeditor.js') }}"></script>
+	<script>
+		window.onload = () => {
+
+			// On met un écouteur d'évènements sur tous les boutons répondre
+			document.querySelectorAll("[data-reply]").forEach(element => {
+				element.addEventListener("click", function(){
+					document.querySelector("#comments_parentid").value = this.dataset.id;
+				});
+			});
+		}
+		let caroulix = new Caroulix('#carousel');
+		let modal = new Modal('#modale-contact');
+	</script>
+   <script>
+    $(function() {
+      var commentForm = $('#comment-form');
+      var commentList = $('#comment-list');
+
+      // Submit the form asynchronously when the user submits it
+      commentForm.submit(function(event) {
+        event.preventDefault();
+
+        var url = commentForm.attr('action');
+        var data = commentForm.serialize();
+
+        $.ajax({
+          type: commentForm.attr('method'),
+          url: url,
+          data: data,
+          success: function(response) {
+            // Update the comment list with the new comment
+            commentList.html(response.comments);
+            commentForm.get(0).reset();
+          },
+          error: function(xhr, textStatus, errorThrown) {
+            alert('An error occurred while submitting the comment.');
+          }
+        });
+      });
+
+      // Load the comments asynchronously when the page loads
+      $.ajax({
+        type: 'GET',
+        url: '{{ path('app_event_show_front', {'id': event.id}) }}',
+        success: function(response) {
+          commentList.html(response.comments);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+          alert('An error occurred while loading the comments.');
+        }
+      });
+    });
+  </script>
 {% endblock %}

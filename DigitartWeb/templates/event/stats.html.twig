@@ -1,0 +1,131 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Event index{% endblock %}
+{% block stylesheets %}
+<link rel="apple-touch-icon" href="apple-icon.png">
+        <link rel="shortcut icon" href="favicon.ico">
+
+        <link rel="stylesheet" href="{{asset('Back/vendors/bootstrap/dist/css/bootstrap.min.css')}}">
+        <link rel="stylesheet" href="{{asset('Back/vendors/font-awesome/css/font-awesome.min.css')}}">
+        <link rel="stylesheet" href="{{asset('Back/vendors/themify-icons/css/themify-icons.css')}}">
+        <link rel="stylesheet" href="{{asset('Back/vendors/flag-icon-css/css/flag-icon.min.css')}}">
+        <link rel="stylesheet" href="{{asset('Back/vendors/selectFX/css/cs-skin-elastic.css')}}">
+        <link rel="stylesheet" href="{{asset('Back/vendors/jqvmap/dist/jqvmap.min.css')}}">
+
+        <link rel="stylesheet" href="{{asset('Back/assets/css/style.css')}}">
+
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+        <style>
+      .widget-content-right {
+    position: relative;
+    top: 7px;
+    right: 15px;
+      }
+     .color-app{
+        color: #BD2A2E;
+     }
+     img {
+  max-width: 100% !important; 
+}
+
+        </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous">
+{% endblock %}
+{% block body %}
+    <h1><strong>Stats</strong></h1>
+    <div>
+  <canvas id="categories"></canvas>
+  <hr>
+  <canvas id="gender"></canvas>
+  <hr>
+   <canvas id="annonces"></canvas>
+   
+   <hr>
+   <canvas id="bar"></canvas>
+   
+</div>
+
+
+   <script>
+  
+
+      let categories = document.querySelector("#categories")
+    let categGraph = new Chart(categories, {
+        type: "pie",
+        data: {
+            labels: {{ eventName|raw }},
+            datasets: [{
+                label: "Statistics",
+                data: {{ eventparticipants|raw }},
+                  backgroundColor: {{ eventColor|raw }}
+            }]
+            
+        }
+    })
+    
+      let annonces = document.querySelector("#annonces")
+    let annGraph = new Chart(annonces, {
+        type: "line",
+        data: {
+            labels: {{ eventName|raw }},
+            datasets: [{
+                label: "Number of participants",
+                data: {{ eventparticipants|raw }}
+               
+                 
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    })
+   let gender = document.querySelector("#gender")
+    let genGraph = new Chart(gender, {
+      type: 'doughnut',
+      data: {
+          labels: ['Male', 'Female'],
+          datasets: [{
+              data: [{{ Male }},{{ Female }}],
+              backgroundColor: [
+                'rgb(73, 105, 211)',
+                  'rgb(242, 17, 62)',
+              ],
+          }]
+      },
+      options: {
+          // Customize the appearance of the pie chart
+      }
+  });
+     let bar = document.querySelector("#bar")
+    let barGraph = new Chart(bar, {
+        type: "bar",
+         data: {
+            labels: {{ eventName|raw }},
+            datasets: [{
+                label: "Statistics",
+                data: {{ eventDurations|raw }},
+                  backgroundColor: {{ eventColor|raw }}
+            }]
+            
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    })
+</script>
+{% endblock %}
+   
+     
+       

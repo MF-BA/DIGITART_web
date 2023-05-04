@@ -51,20 +51,26 @@
                     </div>
 <hr>
                     <div class="form-group">
-                        {{ form_label(form.images, 'Event Images ') }}
+                        {{ form_label(form.images, 'Image') }}
                         {{ form_widget(form.images) }}
                          {{ form_errors(form.images, { 'attr': {'class': 'text-danger'} }) }}
                     </div>
         <hr>
-         <div class="form-group">
-                        {{ form_label(form.image, 'Poster') }}
+                        <div class="form-group">
+                        {{ form_label(form.image, 'Image') }}
                         {{ form_widget(form.image, {
                             'attr': {'class': 'form-control'},
                             'type': 'file'
                         }) }}
                          {{ form_errors(form.image, { 'attr': {'class': 'text-danger'} }) }}
                     </div>
-        <hr>
+                    <hr>
+                    <div class="form-group">
+                        {{ form_label(form.color, 'Color :') }}
+                        {{ form_widget(form.color) }}
+                         {{ form_errors(form.color, { 'attr': {'class': 'text-danger'} }) }}
+                    </div>
+                    <hr>
                     <div class="form-group">
                         {{ form_label(form.idRoom, 'Room') }}
                         {{ form_widget(form.idRoom, { 'attr': {'class': 'form-control'} }) }}
