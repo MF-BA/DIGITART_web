@@ -1,5 +1,8 @@
+{% extends 'base.html.twig' %}
 
-{% extends 'back.html.twig' %}
+{% block title %}Add an Artwork to the Auction{% endblock %}
+{% block homeActive %}{% endblock %}
+{% block auctionActive %} class="active" {% endblock %}
 
 {% block body %}
 <style>
@@ -10,7 +13,7 @@
 }
 
 body {
-  background: #f1f2f7;
+  background: linear-gradient(to bottom, #e6e6e6, #1a1a1a); /* gradient from light gray to dark gray */
 }
 
 .containerr {
@@ -52,7 +55,7 @@ label i {
 }
 
 .field:focus-within label {
-  color: #000;
+  color: #fff;
   letter-spacing: 2px;
 }
 
@@ -75,7 +78,7 @@ textarea::-webkit-scrollbar {
 }
 
 button {
-  background: #28a644;
+  background: #4d4d4d;
   margin: 16px 0 50px 0;
   padding: 8px 16px;
   color: #2f4ad0;
@@ -94,11 +97,12 @@ button:hover {
   }
 }
 label, button {
-  color: black;
+  color: #fff;
 }
   
 </style>
-
+<!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/front-home/museum1.png')}})">
       <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
 
         <h2>AUCTION</h2>
@@ -107,7 +111,5 @@ label, button {
     {{ include('auction/_form.html.twig') }}
     </div>
 
-
-
+</div>
 {% endblock %}
-

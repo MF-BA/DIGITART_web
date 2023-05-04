@@ -1,0 +1,211 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Auction
+{% endblock %}
+
+
+{% block body %}
+	{% set articlesPerPage = 10 %}
+	{% set page = pageParam|default(1) %}
+	{% set offset = (page - 1) * articlesPerPage %}
+	{% set pages = (auctions|length / articlesPerPage)|round(0, 'ceil') %}
+	{% set AuctionsLengh = auctions|length %}
+	{% set auctions = auctions|slice(offset, articlesPerPage) %}
+
+
+	<script>
+		$(document).ready(function () {
+$("#myInput").on("input", function () {
+$.ajax({
+url: "{{ path('DisplayAuctionBack') }}",
+type: "GET",
+data: {
+input_value: $("#myInput").val()
+},
+success: function (data) { // Handle the response from the server
+}
+});
+});
+});
+	</script>
+
+	<div class="content mt-3">
+		<div class="animated fadeIn">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<strong class="card-title">Artworks in The Auction</strong>
+						</div>
+						<div class="card-body">
+
+
+							<table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+								<thead></thead>
+								{% set sort = app.request.query.get('sort') %}
+								{% set order = app.request.query.get('order') %}
+
+								<thead>
+									<tr>
+										<th style="width: 18%;">
+											<a href="{{ path('DisplayAuctionBack', {'sort': 'artwork_name', 'order': sort == 'artwork_name' and order == 'ASC' ? 'DESC' : 'ASC' }) }}">
+												Artwork Name
+												{% if sort == 'artwork_name' %}
+													{% if order == 'ASC' %}
+														<i class="fa fa-chevron-circle-up"></i>
+													{% else %}
+														<i class="fa fa-chevron-circle-down"></i>
+													{% endif %}
+												{% endif %}
+											</a>
+										</th>
+										<th style="width: 10%;">
+											<a href="{{ path('DisplayAuctionBack', {'sort': 'starting_price', 'order': sort == 'starting_price' and order == 'ASC' ? 'DESC' : 'ASC' }) }}">
+												Starting Price
+												{% if sort == 'starting_price' %}
+													{% if order == 'ASC' %}
+														<i class="fa fa-chevron-circle-up"></i>
+													{% else %}
+														<i class="fa fa-chevron-circle-down"></i>
+													{% endif %}
+												{% endif %}
+											</a>
+										</th>
+										<th style="width: 10%;">
+											<a href="{{ path('DisplayAuctionBack', {'sort': 'ending_date', 'order': sort == 'ending_date' and order == 'ASC' ? 'DESC' : 'ASC' }) }}">
+												Ending Date
+												{% if sort == 'ending_date' %}
+													{% if order == 'ASC' %}
+														<i class="fa fa-chevron-circle-up"></i>
+
+													{% else %}
+														<i class="fa fa-chevron-circle-down"></i>
+													{% endif %}
+												{% endif %}
+											</a>
+										</th>
+										<th style="width: 40%;">Description</th>
+										<th style="width: 10%;">
+											<a href="{{ path('DisplayAuctionBack', {'sort': 'highest_bid', 'order': sort == 'highest_bid' and order == 'ASC' ? 'DESC' : 'ASC' }) }}">
+												Highest Bid
+												{% if sort == 'highest_bid' %}
+													{% if order == 'ASC' %}
+														<i class="fa fa-chevron-circle-up"></i>
+
+													{% else %}
+														<i class="fa fa-chevron-circle-down"></i>
+													{% endif %}
+												{% endif %}
+											</a>
+										</th>
+										<th style="width: 12%;">Actions</th>
+									</tr>
+								</thead>
+
+
+								<tbody>
+									{% for auction in auctions %}
+										<tr>
+											<td>{{ auction.artwork.artworkName|upper }}
+												{% if auction.DELETED is not null %}
+													<strong>(DELETED)</strong>
+												{% endif %}
+											</td>
+											<td>{{ auction.startingPrice }}</td>
+											<td>
+												{% if auction.endingDate|date('Y-m-d') <  'now'|date('Y-m-d') %}
+													{{ auction.endingDate|date('Y-m-d') }}
+													<strong>{{'(Ended)'}}
+													{% else %}
+														{{ auction.endingDate|date('Y-m-d') }}
+													{% endif %}
+												</td>
+											</td>
+											<td>{{ auction.description|slice(0, 100) }}{{ (auction.description|length > 100 ? '...' : '') }}</td>
+											<td>{{ highestBids[auction.idAuction] is not null ? highestBids[auction.idAuction] : 'none' }}</td>
+											<td>
+												<a href="{{ path('app_bid_index', {'id_auction': auction.idAuction}) }}">
+
+													<i class="fa fa-eye"></i>
+												</a>
+												{% if highestBids[auction.idAuction] == 'No Bids yet' %}
+													{% if auction.DELETED is null %}
+														{% if auction.endingDate|date('Y-m-d') >=  'now'|date('Y-m-d') %}
+
+
+															<a href="{{ path('app_auction_edit', {'id_auction': auction.idAuction}) }}">
+																&nbsp;&nbsp;&nbsp;&nbsp;
+																<i class="fa fa-edit"></i>
+
+															</a>
+															<a href="{{ path('app_auction_deleteBACK', {'id_auction': auction.idAuction}) }}" onclick="event.preventDefault(); document.getElementById('delete-form-{{ auction.idAuction }}').submit();">
+																&nbsp;&nbsp;&nbsp;&nbsp;
+
+																<i class="fa fa-trash-o"></i>
+
+															</a>
+															<form id="delete-form-{{ auction.idAuction }}" action="{{ path('app_auction_deleteBACK', {'id_auction': auction.idAuction}) }}" method="POST" style="display: none;">
+																<input type="hidden" name="_method" value="DELETE">
+																<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ auction.idAuction) }}">
+															</form>
+														{% endif %}
+													{% endif %}
+												{% endif %}
+											</td>
+										</tr>
+									</td>
+								</tbody>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="7">no Bids found</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<div class="row">
+				<div class="col-sm-12 col-md-5">
+					<div class="dataTables_info">Showing
+						{{page}}
+						to
+						{{pages}}
+						of
+						{{AuctionsLengh}}
+						entries</div>
+				</div>
+				<div class="col-sm-12 col-md-7">
+					<div class="dataTables_paginate paging_simple_numbers">
+						<ul class="pagination">
+							<li class="paginate_button page-item next" id="bootstrap-data-table-export_next">
+								{% if page == 1 %}
+									<a href="#" aria-controls="bootstrap-data-table-export" class="page-link">Previous</a>
+								{% else %}
+									<a href="{{ path('DisplayAuctionBack', {'page': page - 1 ,'sort': sort , 'order' : order }) }}" aria-controls="bootstrap-data-table-export" class="page-link">Previous</a>
+								{% endif %}
+							</li>
+							{% for p in range(1, pages) %}
+								{% if p == page %}
+									<li class="active" class="paginate_button page-item previous" id="bootstrap-data-table-export_previous">
+										<a href="#" aria-controls="bootstrap-data-table-export" class="page-link">{{p}}</a>
+									</li>
+								{% else %}
+									<li class="paginate_button page-item previous" id="bootstrap-data-table-export_previous">
+										<a href="{{ path('DisplayAuctionBack', {'page': p ,'sort': sort , 'order' : order}) }}" aria-controls="bootstrap-data-table-export" class="page-link">{{p}}</a>
+									</li>
+								{% endif %}
+							{% endfor %}
+							<li class="paginate_button page-item next" id="bootstrap-data-table-export_next">
+								{% if page == pages %}
+									<a href="#" aria-controls="bootstrap-data-table-export" class="page-link">Next</a>
+								{% else %}
+									<a href="{{ path('DisplayAuctionBack', {'page': page + 1 ,'sort': sort , 'order' : order }) }}" aria-controls="bootstrap-data-table-export" class="page-link">Next</a>
+								{% endif %}
+							</li>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div></div></div></div></div>{% endblock %}

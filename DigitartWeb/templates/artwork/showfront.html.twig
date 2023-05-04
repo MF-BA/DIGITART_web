@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+{% block homeActive %}{% endblock %}
+{% block artworkactive %}
+	class="active"
+{% endblock %}
+{% block body %}
+
+
+<!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/photo-1554907984-15263bfd63bd.jpg')}});">
+      <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
+
+        <h2>{{ artwork.artworkName }}</h2>
+        <ol>
+          <li><a href="{{ path('showfrontpage') }}">Home</a></li>
+          <li><a href="{{ path('showfrontartwork') }}">Artworks</a></li>
+          <li>{{ artwork.artworkName }}</li>
+        </ol>
+
+      </div>
+    </div><!-- End Breadcrumbs -->
+
+        <!-- ======= Blog Details Section ======= -->
+    <section id="blog" class="blog">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row g-5">
+
+          <div class="col-lg-8">
+
+            <article class="blog-details">
+
+              <div class="post-img position-relative overflow-hidden">
+                {% if imageArtwork[ artwork.idArt ] is not null %}
+                  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                      {% for image in imageArtwork[ artwork.idArt ] %}
+                        <div class="carousel-item {% if loop.first %}active{% endif %}">
+                          <img src="{{ asset('/uploads/'~image.ImageName) }}" class="d-block w-100" style="width: 700px; height: 700px;" alt="">
+                        </div>
+                      {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </a>
+                  </div>
+                {% else %}
+                      
+                        
+                          <img  src="{{ asset('/uploads/7d152feffcc7a073e93892825f6c39f7.png') }}"  class="d-block w-100" style="width: 700px; height: 700px;" alt="">
+                        
+                {% endif %}
+
+                
+              </div>
+
+              <h2 class="title">{{ artwork.artworkName }}</h2>
+
+              <div class="meta-top">
+                <ul>
+                  <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="#">{{ artwork.artistName }}</a></li>
+                  <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="#"><time datetime="{{ artwork.dateArt|date('Y-m-d') }}">{{ artwork.dateArt ? artwork.dateArt|date('j F Y') : '' }}</time></a></li>
+                  <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="#">{{ roomNames[ artwork.idArt ] }} </a></li>
+                </ul>
+              </div><!-- End meta top -->
+
+              <div class="content">
+                <p>
+                {{ artwork.description }}
+                </p>
+              </div><!-- End post content -->
+            </article>
+          </div>
+
+
+          <div class="col-lg-4">
+
+            <div class="sidebar">
+
+              <div class="sidebar-item categories">
+                <h3 class="sidebar-title">QrCode:</h3>
+                <ul class="mt-3">
+                  <li><a href="#">General <span>(25)</span></a></li>
+                </ul>
+              </div><!-- End sidebar categories-->
+            </div><!-- End Blog Sidebar -->
+
+          </div>
+        </div>
+      </div>
+    </section>
+{% endblock %}

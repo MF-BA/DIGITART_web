@@ -147,13 +147,7 @@
                             <li><i class="menu-icon fa fa-th"></i><a href="forms-advanced.html">Advanced Form</a></li>
                         </ul>
                     </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th"></i>Ticket</a>
-                        <ul class="sub-menu children dropdown-menu">
-                          <!-- <li><i class="menu-icon fa fa-th"></i><a href="">Tickets List</a></li>
-                           <li><i class="menu-icon fa fa-th"></i><a href="">Add new ticket</a></li> -->
-                        </ul>
-                    </li>
+                    
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th"></i>Auction</a>
                         <ul class="sub-menu children dropdown-menu">
@@ -161,6 +155,25 @@
                             <li><i class="menu-icon fa fa-th"></i><a href="forms-advanced.html">Advanced Form</a></li>
                         </ul>
                     </li>
+                   <li class="menu-item-has-children dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="menu-icon fa fa-gavel"></i>Auction</a>
+					<ul class="sub-menu children dropdown-menu">
+						<li>
+							<i class="menu-icon fa fa-shopping-cart"></i>
+							<a href="{{path('DisplayAuctionBack')}}">Auction</a>
+						</li>
+						<li>
+							<i class="menu-icon fa fa-plus"></i>
+							<a href="{{path('adminAddAUCTION')}}">Add to auction</a>
+						</li>
+                        <li>
+							<i class="menu-icon fa fa-plus"></i>
+							<a href="{{path('statistics_back')}}">statistics</a>
+						</li>
+					</ul>
+				</li>
+				   
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav>

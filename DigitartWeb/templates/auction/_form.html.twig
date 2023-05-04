@@ -1,0 +1,31 @@
+<div class="containerr">
+    {{ form_start(form,{attr:{novalidate:'novalidate'}}) }}
+    <div class="field" tabindex="1">    
+        {{ form_label(form.startingPrice, 'Starting Price (USD)') }}
+        {{ form_widget(form.startingPrice, { 'attr': {'class': 'form-control form-control-lg'} }) }}
+   
+    </div>
+    <div class="field" tabindex="2">
+        {{ form_label(form.increment) }}
+        {{ form_widget(form.increment, { 'attr': {'class': 'form-control'} }) }}
+ 
+    </div>
+    <div class="field" tabindex="3">
+        {{ form_label(form.endingDate) }}
+        {{ form_widget(form.endingDate, { 'attr': {'class': 'form-control'} }) }}
+
+    </div>
+    <div class="field" tabindex="4">
+        {{ form_label(form.description) }}
+        {{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
+
+    </div>
+    <div class="field" tabindex="5">
+        {{ form_label(form.artwork) }}
+        {{ form_widget(form.artwork, { 'attr': {'class': 'form-control'} }) }}
+
+    </div>
+
+    <button class="button">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
+</div>

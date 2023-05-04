@@ -31,9 +31,11 @@ class Artwork
     private $artworkName;
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="id_artist", type="integer", nullable=true)
+     * @var Users
+     * @ORM\ManyToOne(targetEntity="Users")
+     * @ORM\JoinColumns({
+     * @ORM\JoinColumn(name="id_artist", referencedColumnName="id")
+     * })
      */
     private $idArtist;
 
@@ -59,9 +61,7 @@ class Artwork
     private $description;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="image_art", type="string", length=255, nullable=true)
+     * @ORM\OneToMany(targetEntity="ImageArtwork",mappedBy="idArt", orphanRemoval=true, cascade={"persist"})
      */
     private $imageArt;
 
@@ -74,6 +74,26 @@ class Artwork
      * })
      */
     private $idRoom;
+
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updatedAt;
+
+    private $ownerType;
+
+    public function __construct()
+    {
+        $this->images = new ArrayCollection();
+    }
 
     public function getIdArt(): ?int
     {
@@ -140,17 +160,6 @@ class Artwork
         return $this;
     }
 
-    public function getImageArt(): ?string
-    {
-        return $this->imageArt;
-    }
-
-    public function setImageArt(?string $imageArt): self
-    {
-        $this->imageArt = $imageArt;
-
-        return $this;
-    }
 
     public function getIdRoom(): ?Room
     {
@@ -165,4 +174,49 @@ class Artwork
     }
 
 
+    public function setOwnerType(string $ownerType): void
+    {
+        // Do nothing - this property is virtual and cannot be set
+    }
+
+    /**
+     * @return Collection|ImageArtwork[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(ImageArtwork $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setIdArt($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(ImageArtwork $image): self
+    {
+        if ($this->images->contains($image)) {
+            $this->images->removeElement($image);
+            // set the owning side to null (unless already changed)
+            if ($image->getIdArt() === $this) {
+                $image->setIdArt(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
 }

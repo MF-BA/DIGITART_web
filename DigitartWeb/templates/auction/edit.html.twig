@@ -99,15 +99,14 @@ label, button {
   
 </style>
 
-      <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
+<div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
 
-        <h2>AUCTION</h2>
+        <h2>Edit Auction</h2>
 
       
-    {{ include('auction/_form.html.twig') }}
+        {{ include('auction/_form.html.twig', {'button_label': 'Update'}) }}
+
     </div>
 
 
-
 {% endblock %}
-

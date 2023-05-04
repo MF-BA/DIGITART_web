@@ -1,0 +1,151 @@
+{% set articlesPerPage = 20 %}
+	{% set page = pageParam|default(1) %}
+	{% set offset = (page - 1) * articlesPerPage %}
+	{% set pages = (auctions|length / articlesPerPage)|round(0, 'ceil') %}
+
+	{% set auctions = auctions|slice(offset, articlesPerPage) %}
+
+
+<div class="container" >
+	<div id="auctions-list" class="row gy-4 posts-list">
+		{% for auction in auctions %}
+			<div class="col-xl-4 col-md-6">
+				<div class="post-item position-relative h-100">
+					<div class="post-img position-relative overflow-hidden">
+						{% if imageArtwork[ auction.idAuction ]|length != 0%}
+							<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+								<div class="carousel-inner">
+									{% for image in imageArtwork[ auction.idAuction ] %}
+										<div class="carousel-item {% if loop.first %}active{% endif %}">
+											<img src="{{ asset('/uploads/'~image.ImageName) }}" class="d-block w-100" style="width: 400px; height: 300px;" alt="">
+										</div>
+									{% endfor %}
+								</div>
+							</div>
+						{% else %}
+							<img src="{{ asset('/uploads/noimage.jpg') }}" class="d-block w-100" style="width: 400px; height: 300px;" alt="">
+						{% endif %}
+						{% if auction.endingDate %}
+							{% set endingDate = auction.endingDate|date('Y-m-d H:i:s') %}
+							<span id="timer_{{auction.idAuction}}" class="post-date"></span>
+							<script>
+								updateTimer("{{ endingDate }}", "timer_{{ auction.idAuction }}");
+							</script>
+						{% else %}
+							<span class="post-date">Auction has no ending date.</span>
+						{% endif %}
+					</div>
+					<div class="post-content d-flex flex-column">
+						<h3 class="post-title">{{ auction.artwork.artworkName }}</h3>
+						<div class="meta d-flex align-items-center">
+							<div class="d-flex align-items-center">
+								<i class="bi bi-person"></i>
+								<span class="ps-2">
+									{{auction.artwork.idArtist.lastname|upper}}
+									{{auction.artwork.idArtist.firstname|upper}}
+								</span>
+							</div>
+							<span class="px-3 text-black-50">/</span>
+							<div class="d-flex align-items-center">
+								<i class="bi bi-cash"></i>
+								<span class="ps-2">{{ highestBids[auction.idAuction] is not null ? highestBids[auction.idAuction] : 'none' }}</span>
+							</div>
+
+						</div>
+
+						<p>
+							{{ auction.description|slice(0, 50) }}{{ (auction.description|length > 50 ? '...' : '') }}
+						</p>
+
+
+						<hr>
+
+						<a href="{{ path('app_auction_show', {'id_auction': auction.idAuction}) }}" class="readmore stretched-link">
+							<span>Read More</span>
+							<i class="bi bi-arrow-right"></i>
+						</a>
+
+					</div>
+
+				</div>
+			</div>
+		{% endfor %}
+
+
+	</div>
+
+	<div class="blog-pagination">
+		<ul class="justify-content-center">
+			<li>
+				{% if page == 1 %}
+					<a class="justify-content-center">Previous</a>
+				{% else %}
+					<a href="{{ path('displayAUCTION', {'page': page - 1 }) }}">Previous</a>
+				{% endif %}
+			</li>
+
+			{% for p in range(1, pages) %}
+				{% if p == page %}
+					<li class="active">
+						<a href="#">{{p}}</a>
+					</li>
+				{% else %}
+					<li>
+						<a href="{{ path('displayAUCTION', {'page': p}) }}">{{p}}</a>
+					</li>
+				{% endif %}
+			{% endfor %}
+			<li>
+				{% if page == pages %}
+					<a class="justify-content-center">Next</a>
+				{% else %}
+					<a href="{{ path('displayAUCTION', {'page': page + 1}) }}">Next</a>
+				{% endif %}
+			</li>
+
+		</ul>
+	</div>
+
+</div>
+
+<script>
+				function updateTimer(endingDate, timerId) {
+var remainingTime = moment(endingDate).diff(moment(), 'seconds');
+var duration = moment.duration(remainingTime, 'seconds');
+// Update the timer
+if (remainingTime <= 0) { // Auction has ended
+document.getElementById(timerId).innerHTML = "Auction has ended";
+} else { // Auction is still active
+var years = duration.years();
+var months = duration.months();
+var days = duration.days();
+var hours = duration.hours();
+var minutes = duration.minutes();
+var seconds = duration.seconds();
+
+var timeStr = "";
+if (years > 0) {
+timeStr += years + "y ";
+}
+if (months > 0) {
+timeStr += months + "mo ";
+}
+if (days > 0) {
+timeStr += days + "d ";
+}
+if (hours > 0) {
+timeStr += hours + "h ";
+}
+if (minutes > 0) {
+timeStr += minutes + "m ";
+}
+timeStr += seconds + "s";
+
+document.getElementById(timerId).innerHTML = timeStr;
+setTimeout(function () {
+updateTimer(endingDate, timerId);
+}, 1000);
+}
+}
+// Update the timer every second
+			</script>

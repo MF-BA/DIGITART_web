@@ -1,10 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}UserImages index{% endblock %}
+{% block title %}Images index{% endblock %}
 {% block homeActive %}{% endblock %}
-
+{% block artworkactive %}
+	class="active"
+{% endblock %}
 {% block body %}
-    <h1>UserImages index</h1>
+    <h1>Images index</h1>
 
     <table class="table">
         <thead>
@@ -15,13 +17,13 @@
             </tr>
         </thead>
         <tbody>
-        {% for user_image in user_images %}
+        {% for image in images %}
             <tr>
-                <td>{{ user_image.id }}</td>
-                <td>{{ user_image.name }}</td>
+                <td>{{ image.id }}</td>
+                <td>{{ image.name }}</td>
                 <td>
-                    <a href="{{ path('app_user_images_show', {'id': user_image.id}) }}">show</a>
-                    <a href="{{ path('app_user_images_edit', {'id': user_image.id}) }}">edit</a>
+                    <a href="{{ path('app_images_show', {'id': image.id}) }}">show</a>
+                    <a href="{{ path('app_images_edit', {'id': image.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -32,5 +34,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_user_images_new') }}">Create new</a>
+    <a href="{{ path('app_images_new') }}">Create new</a>
 {% endblock %}
