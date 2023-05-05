@@ -22,8 +22,6 @@ services:
     arguments:
       - "%twilio.account_sid%"
       - "%twilio.auth_token%"
-  Captcha\Bundle\CaptchaBundle\Controller\:
-    resource: "../vendor/carlos-mg89/symfony-captcha-bundle/Controller"
     autowire: true
   # default configuration for services in *this* file
   _defaults:

@@ -1,0 +1,263 @@
+{% extends 'back.html.twig' %}
+ {% block stylesheets %}
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous">
+            <link href="{{asset('Front/assets/img/logo-digitart-rouge.png')}}" rel="icon">
+        <link rel="apple-touch-icon" href="apple-icon.png">
+        <link rel="shortcut icon" href="favicon.ico">
+
+        <link rel="stylesheet" href="{{asset('Back/vendors/bootstrap/dist/css/bootstrap.min.css')}}">
+        <link rel="stylesheet" href="{{asset('Back/vendors/font-awesome/css/font-awesome.min.css')}}">
+        <link rel="stylesheet" href="{{asset('Back/vendors/themify-icons/css/themify-icons.css')}}">
+        <link rel="stylesheet" href="{{asset('Back/vendors/flag-icon-css/css/flag-icon.min.css')}}">
+        <link rel="stylesheet" href="{{asset('Back/vendors/selectFX/css/cs-skin-elastic.css')}}">
+        <link rel="stylesheet" href="{{asset('Back/vendors/jqvmap/dist/jqvmap.min.css')}}">
+
+        <link rel="stylesheet" href="{{asset('Back/assets/css/style.css')}}">
+
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+        <style>
+      .widget-content-right {
+    position: relative;
+    top: 7px;
+    right: 15px;
+      }
+     .color-app{
+        color: #BD2A2E;
+     }
+     img {
+  max-width: 100% !important; 
+}
+    .redcolor{
+        color: #FF0000;
+    }
+
+        </style>
+        {% endblock %}
+
+ {% block javascripts %}
+ 
+<script src="https://cdn.jsdelivr.net/npm/chart.js%22%3E"</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous"></script>
+
+
+        <script src="{{asset('Back/vendors/jquery/dist/jquery.min.js')}}"></script>
+        <script src="{{asset('Back/vendors/popper.js/dist/umd/popper.min.js')}}"></script>
+        <script src="{{asset('Back/vendors/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+        <script src="{{asset('Back/assets/js/main.js')}}"></script>
+
+        <script src="{{asset('Back/vendors/chart.js/dist/Chart.bundle.min.js')}}"></script>
+        <script src="{{asset('Back/assets/js/dashboard.js')}}"></script>
+        <script src="{{asset('Back/assets/js/widgets.js')}}"></script>
+        <script src="{{asset('Back/vendors/jqvmap/dist/jquery.vmap.min.js')}}"></script>
+        <script src="{{asset('Back/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js')}}"></script>
+        <script src="{{asset('Back/vendors/jqvmap/dist/maps/jquery.vmap.world.js')}}"></script>
+        <script>
+        (function($) {
+            "use strict";
+
+            jQuery('#vmap').vectorMap({
+                map: 'world_en',
+                backgroundColor: null,
+                color: '#ffffff',
+                hoverOpacity: 0.7,
+                selectedColor: '#1de9b6',
+                enableZoom: true,
+                showTooltip: true,
+                values: sample_data,
+                scaleColors: ['#1de9b6', '#03a9f5'],
+                normalizeFunction: 'polynomial'
+                    });
+                })(jQuery);
+        </script>
+        {% endblock %}
+        
+
+{% block title %}Statistics Artworks and Rooms{% endblock %}
+
+
+{% block body %}
+<h2 class="title">Statistics Artworks and Rooms</h2>
+
+ <div class="content mt-3">
+        <div class="animated fadeIn">
+          
+          <div class="row">
+          
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="stat-widget-one">
+                        <div class="stat-icon dib"><i class="menu-icon fa fa-picture-o"></i></div>
+                        <div class="stat-content dib">
+                        <div class="stat-text">number of artworks</div>
+                        <div class="stat-digit">{{nbartwork}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+         <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="stat-widget-one">
+                 <div class="stat-icon dib"><i class="menu-icon fa fa-building-o"></i></div>
+                    <div class="stat-content dib">
+                     <div class="stat-text">The number of all rooms</div>
+                        <div class="stat-digit">{{nbrooms}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+       
+         <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="stat-widget-one">
+                  <div class="stat-icon dib"><i class="menu-icon fa fa-building-o"></i></div>
+                    <div class="stat-content dib">
+                     <div class="stat-text"> Room with highest area:</div>
+                        <div class="stat-digit">{{ nameroomhighestarea }} : {{ maxroomarea }}m2</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    </div>
+
+         <div class="row">  
+<div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="mb-3">Number of available rooms</h4>
+                            <div class="flot-container" style="width: 500px; height: 430;">
+                            <canvas id="rooms" width="500" height="300"></canvas>
+                            </div>
+                            </div>
+                            </div><!-- /# card -->
+                        </div><!-- /# column -->
+
+    
+    <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="mb-3">Number of Artworks per rooms</h4>
+                            <div class="flot-container" style="width: 500px; height: 430;" >
+                            <canvas id="myChart" width="500" height="300"></canvas>
+                            
+                            </div>
+                            </div>
+                            </div><!-- /# card -->
+                        </div><!-- /# column -->
+
+    
+</div>
+
+<div class="row">
+
+            <div  >
+                    <div class="card" style="width: 500px; height: 430;">
+                        <div class="card-body" style="width: 500px; height: 430;">
+                            <div class="stat-widget-one">
+                            <div class="stat-icon dib"><i class="menu-icon fa fa-picture-o"></i></div>
+                                <div class="stat-content dib">
+                                <div class="stat-text">The last created artwork is</div>
+                                    <div class="stat-digit">{{ lastArtworkName }} (created on {{ lastArtworkCreatedAt|date('Y-m-d H:i:s') }})</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" style="width: 500px; height: 430;">
+                        <div class="card-body" style="width: 500px; height: 430;">
+                            <div class="stat-widget-one">
+                                <div class="stat-icon dib"><i class="menu-icon fa fa-picture-o"></i></div>
+                                    <div class="stat-content dib">
+                                        <div class="stat-text">The last updated artwork is</div>
+                                            <div class="stat-digit">{{ lastupdatedArtworkName}} (updated on {{ lastupdatedArtwork |date('Y-m-d H:i:s') }})</div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+            </div>
+
+            
+</div>
+
+    </div>
+     </div>
+
+
+
+    <script>
+const ctx = document.getElementById('myChart').getContext('2d');
+var ctx1 = document.getElementById('rooms').getContext('2d');
+var myChart1 = new Chart(ctx1, {
+    type: 'doughnut',
+    data: {
+        labels: ['Available rooms', 'Unavailble rooms'],
+        datasets: [{
+            data: [{{ nbavailable }},{{ nbunavailable }}],
+            backgroundColor: [
+                'rgba(60, 128, 0, 0.7)',
+                'rgba(255, 0, 0, 0.7)',
+            ],
+        }]
+    },
+      options: {
+          // Customize the appearance of the pie chart
+      }
+  });
+
+
+
+ const chartData = {
+    labels: {{ data.labels|json_encode|raw }},
+    datasets: [{
+        label: 'Artworks per room',
+        data: {{ data.values|json_encode|raw }},
+        backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+    }]
+};
+
+const myChart = new Chart(ctx, {
+    type: 'polarArea',
+    data: chartData,
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Artworks per room'
+            }
+        }
+    }
+});
+
+
+
+ 
+</script>
+</div>
+{% endblock %}

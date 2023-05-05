@@ -57,13 +57,13 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
             
          return new RedirectResponse($this->urlGenerator->generate('app_login'));  
         }
-        if($user->getRole() == 'Admin')
+        if($user->getRole() == 'Subscriber' or $user->getRole() == 'Artist')
         {
-        return new RedirectResponse($this->urlGenerator->generate('showbackpage'));
+        return new RedirectResponse($this->urlGenerator->generate('showdigit'));
         }
         else
         {
-        return new RedirectResponse($this->urlGenerator->generate('showfrontpage'));
+        return new RedirectResponse($this->urlGenerator->generate('showbackpage'));
         }
        
         /*if ($user) {

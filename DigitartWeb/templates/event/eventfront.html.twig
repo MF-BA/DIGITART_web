@@ -1,11 +1,13 @@
   {% extends 'base.html.twig' %}
 
+{% block homeActive %}{% endblock %}
+
+{% block eventactive %}
+    class="active"
+{% endblock %}
+
 {% block title %}Event index{% endblock %}
 
-{% block homeActive %}{% endblock %}
-{% block eventactive %}
-	class="active"
-{% endblock %}
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
@@ -140,6 +142,26 @@ if(distance<0)
     },1000)
 </script>
     <!-- Home About Section Begin -->
+    {% if events is empty %}
+<!-- ======= Blog Details Section ======= -->
+    <section id="blog" class="blog">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row g-5">
+
+            <article class="blog-details">
+              <div class="content">
+                <blockquote>
+                  <p>
+                   There are no events to show.      </p>
+                </blockquote>
+              </div><!-- End post content -->
+            </article><!-- End blog post -->
+
+        </div>
+      </div>
+    </section><!-- End Blog Details Section -->
+{% endif %}
+    
     {% set now = date() %}
   <section id="recent-blog-posts" class="recent-blog-posts">
       <div class="container" data-aos="fade-up">

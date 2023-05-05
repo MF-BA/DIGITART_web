@@ -1,0 +1,44 @@
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            {{ form_start(form) }}
+            <div class="card"> 
+                <div class="card-body">
+                    <div class="form-group">
+                        {{ form_label(form.firstName, 'First Name') }}
+                        {{ form_widget(form.firstName, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+<hr>
+                    <div class="form-group">
+                        {{ form_label(form.lastName, 'Last Name') }}
+                        {{ form_widget(form.lastName, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+<hr>
+                    <div class="form-group">
+                        {{ form_label(form.adress, 'Address') }}
+                        {{ form_widget(form.adress, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+<hr>
+                    <div class="form-group">
+                        {{ form_label(form.gender, 'Gender') }}
+                        {{ form_widget(form.gender, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+<hr>
+                    <div class="form-group">
+                        {{ form_label(form.idEvent, 'Event') }}
+                        {{ form_widget(form.idEvent, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+<hr>
+                    <div class="form-group">
+                        {{ form_label(form.idUser, 'User') }}
+                        {{ form_widget(form.idUser, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary mt-3">{{ button_label|default('Save') }}</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

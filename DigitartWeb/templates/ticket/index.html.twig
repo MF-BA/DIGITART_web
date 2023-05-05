@@ -1,0 +1,78 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Ticket{% endblock %}
+
+{% block body %}     
+<div class="breadcrumbs">
+        <div class="col-sm-4">
+            <div class="page-header float-left">
+            <div class="page-title">
+            <h2>Dashboard</h2>
+            <button type="button" class="btn btn-outline-primary" onclick="window.location.href='{{ path('app_ticket_new') }}'">
+            <i class="fa fa-plus"></i> Create new Ticket
+            </button>
+            </div>
+        </div>
+</div>
+
+{% for message in app.flashes('success') %}
+    <div class="col-sm-12">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span class="badge badge-pill badge-success">Success</span> {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+{% endfor %}
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <strong class="card-title">Data Table</strong>
+        </div>
+        <div class="card-body">
+            <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Ticket START Date</th>
+                        <th>Ticket END Date</th>
+                        <th>Price</th>
+                        <th>Ticket Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for ticket in tickets %}
+                    <tr>
+                        <td>{{ ticket.ticketDate ? ticket.ticketDate|date('Y-m-d') : '' }}</td>
+                        <td>{{ ticket.ticketEdate ? ticket.ticketEdate|date('Y-m-d') : '' }}</td>
+                        <td>{{ ticket.price }}</td>
+                        <td>{{ ticket.ticketType }}</td>
+                        <td>
+                            <div>
+                               <a <div class="btn-group" style="display: inline-block;">
+                                <form method="post" action="{{ path('app_ticket_delete', {'ticketId': ticket.ticketId}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ticket.ticketId) }}">
+                                <button type="submit" class="btn btn-outline-danger btn-sm"><i  class="fa fa-trash-o"></i></button>
+                                </form>
+                                 </a>
+                                <a href="{{ path('app_ticket_edit', {'ticketId': ticket.ticketId}) }}">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm"><i class="fa fa-edit"></i></button>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">no records found</td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

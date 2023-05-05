@@ -62,12 +62,60 @@
 .pagination li.disabled a {
   cursor: not-allowed;
 }
+.text {
+  position: absolute;
+  width: 620px;
+  left: 50%;
+  margin-left: -225px;
+  height: 40px;
+  top: 50%;
+  margin-top: -20px;
+}
+
+.text h1:not(:first-child) {
+  margin-left: 20px;
+}
+
+.word {
+  position: absolute;
+  width: 220px;
+  opacity: 0;
+}
+
+.letter {
+  display: inline-block;
+  position: relative;
+  float: left;
+  transform: translateZ(25px);
+  transform-origin: 50% 50% 25px;
+}
+
+.letter.out {
+  transform: rotateX(90deg);
+  transition: transform 0.32s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.letter.behind {
+  transform: rotateX(-90deg);
+}
+
+.letter.in {
+  transform: rotateX(0deg);
+  transition: transform 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.wisteria {
+  color: #BD2A2E;
+}
+
+
+
+
 
      
         </style>
         {% endblock %}
-       <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js" integrity="sha256-DBxkGZLxKsLKhz054qUpBqtotG00r9AELGpSigJujLg=" crossorigin="anonymous"></script>
-
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js" integrity="sha256-DBxkGZLxKsLKhz054qUpBqtotG00r9AELGpSigJujLg=" crossorigin="anonymous"></script>
         {% block javascripts %}
         <script src="{{asset('Back/vendors/jquery/dist/jquery.min.js')}}"></script>
         <script src="{{asset('Back/vendors/popper.js/dist/umd/popper.min.js')}}"></script>
@@ -116,7 +164,7 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="./"><img src="{{asset('Back/images/logo_digitart_home.png')}}" alt="Logo"></a>
+                <a class="navbar-brand" href="/showback"><img src="{{asset('Back/images/logo_digitart_home.png')}}" alt="Logo"></a>
             </div>
 
             <div id="main-menu" class="main-menu collapse navbar-collapse">
@@ -124,7 +172,9 @@
                     <li class="active">
                         <a href="{{ path('showbackpage') }}"> <i class="menu-icon fa fa-dashboard"></i>Dashboard </a>
                     </li>
+                    
                     <h3 class="menu-title">Modules</h3><!-- /.menu-title -->
+                    {% if app.user.role == 'Admin' %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="menu-icon fa fa-users"></i>Users Management</a>
                         <ul class="sub-menu children dropdown-menu">
@@ -135,10 +185,19 @@
                         </ul>
                     </li>
                     <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Artworks</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-picture-o"></i>Artworks</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-table"></i><a href="tables-basic.html">Basic Table</a></li>
-                            <li><i class="fa fa-table"></i><a href="tables-data.html">Data Table</a></li>
+                            <li><i class="fa fa-table"></i><a href="/artwork">Show Artworks</a></li>
+                            <li><i class="fa  fa-plus-square"></i><a href="/artwork/new">Add New Artwork</a></li>
+                            <li><i class="menu-icon fa fa-bar-chart-o"></i><a href="{{path('artwork_stats')}}">Statistics</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-building-o"></i>Rooms</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-table"></i><a href="/room">Show Rooms</a></li>
+                            <li><i class="fa  fa-plus-square"></i><a href="/room/new">Add New Room</a></li>
+                             <li><i class="menu-icon fa fa-bar-chart-o"></i><a href="{{path('artwork_stats')}}">Statistics</a></li>
                         </ul>
                     </li>
                     <li class="menu-item-has-children dropdown">
@@ -150,19 +209,15 @@
                             <li><i class="menu-icon fa fa-th"></i><a href="{{path('calendar')}}">Calendar</a></li>
                         </ul>
                     </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th"></i>Ticket</a>
-                        <ul class="sub-menu children dropdown-menu">
-                          <!-- <li><i class="menu-icon fa fa-th"></i><a href="">Tickets List</a></li>
-                           <li><i class="menu-icon fa fa-th"></i><a href="">Add new ticket</a></li> -->
-                        </ul>
-                    </li>
                     
                     <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th"></i>Auction</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-ticket"></i>Ticket</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="menu-icon fa fa-th"></i><a href="forms-basic.html">Basic Form</a></li>
-                            <li><i class="menu-icon fa fa-th"></i><a href="forms-advanced.html">Advanced Form</a></li>
+                       
+                           <li><i class="menu-icon fa fa-list"></i><a href="{{ path('app_ticket_index') }}">Tickets List</a></li>
+                           <li><i class="menu-icon fa fa-plus-square"></i><a href="{{ path('app_ticket_new') }}">Add new ticket</a></li>
+                            <li><i class="menu-icon fa fa-money"></i><a href="{{ path('app_payment_index') }}">Payment List</a></li>
+                             <li><i class="menu-icon fa fa-bar-chart-o"></i><a href="{{ path('app_ticket_stat') }}">Statistics</a></li>
                         </ul>
                     </li>
                    <li class="menu-item-has-children dropdown">
@@ -181,6 +236,83 @@
 							<i class="menu-icon fa fa-plus"></i>
 							<a href="{{path('statistics_back')}}">statistics</a>
 						</li>
+                        {% endif %}
+                        {% if app.user.role == 'Gallery Manager' %}
+                        <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-picture-o"></i>Artworks</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-table"></i><a href="/artwork">Show Artworks</a></li>
+                            <li><i class="fa  fa-plus-square"></i><a href="/artwork/new">Add New Artwork</a></li>
+                            <li><i class="menu-icon fa fa-bar-chart-o"></i><a href="{{path('artwork_stats')}}">Statistics</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-building-o"></i>Rooms</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-table"></i><a href="/room">Show Rooms</a></li>
+                            <li><i class="fa  fa-plus-square"></i><a href="/room/new">Add New Room</a></li>
+                             <li><i class="menu-icon fa fa-bar-chart-o"></i><a href="{{path('artwork_stats')}}">Statistics</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+
+
+                    {% if app.user.role == 'Auction Manager' %}
+                    <li class="menu-item-has-children dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="menu-icon fa fa-gavel"></i>Auction</a>
+					<ul class="sub-menu children dropdown-menu">
+						<li>
+							<i class="menu-icon fa fa-shopping-cart"></i>
+							<a href="{{path('DisplayAuctionBack')}}">Auction</a>
+						</li>
+						<li>
+							<i class="menu-icon fa fa-plus"></i>
+							<a href="{{path('adminAddAUCTION')}}">Add to auction</a>
+						</li>
+                        <li>
+							<i class="menu-icon fa fa-plus"></i>
+							<a href="{{path('statistics_back')}}">statistics</a>
+						</li>
+                    {% endif %}
+
+                        {% if app.user.role == 'Events Manager' %}
+                        <li class="menu-item-has-children dropdown">
+                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th"></i>Event</a>
+                           <ul class="sub-menu children dropdown-menu">
+                          <li><i class="menu-icon fa fa-th"></i><a href="{{path('app_event_index')}}">List Of Events</a></li>
+                          <li><i class="menu-icon fa fa-th"></i><a href="{{path('app_participants_index')}}">List of Participants</a></li>
+                          <li><i class="menu-icon fa fa-th"></i><a href="{{path('stats')}}">Statistics</a></li>
+                          <li><i class="menu-icon fa fa-th"></i><a href="{{path('calendar')}}">Calendar</a></li>
+                           </ul>
+                          </li>
+                        {% endif %}
+
+
+                            {% if app.user.role == 'Tickets Manager' %}
+                            <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-ticket"></i>Ticket</a>
+                        <ul class="sub-menu children dropdown-menu">
+                       
+                           <li><i class="menu-icon fa fa-list"></i><a href="{{ path('app_ticket_index') }}">Tickets List</a></li>
+                           <li><i class="menu-icon fa fa-plus-square"></i><a href="{{ path('app_ticket_new') }}">Add new ticket</a></li>
+                            <li><i class="menu-icon fa fa-money"></i><a href="{{ path('app_payment_index') }}">Payment List</a></li>
+                             <li><i class="menu-icon fa fa-bar-chart-o"></i><a href="{{ path('app_ticket_stat') }}">Statistics</a></li>
+                        </ul>
+                    </li>
+                            {% endif %}
+
+                    {% if app.user.role == 'Users Manager' %}
+                               <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="menu-icon fa fa-users"></i>Users Management</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-plus"></i><a href="{{path('app_users_new')}}">Add User</a></li>
+                            <li><i class="fa fa-bars"></i><a href="{{path('app_users_index')}}">List of users</a></li>
+                           <li><i class="fa fa-bar-chart"></i><a href="{{path('app_users_statsusers')}}">Users Statistics</a></li>
+                            
+                        </ul>
+                    </li>
+                {% endif %}
 					</ul>
 				</li>
 				   
@@ -251,23 +383,89 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ app.user.firstname }}! ✅</h1>
+    <div style="text-align: center;">
+<div class="text" style="margin-top: -400px;">
+  <h1>WELCOME &nbsp;
+    <span class="word wisteria"> {{ app.user.firstname }}</span>
+    <span class="word wisteria">{{ app.user.lastname }}</span>
 
-   Welcome to your Dashboard!
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/venom-1/OneDrive/Documents/Symfonyprojects/FirstProject/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/venom-1/OneDrive/Documents/Symfonyprojects/FirstProject/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
-    </ul>
-
-
-
-
-    
-
-
-
-
+  </h1>
+  
 </div>
+<br>
+<br>
+<h2>To your dashboard</h2>
+    </div>
+    
+<div class="login100-pic js-tilt" style="margin-top: 10px;" data-tilt>
+					<img src="{{asset('login/images/logo-digitart-rouge.png')}}" alt="IMG">
+				</div>
+  
+
+<script src="{{asset('login/vendor/tilt/tilt.jquery.min.js')}}"></script>
+	<script >
+		$('.js-tilt').tilt({
+			scale: 1.1
+		})
+
+	</script>
+
+    <script>
+var words = document.getElementsByClassName('word');
+var wordArray = [];
+var currentWord = 0;
+
+words[currentWord].style.opacity = 1;
+for (var i = 0; i < words.length; i++) {
+  splitLetters(words[i]);
+}
+
+function changeWord() {
+  var cw = wordArray[currentWord];
+  var nw = currentWord == words.length-1 ? wordArray[0] : wordArray[currentWord+1];
+  for (var i = 0; i < cw.length; i++) {
+    animateLetterOut(cw, i);
+  }
+  
+  for (var i = 0; i < nw.length; i++) {
+    nw[i].className = 'letter behind';
+    nw[0].parentElement.style.opacity = 1;
+    animateLetterIn(nw, i);
+  }
+  
+  currentWord = (currentWord == wordArray.length-1) ? 0 : currentWord+1;
+}
+
+function animateLetterOut(cw, i) {
+  setTimeout(function() {
+		cw[i].className = 'letter out';
+  }, i*80);
+}
+
+function animateLetterIn(nw, i) {
+  setTimeout(function() {
+		nw[i].className = 'letter in';
+  }, 340+(i*80));
+}
+
+function splitLetters(word) {
+  var content = word.innerHTML;
+  word.innerHTML = '';
+  var letters = [];
+  for (var i = 0; i < content.length; i++) {
+    var letter = document.createElement('span');
+    letter.className = 'letter';
+    letter.innerHTML = content.charAt(i);
+    word.appendChild(letter);
+    letters.push(letter);
+  }
+  
+  wordArray.push(letters);
+}
+
+changeWord();
+setInterval(changeWord, 4000);
+    </script>
     {% endblock %}
     </body>
 </html>

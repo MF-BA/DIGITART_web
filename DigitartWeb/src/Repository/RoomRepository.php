@@ -39,6 +39,52 @@ class RoomRepository extends ServiceEntityRepository
         }
     }
 
+    public function getRoomNameById($id)
+    {
+        $room = $this->findOneBy(['idRoom' => $id]);
+        return $room ? $room->getNameRoom() : null;
+    }
+
+
+    public function countAvailable()
+    {
+        return $this->getEntityManager()
+            ->createQuery('SELECT COUNT(r.idRoom) FROM App\Entity\Room r WHERE r.state = :state')
+            ->setParameter('state', 'Available')
+            ->getSingleScalarResult();
+    }
+    
+    public function countUnavailable()
+    {
+        return $this->getEntityManager()
+            ->createQuery('SELECT COUNT(r.idRoom) FROM App\Entity\Room r WHERE r.state = :state')
+            ->setParameter('state', 'Unavailable')
+            ->getSingleScalarResult();
+    }
+    public function countRooms()
+    {
+        return $this->getEntityManager()
+            ->createQuery('SELECT COUNT(r.idRoom) FROM App\Entity\Room r ')
+            ->getSingleScalarResult();
+    }
+    public function getMaxRoomArea()
+{
+    return $this->getEntityManager()
+        ->createQuery('SELECT MAX(r.area) FROM App\Entity\Room r')
+        ->getSingleScalarResult();
+}
+public function getRoomWithHighestArea()
+{
+    return $this->getEntityManager()
+        ->createQueryBuilder()
+        ->select('r')
+        ->from('App\Entity\Room', 'r')
+        ->orderBy('r.area', 'DESC')
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult();
+}
+
 //    /**
 //     * @return Room[] Returns an array of Room objects
 //     */

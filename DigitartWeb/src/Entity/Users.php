@@ -205,23 +205,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      */
     private $resetToken;
  
-    /**
-    * @Recaptcha\IsTrueV3
-    */
-    
-    public $recaptcha;
 
-    protected $captchaCode;
-    
-    public function getCaptchaCode()
-    {
-      return $this->captchaCode;
-    }
-
-    public function setCaptchaCode($captchaCode)
-    {
-      $this->captchaCode = $captchaCode;
-    }
 
     public function __construct()
     {

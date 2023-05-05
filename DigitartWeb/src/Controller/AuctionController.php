@@ -411,4 +411,9 @@ class AuctionController extends AbstractController
     {
         return $this->render('users/register.html.twig', []);
     }
+    #[Route('/showteam', name: 'showteam')]
+    public function display_team(): Response
+    {
+        return $this->render('team.html.twig', []);
+    }
 }
