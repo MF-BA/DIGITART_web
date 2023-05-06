@@ -1,0 +1,36 @@
+{% extends 'back.html.twig' %}
+
+{% block body %}
+
+<canvas id="annonces"></canvas>
+
+<script>
+let annonces = document.querySelector("#annonces");
+let annGraph = new Chart(annonces, {
+    type: "line",
+    data: {
+        labels: {{ paymentDate|raw }},
+        datasets: [{
+            label: "Amount Paid",
+            data: {{ totalAmount|raw }},
+            borderColor: 'red', 
+            pointBackgroundColor: 'black', 
+            pointBorderColor: 'black',
+            pointRadius: 5, 
+            pointHoverRadius: 5,
+            fill: false
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+
+</script>
+{% endblock %}

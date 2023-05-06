@@ -21,22 +21,23 @@
     border: 2px solid var(--color-primary) !important;
 }
 .circle {
-			width: 70px !important;
-			height: 70px !important;
-			border-radius: 50%;
-      background-color: #BD2A2E !important;
-			position: relative !important;
-      top: 30px !important;
-      left: 100px !important;
-      border: 2px solid var(#BD2A2E);
-			color: #fff;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			cursor: pointer;
-			transform: translateY(-50%);
-		}
+					width: 70px !important;
+					height: 70px !important;
+					border-radius: 50%;
+					background-color: #BD2A2E !important;
+					position: relative !important;
+					top: 30px !important;
+					left: 250px !important;
+					border: 2px solid var(#BD2A2E);
+					color: #fff;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					cursor: pointer;
+					transform: translateY(-50%);
+				}
+
 
 		.circle-name {
 			font-size: 10px;
@@ -48,8 +49,8 @@
       font-size: 20px;
       color: #BD2A2E;
 			position: relative !important;
-      top: 2px !important;
-      left: 80px !important;
+      top: 10% !important;
+      left: 25% !important;
     }
 		.options {
 			position: fixed;
@@ -390,75 +391,6 @@ border: none;
   <link href="{{asset('Front/assets/css/main.css')}}" rel="stylesheet">
         {% endblock %}
         
- {% block navbar %}
-        
-          <!-- ======= Header ======= -->
-  <header id="header" class="header d-flex align-items-center">
-    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
-
-      <a href="{{ path('showfrontpage') }}" class="logo d-flex align-items-center">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-        <img src="{{asset('Front/assets/img/logo digitart.png')}}" alt=""> 
-        
-      </a>
-
-      <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
-      <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
-      <nav id="navbar" class="navbar">
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="{{path('showfrontpage')}}">About</a></li>
-          <li><a href="services.html">Services</a></li>
-          <li><a href="projects.html">Projects</a></li>
-          <li><a href="blog.html">Blog</a></li>
-          <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
-            <ul>
-              <li><a href="#">Dropdown 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
-                <ul>
-                  <li><a href="#">Deep Dropdown 1</a></li>
-                  <li><a href="#">Deep Dropdown 2</a></li>
-                  <li><a href="#">Deep Dropdown 3</a></li>
-                  <li><a href="#">Deep Dropdown 4</a></li>
-                  <li><a href="#">Deep Dropdown 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Dropdown 2</a></li>
-              <li><a href="#">Dropdown 3</a></li>
-              <li><a href="#">Dropdown 4</a></li>
-            </ul>
-          </li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-        {% if app.user is not null %}
-
-        {% if app.user.role == 'Subscriber' or app.user.role == 'Artist' %}
-         <strong class="user-name">  {{app.user.firstname}}   {{app.user.lastname}} </strong>
-         <div class="circle" onclick="toggleOptions()">
-         {% if app.user.image is not null %}
-		    <img class="circle-image-container" src="{{ asset('/uploads/' ~ app.user.image) }}" alt="Image" width="60">
-        {% else %}
-        <img class="circle-image-container" src="{{ asset('Back/images/icon-img.png') }}" alt="Image" width="60">
-         {% endif %}
-	</div>
-	<div class="options" id="options">
-		<a class="nav-link" href="{{path('app_users_profilefront', {'id': app.user.id}) }}"><div class="option"><i class="fa fa-user"></i> My profile</div></a>
-		<a class="nav-link" href="{{path('app_logout')}}"><div class="option"><i class="fa fa-power-off"></i>  Logout</div></a>
-	</div>
-  {% endif %} 
-
-  {% endif %} 
-      </nav><!-- .navbar -->
-
-
-    </div>
-    {% if app.user is null %}
-     <a href="{{path('app_login')}}"><button class="login100-form-btn"><i class="fa fa-sign-in" aria-hidden="true"></i>   Login</button></a>
-    {% endif %}
-           
-  </header><!-- End Header -->
-  
-  {% endblock %}
 
   {% block body %}
        
@@ -538,10 +470,11 @@ border: none;
                             </div>
                             <div class="col-md-9">
                             <button class="profile-edit-btn" onclick="confirmLogout()">Logout</button><br/>
-                            </br>
+                           {# </br>
                             <button class="profile-edit-btn" onclick="confirmDelete()">Delete Account</button><br/>
-                            </br>
-                            <button class="profile-edit-btn">Change Password</button><br/>
+                            </br> #}
+                             </br>
+                            <button class="profile-edit-btn" href="{{path('forgotten_password')}}">Change Password</button><br/>
                             </br>
                             <button class="profile-edit-btn">Return Home</button><br/>
                             </br>

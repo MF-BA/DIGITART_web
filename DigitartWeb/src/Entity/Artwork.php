@@ -2,8 +2,12 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Artwork
@@ -25,7 +29,12 @@ class Artwork
 
     /**
      * @var string
+     * @Assert\NotBlank(message=" artworkName doit etre non vide")
+     * @Assert\Length(
+     *      min = 5,
+     *      minMessage=" Enter artworkName with minimum 5 caracters"
      *
+     *     )
      * @ORM\Column(name="artwork_name", type="string", length=255, nullable=false)
      */
     private $artworkName;
@@ -48,14 +57,22 @@ class Artwork
 
     /**
      * @var \DateTime
-     *
+     * @Assert\NotBlank(message="Date of artwork creation cannot be blank")
+     * @Assert\LessThanOrEqual("today", message="Date of artwork creation cannot be in the future")
      * @ORM\Column(name="date_art", type="date", nullable=false)
      */
     private $dateArt;
 
     /**
      * @var string|null
-     *
+
+     * @Assert\NotBlank(message="Artwork description cannot be blank")
+     * @Assert\Length(
+     *      min = 7,
+     *      max = 65535,
+     *      minMessage = "Artwork description must have at least {{ limit }} characters",
+     *      maxMessage = "Artwork description cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     private $description;
@@ -63,14 +80,14 @@ class Artwork
     /**
      * @ORM\OneToMany(targetEntity="ImageArtwork",mappedBy="idArt", orphanRemoval=true, cascade={"persist"})
      */
-    private $imageArt;
+    private $images;
 
     /**
-     * @var Room
+     * @var \Room
      *
      * @ORM\ManyToOne(targetEntity="Room")
      * @ORM\JoinColumns({
-     * @ORM\JoinColumn(name="id_room", referencedColumnName="id_room")
+     *   @ORM\JoinColumn(name="id_room", referencedColumnName="id_room")
      * })
      */
     private $idRoom;
@@ -112,12 +129,12 @@ class Artwork
         return $this;
     }
 
-    public function getIdArtist(): ?int
+    public function getIdArtist(): ?Users
     {
         return $this->idArtist;
     }
 
-    public function setIdArtist(?int $idArtist): self
+    public function setIdArtist(?Users $idArtist): self
     {
         $this->idArtist = $idArtist;
 
@@ -161,6 +178,7 @@ class Artwork
     }
 
 
+
     public function getIdRoom(): ?Room
     {
         return $this->idRoom;
@@ -173,6 +191,10 @@ class Artwork
         return $this;
     }
 
+    public function getOwnerType(): ?string
+    {
+        return $this->idArtist ? 'artist' : 'museum';
+    }
 
     public function setOwnerType(string $ownerType): void
     {

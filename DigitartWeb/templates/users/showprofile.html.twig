@@ -161,15 +161,15 @@
     <button type="button" class="btn mr-2">
     <i class="fa fa-pencil-square-o"></i>Edit my profile</button></a>
 
-    <a href="#">
+    <a href="{{path('forgotten_password')}}">
    <button type="button" class="btn mr-2">
     <i class="fa fa-repeat"></i>change my password!</button></a>
 
-    <a href="{{ path('app_users_deleteprofile',{'id': app.user.id}) }}">
+    {#<a href="{{ path('app_users_deleteprofile',{'id': app.user.id}) }}">
     <button class="btn" id="delete-btn">
         <i class="fa fa-times-circle"></i>Delete Account
-    </button>
-</a>
+    </button> 
+</a>#}
 
     </div>
     </div>

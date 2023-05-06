@@ -1,11 +1,13 @@
   {% extends 'base.html.twig' %}
 
+{% block homeActive %}{% endblock %}
+
+{% block eventactive %}
+    class="active"
+{% endblock %}
+
 {% block title %}Event index{% endblock %}
 
-{% block homeActive %}{% endblock %}
-{% block eventactive %}
-	class="active"
-{% endblock %}
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
@@ -97,6 +99,18 @@
     .btn-danger:hover {
   background-color: white !important;
 }
+.pagin{
+    color: var(--color-secondary);
+    padding: 7px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-danger:hover {
+  background-color: #646363 !important;
+  border-color: #646363 !important; /* Change border color on hover */
+  color: white !important;
+}
 
 </style>
 <script>
@@ -128,6 +142,26 @@ if(distance<0)
     },1000)
 </script>
     <!-- Home About Section Begin -->
+    {% if events is empty %}
+<!-- ======= Blog Details Section ======= -->
+    <section id="blog" class="blog">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row g-5">
+
+            <article class="blog-details">
+              <div class="content">
+                <blockquote>
+                  <p>
+                   There are no events to show.      </p>
+                </blockquote>
+              </div><!-- End post content -->
+            </article><!-- End blog post -->
+
+        </div>
+      </div>
+    </section><!-- End Blog Details Section -->
+{% endif %}
+    
     {% set now = date() %}
   <section id="recent-blog-posts" class="recent-blog-posts">
       <div class="container" data-aos="fade-up">
@@ -175,9 +209,18 @@ if(distance<0)
 
           </div>
         </div><!-- End post item -->
-        
+      
         {% endif %}
 {% endfor %}
+          <section id="blog" class="blog">
+        <div class="blog-pagination">
+          <ul class="justify-content-center">
+            
+            <li><a href="#">{{ knp_pagination_render(events) }}</a></li>
+            
+          </ul>
+        </div><!-- End blog pagination -->
+        </section>
         
 
       </div>
@@ -267,7 +310,9 @@ if(distance<0)
   <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB20J0YArSAor39b70wlsLGS5L2LKKBc4A&q=Esprit+Tunisia&zoom=15&q=Esprit+Tunisia&center=36.8991667,10.1897222" frameborder="0" style="border:0; width: 100%; height: 580px;" allowfullscreen></iframe>
 
                            <div class="map-hover">
+                           
                             <i class="fa fa-map-marker"></i>
+
                         </div>
                     </div>
                 </div>

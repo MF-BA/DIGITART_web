@@ -1,0 +1,101 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Event index{% endblock %}
+
+{% block body %}
+    <h1><strong>List of Events</strong></h1>
+<style>
+   .img {
+  max-width: 50% !important; 
+}
+.btn.social.show {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  color: #900C3F ;
+}
+.btn.social.update {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  color: orange;
+}
+   
+
+.btn.social i {
+  font-size: 1.5rem !important;
+  line-height: 1 !important;
+}
+</style>
+    <div class="mb-3">
+         <form action="{{ path('event_search') }}" method="get">
+            <div class="input-group">
+                <input type="text" class="form-control" id="id" name="id" placeholder="Search by Event Name">
+                <div class="input-group-append">
+                    <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>EventName</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>NbParticipants</th>
+                <th>Description</th>
+                <th>StartTime</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>Image</th>    
+                <th>Poster</th>        
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        <!--  ta7founn -->
+        {% for event in events %}
+            <tr>
+                <td>{{ event.id }}</td>
+                <td>{{ event.eventName }}</td>
+                <td>{{ event.startDate ? event.startDate|date('Y-m-d') : '' }}</td>
+                <td>{{ event.endDate ? event.endDate|date('Y-m-d') : '' }}</td>
+                <td>{{ event.nbParticipants }} </td>
+                <td>{{ event.detail }}</td>
+                <td>{{ event.startTime }}h</td>
+                <td>{{ event.createdAt ? event.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ event.updatedAt ? event.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td> {% for image in event.images %}
+            <div>
+                <img src="{{ asset('/uploads/' ~ image.name) }}" alt="Image" width="150">
+            </div>
+        {% endfor %}</td>
+                <td><img src="{{ asset('uploads/' ~ event.image) }}" alt="Image"  width="150"></td>
+                
+                <td>
+                  <div class="d-flex">
+    <a class="btn social show html5 mr-2" href="{{ path('app_event_show', {'id': event.id}) }}">
+        <i class="fa fa-solid fa-eye"></i>
+    </a>
+    <a class="btn social update html5 mr-2" href="{{ path('app_event_edit', {'id': event.id}) }}">
+        <i class="fa fa-pencil-square"></i>
+    </a>
+</div>
+
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-dark" href="{{ path('app_event_new') }}"><i class="fa fa-plus-square-o"></i> Create new</a>
+
+{% endblock %}

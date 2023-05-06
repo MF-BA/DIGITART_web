@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Users;
-use Twilio\Rest\Client;
 use App\Entity\UserImages;
 use App\Form\SearchUsersType;
 use App\Form\UsersType;
@@ -24,13 +23,7 @@ use League\OAuth2\Client\Provider\Facebook;
 #[Route('/users')]
 class UsersController extends AbstractController
 {
-    private $twilio;
-   
-    public function __construct(Client $twilio)
-    {
-        $this->twilio = $twilio;
-       
-    }
+    
     #[Route('/', name: 'app_users_index')]
     public function index(Request $request, UsersRepository $usersRepository): Response
     {
@@ -206,6 +199,7 @@ class UsersController extends AbstractController
             'user' => $user,
         ]);
     }
+    /*
     #[Route('/sendSms/{user}', name: 'app_send_sms', methods: ['GET'])]
     public function sendSms(Request $request, Users $user): Response
     {
@@ -251,8 +245,8 @@ $client->messages->create(
        'code' => $code,
        ], Response::HTTP_SEE_OTHER);
        
-      
     }
+    
     #[Route('/sms-verification', name: 'app_sms_verification')]
     public function smsVerification(Request $request): Response
     {
@@ -263,7 +257,7 @@ $client->messages->create(
         'phone_number' => $phoneNumber,
         'code' => $code,
     ]);
-    }
+    }*/
     private function generateCode(): string
     {
         $code = '';
@@ -291,6 +285,7 @@ $client->messages->create(
             'form' => $form->createView(),
         ]);
     }
+
     #[Route('/{id}/edit', name: 'app_users_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Users $user, EntityManagerInterface $entityManager): Response
     {

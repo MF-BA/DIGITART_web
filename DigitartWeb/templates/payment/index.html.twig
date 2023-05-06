@@ -29,7 +29,7 @@
         <h2>Enjoy your journey with DigitArt ! </h2>
         <p>Here you can reserve you're ticket </p>
       </div>
-{% for message in app.flashes('error') %}
+{% for message in app.flashes('errors') %}
     <div class="sufee-alert alert with-close alert-danger alert-dismissible fade show" style="text-align: center;" id="flash-message">
         <div>{{ message }} </div>
         <div><button type="button" class="btn btn-outline-danger btn-sm" onclick="window.location.href='{{ path('app_payment_card') }}'">

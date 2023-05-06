@@ -113,7 +113,7 @@ class RegistrationController extends AbstractController
                 $user->setIsVerified(true);
                 $em->flush($user);
                 $flashy->success('Account Activated');
-                return $this->redirectToRoute('app_login');
+                return $this->redirectToRoute('showfrontpage');
             }
         }
         // Ici un problème se pose dans le token

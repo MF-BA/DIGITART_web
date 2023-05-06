@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 
+
 {% block title %}Auction
 {% endblock %}
 
@@ -9,30 +10,31 @@
 {% endblock %}
 
 {% block BID_CONDITION %}
-<style>
-.sidebar {
-  width: 400px;
+	<style>
+		.sidebar {
+			width: 400px;
+		}
+	</style>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		function updateAuctionValues() { // Send an AJAX request to the server
+$.ajax({
+url: '{{ path("app_auction_upppdatee", {"id_auction": auction.idAuction}) }}', // Replace with your endpoint URL and auction ID
+dataType: 'json',
+success: function (data) { // Update the values on the page
+if (data.highestBid === null) {
+$('#highest-bid').text('none');
+} else {
+$('#highest-bid').text(data.highestBid + '$');
 }
-</style>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-function updateAuctionValues() {
-  // Send an AJAX request to the server
-  $.ajax({
-    url: '{{ path("app_auction_upppdatee", {"id_auction": auction.idAuction}) }}', // Replace with your endpoint URL and auction ID
-    dataType: 'json',
-    success: function(data) {
-      // Update the values on the page
-      $('#highest-bid').text(data.highestBid);
-      $('#num-bidders').text(data.numBidders);
-    }
-  });
+$('#num-bidders').text(data.numBidders);
+}
+});
 }
 
 // Execute the function every 5 seconds
 setInterval(updateAuctionValues, 5000);
-
-</script>
+	</script>
 
 	<script>
 		function validateBid() {
@@ -96,13 +98,14 @@ return true;
 
 						<article class="blog-details">
 
-							<div class="post-img">
+							<div class="post-img position-relative overflow-hidden">
+
 								{% if imageArtwork[ auction.idAuction ]|length != 0 %}
 									<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
 										<div class="carousel-inner">
 											{% for image in imageArtwork[ auction.idAuction ] %}
 												<div class="carousel-item {% if loop.first %}active{% endif %}">
-													<img src="{{ asset('/uploads/'~image.ImageName) }}" class="d-block w-100" style="width: 400px; height: 300px;" alt="">
+													<img src="{{ asset('/uploads/'~image.ImageName) }}" class="d-block w-100" style="width: 700px; height: 700px;" alt="">
 												</div>
 											{% endfor %}
 										</div>
@@ -123,11 +126,11 @@ return true;
 									<li class="d-flex align-items-center">
 										<i class="bi bi-clock"></i>
 										<a>
-												{% set endingDate = auction.endingDate|date('Y-m-d H:i:s') %}
-												<span id="timer_{{auction.idAuction}}" class="post-date"></span>
-												<script>
-													updateTimer("{{ endingDate }}", "timer_{{ auction.idAuction }}");
-												</script>
+											{% set endingDate = auction.endingDate|date('Y-m-d H:i:s') %}
+											<span id="timer_{{auction.idAuction}}" class="post-date"></span>
+											<script>
+												updateTimer("{{ endingDate }}", "timer_ {{ auction.idAuction }}");
+											</script>
 										</a>
 									</li>
 									<li class="d-flex align-items-center">
@@ -156,6 +159,7 @@ return true;
 							<div class="sidebar"> <div class="sidebar-item search-form">
 								<div class="meta-top">
 									<a>The starting Price :
+										{{ auction.startingPrice ~ '$' }}
 									</a>
 									<br>
 									<br>
@@ -199,7 +203,7 @@ return true;
 											{{ form_widget(form.offer, {'attr': {'value': highestBid is not null ? highestBid + auction.increment : auction.startingPrice ,
 							'pattern': '[0-9]*' , 'inputmode' : 'numeric','min': highestBid is not null ? highestBid + auction.increment : auction.startingPrice}
 							}) }}
-							{{ form_errors(form.offer) }}
+											{{ form_errors(form.offer) }}
 											<button type="submit">
 												<i class="bi bi-credit-card">{{ button_label|default('') }}</i>
 											</button>

@@ -15,6 +15,10 @@ use Stripe\Checkout\Session;
 use Stripe\Stripe;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use TCPDF;
 
 #[Route('/payment')]
@@ -49,12 +53,12 @@ class PaymentController extends AbstractController
     
         if ($form->isSubmitted() && $form->isValid()) {
             if ($payment->getTotalPayment() == 0) {
-                $this->addFlash('error', 'Please select a ticket to continue purchasing!');
+                $this->addFlash('errors', 'Please select a ticket to continue purchasing!');
                 return $this->redirectToRoute('app_payment_new');
             }
     
            if ($paymentCount >= 4) {
-                $this->addFlash('error', 'You have reached the maximum limit of payments. Please finalize your purchases first!');
+                $this->addFlash('errors', 'You have reached the maximum limit of payments. Please finalize your purchases first!');
                 return $this->redirectToRoute('app_payment_new');
             } 
             $payment->setUser($userId);
@@ -104,6 +108,7 @@ class PaymentController extends AbstractController
             return $this->render('payment/your_custom_form.html.twig', [
                 'clientSecret' => $intent->client_secret,
                 'Amount' =>$Amount,
+                
             ]);
         }
         
@@ -116,10 +121,58 @@ class PaymentController extends AbstractController
 
    
     #[Route('/cardHistory', name: 'app_payment_CurrentcardHistory')]
-    public function CurrentcardHistory( EntityManagerInterface $entityManager): Response
+    public function CurrentcardHistory( EntityManagerInterface $entityManager, MailerInterface $mailer,PaymentRepository $PaymentRepository): Response
     {
         $userId = $this->getUser()->getId();
-        // update any unpaid payment records for the user after successful payment
+        $userFirstName = $this->getUser()->getFirstname();
+        $userLastName = $this->getUser()->getLastname();
+
+        $lastUpdatedAt = $PaymentRepository->getLastUpdatedAtByUserId();
+        $lastUpdatedAt = new \DateTime($lastUpdatedAt);
+        
+        $date = $lastUpdatedAt->format('Y-m-d');
+        $time = $lastUpdatedAt->format('H:i');
+        $payments = $PaymentRepository->findBy(['user' => $userId, 'updatedAt' => $lastUpdatedAt]);
+        // Calculate total values
+        $total_nb_adult = 0;
+        $total_nb_teenager = 0;
+        $total_nb_student = 0;
+        $total_payment = 0;
+        foreach ($payments as $payment) {
+            $total_nb_adult += $payment->getNbAdult();
+            $total_nb_teenager += $payment->getNbTeenager();
+            $total_nb_student += $payment->getNbStudent();
+            $total_payment += $payment->getTotalPayment();
+        }
+
+
+        $userEmail = $this->getUser()->getEmail();
+
+        //$to = 'aminemehdi999@gmail.com';
+        $subject = 'Digitart payment Receipt No Reply';
+        $template = 'payment/payment_email.html.twig';
+        $context = [
+            'total_nb_adult' => $total_nb_adult,
+            'total_nb_student' => $total_nb_student,
+            'total_nb_teenager' => $total_nb_teenager,
+            'total_payment' => $total_payment,
+            'lastUpdatedAt' => $date,
+            'time' => $time,
+            'userFirstName' => $userFirstName,
+            'userLastName' => $userLastName,
+        ];
+    
+        $body = $this->renderView($template, $context);
+    
+        $email = (new Email())
+            ->from('DIGITART@NOREPLY.COM')
+            ->to($userEmail)
+            ->subject($subject)
+            ->html($body);
+    
+        $mailer->send($email);
+
+        
         $paymentRepository = $entityManager->getRepository(Payment::class);
         $paymentsToUpdate = $paymentRepository->findBy([
             'user' => $userId,
@@ -142,6 +195,22 @@ class PaymentController extends AbstractController
             'payments' => $payments,
         ]);
     }
+
+    #[Route('/cardHistoryy', name: 'app_payment_CurrentcardHistoryNoUpdate')]
+    public function CurrentcardHistoryNoUpdate( EntityManagerInterface $entityManager): Response
+    {
+        $userId = $this->getUser()->getId();
+        $entityManager->flush();
+        $payments = $entityManager
+            ->getRepository(Payment::class)
+            ->findBy([
+                'user' => $userId,
+                'paid' => true
+            ]);
+        return $this->render('payment/cardHistoryy.html.twig', [
+            'payments' => $payments,
+        ]);
+    }
     
     
     #[Route('/{paymentId}', name: 'app_payment_delete', methods: ['POST'])]
@@ -153,15 +222,6 @@ class PaymentController extends AbstractController
         }
 
         return $this->redirectToRoute('app_payment_card', [], Response::HTTP_SEE_OTHER);
-    }
-
-  
-    #[Route('/test', name: 'calendar')]
-    public function Test( )
-    {
-        
-        return $this->render('payment/test.html.twig', [
-        ]);
     }
    
 
@@ -204,7 +264,9 @@ class PaymentController extends AbstractController
     public function generatePdf(PaymentRepository $PaymentRepository): Response
     {
         $user_id = $this->getUser()->getId();
-         
+        $user_fname = $this->getUser()->getFirstname();
+        $user_lname = $this->getUser()->getLastname();
+
         $lastUpdatedAt = $PaymentRepository->getLastUpdatedAtByUserId();
         // Convert string to DateTime object
         $lastUpdatedAt = new \DateTime($lastUpdatedAt);
@@ -230,7 +292,7 @@ class PaymentController extends AbstractController
         $pdf->AddPage();
 
         // Add background image
-        $backgroundImage = 'https://cdn.discordapp.com/attachments/1095078227573219358/1095095439155527740/massive.jpg'; // Replace with your image path
+        $backgroundImage = 'https://cdn.discordapp.com/attachments/731879809541472298/1103838322817781801/massive_2.jpg'; // Replace with your image path
         // Save current auto page break setting
         $auto_page_break = $pdf->getAutoPageBreak();
         // Disable auto page break
@@ -243,25 +305,27 @@ class PaymentController extends AbstractController
         $pdf->SetDrawColor(0, 0, 0); // RGB color for black
        
         $pdf->SetLineWidth(0.5); // Line width for border
-        $pdf->Rect(10, 70, 190, 60, 'D'); // Parameters: x, y, width, height, 'D' for border only
+        //$pdf->Rect(10, 70, 190, 60, 'D'); // Parameters: x, y, width, height, 'D' for border only
 
-        // Set some content
         $pdf->SetFont('helvetica', '', 16); // Increase font size to 16
-        $pdf->SetTextColor(255, 255, 255); // Set text color to #BD2A2E (red)
-        $pdf->Cell(0,60,'', 0, 1, 'C');  
+        $pdf->SetTextColor(0, 0, 0); // Set text color to black
+        $pdf->Cell(0, 60, '', 0, 1, 'C');
+        $pdf->Cell(0, 10, '', 0, 1, 'C'); // add two empty cells
         // Center the date
-        $pdf->Cell(0, 10, 'Date of purchase: ' .$lastUpdatedAt->format('Y-m-d'), 0, 1, 'C');  
+        $pdf->Cell(0, 10, 'Date of purchase: ' .$lastUpdatedAt->format('Y-m-d'), 0, 1, 'C');
         $pdf->SetFont('helvetica', '', 12); // Reset font size to 12 
         // Center the ticket number and other text
+        $pdf->SetTextColor(0, 0, 0); // Set text color to black
         $pdf->Cell(0, 10, 'Number of Adult Tickets: ' . $total_nb_adult, 0, 1, 'C');
         $pdf->Cell(0, 10, 'Number of Teenager Tickets: ' . $total_nb_teenager, 0, 1, 'C');
         $pdf->Cell(0, 10, 'Number of Student Tickets: ' . $total_nb_student, 0, 1, 'C');
-        $pdf->Cell(0,5,'', 0, 1, 'C');  
+        $pdf->Cell(0, 5, '', 0, 1, 'C');
         $pdf->SetFont('helvetica', 'B', 14); // 'B' for bold
+        $pdf->SetTextColor(0, 0, 0); // Set text color to black
         $pdf->Cell(0, 10, 'Total Payment: ' . $total_payment . ' $', 0, 1, 'C');
         
         // Generate QR code
-        $qrCodeUrl = 'https://chart.googleapis.com/chart?cht=qr&chl=' . urlencode('Number of Adult Tickets: ' . $total_nb_adult . ', Number of Teenager Tickets: ' . $total_nb_teenager . ', Number of Student Tickets: ' . $total_nb_student . ', Total Payment: ' . $total_payment) . '&chs=300x300&choe=UTF-8&chld=L|2'; // Increase QR code size to 300x300
+        $qrCodeUrl = 'https://chart.googleapis.com/chart?cht=qr&chl=' . urlencode($user_fname . ' ' . $user_lname . ' Number of Adult Tickets: ' . $total_nb_adult . ', Number of Teenager Tickets: ' . $total_nb_teenager . ', Number of Student Tickets: ' . $total_nb_student . ', Total Payment: ' . $total_payment . ', First Name: ' .  ', OurWebsite: www.digitart.tn') . '&chs=300x300&choe=UTF-8&chld=L|2';
         $qrCode = file_get_contents($qrCodeUrl);
 
         // Calculate the width of the QR code image
@@ -274,6 +338,27 @@ class PaymentController extends AbstractController
 
         // Output the PDF as response
         return new Response($pdf->Output('ticket.pdf', 'I'));
+    }
+    
+    #[Route('/test', name: 'test')]
+    public function Test(MailerInterface $mailer)
+    {
+        $to = 'aminemehdi999@gmail.com';
+        $subject = 'Test Email';
+        $template = 'payment/payment_email.html.twig';
+        $context = ['amount' => '10.00', 'currency' => 'USD'];
+    
+        $body = $this->renderView($template, $context);
+    
+        $email = (new Email())
+            ->from('aminenoob614@gmail.com')
+            ->to($to)
+            ->subject($subject)
+            ->html($body);
+    
+        $mailer->send($email);
+    
+        return $this->render('payment/test.html.twig');
     }
     
 
