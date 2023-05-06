@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Bid
@@ -19,6 +20,7 @@ class Bid
      * @ORM\Column(name="ID", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups("Bid")
      */
     private $id;
 
@@ -26,6 +28,8 @@ class Bid
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
+     * @Groups("Bid")
+     * 
      */
     private $date;
 
@@ -33,6 +37,8 @@ class Bid
      * @var int
      *
      * @ORM\Column(name="offer", type="integer", nullable=false)
+     * @Groups("Bid")
+     * 
      */
     private $offer;
 
@@ -43,6 +49,9 @@ class Bid
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_auction", referencedColumnName="id_auction")
      * })
+     * 
+     * @Groups("Bid")
+     * 
      */
     private $id_auction;
 
@@ -50,6 +59,9 @@ class Bid
      * @var int
      *
      * @ORM\Column(name="id_user", type="integer", nullable=false)
+     * 
+     * @Groups("Bid")
+     * 
      */
     private $idUser;
 
@@ -105,6 +117,4 @@ class Bid
 
         return $this;
     }
-
-
 }

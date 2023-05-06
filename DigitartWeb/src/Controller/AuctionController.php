@@ -16,7 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\BidRepository;
 use App\Repository\ImageArtworkRepository;
 use App\Repository\UsersRepository;
+use LDAP\Result;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 #[Route('/auction')]
 class AuctionController extends AbstractController
@@ -45,7 +47,7 @@ class AuctionController extends AbstractController
                 $array[$auc->getIdAuction()] = $highestBid->getOffer();
             else $array[$auc->getIdAuction()] = null;
         }
-            
+
         return $this->render('auction/displayAll.html.twig', [
             'auctions' => $auction,
             'highestBids' => $array,
@@ -53,7 +55,7 @@ class AuctionController extends AbstractController
             'imageArtwork' => $images,
         ]);
     }
-    
+
     #[Route('/showww', name: 'show_updatee', methods: ['GET', 'POST'])]
     public function auctionfrontJSON(AuctionRepository $auctionRepository, BidRepository $BidRepository, ImageArtworkRepository $ImageartworkRepository, Request $request)
     {
@@ -80,8 +82,8 @@ class AuctionController extends AbstractController
             else $array[$auc->getIdAuction()] = null;
         }
 
-        if (count($auction)> 0) {
-            $html = $this->renderView('auction/displayFRONT.html.twig',[
+        if (count($auction) > 0) {
+            $html = $this->renderView('auction/displayFRONT.html.twig', [
                 'auctions' => $auction,
                 'highestBids' => $array,
                 'pageParam' => $page,
@@ -90,7 +92,7 @@ class AuctionController extends AbstractController
         } else {
             $html = '<p>No auctions found.</p>';
         }
-        
+
         // Return the values in JSON format
         return new JsonResponse([
             'html' => $html
@@ -384,36 +386,67 @@ class AuctionController extends AbstractController
     }
 
 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //  Mobile
+    /////////////////////////////////////////////////////////////////////////////////////////
+    #[Route('/mobile/Display', name: 'Display_MOBILE')]
+    public function DisplayMOBILE(AuctionRepository $auctionRepository, NormalizerInterface $normalizer)
+    {
+        $auctions = $auctionRepository->findAll();
+        $studentNormalize = $normalizer->normalize($auctions, 'json', ['groups' => "Auction"]);
+        $json = json_encode($studentNormalize);
 
+        return new Response($json);
+    }
 
-    #[Route('/showfront', name: 'showfrontpage')]
-    public function display_front(): Response
+    #[Route('/mobile/add', name: 'create_MOBILE')]
+    public function addMOBILE(Request $req, AuctionRepository $auctionRepository, ArtworkRepository $ArtworkRepository)
     {
-        return $this->render('base.html.twig', []);
+        $entityManager = $this->getDoctrine()->getManager();
+        $auction = new Auction();
+        $auction->setStartingPrice($req->get('StartingPrice'));
+        $auction->setDescription($req->get('Description'));
+        $auction->setEndingDate($req->get('EndingDate'));
+        $auction->setIncrement($req->get('Increment'));
+        $artwork = $ArtworkRepository->find($req->get('Artwork'));
+        $auction->setartwork($artwork);
+
+        // Persist the Auction object
+        $entityManager->persist($auction);
+
+        // Flush changes to the database
+        $entityManager->flush();
     }
-    #[Route('/showdigit', name: 'showdigit')]
-    public function display_digit(): Response
+
+    #[Route('/mobile/{id}/edit', name: 'edit_mobile')]
+    public function editMOBILE(Request $req,  AuctionRepository $auctionRepository, ArtworkRepository $artworkRepository, $id)
     {
-        return $this->render('base.html.twig', []);
+        $auction = $auctionRepository->find($id);
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $auction->setStartingPrice($req->get('StartingPrice'));
+        $auction->setDescription($req->get('Description'));
+        $auction->setEndingDate($req->get('EndingDate'));
+        $auction->setIncrement($req->get('Increment'));
+        $artwork = $artworkRepository->find($req->get('Artwork'));
+        $auction->setArtwork($artwork);
+
+        // Flush changes to the database
+        $entityManager->flush();
     }
-    #[Route('/showback/back', name: 'showbackpage')]
-    public function display_back(): Response
+
+    #[Route('/mobile/{id}/delete', name: 'delete_auction')]
+    public function deleteMOBILE(AuctionRepository $auctionRepository, int $id): Response
     {
-        return $this->render('back.html.twig', []);
+        // Find the Auction object by ID
+        $auction = $auctionRepository->find($id);
+
+        // Remove the Auction object
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($auction);
+        $entityManager->flush();
+        return new Response('Auction deleted successfully');
     }
-    #[Route('/showlogin', name: 'showloginpage')]
-    public function display_login(): Response
-    {
-        return $this->render('users/login.html.twig', []);
-    }
-    #[Route('/showregister', name: 'showregister')]
-    public function display_register(): Response
-    {
-        return $this->render('users/register.html.twig', []);
-    }
-    #[Route('/showteam', name: 'showteam')]
-    public function display_team(): Response
-    {
-        return $this->render('team.html.twig', []);
-    }
+
+    
 }

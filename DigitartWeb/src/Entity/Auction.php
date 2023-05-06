@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use PhpParser\Node\Name;
 use Gedmo\Mapping\Annotation as Gedmo; // gedmo annotations
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Auction
@@ -24,6 +25,7 @@ class Auction
      * @ORM\Column(name="id_auction", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups("Auction")
      */
     private $id_auction;
 
@@ -31,6 +33,7 @@ class Auction
      * @var int
      *
      * @ORM\Column(name="starting_price", type="integer", nullable=false)
+     * @Groups("Auction")
      */
     private $startingPrice;
 
@@ -38,6 +41,7 @@ class Auction
      * @var int
      *
      * @ORM\Column(name="increment", type="integer", nullable=false, options={"default"="10"})
+     * @Groups("Auction")
      */
     private $increment = 10;
 
@@ -46,6 +50,7 @@ class Auction
      *
      * @ORM\Column(name="ending_date", type="date", nullable=false)
      * @Assert\GreaterThan("today", message="The ending date must be greater than or equal to tomorrow.")
+     * @Groups("Auction")
      */
     private $endingDate;
 
@@ -54,6 +59,7 @@ class Auction
      *
      * @ORM\Column(name="description", type="text", length=65535, nullable=false)
      * @Assert\Length(min=10, minMessage="The description must exceed 10 characters long.")
+     * @Groups("Auction")
      */
     private $description;
 
@@ -61,23 +67,30 @@ class Auction
      * @var string|null
      *
      * @ORM\Column(name="state", type="string", length=10, nullable=true)
+     * @Groups("Auction")
      */
-    private $state = null ;
+    private $state = null;
 
     /**
      * @ORM\Column(name="added", type="datetime", nullable=false)
      * @Gedmo\Timestampable(on="create")
+     * 
+     * 
+     * @Groups("Auction")
      */
     private $added;
 
     /**
      * @ORM\Column(name="updated", type="datetime", nullable=false)
      * @Gedmo\Timestampable(on="update")
+     * 
+     * @Groups("Auction")
      */
     private $updated;
 
     /**
      * @ORM\Column(name="deleted", type="datetime", nullable=true)
+     * @Groups("Auction")
      */
     private $deleted = null;
 
@@ -88,6 +101,8 @@ class Auction
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_artwork", referencedColumnName="id_art")
      * })
+     * 
+     * @Groups("Auction")
      */
     private $artwork;
 
