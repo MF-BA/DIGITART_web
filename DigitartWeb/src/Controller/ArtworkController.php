@@ -76,7 +76,7 @@ class ArtworkController extends AbstractController
     }
    
 
-    #[Route('/artwork/new', name: 'app_artwork_new', methods: ['GET', 'POST'])]
+    #[Route('/artwork/new/back', name: 'app_artwork_new', methods: ['GET', 'POST'])]
     public function new(Request $request, ArtworkRepository $artworkRepository): Response
     {
         $artwork = new Artwork();
@@ -219,7 +219,7 @@ class ArtworkController extends AbstractController
         ]);
     }
 
-    #[Route('/artwork/{idArt}', name: 'app_artwork_show', methods: ['GET'])]
+    #[Route('/artwork/{idArt}/back', name: 'app_artwork_show', methods: ['GET'])]
     public function show(Artwork $artwork,RoomRepository $roomRepository,ImageArtworkRepository $ImageartworkRepository): Response
     {
         $roomNames = [];
@@ -263,7 +263,7 @@ class ArtworkController extends AbstractController
         ]);
     }
 
-    #[Route('/artwork/{idArt}/edit', name: 'app_artwork_edit', methods: ['GET', 'POST'])]
+    #[Route('/artwork/{idArt}/edit/back', name: 'app_artwork_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Artwork $artwork, ArtworkRepository $artworkRepository,ImageArtworkRepository $ImageartworkRepository): Response
     {
         $form = $this->createForm(ArtworkType::class, $artwork);
@@ -307,7 +307,7 @@ class ArtworkController extends AbstractController
         ]);
     }
 
-    #[Route('/artwork/{idArt}', name: 'app_artwork_delete', methods: ['POST'])]
+    #[Route('/artwork/{idArt}/back', name: 'app_artwork_delete', methods: ['POST'])]
     public function delete(Request $request, Artwork $artwork, ArtworkRepository $artworkRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$artwork->getIdArt(), $request->request->get('_token'))) {

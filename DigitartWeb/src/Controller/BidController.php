@@ -18,7 +18,7 @@ use Knp\Snappy\Pdf;
 #[Route('/bid')]
 class BidController extends AbstractController
 {
-    #[Route('/{id_auction}', name: 'app_bid_index', methods: ['GET'])]
+    #[Route('/{id_auction}/back', name: 'app_bid_index', methods: ['GET'])]
     public function showBidsAuction(UsersRepository $usersrepo, BidRepository $bidRepository, Auction $auction): Response
     {
         $highestBid = $bidRepository->highestBid($auction->getIdAuction());
@@ -52,7 +52,7 @@ class BidController extends AbstractController
     }
 
 
-    #[Route('/new', name: 'app_bid_new', methods: ['GET', 'POST'])]
+    #[Route('/new/back', name: 'app_bid_new', methods: ['GET', 'POST'])]
     public function new(Request $request, BidRepository $bidRepository): Response
     {
         $bid = new Bid();
@@ -69,7 +69,7 @@ class BidController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_bid_show', methods: ['GET'])]
+    #[Route('/{id}/back', name: 'app_bid_show', methods: ['GET'])]
     public function show(Bid $bid): Response
     {
         return $this->render('bid/show.html.twig', [
@@ -77,7 +77,7 @@ class BidController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_bid_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit/back', name: 'app_bid_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Bid $bid, BidRepository $bidRepository): Response
     {
         $form = $this->createForm(BidType::class, $bid);
@@ -95,7 +95,7 @@ class BidController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_bid_delete', methods: ['POST'])]
+    #[Route('/{id}/back', name: 'app_bid_delete', methods: ['POST'])]
     public function delete(Request $request, Bid $bid, BidRepository $bidRepository): Response
     {
         if ($this->isCsrfTokenValid('delete' . $bid->getId(), $request->request->get('_token'))) {
@@ -105,7 +105,7 @@ class BidController extends AbstractController
         return $this->redirectToRoute('app_bid_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/pdf/{id_auction}', name: 'PDF', methods: ['GET', 'POST'])]
+    #[Route('/pdf/{id_auction}/back', name: 'PDF', methods: ['GET', 'POST'])]
     public function GeneratePDF(UsersRepository $usersrepo, BidRepository $bidRepository, Auction $auction, Pdf $knpSnappyPdf)
     {
         // Retrieve data for the PDF

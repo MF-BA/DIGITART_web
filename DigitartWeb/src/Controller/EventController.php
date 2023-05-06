@@ -127,7 +127,7 @@ class EventController extends AbstractController
     }
     
 
-    #[Route('/new', name: 'app_event_new', methods: ['GET', 'POST'])]
+    #[Route('/new/back', name: 'app_event_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EventRepository $eventRepository): Response
     {
         $event = new Event();

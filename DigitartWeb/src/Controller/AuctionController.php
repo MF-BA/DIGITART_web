@@ -100,7 +100,7 @@ class AuctionController extends AbstractController
 
 
 
-    #[Route('/new', name: 'app_auction_new', methods: ['GET', 'POST'])]
+    #[Route('/new/back', name: 'app_auction_new', methods: ['GET', 'POST'])]
     public function new(Request $request, AuctionRepository $auctionRepository): Response
     {
         $auction = new Auction();
@@ -184,7 +184,7 @@ class AuctionController extends AbstractController
     }
 
 
-    #[Route('/edit/{id_auction}', name: 'app_auction_edit', methods: ['GET', 'POST'])]
+    #[Route('/edit/{id_auction}/back', name: 'app_auction_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Auction $auction, AuctionRepository $auctionRepository, ImageArtworkRepository $ImageartworkRepository): Response
     {
         $form = $this->createForm(Auction1Type::class, $auction);
@@ -207,7 +207,7 @@ class AuctionController extends AbstractController
         ]);
     }
 
-    #[Route('/delete/{id_auction}', name: 'app_auction_delete', methods: ['POST'])]
+    #[Route('/delete/{id_auction}/back', name: 'app_auction_delete', methods: ['POST'])]
     public function delete(Request $request, Auction $auction, AuctionRepository $auctionRepository): Response
     {
         if ($this->isCsrfTokenValid('delete' . $auction->getIdAuction(), $request->request->get('_token'))) {
@@ -217,7 +217,7 @@ class AuctionController extends AbstractController
         return $this->redirectToRoute('displayAUCTION', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/statistics', name: 'statistics_back')]
+    #[Route('/statistics/back', name: 'statistics_back')]
     public function statistics_back(AuctionRepository $auctionRepository, BidRepository $BidRepository, ArtworkRepository $artworkrepo, Request $request): Response
     {
         $data1 = [];
@@ -274,7 +274,7 @@ class AuctionController extends AbstractController
         return $this->render('auction/statistics.html.twig', ['data' => $data, 'highestBids' => $highestBids]);
     }
 
-    #[Route('/admin', name: 'DisplayAuctionBack', methods: ['GET'])]
+    #[Route('/admin/back', name: 'DisplayAuctionBack', methods: ['GET'])]
     public function indexBACK(AuctionRepository $auctionRepository, BidRepository $BidRepository, ArtworkRepository $artworkrepo, Request $request): Response
     {
         $page = $request->query->getInt('page', 1);
@@ -357,7 +357,7 @@ class AuctionController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/add', name: 'adminAddAUCTION',  methods: ['GET', 'POST'])]
+    #[Route('/admin/add/back', name: 'adminAddAUCTION',  methods: ['GET', 'POST'])]
     public function addauctionBACK(Request $request, AuctionRepository $auctionRepository): Response
     {
         $auction = new Auction();
@@ -396,7 +396,7 @@ class AuctionController extends AbstractController
     {
         return $this->render('base.html.twig', []);
     }
-    #[Route('/showback', name: 'showbackpage')]
+    #[Route('/showback/back', name: 'showbackpage')]
     public function display_back(): Response
     {
         return $this->render('back.html.twig', []);
