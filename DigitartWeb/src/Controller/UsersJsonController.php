@@ -20,6 +20,8 @@ use libphonenumber\PhoneNumberUtil;
 use libphonenumber\NumberParseException;
 use League\OAuth2\Client\Provider\Facebook;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class UsersJsonController extends AbstractController
 {
@@ -92,7 +94,61 @@ class UsersJsonController extends AbstractController
      $jsoncontent = $normalizer->normalize($user, 'json', ['groups' => "users"]);
         return new Response("User updated successfully" . json_encode($jsoncontent));
     }
+    #[Route('user/edituser', name: 'editUser')]
+    public function edituser(Request $req,UserPasswordHasherInterface $userPasswordHasher): Response
+    {
+        $id = $req->get('id');
+        $cin = $req->query->get('cin');
+       $firstname = $req->query->get('firstname');
+       $lastname = $req->query->get('lastname');
+       $email = $req->query->get('email');
+       $password = $req->query->get('password');
+        $em= $this->getDoctrine()->getManager();
+        $user = $em->getRepository(Users::class)->find($id);
+        $mail_exist = $em->getRepository(Users::class)->findOneByEmail($email);
 
+        if ($mail_exist)
+        {
+            return new JsonResponse("Email already used! ");
+        }
+        else
+        {
+
+        
+        if($req->files->get('image')!=null)
+        {
+            $file = $req->files->get('image');
+            $filename = $file->getClientOriginalName();
+
+            $file->move(
+                $filename
+            );
+            $user->setImage($filename);
+        }
+        $user->setCin($cin );
+        $user->setFirstname($firstname);
+        $user->setLastname($lastname);
+        $user->setEmail($email);
+        $user->setPassword(
+            $userPasswordHasher->hashPassword(
+                $user,
+                $password
+            )
+        );
+        $user->setIsVerified(true); //par defaut lezem ykoun enabled
+
+   try{
+   $em = $this->getDoctrine()->getManager();
+   $em->persist($user);
+   $em->flush();
+
+   return new JsonResponse("success",200); //200 ya3ni http result mt3 serveur OK 
+   }catch(\Exception $ex){
+   return new Response("Failed".$ex->getMessage());
+   }
+       
+}
+    }
     #[Route('deleteUserJSON/{id}', name: 'deleteUserJSON')]
     public function deleteUserJSON(Request $req, $id, NormalizerInterface $normalizer): Response
     {
@@ -104,6 +160,75 @@ class UsersJsonController extends AbstractController
 
      $jsoncontent = $normalizer->normalize($user, 'json', ['groups' => "users"]);
         return new Response("User deleted successfully " . json_encode($jsoncontent));
+    }
+    #[Route('user/signup', name: 'app_user_signup')]
+    public function signupAction(Request $req,UserPasswordHasherInterface $userPasswordHasher): Response
+    {
+
+       $cin = $req->query->get('cin');
+       $firstname = $req->query->get('firstname');
+       $lastname = $req->query->get('lastname');
+       $email = $req->query->get('email');
+       $password = $req->query->get('password');
+
+       if(!filter_var($email, FILTER_VALIDATE_EMAIL))
+       {
+        return new Response("email invalid!");
+       }
+       
+        $user = new Users();
+        $user->setCin($cin );
+        $user->setFirstname($firstname);
+        $user->setLastname($lastname);
+        $user->setEmail($email);
+        $user->setPassword(
+            $userPasswordHasher->hashPassword(
+                $user,
+                $password
+            )
+        );
+        //$user->setBirthDate(new \DateTime($birthdate));
+        try{
+           $em= $this->getDoctrine()->getManager();
+           $em->persist($user);
+           $em->flush();
+
+           return new JsonResponse("Account is created",200);
+        }catch (\Exception $ex)
+        {
+            return new Response("exception ".$ex->getMessage());
+        }
+
+    
+    }
+    #[Route('user/signin', name: 'app_user_signin')]
+    public function signinAction(Request $req,UserPasswordHasherInterface $userPasswordHasher): Response
+    {
+
+       
+       $email = $req->query->get('email');
+       $password = $req->query->get('password');
+
+       $em = $this->getDoctrine()->getManager();
+       $user = $em->getRepository(Users::class)->findOneBy(['email'=>$email]);
+       if($user)
+       {
+        if(password_verify($password,$user->getPassword()))
+        {
+            $serializer = new Serializer([new ObjectNormalizer()]);
+            $formatted = $serializer->normalize($user);
+            return new JsonResponse($formatted);
+        }
+        else
+        {
+            return new Response('password not found');
+        }
+       }
+       else
+       {
+        return new Response('user not found');
+       }
+ 
     }
     
 }

@@ -270,12 +270,12 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
     }
     public function getauthCode(): ?string
     {
-        return $this->resetToken;
+        return $this->authCode;
     }
 
-    public function setauthCode(?string $resetToken): self
+    public function setauthCode(?string $authCode): self
     {
-        $this->resetToken = $resetToken;
+        $this->authCode = $authCode;
 
         return $this;
     }
