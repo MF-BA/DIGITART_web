@@ -24,7 +24,6 @@ class CommentsType extends AbstractType
             ->add('parentid', HiddenType::class, [
                 'mapped' => false
             ])
-            ->add('envoyer', SubmitType::class)
         ;
     }
 

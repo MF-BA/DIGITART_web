@@ -1,0 +1,540 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+        <style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .hero .info .btn-get-started {
+    font-family: var(--font-primary) !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    letter-spacing: 1px !important;
+    display: inline-block !important;
+    padding: 12px 40px !important; 
+    border-radius: 50px !important;
+    transition: 0.5s !important;
+    margin: 10px !important;
+    color: #fff !important;
+    border: 2px solid var(--color-primary) !important;
+}
+   
+.circle {
+			width: 70px !important;
+			height: 70px !important;
+			border-radius: 50%;
+      background-color: #BD2A2E !important;
+			position: relative !important;
+      top: 30px !important;
+      left: 100px !important;
+      border: 2px solid var(#BD2A2E);
+			color: #fff;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			transform: translateY(-50%);
+		}
+
+		.circle-name {
+			font-size: 10px;
+			position: relative !important;
+      top: 2px !important;
+      left: 1px !important;
+		}
+    .user-name {
+      font-size: 20px;
+      color: #BD2A2E;
+			position: relative !important;
+      top: 10% !important;
+      left: 25% !important;
+    }
+		.options {
+			position: fixed;
+			top: 155px !important;
+			right: 25px !important;
+			transform: translateY(-50%);
+			background-color: #000000;
+      border-radius: 10% !important;
+			box-shadow: 0 4px 6px rgba(0,0,0,.1);
+			padding: 10px;
+			display: none;
+		}
+
+				.circle {
+					width: 70px !important;
+					height: 70px !important;
+					border-radius: 50%;
+					background-color: #BD2A2E !important;
+					position: relative !important;
+					top: 30px !important;
+					left: 250px !important;
+					border: 2px solid var(#BD2A2E);
+					color: #fff;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					cursor: pointer;
+					transform: translateY(-50%);
+				}
+
+		.option:hover {
+			color: #BD2A2E;
+		}
+
+		.options {
+			position: fixed;
+			top: 155px !important;
+			right: 25px !important;
+			transform: translateY(-50%);
+			background-color: #000000;
+      border-radius: 10% !important;
+			box-shadow: 0 4px 6px rgba(0,0,0,.1);
+			padding: 10px;
+			display: none;
+		}
+
+		.option {
+			margin-bottom: 10px;
+			cursor: pointer;
+		}
+
+		.option:hover {
+			color: #BD2A2E;
+		}
+    .card-item {
+  border: 1px solid rgba(82, 86, 94, 0.2);
+  background: #bebebe;
+  width: 1500px !important;
+	height: 1200px !important;
+  position: relative;
+  right: 70px !important;
+  border-radius: 0;
+}
+.color-text-table{
+  color: #333333;
+}
+body{
+    background: -webkit-linear-gradient(left, #3931af, #00c6ff);
+}
+.emp-profile{
+    padding: 3%;
+    margin-top: 3%;
+    margin-bottom: 3%;
+    border-radius: 0.5rem;
+    background: #dfdfdf;
+}
+.profile-img{
+    text-align: center;
+}
+.profile-img img{
+    width: 50%;
+    height: 50%;
+}
+.profile-img .file {
+    position: relative;
+    bottom: 120px;
+    right: 0.5px;
+    overflow: hidden;
+    margin-top: 20%;
+    width: 50%;
+    border: none;
+    border-radius: 0;
+    font-size: 15px;
+    background: #212529b8;
+}
+.profile-img .file input {
+    position: absolute;
+    opacity: 0;
+    right: 0;
+    top: 0;
+}
+.profile-head h5{
+    color: #333;
+}
+.profile-head h6{
+    color: #BD2A2E;
+}
+.profile-edit-btn{
+    border: none;
+    background:#BD2A2E;
+    border-radius: 1.5rem;
+    width: 90%;
+    padding: 2%;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+}
+.profile-edit-btn:hover{
+  background: #333333;
+    
+}
+.proile-rating{
+    font-size: 12px;
+    color: #818182;
+    margin-top: 5%;
+}
+.proile-rating span{
+    color: #495057;
+    font-size: 15px;
+    font-weight: 600;
+}
+.profile-head .nav-tabs{
+    margin-bottom:5%;
+}
+.profile-head .nav-tabs .nav-link{
+    font-weight:600;
+    border: none;
+    color: #BD2A2E;
+}
+.profile-head .nav-tabs .nav-link.active{
+    border: none;
+    border-bottom:2px solid #BD2A2E;
+}
+.profile-work{
+    padding: 14%;
+    margin-top: -15%;
+    position: relative;
+    left: 50px;
+    bottom: 50px;
+}
+.profile-work p{
+    font-size: 12px;
+    color: #818182;
+    font-weight: 600;
+    margin-top: 10%;
+}
+.profile-work a{
+    text-decoration: none;
+    color: #495057;
+    font-weight: 600;
+    font-size: 14px;
+}
+.profile-work a:hover{
+    color: #BD2A2E;
+}
+.profile-work ul{
+    list-style: none;
+}
+.profile-tab label{
+    font-weight: 600;
+}
+.profile-tab p{
+    font-weight: 600;
+    color: #BD2A2E;
+}
+.profile-tab {
+  position: relative;
+  bottom: 200px;
+}
+.fieldset {
+			border: none;
+      width: 1500px !important;
+	height: 800px !important;
+		}
+
+		.hide {
+			display: none;
+		}
+    .popup-profimg {
+	width: 1200px !important;
+	height: 600px !important;
+	background: #fff;
+  position: relative;
+  top: -200px;
+  left: 650px;
+  transform: translate(-50%,-50%) scale(0.1);
+  visibility: hidden;
+  transition: transform 0.4s, top 0.4s;
+	padding: 30px;
+	border-radius: 30px;
+  border : 2px solid #BD2A2E;
+}
+.popup-profimg h3{
+	color: #BD2A2E;
+}
+.popup-profimg p{
+	color: #333333;
+}
+.icon {
+	font-size: 100px;
+}
+.bx {
+    font-family: boxicons!important;
+    font-weight: 400;
+    font-style: normal;
+    font-variant: normal;
+    color: firebrick;
+    line-height: 1;
+    text-rendering: auto;
+    display: inline-block;
+    text-transform: none;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+ .open-popup-profimg{
+visibility: visible;
+position:relative;
+right:500px;
+bottom: 100px;
+transform: translate(-50%,-50%) scale(1);
+}
+.close-icon {
+  position: relative;
+  bottom: 530px;
+  left: 1120px;
+  background: transparent;
+  color : #BD2A2E;
+  border-radius: 250px;
+  border: 2px solid #BD2A2E;
+}
+.circle-image-container {
+  width: 60px; /* set the width and height to the desired size */
+  height: 60px;
+  border-radius: 50%; /* make the container round */
+  overflow: hidden; /* hide any parts of the image that exceed the container's boundaries */
+  background-size: cover; /* scale the image to cover the container while maintaining its aspect ratio */
+  background-position: center center; /* center the image horizontally and vertically within the container */
+}
+.image-container {
+  width: 120%;
+  height: 500px; /* Set the height to whatever you want */
+  overflow: auto; /* This will make the container scrollable */
+   display: flex; /* Set the display property to flex */
+  flex-wrap: wrap; /* Wrap the images to the next row if they exceed the container width */
+  position: relative; 
+  right: 150px;
+}
+
+.image-container img {
+  width: calc(120% / 2 );
+  height: auto;
+  display: block;
+  margin: 5px; /* Add some margin between the images */
+}
+/* Hide the default file input button */
+#image-upload-input {
+  display: none;
+}
+
+/* Style the custom file input button */
+.file-input-button {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #BD2A2E;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Style the file input button label */
+.file-input-label {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Style the file input button hover state */
+.file-input-button:hover {
+  background-color: #333333;
+}
+.position-btn-save{
+  position: relative;
+  top: 370px;
+}
+.profile-edit-btn-pos{
+border: none;
+    background:#BD2A2E;
+    border-radius: 1.5rem;
+   position: relative;
+    right: 223px;
+    width: 90%;
+    padding: 2%;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+}
+.profile-edit-btn-pos:hover{
+  background: #333333;
+   
+}
+.return-edit-btn {
+    border: none;
+    background:#BD2A2E;
+    position: relative;
+    left: 286px;
+    border-radius: 1.5rem;
+    width: 90%;
+    padding: 2%;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+}
+.return-edit-btn:hover{
+  background: #333333;
+   
+}
+.center-form {
+  position: relative;
+  left: 200px;
+}
+</style>
+
+		
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+	<script>
+		function toggleOptions() {
+			var options = document.getElementById('options');
+			if (options.style.display === 'none') {
+				options.style.display = 'block';
+			} else {
+				options.style.display = 'none';
+			}
+		}
+	</script>
+           <link href="{{asset('Front/assets/img/logo-digitart-rouge.png')}}" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+ 
+  
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<link rel="stylesheet" href="style.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{{asset('Front/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/aos/aos.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/glightbox/css/glightbox.min.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/swiper/swiper-bundle.min.css')}}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{{asset('Front/assets/css/main.css')}}" rel="stylesheet">
+        {% endblock %}
+        
+
+
+{% block body %}
+<div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/footer.jpg')}});">
+      <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
+
+        <h2>Our Team</h2>
+        <ol>
+          <li><a href="{{ path('showfrontpage') }}">Home</a></li>
+
+        </ol>
+
+      </div>
+    </div><!-- End Breadcrumbs -->
+
+<!-- ======= Our Team Section ======= -->
+    <section id="team" class="team">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-header">
+          <h2>Primes</h2>
+          <p>Prime Developers is a team of students who have created a state-of-the-art museum management application. Their application, DigitArt, provides comprehensive solutions for museum operations, including artifact management, visitor tracking, and exhibition planning.
+          The creation of DigitArt was a part of the Pidev project during the semester</p>
+        </div>
+
+        <div class="row gy-5">
+
+          <div class="col-lg-4 col-md-6 member" data-aos="fade-up" data-aos-delay="100">
+            <div class="member-img">
+              <img src="{{ asset('Front/assets/img/team/tlili.jpeg') }}" class="img-fluid" alt="">
+              <div class="social">
+                <a href="https://twitter.com/TliliFb"><i class="bi bi-twitter"></i></a>
+                <a href="https://www.facebook.com/amine.tlili.19/"><i class="bi bi-facebook"></i></a>
+                <a href="https://www.instagram.com/amine_tlili19/"><i class="bi bi-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/mohamedaminetlili/"><i class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+            <div class="member-info text-center">
+              <h4>Mohamed Amine Tlili</h4>
+              
+            </div>
+          </div><!-- End Team Member -->
+
+          <div class="col-lg-4 col-md-6 member" data-aos="fade-up" data-aos-delay="200">
+            <div class="member-img">
+              <img src="{{ asset('Front/assets/img/team/Aziz.jpg') }}" class="img-fluid" alt="">
+              <div class="social">
+                <a href="#"><i class="bi bi-twitter"></i></a>
+                <a href="https://www.facebook.com/MedAziz.lk.7/"><i class="bi bi-facebook"></i></a>
+                <a href="https://www.instagram.com/louukiil33/"><i class="bi bi-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/mohamed-aziz-loukil/"><i class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+            <div class="member-info text-center">
+              <h4>Mohamed Aziz Loukil</h4>
+              
+            </div>
+          </div><!-- End Team Member -->
+
+          <div class="col-lg-4 col-md-6 member" data-aos="fade-up" data-aos-delay="300">
+            <div class="member-img">
+              <img src="{{ asset('Front/assets/img/team/koussay.jpg') }}" class="img-fluid" alt="">
+              <div class="social">
+                <a href="https://twitter.com/mohamed_laatar"><i class="bi bi-twitter"></i></a>
+                <a href="https://www.facebook.com/mohamed.laatar/"><i class="bi bi-facebook"></i></a>
+                <a href="https://www.instagram.com/mohamedlaatar/?hl=fr"><i class="bi bi-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/mohamed-laatar-a28378241"><i class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+            <div class="member-info text-center">
+              <h4>Koussay Bedhief</h4>
+             
+            </div>
+          </div><!-- End Team Member -->
+
+         
+          <div class="col-lg-4 col-md-6 member" data-aos="fade-up" data-aos-delay="400">
+            <div class="member-img">
+              <img src="{{ asset('Front/assets/img/team/fedi.jpg') }}" class="img-fluid" alt="">
+              <div class="social">
+                <a href="#"><i class="bi bi-twitter"></i></a>
+                <a href="#"><i class="bi bi-facebook"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+                <a href="#"><i class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+            <div class="member-info text-center">
+              <h4>Mohamed Fedi Ben Aoun</h4>
+              
+            </div>
+          </div><!-- End Team Member -->
+
+          <div class="col-lg-4 col-md-6 member" data-aos="fade-up" data-aos-delay="500">
+            <div class="member-img">
+              <img src="{{ asset('Front/assets/img/team/laatar.jpg') }}" class="img-fluid" alt="">
+              <div class="social">
+                <a href="#"><i class="bi bi-twitter"></i></a>
+                <a href="#"><i class="bi bi-facebook"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+                <a href="#"><i class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+            <div class="member-info text-center">
+              <h4>Mohamed Laatar</h4>
+              
+            </div>
+          </div><!-- End Team Member -->
+ 
+          
+
+        </div>
+
+      </div>
+    </section><!-- End Our Team Section -->
+
+{% endblock %}

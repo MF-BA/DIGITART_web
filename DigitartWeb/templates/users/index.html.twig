@@ -3,28 +3,64 @@
 {% block title %}List of users{% endblock %}
 
 {% block body %}
-    <h1>List of users</h1>
 
+<style>
+.outer-wrapper {
+  padding: 10px;
+  background-color: #f8f8f8;
+  width: 1200px;
+  position: relative;
+  left: 30px;
+  
+}
 
- <div class="col-md-9">
-                        
+.table-wrapper {
+  overflow-x: auto;
+  position: relative;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  height: 450px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.table-wrapper table {
+  border-collapse: collapse;
+  width: 50%;
+  text-align: center;
+}
+
+.table-wrapper th,
+.table-wrapper td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.table-wrapper th {
+  background-color: #BD2A2E;
+  font-weight: bold;
+  
+}
+.center-table {
+  margin: 0 auto;
+}
+</style>
+   
+   <strong><div class="text-center"> <h1>List of users</h1> </div></strong>
+
+{{ form(form) }}
+</br>
+</br>
+
+<div class="center-table"> 
+      <div class="outer-wrapper">    
+    <div class="table-wrapper">
     
-    
-     <div class="dataTables_filter">
-     <label>Search:
-        <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="users-table" id="search-input">
-     </label>
-     </div>
-                           
-                
-                          
-      <div class="outer-wrapper table-responsive">    
-    <div class="table-wrapper"> 
-       
-    <table id="users-table" class="table table-striped table-hover">
+   <table id="bootstrap-data-table-export center-table" class="table table-striped table-bordered">
         <thead class="thead-digitartcolor">
             <tr>
-                
+                <th>Profile Image</th>
                 <th>Cin</th>
                 <th>Firstname</th>
                 <th>Lastname</th>
@@ -35,68 +71,104 @@
                 <th>Gender</th>
                 <th>Role</th>
                 <th>Status</th>
+                <th>Created At</th>
+                <th>Updated At</th>
                 <th>actions</th>
             </tr>
         </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.cin }}</td>
-                <td>{{ user.firstname }}</td>
-                <td>{{ user.lastname }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.address }}</td>
-                <td>{{ user.phoneNum }}</td>
-                <td>{{ user.birthDate ? user.birthDate|date('Y-m-d') : '' }}</td>
-                <td>{{ user.gender }}</td>
-                <td>{{ user.role }}</td>
-                <td>{{ user.status }}</td>
-                <td>
-
-                 <div class="d-flex">
-                    <a href="{{ path('app_users_show', {'id': user.id}) }}">
-                    <button type="button" class="btn btn-outline-info mr-2">
-                    <i class="fa fa-question-circle"></i>
-                    </button></a>
-
-                    <a href="{{ path('app_users_edit', {'id': user.id}) }}">
-                    <button type="button" class="btn btn-outline-dark mr-2">
-                    <i class="fa fa-pencil-square"></i>
-                    </button></a>
-
-                    <a href="{{ path('app_users_updatestatus', {'id': user.id, 'newStatus': 'blocked'}) }}">
-               <button type="button" class="btn btn-outline-danger mr-2">
-               <i class="fa fa-lock"></i>
-              </button>
-              </a>
-
-<a href="{{ path('app_users_updatestatus', {'id': user.id, 'newStatus': 'unblocked'}) }}">
-    <button type="button" class="btn btn-outline-success mr-2">
-    <i class="fa  fa-unlock"></i>
-    </button>
-</a>
-
-                  </div>
-
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="15">no records found</td>
-            </tr>
-        {% endfor %}
+        <tbody id="table-body">
+              {% include 'users/tablecontent.html.twig' %}
         </tbody>
+        
     </table>
+    
+    
     </div>
-    
-    
      </div>
- </div>
- 
-       
+     </div>
+    {# {% set queryParams = app.request.query.all %}
+        {% set queryString = queryParams|filter((v, k) => k != "page" and k != "ajax")|url_encode %}
+         <ul class="pagination">
+        <li class="{{ (page == 1) ? 'disabled' : '' }}">
+            <a href="?page=1&{{queryString}}">
+                <i class="fa fa-step-backward"></i>
+            </a>
+        </li>    
+        <li class="{{ (page == 1) ? 'disabled' : '' }}">
+            <a href="{{ (page > 1) ? '?page=' ~ (page - 1) : '' }}&{{queryString}}">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        </li>
+        {% set pages = (total / limit)|round(0, 'ceil') %}
+        {% for item in 1..pages %}
+            <li class="{{ (page == item) ? 'active' : '' }}">
+                <a href="?page={{ item }}&{{queryString}}">{{ item }}</a>
+            </li>
+        {% endfor %}
+        <li class="{{ (page == pages) ? 'disabled' : '' }}">
+            <a href="{{ (page < pages) ? '?page=' ~ (page + 1) : '' }}&{{queryString}}">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+        <li class="{{ (page == pages) ? 'disabled' : '' }}">
+            <a href="?page={{ pages }}&{{queryString}}">
+                <i class="fa fa-step-forward"></i>
+            </a>
+        </li>
 
-             
-              
-    <!-- <a href=" path('app_users_new') }}">Create new</a> --!>
+    </ul> #}
+   <div class="col-sm-12 col-md-7">
+    <div class="dataTables_paginate paging_simple_numbers">
+    {% set queryParams = app.request.query.all %}
+        {% set queryString = queryParams|filter((v, k) => k != "page" and k != "ajax")|url_encode %}
+        <ul class="pagination">
+            <li class="paginate_button page-item {% if page == 1 %}disabled{% endif %}">
+                <a href="?page=1&{{queryString}}" class="page-link">
+                    Previous
+                </a>
+            </li>    
+            <li class="paginate_button page-item {% if page == 1 %}disabled{% endif %}">
+                <a href="{{ (page > 1) ? '?page=' ~ (page - 1) : '' }}&{{queryString}}" class="page-link">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            </li>
+            {% set pages = (total / limit)|round(0, 'ceil') %}
+            {% for item in 1..pages %}
+                <li class="paginate_button page-item {% if page == item %}active{% endif %}">
+                    <a href="?page={{ item }}&{{queryString}}" class="page-link">{{ item }}</a>
+                </li>
+            {% endfor %}
+            <li class="paginate_button page-item {% if page == pages %}disabled{% endif %}">
+                <a href="{{ (page < pages) ? '?page=' ~ (page + 1) : '' }}&{{queryString}}" class="page-link">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+            <li class="paginate_button page-item {% if page == pages %}disabled{% endif %}">
+                <a href="?page={{ pages }}&{{queryString}}" class="page-link">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script type="text/javascript">
+    
+        $(document).ready(function(){
+            $("#search-form input").on("input", function(e) {
+                
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: "{{ path('app_users_index') }}",
+                    data: $("#search-form").serialize(),
+                    success: function(data){
+                        $("#table-body").html(data);
+                    }
+                });
+            });
+        });
+</script>
 
 {% endblock %}

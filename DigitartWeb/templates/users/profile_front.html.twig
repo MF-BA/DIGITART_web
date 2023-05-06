@@ -1,0 +1,818 @@
+{% extends 'base.html.twig' %}
+
+{% block homeActive %}{% endblock %}
+
+
+{% block stylesheets %}
+        <style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .hero .info .btn-get-started {
+    font-family: var(--font-primary) !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    letter-spacing: 1px !important;
+    display: inline-block !important;
+    padding: 12px 40px !important; 
+    border-radius: 50px !important;
+    transition: 0.5s !important;
+    margin: 10px !important;
+    color: #fff !important;
+    border: 2px solid var(--color-primary) !important;
+}
+.circle {
+					width: 70px !important;
+					height: 70px !important;
+					border-radius: 50%;
+					background-color: #BD2A2E !important;
+					position: relative !important;
+					top: 30px !important;
+					left: 250px !important;
+					border: 2px solid var(#BD2A2E);
+					color: #fff;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					cursor: pointer;
+					transform: translateY(-50%);
+				}
+
+
+		.circle-name {
+			font-size: 10px;
+			position: relative !important;
+      top: 2px !important;
+      left: 1px !important;
+		}
+    .user-name {
+      font-size: 20px;
+      color: #BD2A2E;
+			position: relative !important;
+      top: 10% !important;
+      left: 25% !important;
+    }
+		.options {
+			position: fixed;
+			top: 155px !important;
+			right: 25px !important;
+			transform: translateY(-50%);
+			background-color: #000000;
+      border-radius: 10% !important;
+			box-shadow: 0 4px 6px rgba(0,0,0,.1);
+			padding: 10px;
+			display: none;
+		}
+
+		.option {
+			margin-bottom: 10px;
+			cursor: pointer;
+		}
+
+		.option:hover {
+			color: #BD2A2E;
+		}
+    .card-item {
+  border: 1px solid rgba(82, 86, 94, 0.2);
+  background: #bebebe;
+  width: 1500px !important;
+	height: 1200px !important;
+  position: relative;
+  right: 70px !important;
+  border-radius: 0;
+}
+.color-text-table{
+  color: #333333;
+}
+body{
+    background: -webkit-linear-gradient(left, #3931af, #00c6ff);
+}
+.emp-profile{
+    padding: 3%;
+    margin-top: 3%;
+    margin-bottom: 3%;
+    border-radius: 0.5rem;
+    background: #dfdfdf;
+}
+.profile-img{
+    text-align: center;
+}
+.profile-img img{
+    width: 50%;
+    height: 50%;
+}
+.profile-img .file {
+    position: relative;
+    bottom: 120px;
+    right: 0.5px;
+    overflow: hidden;
+    margin-top: 20%;
+    width: 50%;
+    border: none;
+    border-radius: 0;
+    font-size: 15px;
+    background: #212529b8;
+}
+.profile-img .file input {
+    position: absolute;
+    opacity: 0;
+    right: 0;
+    top: 0;
+}
+.profile-head h5{
+    color: #333;
+}
+.profile-head h6{
+    color: #BD2A2E;
+}
+.profile-edit-btn{
+    border: none;
+    background:#BD2A2E;
+    border-radius: 1.5rem;
+    width: 90%;
+    padding: 2%;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+}
+.profile-edit-btn:hover{
+  background: #333333;
+    
+}
+.proile-rating{
+    font-size: 12px;
+    color: #818182;
+    margin-top: 5%;
+}
+.proile-rating span{
+    color: #495057;
+    font-size: 15px;
+    font-weight: 600;
+}
+.profile-head .nav-tabs{
+    margin-bottom:5%;
+}
+.profile-head .nav-tabs .nav-link{
+    font-weight:600;
+    border: none;
+    color: #BD2A2E;
+}
+.profile-head .nav-tabs .nav-link.active{
+    border: none;
+    border-bottom:2px solid #BD2A2E;
+}
+.profile-work{
+    padding: 14%;
+    margin-top: -15%;
+    position: relative;
+    left: 50px;
+    bottom: 50px;
+}
+.profile-work p{
+    font-size: 12px;
+    color: #818182;
+    font-weight: 600;
+    margin-top: 10%;
+}
+.profile-work a{
+    text-decoration: none;
+    color: #495057;
+    font-weight: 600;
+    font-size: 14px;
+}
+.profile-work a:hover{
+    color: #BD2A2E;
+}
+.profile-work ul{
+    list-style: none;
+}
+.profile-tab label{
+    font-weight: 600;
+}
+.profile-tab p{
+    font-weight: 600;
+    color: #BD2A2E;
+}
+.profile-tab {
+  position: relative;
+  bottom: 200px;
+}
+.fieldset {
+			border: none;
+      width: 1500px !important;
+	height: 800px !important;
+		}
+
+		.hide {
+			display: none;
+		}
+    .popup-profimg {
+	width: 1200px !important;
+	height: 600px !important;
+	background: #fff;
+  position: relative;
+  top: -200px;
+  left: 650px;
+  transform: translate(-50%,-50%) scale(0.1);
+  visibility: hidden;
+  transition: transform 0.4s, top 0.4s;
+	padding: 30px;
+	border-radius: 30px;
+  border : 2px solid #BD2A2E;
+}
+.popup-profimg h3{
+	color: #BD2A2E;
+}
+.popup-profimg p{
+	color: #333333;
+}
+.icon {
+	font-size: 100px;
+}
+.bx {
+    font-family: boxicons!important;
+    font-weight: 400;
+    font-style: normal;
+    font-variant: normal;
+    color: firebrick;
+    line-height: 1;
+    text-rendering: auto;
+    display: inline-block;
+    text-transform: none;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+ .open-popup-profimg{
+visibility: visible;
+position:relative;
+right:500px;
+bottom: 100px;
+transform: translate(-50%,-50%) scale(1);
+}
+.close-icon {
+  position: relative;
+  bottom: 530px;
+  left: 1120px;
+  background: transparent;
+  color : #BD2A2E;
+  border-radius: 250px;
+  border: 2px solid #BD2A2E;
+}
+.circle-image-container {
+  width: 60px; /* set the width and height to the desired size */
+  height: 60px;
+  border-radius: 50%; /* make the container round */
+  overflow: hidden; /* hide any parts of the image that exceed the container's boundaries */
+  background-size: cover; /* scale the image to cover the container while maintaining its aspect ratio */
+  background-position: center center; /* center the image horizontally and vertically within the container */
+}
+.image-container {
+  width: 120%;
+  height: 500px; /* Set the height to whatever you want */
+  overflow: auto; /* This will make the container scrollable */
+   display: flex; /* Set the display property to flex */
+  flex-wrap: wrap; /* Wrap the images to the next row if they exceed the container width */
+  position: relative; 
+  right: 150px;
+}
+
+.image-container img {
+  width: calc(120% / 2 );
+  height: auto;
+  display: block;
+  margin: 5px; /* Add some margin between the images */
+}
+/* Hide the default file input button */
+#image-upload-input {
+  display: none;
+}
+
+/* Style the custom file input button */
+.file-input-button {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #BD2A2E;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Style the file input button label */
+.file-input-label {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Style the file input button hover state */
+.file-input-button:hover {
+  background-color: #333333;
+}
+.position-btn-save{
+  position: relative;
+  top: 370px;
+}
+.profile-edit-btn-pos{
+border: none;
+    background:#BD2A2E;
+    border-radius: 1.5rem;
+   position: relative;
+    right: 223px;
+    width: 90%;
+    padding: 2%;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+}
+.profile-edit-btn-pos:hover{
+  background: #333333;
+   
+}
+.return-edit-btn {
+    border: none;
+    background:#BD2A2E;
+    position: relative;
+    left: 286px;
+    border-radius: 1.5rem;
+    width: 90%;
+    padding: 2%;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+}
+.return-edit-btn:hover{
+  background: #333333;
+   
+}
+.center-form {
+  position: relative;
+  left: 200px;
+}
+</style>
+
+		
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+	<script>
+		function toggleOptions() {
+			var options = document.getElementById('options');
+			if (options.style.display === 'none') {
+				options.style.display = 'block';
+			} else {
+				options.style.display = 'none';
+			}
+		}
+	</script>
+           <link href="{{asset('Front/assets/img/logo-digitart-rouge.png')}}" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+ 
+  
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<link rel="stylesheet" href="style.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{{asset('Front/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/aos/aos.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/glightbox/css/glightbox.min.css')}}" rel="stylesheet">
+  <link href="{{asset('Front/assets/vendor/swiper/swiper-bundle.min.css')}}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{{asset('Front/assets/css/main.css')}}" rel="stylesheet">
+        {% endblock %}
+        
+
+  {% block body %}
+       
+<div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/footer.jpg')}});">
+      <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
+
+        <h2>Your Profile</h2>
+        <ol>
+          <li><a href="{{ path('showfrontpage') }}">Home</a></li>
+
+        </ol>
+
+      </div>
+    </div><!-- End Breadcrumbs -->
+    
+
+	
+        	
+   
+
+	
+	
+<!-- ======= Constructions Section ======= -->
+    <section id="constructions" class="constructions">
+      <div class="container" data-aos="fade-up">
+    
+        <div class="section-header">
+          <h2>Personnal Informations</h2>
+          <p>here you can edit your profile</p>
+        </div>
+        
+        <div class="container emp-profile">
+        
+        <fieldset id="step1" class="fieldset">   
+              <div class="row">
+                <div class="col-md-4">
+                        <div class="profile-img">
+                         {% if app.user.image is not null %}
+                            <img src="{{ asset('/uploads/' ~ app.user.image) }}" alt="Image" width="30">
+                          {% else %}
+                        <img class="user-avatar" src="{{ asset('Back/images/icon-profile.png') }}" alt="Image" width="30">
+                         {% endif %}
+                             {#<a href="{{ path('app_user_upload_image', {'id': app.user.id}) }}">#}
+                            <button class="file btn btn-lg btn-danger" onclick="openPopup()">
+                                Change Photo
+                            </button>
+                            
+                        </div>
+                 </div>
+                     <div class="col-md-6">
+                        <div class="profile-head">
+                                    <h5>
+                                      <strong>  {{ app.user.firstname }} {{ app.user.lastname }} </strong>
+                                    </h5>
+                                    <h6>
+                                        {{ app.user.role }}
+                                    </h6>
+                                    <p class="proile-rating">  </br>    <span>    </span></p>
+                        </div>
+                     </div>
+                    <div class="col-md-2">
+                    <a href="">
+                    <button id="edit1" class="profile-edit-btn-pos">Edit Profile</button>
+                     </a>
+                    </div>
+                </div>
+                  <div class="row">
+                   <div class="col-md-4">
+                        <div class="profile-work">
+                            <div class="row">
+                            <div class="col col-md-2">
+                            <i class="fa fa-gear fa-spin" style="font-size:24px;color:#BD2A2E"></i>
+                            </div>
+                              <div class="col-6 col-md-2">
+                            <p><strong>SETTINGS</strong></p>
+                            </div>
+                            </div>
+                            <div class="col-md-9">
+                            <button class="profile-edit-btn" onclick="confirmLogout()">Logout</button><br/>
+                           {# </br>
+                            <button class="profile-edit-btn" onclick="confirmDelete()">Delete Account</button><br/>
+                            </br> #}
+                             </br>
+                            <button class="profile-edit-btn" href="{{path('forgotten_password')}}">Change Password</button><br/>
+                            </br>
+                            <button class="profile-edit-btn">Return Home</button><br/>
+                            </br>
+                           </div>
+                        </div>
+                    </div>
+                   <div class="col-md-8">
+                        <div class="tab-content profile-tab" id="myTabContent">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><div class="color-text-table">Cin</div></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ app.user.cin }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><div class="color-text-table">Firstname</div></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ app.user.firstname }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><div class="color-text-table">Lastname</div></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ app.user.lastname }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><div class="color-text-table">Email</div></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ app.user.email }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><div class="color-text-table">Address</div></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ app.user.address }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><div class="color-text-table">PhoneNum</div></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ app.user.phoneNum }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><div class="color-text-table">BirthDate</div></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ app.user.birthDate ? user.birthDate|date('Y-m-d') : '' }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label><div class="color-text-table">Gender</div></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ app.user.gender }}</p>
+                                            </div>
+                                        </div>
+                                       
+                            </div>
+                            
+                                     
+                  </div>
+                </div>
+                
+              </div>
+              
+              <div class="popup-profimg" id="popup-profimg"> 
+               <div class="row form-group"> 
+              <div class="col col-md-6">
+          <div class="row">
+          <form action="#" method="post" enctype="multipart/form-data" id="image-upload-form">
+              <div class="col-md-4">
+			  <i class='bx bxs-cloud-upload icon'></i>
+        <label for="image-upload-input" class="file-input-button">
+  <span class="file-input-label">Choose file</span>
+</label>
+        <input type="file" name="image" id="image-upload-input">
+        
+        </div>
+        <div class="position-btn-save">
+         <button type="submit" class="btn btn-outline-danger btn-sm" id="submit-btn">
+         <i class="fa fa-chevron-circle-down"></i>  Save changes
+        </button>
+        </div>
+        </form>
+        </br>
+			  <p>Image size must be less than <span>2MB</span></p>
+        </div>
+        </div>
+         <div class="col-md-6">
+        <div class="image-container">
+        {% if app.user.userImages is null %}
+           <strong>there is no saved images</strong>
+                {% else %}
+               {% for image in app.user.userImages %}
+                <img src="{{ asset('/uploads/' ~ image.name) }}" alt="Image" width="150">
+                </br>
+                <a href="{{ path('app_user_images_delete', {'id': image.id}) }}">
+                <button class="btn btn-outline-danger btn-sm" id="delete-img-btn">
+                <i class="fa fa-times-circle"></i>
+                </button>
+                </a>
+                {% endfor %}
+                {% endif %}
+               </div>
+               </div>
+               </div>
+               <button class="close-icon" onclick="closePopup()"><i class='fa fa-times'></i></button>
+	           </div>
+                
+              </fieldset>
+              {{ form_start(form,{attr:{'novalidate':'novalidate'}}) }}
+              <fieldset id="step2" class="fieldset hide"> 
+              <div class="row">
+              
+                     <div class="col-md-6">
+                     <div class="center-form">
+                        <div class="profile-head">
+                                    <h5>
+                                      <strong>  {{ app.user.firstname }} {{ app.user.lastname }} </strong>
+                                    </h5>
+                                    <h6>
+                                        {{ app.user.role }}
+                                    </h6>
+                                    <p class="proile-rating">  </br>    <span>    </span></p>
+                        </div>
+                     </div>
+                    </div> 
+                    <div class="col-md-2">
+                    <a href="">
+                    <button id="prev1" class="return-edit-btn">Return</button>
+                     </a>
+                    </div>
+                <div class="center-form">
+                 <div class="col-md-9">  
+      {# Cin #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+        <strong style="color: #000000;">Cin</strong>
+          
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.cin, {'attr': {'class': 'form-control', 'placeholder': 'Enter cin'}}) }}
+          {{ form_errors(form.cin) }}
+          <small class="form-text text-muted">Cin must contain 8 digits</small>
+        </div>
+      </div>
+
+      {# First name #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+        <strong style="color: #000000;">First name</strong>
+          
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Enter First name'}}) }}
+          {{ form_errors(form.firstname) }}
+          <small class="form-text text-muted">Text</small>
+        </div>
+      </div>
+     
+{# Last name #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+        <strong style="color: #000000;">Last name</strong>
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Enter Last name'}}) }}
+          {{ form_errors(form.lastname) }}
+          <small class="form-text text-muted">Text</small>
+        </div>
+      </div>
+{# Email #}
+       <div class="row form-group">
+        <div class="col col-md-2">
+        <strong style="color: #000000;">Email</strong>
+        </div>
+        <div class="col-12 col-md-9">
+          {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter Email'}}) }}
+          {{ form_errors(form.email) }}
+          <small class="form-text text-muted">Please enter a valid email!</small>
+        </div>
+      </div>
+
+      {# Address #}
+      <div class="row form-group">
+        <div class="col col-md-2">
+      <strong style="color: #000000;">Address</strong>
+        </div>
+<div class="col-12 col-md-9">
+{{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter Address'}}) }}
+{{ form_errors(form.address) }}
+<small class="form-text text-muted">Text</small>
+</div>
+</div>
+{# Phone #}
+  <div class="row form-group">
+    <div class="col col-md-2">
+    <strong style="color: #000000;">Phone Number</strong>
+      
+    </div>
+    <div class="col-12 col-md-9">
+      {{ form_widget(form.phoneNum, {'attr': {'class': 'form-control', 'placeholder': 'Enter Phone'}}) }}
+      {{ form_errors(form.phoneNum) }}
+      <small class="form-text text-muted">Phone number must contain 8 digits</small>
+    </div>
+  </div>
+  {# birth date #}
+  <div class="row form-group">
+        <div class="col col-md-2">
+        <strong style="color: #000000;">Birth Date</strong>
+    </div>
+    <div class="col-12 col-md-9">
+        {{ form_widget(form.birthDate, {'attr': {'class': 'form-control'}}) }}
+    </div>
+ </div>
+{# Gender #}
+<div class="row form-group">
+  <div class="col col-md-2">
+    <strong style="color: #000000;">Gender</strong>
+  </div>
+  <div class="col-12 col-md-9">
+    {{ form_widget(form.gender, {
+        'attr': {'class': 'form-control'},
+        'value': user.gender|default('male')
+    }) }}
+  </div>
+</div>
+
+
+      
+    <button type="submit" class="btn btn-success btn-sm">
+      <i class="fa fa-chevron-circle-down"></i> {{ button_label|default('Submit') }} 
+    </button>
+    <button type="reset" class="btn btn-danger btn-sm">
+      <i class="fa fa-ban"></i> Reset
+    </button>
+
+
+  </div>
+</div>
+</div>
+    </div>                        
+                                     
+                
+              
+              </fieldset>
+        {{ form_end(form) }}
+            </div>
+      </div>
+      
+    </section><!-- End Constructions Section -->
+
+          <script>
+ const edit1 = document.querySelector("#edit1");
+const prev1 = document.querySelector("#prev1");
+const step1 = document.querySelector("#step1");
+const step2 = document.querySelector("#step2"); 
+  var form = document.querySelector('form');
+  var submitBtn = document.querySelector('#submit-btn');
+  var imageUploadInput = document.querySelector('#image-upload-input');
+  
+let popup = document.getElementById("popup-profimg");
+
+function openPopup() {
+
+popup.classList.add("open-popup-profimg");
+
+}
+
+function closePopup() {
+
+popup.classList.remove("open-popup-profimg");
+}
+ document.querySelector('#image-upload-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var imagename = document.querySelector('#image-upload-input').value.split('\\').pop();
+        var formAction = '{{ path('app_user_upload_image', {'name_img': 'YOUR_PARAM_VALUE_HERE', 'id': app.user.id }) }}'.replace('YOUR_PARAM_VALUE_HERE', imagename);
+        this.setAttribute('action', formAction);
+        this.submit();
+    });
+
+  form.addEventListener('submit', function(event) {
+    if (!imageUploadInput.value) {
+      event.preventDefault(); // Prevent the form from submitting
+      alert('Please select a file'); // Display an error message
+      var formAction = '{{ path('app_user_upload_image', {'name_img': 'YOUR_PARAM_VALUE_HERE', 'id': app.user.id }) }}'.replace('YOUR_PARAM_VALUE_HERE', 'empty');
+        this.setAttribute('action', formAction);
+        this.submit();
+    }
+  });
+edit1.addEventListener("click", function(event) {
+	event.preventDefault();
+	step1.classList.add("hide");
+	step2.classList.remove("hide");
+});
+
+prev1.addEventListener("click", function(event) {
+	event.preventDefault();
+	step2.classList.add("hide");
+	step1.classList.remove("hide");
+});
+function confirmLogout() {
+  if (window.confirm("Are you sure you want to disconnect?")) {
+    // User clicked "OK", do the logout
+    var formAction = '{{ path('app_logout') }}';
+        this.setAttribute('action', formAction);
+        this.submit();
+  } else {
+    // User clicked "Cancel", do nothing
+  }
+}
+function confirmDelete() {
+  if (window.confirm("Are you sure you want to delete your account? this action cannot be undone!")) {
+    // User clicked "OK", do the logout
+    var formAction = '{{ path('app_users_deleteprofile',{'id': app.user.id}) }}';
+        this.setAttribute('action', formAction);
+        this.submit();
+  } else {
+    // User clicked "Cancel", do nothing
+  }
+}
+   </script>
+
+  {% endblock %}

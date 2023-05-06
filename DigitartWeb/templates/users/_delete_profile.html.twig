@@ -1,4 +1,4 @@
-<form method="post" action="{{ path('app_users_deleteprofile', {'id': user.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-    <button class="btn social youtube"><i class="fa fa-times-circle"></i>Delete Account</button>
-</form>
+<a href="{{ path('app_users_deleteprofile',{'id': app.user.id}) }}">
+   
+    <button class="btn"><i class="fa fa-times-circle"></i>Delete Account</button>
+</a>

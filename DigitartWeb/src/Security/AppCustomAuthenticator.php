@@ -2,7 +2,9 @@
 
 namespace App\Security;
 
+
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\Entity\Users;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -20,9 +22,12 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
     use TargetPathTrait;
 
     public const LOGIN_ROUTE = 'app_login';
+   
+
 
     public function __construct(private UrlGeneratorInterface $urlGenerator)
     {
+        
     }
 
     public function authenticate(Request $request): Passport
@@ -47,18 +52,27 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
         }
 
         $user= $token->getUser();
-
-        if($user->getRole() == 'Admin')
+        if ($user->getIsVerified() == false or $user->getStatus() == 'blocked')
         {
-        return new RedirectResponse($this->urlGenerator->generate('showbackpage'));
+            
+         return new RedirectResponse($this->urlGenerator->generate('app_login'));  
+        }
+        if($user->getRole() == 'Subscriber' or $user->getRole() == 'Artist')
+        {
+        return new RedirectResponse($this->urlGenerator->generate('showdigit'));
         }
         else
         {
-        return new RedirectResponse($this->urlGenerator->generate('showfrontpage'));
+        return new RedirectResponse($this->urlGenerator->generate('showbackpage'));
         }
+       
+        /*if ($user) {
+            $url = $this->urlGenerator->generate('app_send_sms', ['user' => $user->getId()]);
+            return new RedirectResponse($url);
+        }*/
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
-
+    
     protected function getLoginUrl(Request $request): string
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);

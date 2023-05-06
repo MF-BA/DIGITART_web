@@ -1,0 +1,141 @@
+
+{% extends 'base.html.twig' %}
+{% block homeActive %}{% endblock %}
+{% block artworkactive %}
+  class="active"
+{% endblock %}
+
+{% block body %}
+
+<!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/photo-1554907984-15263bfd63bd.jpg')}});">
+      <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
+
+        <h2>Artworks</h2>
+        <ol>
+          <li><a href="{{ path('showfrontpage') }}">Home</a></li>
+          <li>Artworks</li>
+        </ol>
+
+      </div>
+    </div><!-- End Breadcrumbs -->
+
+
+   <!-- ======= Our Projects Section ======= -->
+<section id="projects" class="projects">
+  <div class="container" data-aos="fade-up">
+    <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry" data-portfolio-sort="original-order">
+      <ul class="portfolio-flters" data-aos="fade-up" data-aos-delay="100" id="artwork-filters">
+        <li data-filter="*" class="filter-active">All</li>
+        {% for room in rooms %}
+          <li data-filter=".filter-{{ room.nameRoom|lower }}">{{ room.nameRoom }}</li>
+        {% endfor %}
+      </ul><!-- End Projects Filters -->
+
+      <div class="row gy-4 portfolio-container" data-aos="fade-up" data-aos-delay="200">
+        <!-- ======= Blog Section ======= -->
+    <section id="blog" class="blog">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4 posts-list">
+          {% for artwork in artworks %}
+           <div class="col-lg-4 col-md-6 portfolio-item filter-{{ artwork.idRoom.nameRoom|lower }}">
+            <div class="post-item position-relative h-100">
+
+              <div class="post-img position-relative overflow-hidden">
+                {% if imageArtwork[ artwork.idArt ] is not empty %}
+                  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                      {% for image in imageArtwork[ artwork.idArt ] %}
+                        <div class="carousel-item {% if loop.first %}active{% endif %}">
+                          <img src="{{ asset('/uploads/'~image.ImageName) }}" class="d-block w-100" style="width: 400px; height: 300px;" alt="">
+                        </div>
+                      {% endfor %}
+                    </div>
+                   
+                  </div>
+                {% else %}
+                      <img  src="{{ asset('/uploads/noimage.jpg') }}"  class="d-block w-100" style="width: 400px; height: 300px;" alt="">
+
+                {% endif %}
+                <span class="post-date">{{ artwork.dateArt ? artwork.dateArt|date('d/m/Y') : '' }}</span>
+              </div>
+
+              <div class="post-content d-flex flex-column">
+
+                <h3 class="post-title">{{ artwork.artworkName }}</h3>
+
+                <div class="meta d-flex align-items-center">
+                  <div class="d-flex align-items-center">
+                    <i class="bi bi-person"></i> <span class="ps-2">{% if artwork.idArtist is not null %}{{ users[ artwork.idArt ] }}{% else %} {{ artwork.artistName }}{% endif %}</span>
+                  </div>
+                  <span class="px-3 text-black-50">/</span>
+                  <div class="d-flex align-items-center">
+                    <i class="bi bi-folder2"></i> <span class="ps-2">
+                   
+                   {{ roomNames[ artwork.idArt ] }}  
+                    </span>
+                  </div>
+                </div>
+
+                <p>
+                {% set max_lines = 2 %}
+                  {% set max_chars_per_line = 80 %}
+
+                  {% set truncated_description = artwork.description|split("\n")|slice(0, max_lines)|join("\n")|slice(0, max_chars_per_line*(max_lines-1)) ~ (artwork.description|split("\n")|length > max_lines ? '...' : '') %}
+                 {% if truncated_description|last == ' ' %}
+                    {{ truncated_description }}
+                {% else %}
+                    {{ truncated_description|split(' ')|slice(0, -1)|join(' ') }}...
+                {% endif %}
+                </p>
+
+                <hr>
+
+                <a href="{{ path('app_artwork_showfront', {'idArt': artwork.idArt}) }}" class="readmore stretched-link"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+
+              </div>
+
+            </div>
+          </div><!-- End post list item -->
+            {% else %}
+            <tr>
+                 <td colspan="8">no records found</td>
+            </tr>
+            {% endfor %}
+         
+
+        </div><!-- End blog posts list -->
+
+       
+      </div>
+    
+          
+
+    
+    </section><!-- End Blog Section -->
+      </div><!-- End Projects Container -->
+    </div>
+  </div>
+     <br>   <br>  
+     <hr>
+     <h2 class="title" style="padding-left:20px;" >Know more informations about our artworks Powered By OPENAI</h2>
+     <div>
+     
+    {{ include('artwork/chatgpt.html.twig') }}  
+    </div>
+    <hr>
+     <h2 class="title" style="padding-left:20px;" >Let's explore the rooms</h2>
+     
+  </section><!-- End Our Projects Section -->
+
+ 
+      
+      <iframe src="https://www.google.com/maps/embed/v1/streetview?key=AIzaSyB20J0YArSAor39b70wlsLGS5L2LKKBc4A&location=45.767000577319344,4.834155074587501&heading=-156.63&pitch=20&fov=80" width="100%" height="580" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+    
+   
+    
+{% endblock %}
+
+
+

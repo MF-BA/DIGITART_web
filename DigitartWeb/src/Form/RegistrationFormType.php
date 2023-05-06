@@ -20,6 +20,12 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Karser\Recaptcha3Bundle\Form\Recaptcha3Type;
+use Karser\Recaptcha3Bundle\Validator\Constraints\Recaptcha3;
+use Symfony\Config\KarserRecaptcha3Config;
+use Captcha\Bundle\CaptchaBundle\Form\Type\CaptchaType;
+use Captcha\Bundle\CaptchaBundle\Validator\Constraints\ValidCaptcha;
+use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaV3Type;
 
 class RegistrationFormType extends AbstractType
 {
@@ -34,20 +40,6 @@ class RegistrationFormType extends AbstractType
                     'class' => 'form-control',
                     'id' => 'cin-input', // Define the id attribute here
                 ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a cin',
-                    ]),
-                    new Length([
-                        'min' => 8,
-                        'max' => 8,
-                        'exactMessage' => 'Cin must contain exactly {{ limit }} digits',
-                    ]),
-                    new Regex([
-                        'pattern' => '/^\d+$/',
-                        'message' => 'Cin must be a number',
-                    ]),
-                ],
             ])
             ->add('firstname', TextType::class, [
                 'label' => 'Firstname',
@@ -55,15 +47,6 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'Enter first name',
                     'class' => 'form-control',
                     'id' => 'firstname-input', // Define the id attribute here
-                ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a first name',
-                    ]),
-                    new Regex([
-                        'pattern' => '/^[a-zA-Z]+$/',
-                        'message' => 'Please enter a valid first name',
-                    ]),
                 ],
             ])
             ->add('lastname', TextType::class, [
@@ -73,53 +56,31 @@ class RegistrationFormType extends AbstractType
                     'class' => 'form-control',
                     'id' => 'lastname-input', // Define the id attribute here
                 ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a last name',
-                    ]),
-                    new Regex([
-                        'pattern' => '/^[a-zA-Z]+$/',
-                        'message' => 'Please enter a valid last name',
-                    ]),
-                ],
             ]);
              // Add the email and password fields as hidden fields
         // so they are still submitted with the form
         $builder->add('email',TextType::class, [
+            
             'label' => 'Email',
             'attr' => [
                 'placeholder' => 'Enter Email',
                 'class' => 'form-control',
                 'id' => 'email-input', // Define the id attribute here
             ],
-            'constraints' => [
-                new Assert\NotBlank([
-                    'message' => 'Please enter an email',
-                ]),
-                new Assert\Email([
-                    'message' => 'Please enter a valid email address',
-                ]),
-            ],
+            
         ]);
-        $builder->add('plainPassword', PasswordType::class, [
-            // instead of being set onto the object directly,
-            // this is read and encoded in the controller
+        $builder->add('password', PasswordType::class, [
             'mapped' => false,
-            'attr' => ['autocomplete' => 'new-password'],
-            'constraints' => [
+            'label' => 'Password',
+            'attr' => [
+                'placeholder' => 'Enter Password',
+                'class' => 'form-control',
+                'id' => 'password-input', // Define the id attribute here
+            ],
+            'constraints'=> [
                 new NotBlank([
-                    'message' => 'Please enter a password',
-                ]),
-                new Length([
-                    'min' => 6,
-                    'minMessage' => 'Your password should be at least {{ limit }} characters',
-                    // max length allowed by Symfony for security reasons
-                    'max' => 4096,
-                ]),
-                new Regex([
-                    'pattern' => '/^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#\$%\^&\*\(\)]).+$/',
-                    'message' => 'Password should contain at least one uppercase letter, one lowercase letter, and one special character (!@#$%^&*())',
-                ]),
+                    'message' => 'Please enter a Password',
+                ]), 
             ],
         ])
 
@@ -130,11 +91,6 @@ class RegistrationFormType extends AbstractType
                     'class' => 'form-control',
                     'id' => 'address-input', // Define the id attribute here
                 ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter an address',
-                    ])
-                ],
             ])
             ->add('phoneNum', IntegerType::class, [
                 'label' => 'Phone Number',
@@ -143,49 +99,30 @@ class RegistrationFormType extends AbstractType
                     'class' => 'form-control',
                     'id' => 'phoneNum-input', // Define the id attribute here
                 ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a phone number',
-                    ]),
-                    
-                    new Length([
-                    'min' => 8,
-                    'max' => 8,
-                    'exactMessage' => 'Phone number must contain exactly {{ limit }} digits',
-                     ]),
-                     new Regex([
-                        'pattern' => '/^\d+$/',
-                        'message' => 'Phone number must be a number',
-                    ]),
-                    
-                ],
             ])
             ->add('birthDate',BirthdayType::class, [
                 'label' => 'Birth date',
                 'widget' => 'single_text',
-                'attr' => ['class' => 'form-control'],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter your birth date',
-                    ]),
-                    
-                ],
+                'attr' => ['class' => 'form-control', 'max' => (new \DateTime())->format('Y-m-d')],
             ])
             ->add('gender', ChoiceType::class, [
+                'expanded' => true,
+                'multiple' => false,
+                'attr' => [
+                    'class' => 'form-check-inline' // add this line
+                ],
+                'label_attr' => [
+                    'class' => 'mr-3' // add this line to create space between radio buttons and text field
+                ],
+                'choice_attr' => [
+                    'class' => 'mr-2' // add this line to create space between radio buttons
+                ],
                 'choices' => [
                     'Male' => 'Male',
                     'Female' => 'Female',
                    
-                ],
-                'expanded' => true,
-                'multiple' => false,
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please specify your gender',
-                    ]),
-                    
-                ],
-               
+                ]
+                
             ])
             ->add('role', ChoiceType::class, [
                 'choices' => [
@@ -196,6 +133,26 @@ class RegistrationFormType extends AbstractType
                 'multiple' => false,
                 'placeholder' => 'Choose your role',
             ])
+            /*->add('captchaCode', CaptchaType::class, [
+                'captchaConfig' => 'ExampleCaptcha',
+                'constraints' => [
+                    new ValidCaptcha([
+                        'message' => 'Invalid captcha, please try again',
+                    ]),
+                ]
+            ])*/
+            /*->add('recaptcha', EWZRecaptchaV3Type::class, array(
+                'action_name' => 'contact',
+                'constraints' => array(
+                    new IsTrueV3()
+                )
+            ));*/
+            ->add('captcha', Recaptcha3Type::class, [
+                'constraints' => new Recaptcha3(['message' => 'There were problems with your captcha. Please try again or contact with support and provide following code(s): {{ errorCodes }}']),
+                'action_name' => 'register',
+            ]);
+
+            
             
         ;
     }

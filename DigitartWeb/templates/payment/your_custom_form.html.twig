@@ -1,0 +1,178 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Payment{% endblock %}
+{% block homeActive %}{% endblock %}
+{% block ticketactive %}
+	class="active"
+{% endblock %}
+{% block body %}
+ <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{asset('Front/assets/img/front-home/museum4.jpg')}});">
+      <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
+
+        <h2>Purchase</h2>
+        <ol>
+          <li><a href="">Return to ticket</a></li>
+          
+        </ol>
+
+      </div>
+    </div><!-- End Breadcrumbs -->
+
+<section id="services" class="services section-bg">
+  <div class="container" data-aos="fade-up">
+      <div class="row gy-4" data-aos="fade-up" data-aos-delay="200">
+      <div class="section-header" data-aos="fade-up" data-aos-delay="200">
+        <h2>Finalize you're payment Sir " {{app.user.firstname}} {{app.user.lastname}} " </h2>
+        <p>All ticket bought are not refundable! </p>
+      </div>
+
+    <div class="form-wrapper"> <div class="mainscreen" data-aos="fade-up" data-aos-delay="200">
+    <form method="post">
+    <div id="errors"></div>
+    <input type="text" id="cardholder-name" placeholder="Titulaire de la carte">
+    <input type="text" id="cardholder-name" value="{{app.user.email}}">
+    <div id="card-elements"></div>
+    <div id="card-errors" role="alert"></div>
+    <button id="card-button" type="button" data-secret="{{ clientSecret }}">Pay
+    <div> {{ Amount }} $</div>
+    </button>
+    </form>
+    </div>
+        <script src="https://js.stripe.com/v3/"></script>
+        
+</section><!-- End Services Section -->
+<script>
+window.onload = () => {
+    // Variables
+    let stripe = Stripe('pk_test_51MfRIsHcaMLPP7A1CiVHTe3wo69caUJgl4GbfkBL83Ih7wler9uw1CV5Di08BfPEqhgXsJNjCEb54COPS8zbOVUd005emg9WN9')
+    let elements = stripe.elements()
+    let redirect = "{{ path('app_payment_CurrentcardHistory') }}";
+
+    // Objets de la page
+    let cardHolderName = document.getElementById("cardholder-name")
+    let cardButton = document.getElementById("card-button")
+    let clientSecret = cardButton.dataset.secret;
+
+    // Crée les éléments du formulaire de carte bancaire
+    let card = elements.create("card")
+    card.mount("#card-elements")
+
+    // On gère la saisie
+    card.addEventListener("change", (event) => {
+        let displayError = document.getElementById("card-errors")
+        if(event.error){
+            displayError.textContent = event.error.message;
+        }else{
+            displayError.textContent = "";
+        }
+    })
+
+    // On gère le paiement
+    cardButton.addEventListener("click", () => {
+        stripe.handleCardPayment(
+            clientSecret, card, {
+                payment_method_data: {
+                    billing_details: {name: cardHolderName.value}
+                }
+            }
+        ).then((result) => {
+            if(result.error){
+                document.getElementById("errors").innerText = result.error.message
+            }else{
+                document.location.href = redirect
+            }
+        })
+    })
+
+}
+</script>
+   <style>
+        /* Center the payment form */
+        body {
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000000;
+        }
+
+         .mainscreen {
+         display: flex;
+        justify-content: center;
+        align-items: center;
+       
+        }
+        
+        /* Style the payment form */
+        form {
+        width: 400px;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+
+        /* Add the following code to center the form */
+     
+        }
+
+        
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        input[type="text"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+#card-button {
+    display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#card-button div {
+  margin-left: 10px;
+}
+        
+        #card-elements {
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        
+        #card-errors {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        button[type="button"] {
+           background: linear-gradient(
+135deg
+, #BD2A2E 0%, #000000  100%);
+    padding: 15px;
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-weight: 400;
+    font-size: 1.2rem;
+    margin-top: 10px;
+    width:100%;
+    letter-spacing: .11rem;
+    outline:none;
+        }
+        
+        button[type="button"]:hover {
+            transform: scale(1.05) translateY(-3px);
+    box-shadow: 3px 3px 6px #38373785;
+        }
+
+    </style>
+{% endblock %}

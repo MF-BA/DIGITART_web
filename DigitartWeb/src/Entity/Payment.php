@@ -4,13 +4,13 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use Gedmo\Mapping\Annotation as Gedmo; // gedmo annotations
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Payment
  *
  * @ORM\Table(name="payment", indexes={@ORM\Index(name="pk", columns={"user_id"})})
  * @ORM\Entity
-  * @ORM\Entity(repositoryClass="App\Repository\PaymentRepository")
  */
 class Payment
 {
@@ -54,9 +54,30 @@ class Payment
     /**
      * @var int|null
      *
-     * @ORM\Column(name="total_payment", type="integer", nullable=true)
+     * @ORM\Column(name="total_payment", type="integer", nullable=false)
      */
     private $totalPayment;
+
+    /**
+     * @var bool|null
+     *
+     * @ORM\Column(name="paid", type="boolean", nullable=true)
+     */
+    private $paid;
+
+    /**
+     *
+     * @ORM\Column(name="createdAt", type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $createdAt;
+
+    /**
+     *
+     * @ORM\Column(name="updatedAt", type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updatedAt;
 
     /**
      * @var Users
@@ -72,6 +93,14 @@ class Payment
     {
         return $this->paymentId;
     }
+
+    public function setPaymentId(?int $paymentId): ?self
+    {
+        $this->paymentId=$paymentId;
+        return $this;
+    }
+
+   
 
     public function getPurchaseDate(): ?\DateTimeInterface
     {
@@ -133,6 +162,18 @@ class Payment
         return $this;
     }
 
+    public function isPaid(): ?bool
+    {
+        return $this->paid;
+    }
+
+    public function setPaid(?bool $paid): self
+    {
+        $this->paid = $paid;
+
+        return $this;
+    }
+
     public function getUser(): ?Users
     {
         return $this->user;
@@ -145,5 +186,18 @@ class Payment
         return $this;
     }
 
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+    $this->createdAt = $createdAt;
+
+    return $this;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+    $this->updatedAt = $updatedAt;
+
+    return $this;
+    }
 
 }

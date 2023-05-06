@@ -86,6 +86,39 @@ a:hover {
 .login100-form-btn:hover {
   background: #333333 !important;
 }
+.social-connect-btn {
+  font-family: Montserrat-Bold;
+  font-size: 10px;
+  line-height: 1.5;
+  color: #fff;
+  text-transform: uppercase;
+
+  width: 200px;
+  height: 50px;
+  border-radius: 25px;
+  background: blue !important;
+  position: relative;
+  top: 100px;
+  right: 70px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 25px;
+
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+.social-connect-btn:hover {
+  background: #333333 !important;
+}
+
+
 .container-login100 {
   width: 100% !important;  
   min-height: 100vh !important;
@@ -100,10 +133,29 @@ a:hover {
   padding: 15px !important;
   background-image: url("login/images/background.jpg") !important;
 }
-
+.top-login-form {
+  width: 300px !important;
+display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center !important;
+  align-items: center !important;
+  position: absolute !important;
+  left: 980px !important;
+  bottom: 700px !important;
+}
+.position-footer{
+  position: relative !important;
+  bottom: 100px;
+  
+}
 	</style>
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="{{asset('login/images/icons/favicon.ico')}}">
+  <link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{{asset('login/vendor/bootstrap/css/bootstrap.min.css')}}">
 <!--===============================================================================================-->
@@ -130,42 +182,61 @@ a:hover {
 <!--===============================================================================================-->
 	<script src="{{asset('login/vendor/select2/select2.min.js')}}"></script>
 <!--===============================================================================================-->
-	<script src="{{asset('login/vendor/tilt/tilt.jquery.min.js')}}"></script>
-	<script >
-		$('.js-tilt').tilt({
-			scale: 1.1 
-		})
-	</script>
+	
+
+  <!-- Flashy depends on jQuery -->
+    <script src="//code.jquery.com/jquery.js"></script>
+    <!-- Load Flashy default JavaScript -->
+    <script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
+    <!-- Include Flashy default partial -->
+
+	
 <!--===============================================================================================-->
 	<script src="{{asset('login/js/main.js')}}"></script>
 {% endblock %}
 </head>
 
 {% block body %}
+ 
 <div class="limiter">
-		<div class="container-login100">
-			<div class="wrap-login100">
-				<div class="login100-pic js-tilt" data-tilt style="will-change: transform !important; transform: perspective(300px) rotateX(0deg) rotateY(0deg) !important;">
-					<img src="{{asset('login/images/logo-digitart-rouge.png')}}" alt="IMG">
-				</div>
-      <form class="login100-form validate-form" method="post">
-<div class="container-login100-form-btn">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
 
-    {% if app.user and app.user.id %}
+		<div class="container-login100">
+    {{ include('@MercurySeriesFlashy/flashy.html.twig') }}
+    <div class="top-login-form">
+  {% for message in app.flashes('danger') %}
+                <div class="alert alert-danger">
+                    {{ message }}
+      </div>
+               
+  {% endfor %}
+  {% for message in app.flashes('success') %}
+                <div class="success success-danger">
+                    {{ message }}
+      </div>
+               
+  {% endfor %}
+ 
+{% if app.user and app.user.id and app.user.isVerified == true and app.user.status == 'unblocked'%}
         <div class="mb-3">
             You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
         </div>
     {% endif %}
+    </div>
+    
+			<div class="wrap-login100">
+      
+				<div class="login100-pic js-tilt" data-tilt style="will-change: transform !important; transform: perspective(300px) rotateX(0deg) rotateY(0deg) !important;">
+					<img src="{{asset('login/images/logo-digitart-rouge.png')}}" alt="IMG">
+				</div>
+      <form class="login100-form validate-form" method="post" novalidate>
+<div class="container-login100-form-btn">
           
               <span class="login100-form-title">
 						Login
 					</span> 
 
     <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-	<input class="input100" type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" placeholder="Email" required autofocus>
+	<input class="input100"class="input100" type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" placeholder="Email" required autofocus>
 		<span class="focus-input100"></span>
 			<span class="symbol-input100">
 			<i class="fa fa-envelope" aria-hidden="true"></i>
@@ -201,18 +272,38 @@ a:hover {
 						<button class="login100-form-btn" type="submit">
 							Login
 						</button>
-					</div>
 
+              
+					</div>
+          
 					<div class="text-center p-t-12">
 						<span class="txt1">
 							Forgot
 						</span>
-						<a class="txt2" href="#">
+						<a class="txt2" href="{{path('forgotten_password')}}">
 							Password?
 						</a>
 					</div>
 
-					<div class="text-center p-t-136">
+
+
+          
+          
+						 
+					
+
+				</form>
+        	
+            <div class="text-center">
+           <a href="{{path('app_facebook_login')}}">
+            <button class="social-connect-btn">
+            <i class="fa fa-facebook bg" style="color: white; font-size: 20px;" aria-hidden="true"></i>
+							Connect with facebook
+						</button>
+            </a>
+            </div>
+
+					<div class="text-center position-footer">
 						<a class="txt2" href="{{path('app_register')}}">
 							Create your Account
 							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
@@ -223,15 +314,16 @@ a:hover {
             Return to home	
 						</a>
 					</div>
-          
-						
-					
-
-				</form>
-
                 </div>
 		</div>
 	</div>
+  <script src="{{asset('login/vendor/tilt/tilt.jquery.min.js')}}"></script>
+	<script >
+		$('.js-tilt').tilt({
+			scale: 1.1
+		})
+
+	</script>
 {% endblock %}
 
 

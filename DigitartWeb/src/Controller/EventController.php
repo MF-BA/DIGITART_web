@@ -35,7 +35,10 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
 use App\Service\SendMailService;
-
+use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 #[Route('/event')]
 class EventController extends AbstractController
@@ -99,7 +102,7 @@ class EventController extends AbstractController
     #[Route('/reload', name: 'reload', methods: ['GET'])]
     public function example(FlashyNotifier $flashy): Response
     {
-        $flashy->success('Event created!', 'http://your-awesome-link.com');
+       
         return $this->redirectToRoute('app_event_no_participants');
     }
     #[Route('/front', name: 'app_event_front_index', methods: ['GET'])]
@@ -107,7 +110,7 @@ class EventController extends AbstractController
     {
         // get today's date
         $today = new \DateTime();
-        $flashy->success('Event created!', 'http://your-awesome-link.com');
+        
         // fetch events whose end date is greater than or equal to today's date
         $query = $eventRepository->createQueryBuilder('e')
             ->where('e.endDate >= :today')
@@ -127,7 +130,7 @@ class EventController extends AbstractController
     }
     
 
-    #[Route('/new', name: 'app_event_new', methods: ['GET', 'POST'])]
+    #[Route('/new/back', name: 'app_event_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EventRepository $eventRepository): Response
     {
         $event = new Event();
@@ -191,28 +194,97 @@ class EventController extends AbstractController
     #[Route('/test/mail', name: 'mailing')] 
     public function Test(MailerInterface $mailer,SendMailService $mail)
     {
-        $amount=0;
-        $currency="";
-        $to = 'bedhiefkoussay2015@gmail.com';
-        $subject = 'Test Email';
-        $context = ['amount' => '10.00', 'currency' => 'USD'];
+        $user = $this->getUser();
+    $email = (new Email())
+    ->from('digitart.primes@gmail.com')
+    ->to($user->getEmail())
+    ->subject('Event Added')
+    ->html(
+        '<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Your email subject</title>
+            <style>
+                /* Style the body of the email */
+                body {
+                    font-family: Arial, sans-serif;
+                    font-size: 16px;
+                    line-height: 1.5;
+                    color: #333;
+                    background-color: #f5f5f5;
+                    margin: 0;
+                    padding: 0;
+                }
+                /* Style the container of the email */
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: #fff;
+                }
+                /* Style the heading of the email */
+                h1 {
+                    font-size: 24px;
+                    color: #333;
+                    margin-top: 0;
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+                /* Style the paragraphs of the email */
+                p {
+                    margin-top: 0;
+                    margin-bottom: 20px;
+                    text-align: justify;
+                }
+                /* Style the link in the email */
+                a {
+                    color: #333;
+                    text-decoration: none;
+                }
+                /* Style the button in the email */
+                .btn {
+                    display: inline-block;
+                    background-color: #007bff;
+                    color: #fff;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    text-decoration: none;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>You just participated in the event</h1>
+                <p>Dear [Name],</p>
+                <p>We would like to extend an invitation to you to attend our upcoming event, which will take place on [date and time] at [location].
+
+                The event will be an opportunity for us to showcase our latest products and services, as well as to network with industry professionals and connect with potential clients.
+                
+                We believe that your presence at the event would be invaluable, and we would be honored if you could join us.
+                
+                Let us know if you have any special dietary requirements or other needs that we should be aware of.
+                
+                Thank you for your consideration, and we hope to see you at the event.</p>
+                <p>Your Name</p>
+                <a href="#" class="btn">Click here to take action</a>
+            </div>
+        </body>
+        </html>
+        '
+    );
     
-       // $body = $this->renderView($template, $context);
-    
-        $mail->send(
-            'digitart.primes@gmail.com',
-            $to,
-            $subject,
-            'eventmail',
-            $context
-        );
+        $transport=new GmailSmtpTransport('digitart.primes@gmail.com','ktknrunncnveaidz');
+        $mailer=new Mailer($transport);
+        $mailer->send($email);
         
     
-        return $this->render('event/test.html.twig', [
-            'amount' => $amount,
-            'currency' => $currency 
-        ]);
+        return $this->redirectToRoute('app_event_front_index');
     }
+
+
+
+
     #[Route('/{id}/front', name: 'app_event_show_front', methods: ['POST', 'GET'])]
 public function showfront(FlashyNotifier $flashy,Event $event, Request $request): Response
 {
@@ -250,7 +322,7 @@ public function showfront(FlashyNotifier $flashy,Event $event, Request $request)
         $em->persist($comment);
         $em->flush();
         $this->addFlash('message', 'Votre commentaire a bien été envoyé');
-        $flashy->success('Event created!', 'http://your-awesome-link.com');
+        $flashy->success('Comment added!', 'http://your-awesome-link.com');
 
         return $this->redirectToRoute('app_event_show_front', ['id' => $event->getId()]);
     }
@@ -281,6 +353,8 @@ public function showfront(FlashyNotifier $flashy,Event $event, Request $request)
             'events' => $events,
         ]);
     }
+
+
     #[Route('/noparticipants/l', name: 'app_event_no_participants', methods: ['GET'])]
     public function zeroparticipants(EventRepository $eventRepository): Response
     {
@@ -293,7 +367,7 @@ public function showfront(FlashyNotifier $flashy,Event $event, Request $request)
 
 
  
-    #[Route('/{id}/participate/l', name: 'app_event_participate', methods: ['GET'])]
+     #[Route('/{id}/participate/l', name: 'app_event_participate', methods: ['GET'])]
     public function participateAction(Event $event)
     {
         // Get the Participants entity manager
@@ -329,6 +403,98 @@ public function showfront(FlashyNotifier $flashy,Event $event, Request $request)
         $participant->setAdress($user->getAddress());
         $participant->setGender($user->getGender());
         $participant->setIdEvent($event);
+
+        $user = $this->getUser();
+        $email = (new Email())
+        ->from('digitart.primes@gmail.com')
+        ->to($user->getEmail())
+        ->subject('Event Added')
+        ->html('<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Your email subject</title>
+            <style>
+                /* Style the body of the email */
+                body {
+                    font-family: Arial, sans-serif;
+                    font-size: 16px;
+                    line-height: 1.5;
+                    color: #333;
+                    background-color: #f5f5f5;
+                    margin: 0;
+                    padding: 0;
+                }
+                /* Style the container of the email */
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: #fff;
+                }
+                /* Style the heading of the email */
+                h1 {
+                    font-size: 24px;
+                    color: #333;
+                    margin-top: 0;
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+                /* Style the paragraphs of the email */
+                p {
+                    margin-top: 0;
+                    margin-bottom: 20px;
+                    text-align: justify;
+                    color:#000;
+                }
+                /* Style the link in the email */
+                a {
+                    color: #333;
+                    text-decoration: none;
+                }
+                /* Style the button in the email */
+                .btn {
+                    display: inline-block;
+                    background-color: #007bff;
+                    color: #fff;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    text-decoration: none;
+                }
+                /* Style the image in the email */
+                .img {
+                    display: block;
+                    margin: 0 auto;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+            <img src="https://cdn.discordapp.com/attachments/866163650824896592/1101423432870150225/logo_digitart.png" alt="Your Image" class="img" width="300">
+
+                <h1>you just participated in '.$event->getEventName().' </h1>
+                <p>Dear <strong>'.$user->getFirstName().'</strong>,</p>
+                <p>We would like to extend an invitation to you to attend our upcoming event, which will take place on <strong>'.$event->getStartDate()->format('Y-m-d H:i:s').' '.$event->getEndDate()->format('Y-m-d H:i:s').'</strong></p>
+
+                <p>The event will be an opportunity for us to showcase our latest products and services, as well as to network with industry professionals and connect with potential clients.
+                
+                We believe that your presence at the event would be invaluable, and we would be honored if you could join us.
+                
+                Let us know if you have any special dietary requirements or other needs that we should be aware of.
+                
+                Thank you for your consideration, and we hope to see you at the event.
+                
+                Best regards,</p>
+                <p><strong>Digitart</strong></p>
+            </div>
+        </body>
+        </html>
+        '
+        );
+        
+            $transport=new GmailSmtpTransport('digitart.primes@gmail.com','ktknrunncnveaidz');
+            $mailer=new Mailer($transport);
+            $mailer->send($email);
     
         // Decrement the number of available slots
         $event->setNbparticipants($event->getNbparticipants() - 1);
@@ -712,6 +878,46 @@ $pdf->Cell(0, 10, 'End Date: ' . $endDate, 0, 1, 'L');
 
         return $this->render('event/fullcalendar.html.twig', compact('data'));
     }
+   
+
+    #[Route('/addEvent/Json', name: 'add_event', methods: ['GET', 'POST'])]
+    public function addevent(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $event = new Event();
+        $event_name = $request->query->get("event_name");
+        $nb_participants = $request->query->get("nb_participants");
+        $start_time = $request->query->get("start_time");
+        $detail = $request->query->get("detail");
+        $color = $request->query->get("color");
+        $date = new \DateTime('now');
+
+        $event->setEventName($event_name);
+        $event->setNbParticipants($nb_participants);
+        $event->setStartTime($start_time);
+        $event->setStartDate($date);
+        $event->setEndDate($date);
+        $event->setColor($color);
+        $event->setDetail($detail);
+
+        $em->persist($event);
+        $em->flush();
+        $serializer  = new Serializer([new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($event);
+        return new JsonResponse($formatted);
 
 
+    }
+
+    /**
+     * @Route("/DisplayEvent/Json", name="display _event")
+     */
+    public function dislpayEvent()
+    {
+        $event = $this->getDoctrine()->getManager()->getRepository(Event::class)->findAll();
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($event);
+
+        return new JsonResponse($formatted);
+    }
 }

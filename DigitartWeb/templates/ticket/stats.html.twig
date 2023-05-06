@@ -1,0 +1,145 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Ticket{% endblock %}
+{% block body %}     
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.0.7/countUp.min.js"></script>
+
+     <div class="content mt-3">
+        <div class="animated fadeIn">
+          
+          <div class="row">
+          
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="stat-widget-one">
+                        <div class="stat-icon dib"><i class="ti-money text-success border-success"></i></div>
+                        <div class="stat-content dib">
+                        <div class="stat-text">Total sales</div>
+                        <div class="stat-digit">{{totalAmount1}} $</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+         <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="stat-widget-one">
+                    <div class="stat-icon dib"><i class="ti-money text-success border-success"></i></div>
+                    <div class="stat-content dib">
+                        <div class="stat-text">Today's total sales</div>
+                        <div class="stat-digit">{{totalAmountToday}}  $</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="stat-widget-one">
+                    <div class="stat-icon dib"><i class="ti-layout-grid2 text-warning border-warning"></i></div>
+                    <div class="stat-content dib">
+                        <div class="stat-text">Total ticket bought</div>
+                        <div class="stat-digit"> {{totalTickets}} </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+         <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="stat-widget-one">
+                    <div class="stat-icon dib"><i class="ti-link text-danger border-danger"></i></div>
+                    <div class="stat-content dib">
+                        <div class="stat-text">Tickets bought today</div>
+                        <div class="stat-digit">{{totalTicketsToday}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    </div>
+
+      <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="mb-3">Total amount gained per day</h4>
+                                <div class="flot-container" style="width: 500px; height: 500px;">
+                                   
+                                   <canvas id="annonces" style="width: 100%; height: 100%;"></canvas>
+
+
+                                </div>
+                            </div>
+                        </div><!-- /# card -->
+                    </div><!-- /# column -->
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="mb-3">Type of ticket purchasers</h4>
+                            <div class="flot-container" style="width: 500px; height: 500px;">
+                            <canvas id="myChart" style="width: 100%; height: 100%;"></canvas>
+                            </div>
+                            </div>
+                            </div><!-- /# card -->
+                        </div><!-- /# column -->
+
+    </div>
+
+    </div>
+     </div>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: ['Adults', 'Teenagers', 'Students'],
+        datasets: [{
+            data: [{{ totalAdult|json_encode() }}, {{ totalTeenager|json_encode() }}, {{ totalStudent|json_encode() }}],
+            backgroundColor: [
+                'rgba(234, 16, 16, 0.7)',
+                'rgba(100, 30, 22, 0.7)',
+                'rgba(217, 136, 128, 0.7)',
+            ],
+        }]
+    },
+    options: {
+        // Customize the appearance of the pie chart
+    }
+});
+
+var annonces = document.querySelector("#annonces");
+var annGraph = new Chart(annonces, {
+    type: "line",
+    data: {
+        labels: {{ paymentDate|raw }},
+        datasets: [{
+            label: "Amount Paid $",
+            data: {{ totalAmount|raw }},
+            borderColor: 'red', 
+            pointBackgroundColor: 'black', 
+            pointBorderColor: 'black',
+            pointRadius: 5, 
+            pointHoverRadius: 5,
+            fill: false
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+</script>
+
+{% endblock %}

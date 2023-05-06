@@ -1,0 +1,53 @@
+ {% for user in users %}
+            <tr>
+                {% if user.image is not null %}
+                <td><img src="{{ asset('/uploads/' ~ user.image) }}" alt="Image" width="150"></td>
+                {% else %}
+                <td><img src="{{ asset('Back/images/icon-profile.png') }}" alt="Image" width="150"></td>
+                {% endif %}
+                <td>{{ user.cin }}</td>
+                <td>{{ user.firstname }}</td>
+                <td>{{ user.lastname }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.address }}</td>
+                <td>{{ user.phoneNum }}</td>
+                <td>{{ user.birthDate ? user.birthDate|date('Y-m-d') : '' }}</td>
+                <td>{{ user.gender }}</td>
+                <td>{{ user.role }}</td>
+                <td>{{ user.status }}</td>
+                <td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ user.updatedAt ? user.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+
+                 <div class="d-flex">
+                    <a href="{{ path('app_users_show', {'id': user.id}) }}">
+                    <button type="button" class="btn btn-outline-info mr-2">
+                    <i class="fa fa-question-circle"></i>
+                    </button></a>
+
+                    <a href="{{ path('app_users_edit', {'id': user.id}) }}">
+                    <button type="button" class="btn btn-outline-dark mr-2">
+                    <i class="fa fa-pencil-square"></i>
+                    </button></a>
+
+                    <a href="{{ path('app_users_updatestatus', {'id': user.id, 'newStatus': 'blocked'}) }}">
+               <button type="button" class="btn btn-outline-danger mr-2">
+               <i class="fa fa-lock"></i>
+              </button>
+              </a>
+
+<a href="{{ path('app_users_updatestatus', {'id': user.id, 'newStatus': 'unblocked'}) }}">
+    <button type="button" class="btn btn-outline-success mr-2">
+    <i class="fa  fa-unlock"></i>
+    </button>
+</a>
+
+                  </div>
+
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="15">no records found</td>
+            </tr>
+        {% endfor %}

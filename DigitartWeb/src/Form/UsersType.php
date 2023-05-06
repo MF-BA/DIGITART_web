@@ -18,37 +18,36 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+
 
 class UsersType extends AbstractType
 {
     private $security;
+ 
 
     public function __construct(Security $security)
     {
         $this->security = $security;
     }
+    
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $currentUser = $this->security->getUser();
         $currentUserId = $currentUser ? $currentUser->getId() : null;
+        
         $builder
       
-        ->add('cin', TextType::class, [
+        ->add('cin', IntegerType::class, [
             'label' => 'Cin',
             'attr' => [
                 'placeholder' => 'Enter cin',
                 'class' => 'form-control',
                 'id' => 'cin-input', // Define the id attribute here
-            ],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please enter a cin',
-                ]),
-                new Length([
-                    'min' => 8,
-                    'max' => 8,
-                    'exactMessage' => 'Cin must contain exactly {{ limit }} digits',
-                ]),
             ],
         ])
         ->add('firstname', TextType::class, [
@@ -58,11 +57,6 @@ class UsersType extends AbstractType
                 'class' => 'form-control',
                 'id' => 'firstname-input', // Define the id attribute here
             ],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please enter a first name',
-                ])
-            ],
         ])
         ->add('lastname', TextType::class, [
             'label' => 'Lastname',
@@ -70,11 +64,6 @@ class UsersType extends AbstractType
                 'placeholder' => 'Enter last name',
                 'class' => 'form-control',
                 'id' => 'lastname-input', // Define the id attribute here
-            ],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please enter a last name',
-                ])
             ],
         ]);
          // Add the email and password fields as hidden fields
@@ -86,49 +75,48 @@ class UsersType extends AbstractType
                 'class' => 'form-control',
                 'id' => 'email-input', // Define the id attribute here
             ],
-            'constraints' => [
-                new Assert\NotBlank([
-                    'message' => 'Please enter an email',
-                ]),
-                new Assert\Email([
-                    'message' => 'Please enter a valid email address',
-                ]),
-            ],
         ]);
-        $builder->add('plainPassword', PasswordType::class, [
-            // instead of being set onto the object directly,
-            // this is read and encoded in the controller
+        $builder->add('password', PasswordType::class, [
             'mapped' => false,
-            'attr' => ['autocomplete' => 'new-password'],
-            'constraints' => [
+            'label' => 'Password',
+            'attr' => [
+                'placeholder' => 'Enter Password',
+                'class' => 'form-control',
+                'id' => 'password-input', // Define the id attribute here
+            ],
+            'constraints'=> [
                 new NotBlank([
-                    'message' => 'Please enter a password',
-                ]),
-                new Length([
-                    'min' => 6,
-                    'minMessage' => 'Your password should be at least {{ limit }} characters',
-                    // max length allowed by Symfony for security reasons
-                    'max' => 4096,
-                ]),
-                new Regex([
-                    'pattern' => '/^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#\$%\^&\*\(\)]).+$/',
-                    'message' => 'Password should contain at least one uppercase letter, one lowercase letter, and one special character (!@#$%^&*())',
-                ]),
+                    'message' => 'Please enter a Password',
+                ]), 
             ],
         ]);
        
     $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($currentUserId) {
         $form = $event->getForm();
         $user = $event->getData();
-
+        $roles = $user->getRoles();
+        
         // Check if the form is being used to edit an existing user
         if ($user instanceof Users && $user->getId() !== null && $user->getId() !== $currentUserId) {
             // If so, remove the email and password fields from the form
             $form->remove('email');
-            $form->remove('plainPassword');
+            $form->remove('password');
+            $form->remove('userImages');
+            $form->remove('image');
+           
+        }
+        if ($user instanceof Users && $user->getId() === null) {
+           
+            $form->remove('userImages');
+            $form->remove('image');
         }
         if ($user->getId() === $currentUserId){
-            $form->remove('plainPassword');
+            $form->remove('password');
+            if (in_array('ROLE_SUBSCRIBER', $roles) || in_array('ROLE_ARTIST', $roles)) {
+                $form->remove('role');
+                $form->remove('userImages');
+                $form->remove('image');
+            }
         }
        
     })
@@ -139,76 +127,66 @@ class UsersType extends AbstractType
                 'class' => 'form-control',
                 'id' => 'address-input', // Define the id attribute here
             ],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please enter an address',
-                ])
-            ],
         ])
-        ->add('phoneNum', TextType::class, [
+        ->add('phoneNum', IntegerType::class, [
             'label' => 'Phone Number',
             'attr' => [
                 'placeholder' => 'Enter phone number',
                 'class' => 'form-control',
                 'id' => 'phoneNum-input', // Define the id attribute here
             ],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please enter a phone number',
-                ]),
-                
-                new Length([
-                'min' => 8,
-                'max' => 8,
-                'exactMessage' => 'Phone number must contain exactly {{ limit }} digits',
-                 ]),
-                
-            ],
         ])
         ->add('birthDate',BirthdayType::class, [
             'label' => 'Birth date',
             'widget' => 'single_text',
-            'attr' => ['class' => 'form-control'],
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please enter a birth date',
-                ]),
-                
-            ],
+            'attr' => ['class' => 'form-control', 'max' => (new \DateTime())->format('Y-m-d')],
         ])
+
         ->add('gender', ChoiceType::class, [
             'choices' => [
                 'Male' => 'Male',
                 'Female' => 'Female',
-               
             ],
             'expanded' => true,
             'multiple' => false,
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Please specify your gender',
-                ]),
-                
+            'attr' => [
+                'class' => 'form-check-inline' // add this line
             ],
-           
+            'label_attr' => [
+                'class' => 'mr-3' // add this line to create space between radio buttons and text field
+            ],
+            'choice_attr' => [
+                'class' => 'mr-2' // add this line to create space between radio buttons
+            ]
         ])
         ->add('role', ChoiceType::class, [
             'choices' => [
                 'Admin' => 'Admin',
                 'Artist' => 'Artist',
                 'Subscriber' => 'Subscriber',
-                'Gallery manager' => 'Gallery manager',
-                'Auction manager' => 'Auction manager',
-                'Events manager' => 'Events manager',
-                'Tickets manager' => 'Tickets manager',
-                'Users manager' => 'Users manager',
+                'Gallery manager' => 'Gallery Manager',
+                'Auction manager' => 'Auction Manager',
+                'Events manager' => 'Events Manager',
+                'Tickets manager' => 'Tickets Manager',
+                'Users manager' => 'Users Manager',
             ],
             'expanded' => false,
             'multiple' => false,
             'placeholder' => 'Choose a role',
             
         ])
-            
+         ->add('userImages', FileType::class, [
+           'label' => false,
+           'multiple' => true,
+           'mapped' => false,
+           'required' => false
+         ])   
+         ->add('image', FileType::class, [
+            'label' => false,
+            'multiple' => false,
+            'mapped' => false,
+            'required' => false
+          ]) 
         ;
     }
 
