@@ -39,6 +39,8 @@ use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
 
 #[Route('/event')]
 class EventController extends AbstractController
@@ -920,4 +922,69 @@ $pdf->Cell(0, 10, 'End Date: ' . $endDate, 0, 1, 'L');
 
         return new JsonResponse($formatted);
     }
+    /**
+     * @Route("/modifyEvent/Json", name="modify_event")
+     * @Method("PUT")
+     */
+    public function modifyEvent(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $event = $this->getDoctrine()->getManager()->getRepository(Event::class)->find($request->get("id"));
+        $date = new \DateTime('now');
+
+        $event->setEventName($request->get("event_name"));
+        $event->setNbParticipants($request->get("nb_participants"));
+        $event->setStartTime($request->get("start_time"));
+        $event->setStartDate($date);
+        $event->setEndDate($date);
+        $event->setColor($request->get("color"));
+        $event->setDetail($request->get("details"));
+        $em->persist($event);
+        $em->flush();
+        $serializer  = new Serializer([new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($event);
+        return new JsonResponse("Event was modified successfully");
+    }
+    /**
+     * @Route("/deleteEvent/Json", name="delete_event")
+     * @Method("DELETE")
+     */
+    public function deleteEvent(Request $request)
+    {
+        $id = $request->get("id");
+
+        $em=$this->getDoctrine()->getManager();
+        $event=$em->getRepository(Event::class)->find($id);
+        if($event!=null)
+        {
+            $em->remove($event);
+            $em->flush();
+            
+            $serializer  = new Serializer([new ObjectNormalizer()]);
+        $formatted = $serializer->normalize("Event was deleted successfully !");
+        return new JsonResponse($formatted);
+
+        }
+    }
+/**
+ * @Route("/detailEvent/Json", name="detail_event")
+ * @Method("GET")
+ */
+public function detailEvent(Request $request)
+{
+    $id = $request->get("id");
+    $em = $this->getDoctrine()->getManager();
+    $event = $em->getRepository(Event::class)->find($id);
+    if(!$event) {
+        throw $this->createNotFoundException('The event does not exist');
+    }
+    $serializer = new Serializer([new ObjectNormalizer()]);
+    $formatted = $serializer->normalize($event);
+    return new JsonResponse($formatted);
+}
+
+
+
+
+
 }
