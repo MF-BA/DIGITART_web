@@ -101,7 +101,6 @@ class Auction
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_artwork", referencedColumnName="id_art")
      * })
-     * 
      * @Groups("Auction")
      */
     private $artwork;
