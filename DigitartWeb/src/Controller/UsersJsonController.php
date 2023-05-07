@@ -22,6 +22,7 @@ use League\OAuth2\Client\Provider\Facebook;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class UsersJsonController extends AbstractController
 {
@@ -101,6 +102,12 @@ class UsersJsonController extends AbstractController
         $cin = $req->query->get('cin');
        $firstname = $req->query->get('firstname');
        $lastname = $req->query->get('lastname');
+       $address = $req->query->get('address');
+       $gender = $req->query->get('gender');
+       $role = $req->query->get('role');
+       $phoneNum = $req->query->get('phoneNum');
+       $birthDate = $req->query->get('birthDate');
+
       
         $em= $this->getDoctrine()->getManager();
         $user = $em->getRepository(Users::class)->find($id);
@@ -117,10 +124,15 @@ class UsersJsonController extends AbstractController
             );
             $user->setImage($filename);
         }
-        $user->setCin($cin );
+        $user->setCin($cin);
         $user->setFirstname($firstname);
         $user->setLastname($lastname);
-       
+        $user->setAddress($address);
+        $user->setGender($gender);
+        $user->setRole($role);
+        $user->setPhoneNum($phoneNum);
+        $user->setBirthDate(new \DateTime($birthDate));
+
         $user->setIsVerified(true); //par defaut lezem ykoun enabled
 
    try{
@@ -136,16 +148,15 @@ class UsersJsonController extends AbstractController
 
     }
     #[Route('deleteUserJSON/{id}', name: 'deleteUserJSON')]
-    public function deleteUserJSON(Request $req, $id, NormalizerInterface $normalizer): Response
+    public function deleteUserJSON($id, NormalizerInterface $normalizer): Response
     {
-
         $em= $this->getDoctrine()->getManager();
         $user = $em->getRepository(Users::class)->find($id);
         $em->remove($user);
         $em->flush();
 
      $jsoncontent = $normalizer->normalize($user, 'json', ['groups' => "users"]);
-        return new Response("User deleted successfully " . json_encode($jsoncontent));
+     return new Response("User deleted successfully " . json_encode($jsoncontent));
     }
     #[Route('user/signup', name: 'app_user_signup')]
     public function signupAction(Request $req,UserPasswordHasherInterface $userPasswordHasher): Response
@@ -231,9 +242,9 @@ class UsersJsonController extends AbstractController
        {
         if(password_verify($password,$user->getPassword()))
         {
-            $serializer = new Serializer([new ObjectNormalizer()]);
-            $formatted = $serializer->normalize($user);
-            return new JsonResponse($formatted);
+         $serializer = new Serializer([new ObjectNormalizer()]);
+         $formatted = $serializer->normalize($user);
+         return new JsonResponse($formatted);
         }
         else
         {
