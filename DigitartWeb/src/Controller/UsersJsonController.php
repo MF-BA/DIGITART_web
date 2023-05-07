@@ -101,20 +101,12 @@ class UsersJsonController extends AbstractController
         $cin = $req->query->get('cin');
        $firstname = $req->query->get('firstname');
        $lastname = $req->query->get('lastname');
-       $email = $req->query->get('email');
-       $password = $req->query->get('password');
+      
         $em= $this->getDoctrine()->getManager();
         $user = $em->getRepository(Users::class)->find($id);
-        $mail_exist = $em->getRepository(Users::class)->findOneByEmail($email);
-
-        if ($mail_exist)
-        {
-            return new JsonResponse("Email already used! ");
-        }
-        else
-        {
-
         
+
+     
         if($req->files->get('image')!=null)
         {
             $file = $req->files->get('image');
@@ -128,13 +120,7 @@ class UsersJsonController extends AbstractController
         $user->setCin($cin );
         $user->setFirstname($firstname);
         $user->setLastname($lastname);
-        $user->setEmail($email);
-        $user->setPassword(
-            $userPasswordHasher->hashPassword(
-                $user,
-                $password
-            )
-        );
+       
         $user->setIsVerified(true); //par defaut lezem ykoun enabled
 
    try{
@@ -147,7 +133,7 @@ class UsersJsonController extends AbstractController
    return new Response("Failed".$ex->getMessage());
    }
        
-}
+
     }
     #[Route('deleteUserJSON/{id}', name: 'deleteUserJSON')]
     public function deleteUserJSON(Request $req, $id, NormalizerInterface $normalizer): Response
@@ -170,14 +156,29 @@ class UsersJsonController extends AbstractController
        $lastname = $req->query->get('lastname');
        $email = $req->query->get('email');
        $password = $req->query->get('password');
+       $address= $req->query->get('address');
+       $phonenum= $req->query->get('phoneNum');
+       $birthDate= $req->query->get('birthDate');
+       $gender= $req->query->get('gender');
+       $role= $req->query->get('role');
 
+       $em= $this->getDoctrine()->getManager();
+       $mail_exist = $em->getRepository(Users::class)->findOneByEmail($email);
+
+       if($mail_exist)
+       {
+        return new JsonResponse("Email already used! ");
+       }
+       else
+       {
+       
        if(!filter_var($email, FILTER_VALIDATE_EMAIL))
        {
         return new Response("email invalid!");
        }
        
         $user = new Users();
-        $user->setCin($cin );
+        $user->setCin($cin);
         $user->setFirstname($firstname);
         $user->setLastname($lastname);
         $user->setEmail($email);
@@ -187,7 +188,21 @@ class UsersJsonController extends AbstractController
                 $password
             )
         );
-        //$user->setBirthDate(new \DateTime($birthdate));
+        $user->setAddress($address);
+        $user->setPhoneNum($phonenum);
+        $user->setBirthDate(new \DateTime($birthDate));
+        $user->setGender($gender);
+        $user->setRole($role);
+        if($role==='Artist')
+        {
+         $user->setRoles(['ROLE_ARTIST']);
+        }
+        if($role==='Subscriber')
+        {
+         $user->setRoles(['ROLE_SUBSCRIBER']);
+        }
+        $user->setEmailAuthCode('111111');
+        
         try{
            $em= $this->getDoctrine()->getManager();
            $em->persist($user);
@@ -198,7 +213,8 @@ class UsersJsonController extends AbstractController
         {
             return new Response("exception ".$ex->getMessage());
         }
-
+ 
+    }
     
     }
     #[Route('user/signin', name: 'app_user_signin')]
