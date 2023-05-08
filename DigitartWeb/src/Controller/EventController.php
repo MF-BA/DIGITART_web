@@ -893,6 +893,8 @@ $pdf->Cell(0, 10, 'End Date: ' . $endDate, 0, 1, 'L');
         $detail = $request->query->get("detail");
         $color = $request->query->get("color");
         $date = new \DateTime('now');
+        $start_date= $request->query->get("startDate");
+        $end_date= $request->query->get("endDate");
 
         $event->setEventName($event_name);
         $event->setNbParticipants($nb_participants);

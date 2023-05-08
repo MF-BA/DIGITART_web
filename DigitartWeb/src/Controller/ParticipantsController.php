@@ -9,6 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
 
 #[Route('/participants')]
 class ParticipantsController extends AbstractController
@@ -75,4 +81,10 @@ class ParticipantsController extends AbstractController
 
         return $this->redirectToRoute('app_participants_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+
+   
+
+
 }
