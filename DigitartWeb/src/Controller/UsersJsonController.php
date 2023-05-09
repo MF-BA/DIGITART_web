@@ -28,18 +28,16 @@ class UsersJsonController extends AbstractController
 {
     
     #[Route('/Allusers', name: 'app_json_allusers')]
-    public function getusers(SerializerInterface $serializer, UsersRepository $usersRepository): Response
+    public function getusers(SerializerInterface $serializer, UsersRepository $usersRepository,NormalizerInterface $normalizer): Response
     {
 
         $users= $usersRepository->findAll();
 
-     $json = $serializer->serialize($users, 'json', ['groups' => "users"]);
+    // $json = $serializer->serialize($users, 'json', ['groups' => "users"]);
 
-
-       /* or
         $usersNormalises = $normalizer->normalize($users, 'json', ['groups' => "users"]);
         $json = json_encode($usersNormalises);
-         */
+
         return new Response($json);
     }
     #[Route('/userdetail/{id}', name: 'app_json_getuserid')]
@@ -51,8 +49,9 @@ class UsersJsonController extends AbstractController
      $usersNormalises = $normalizer->normalize($users, 'json', ['groups' => "users"]);
         return new Response(json_encode($usersNormalises));
     }
-    #[Route('addUserJSON/new', name: 'addUserJSON')]
-    public function addUserJSON(Request $req, NormalizerInterface $normalizer): Response
+    
+    #[Route('/addUserJSON/new', name: 'addUserJSON')]
+    public function addUserJSON(Request $req, NormalizerInterface $normalizer,UserPasswordHasherInterface $userPasswordHasher): Response
     {
 
         $em= $this->getDoctrine()->getManager();
@@ -61,35 +60,73 @@ class UsersJsonController extends AbstractController
         $user->setFirstname($req->get('firstname'));
         $user->setLastname($req->get('lastname'));
         $user->setEmail($req->get('email'));
-        /*$user->setFirstname($req->get('firstname'));
-        $user->setFirstname($req->get('firstname'));
-        $user->setFirstname($req->get('firstname'));
-        $user->setFirstname($req->get('firstname'));
-        $user->setFirstname($req->get('firstname'));
-        $user->setFirstname($req->get('firstname'));
-        $user->setFirstname($req->get('firstname'));*/
+        $user->setPassword($userPasswordHasher->hashPassword(
+            $user,
+            $req->get('password')
+        ));
+        $user->setAddress($req->get('address'));
+        $user->setPhoneNum($req->get('phoneNum'));
+        $user->setRole($req->get('role'));
+        $user->setGender($req->get('gender'));
+        $user->setBirthDate(new \DateTime($req->get('birthDate')));
+        
+        
+        if($req->get('role') === 'Artist')
+        {
+         $user->setRoles(['ROLE_ARTIST']);
+        }
+        if($req->get('role') ==='Subscriber')
+        {
+         $user->setRoles(['ROLE_SUBSCRIBER']);
+        } 
+        if($req->get('role') === 'Admin')
+        {
+         $user->setRoles(['ROLE_ADMIN']);
+        }
+        if($req->get('role') === 'Gallery Manager')
+        {
+        $user->setRoles(['ROLE_GALLERY_MANAGER']);
+        }
+        if($req->get('role') === 'Auction Manager')
+        {
+         $user->setRoles(['ROLE_AUCTION_MANAGER']);
+        }
+        if($req->get('role') === 'Events Manager')
+        {
+         $user->setRoles(['ROLE_EVENT_MANAGER']);
+        }
+        if($req->get('role') === 'Tickets Manager')
+        {
+        $user->setRoles(['ROLE_TICKETS_MANAGER']);
+        }
+        if($req->get('role') === 'Users Manager')
+        {
+         $user->setRoles(['ROLE_USERS_MANAGER']);
+        }
+        $user->setIsVerified(true);
+        $user->setEmailAuthCode('111111');
+
        $em->persist($user);
        $em->flush();
      $jsoncontent = $normalizer->normalize($user, 'json', ['groups' => "users"]);
         return new Response(json_encode($jsoncontent));
     }
-    #[Route('updateUserJSON/{id}', name: 'addUserJSON')]
-    public function updateUserJSON(Request $req, $id, NormalizerInterface $normalizer): Response
+    #[Route('/updateUserJSON', name: 'updateUserJSON')]
+    public function updateUserJSON(Request $req, NormalizerInterface $normalizer): Response
     {
 
         $em= $this->getDoctrine()->getManager();
-        $user = $em->getRepository(Users::class)->find($id);
+        $user = $em->getRepository(Users::class)->find($req->get('id'));
         $user->setCin($req->get('cin'));
         $user->setFirstname($req->get('firstname'));
         $user->setLastname($req->get('lastname'));
         $user->setEmail($req->get('email'));
-        /*$user->setFirstname($req->get('firstname'));
-        $user->setFirstname($req->get('firstname'));
-        $user->setFirstname($req->get('firstname'));
-        $user->setFirstname($req->get('firstname'));
-        $user->setFirstname($req->get('firstname'));
-        $user->setFirstname($req->get('firstname'));
-        $user->setFirstname($req->get('firstname'));*/
+        $user->setAddress($req->get('address'));
+        $user->setGender($req->get('gender'));
+        $user->setRole($req->get('role'));
+        $user->setPhoneNum($req->get('phoneNum'));
+        $user->setBirthDate(new \DateTime($req->get('birthDate')));
+        $user->setBirthDate($req->get('status'));
       
        $em->flush();
      $jsoncontent = $normalizer->normalize($user, 'json', ['groups' => "users"]);

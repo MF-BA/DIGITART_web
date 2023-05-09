@@ -29,6 +29,9 @@ class UsersFixture extends Fixture
          $user->setLastname($faker->lastName);
          $user->setEmail($faker->email); 
          $user->setAddress($faker->address);
+         $user->setPhoneNum($faker->numberBetween(11111111, 99999999));
+         $user->setBirthDate($faker->dateTimeBetween('-1 year', 'now'));
+         $user->setImage('0776dc120d4e09a5a2f635b1fb51e93e.jpg');
          $user->setPassword($this->userPasswordHasher->hashPassword($user,$faker->password()));
          $user->setGender($faker->randomElement(['Male', 'Female']));
          $user->setRole($faker->randomElement(['Admin', 'Subscriber', 'Artist', 'Gallery Manager',
