@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\ImageArtworkRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * ImageArtwork
@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class ImageArtwork
 {
-   /**
+    /**
      * @var int
      *
      * @ORM\Column(name="id_img", type="integer", nullable=false)
@@ -32,9 +32,10 @@ class ImageArtwork
      * @ORM\JoinColumns({
      * @ORM\JoinColumn(name="id_art", referencedColumnName="id_art")
      * })
+     * @Groups("Images")
      */
     private $idArt;
-   
+
 
 
     /**
@@ -42,7 +43,7 @@ class ImageArtwork
      */
     private ?string $imageName = null;
 
-   
+
     public function getId(): ?int
     {
         return $this->id;
@@ -67,9 +68,4 @@ class ImageArtwork
     {
         return $this->imageName;
     }
-
-   /*
-test merge
-
-   */
 }

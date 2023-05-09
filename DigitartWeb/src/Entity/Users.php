@@ -13,6 +13,7 @@ use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use EWZ\Bundle\RecaptchaBundle\Validator\Constraints as Recaptcha;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UsersRepository::class)
@@ -25,6 +26,8 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups("Auction")
+     
      */
     private $id;
 

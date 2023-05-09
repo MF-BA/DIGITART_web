@@ -38,6 +38,7 @@ class Artwork
      *
      *     )
      * @ORM\Column(name="artwork_name", type="string", length=255, nullable=false)
+     * @Groups("Auction")
      */
     private $artworkName;
 
@@ -47,6 +48,7 @@ class Artwork
      * @ORM\JoinColumns({
      * @ORM\JoinColumn(name="id_artist", referencedColumnName="id")
      * })
+     * @Groups("Auction")
      */
     private $idArtist;
 
