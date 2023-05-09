@@ -294,5 +294,20 @@ class UsersJsonController extends AbstractController
        }
  
     }
+
+    #[Route('user/getPasswordByEmail', name: 'app_password')]
+    public function getPasswordByEmail(Request $request)
+    {
+        $email = $request->query->get('email');
+        $user = $this-->getDoctrine()->getManager()->getRepository(Users::class)->findOneBy(['email'=>$email]);
+
+        if($user){
+            $password = $user->getPassword();
+            $serializer = new Serializer([new ObjectNormalizer()]);
+            $formatted = $serializer->normalize($password);
+            return new JsonResponse($formatted);
+        }
+        return new Response('user not found');
+    }
     
 }
