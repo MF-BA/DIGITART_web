@@ -114,19 +114,19 @@ class UsersJsonController extends AbstractController
     #[Route('/updateUserJSON', name: 'updateUserJSON')]
     public function updateUserJSON(Request $req, NormalizerInterface $normalizer): Response
     {
-
+        $id = $req->get('id');
         $em= $this->getDoctrine()->getManager();
-        $user = $em->getRepository(Users::class)->find($req->get('id'));
-        $user->setCin($req->get('cin'));
-        $user->setFirstname($req->get('firstname'));
-        $user->setLastname($req->get('lastname'));
-        $user->setEmail($req->get('email'));
-        $user->setAddress($req->get('address'));
-        $user->setGender($req->get('gender'));
-        $user->setRole($req->get('role'));
-        $user->setPhoneNum($req->get('phoneNum'));
-        $user->setBirthDate(new \DateTime($req->get('birthDate')));
-        $user->setBirthDate($req->get('status'));
+        $user = $em->getRepository(Users::class)->find($id);
+        $user->setCin($req->query->get('cin'));
+        $user->setFirstname($req->query->get('firstname'));
+        $user->setLastname($req->query->get('lastname'));
+        $user->setEmail($req->query->get('email'));
+        $user->setAddress($req->query->get('address'));
+        $user->setGender($req->query->get('gender'));
+        $user->setRole($req->query->get('role'));
+        $user->setPhoneNum($req->query->get('phoneNum'));
+        $user->setBirthDate(new \DateTime($req->query->get('birthDate')));
+        $user->setStatus($req->query->get('status'));
       
        $em->flush();
      $jsoncontent = $normalizer->normalize($user, 'json', ['groups' => "users"]);
