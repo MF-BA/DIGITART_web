@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230424060641 extends AbstractMigration
+final class Version20230510092852 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -24,20 +24,24 @@ final class Version20230424060641 extends AbstractMigration
         $this->addSql('CREATE TABLE artwork (id_art INT AUTO_INCREMENT NOT NULL, id_artist INT DEFAULT NULL, id_room INT DEFAULT NULL, artwork_name VARCHAR(255) NOT NULL, artist_name VARCHAR(255) DEFAULT NULL, date_art DATE NOT NULL, description TEXT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_881FC576276E236A (id_artist), INDEX fk_art (id_room), PRIMARY KEY(id_art)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE auction (id_auction INT AUTO_INCREMENT NOT NULL, id_artwork INT DEFAULT NULL, starting_price INT NOT NULL, increment INT DEFAULT 10 NOT NULL, ending_date DATE NOT NULL, description TEXT NOT NULL, state VARCHAR(10) DEFAULT NULL, added DATETIME NOT NULL, updated DATETIME NOT NULL, deleted DATETIME DEFAULT NULL, INDEX fk_artwork (id_artwork), PRIMARY KEY(id_auction)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE bid (id_auction INT DEFAULT NULL, ID INT AUTO_INCREMENT NOT NULL, date DATETIME NOT NULL, offer INT NOT NULL, id_user INT NOT NULL, INDEX IDX_4AF2B3F3795CE3 (id_auction), PRIMARY KEY(ID)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE event (id INT AUTO_INCREMENT NOT NULL, id_room INT DEFAULT NULL, event_name VARCHAR(255) NOT NULL, start_date DATE NOT NULL, end_date DATE NOT NULL, nb_participants VARCHAR(255) NOT NULL, detail VARCHAR(255) NOT NULL, start_time INT NOT NULL, image VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX id_room (id_room), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE comments (id INT AUTO_INCREMENT NOT NULL, id_user INT DEFAULT NULL, event_id INT NOT NULL, parent_id INT DEFAULT NULL, content LONGTEXT NOT NULL, created_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_5F9E962A6B3CA4B (id_user), INDEX IDX_5F9E962A71F7E88B (event_id), INDEX IDX_5F9E962A727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE event (id INT AUTO_INCREMENT NOT NULL, id_room INT DEFAULT NULL, event_name VARCHAR(255) NOT NULL, start_date DATE NOT NULL, end_date DATE NOT NULL, nb_participants VARCHAR(255) NOT NULL, detail VARCHAR(255) NOT NULL, start_time INT NOT NULL, image VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, color VARCHAR(7) DEFAULT NULL, INDEX id_room (id_room), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE images (id INT AUTO_INCREMENT NOT NULL, event_id INT NOT NULL, name VARCHAR(255) NOT NULL, INDEX IDX_E01FBE6A71F7E88B (event_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE messenger_messages (id BIGINT AUTO_INCREMENT NOT NULL, body LONGTEXT NOT NULL, headers LONGTEXT NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at DATETIME NOT NULL, available_at DATETIME NOT NULL, delivered_at DATETIME DEFAULT NULL, INDEX IDX_75EA56E0FB7336F0 (queue_name), INDEX IDX_75EA56E0E3BD61CE (available_at), INDEX IDX_75EA56E016BA31DB (delivered_at), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE participants (id_event INT NOT NULL, id_user INT DEFAULT NULL, first_name VARCHAR(255) NOT NULL, last_name VARCHAR(255) NOT NULL, adress VARCHAR(255) NOT NULL, gender VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_716970926B3CA4B (id_user), INDEX id_event_const (id_event), PRIMARY KEY(id_event)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE participants (id INT AUTO_INCREMENT NOT NULL, id_event INT DEFAULT NULL, id_user INT DEFAULT NULL, first_name VARCHAR(255) NOT NULL, last_name VARCHAR(255) NOT NULL, adress VARCHAR(255) NOT NULL, gender VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_716970926B3CA4B (id_user), INDEX id_event_const (id_event), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE payment (payment_id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, purchase_date DATE NOT NULL, nb_adult INT DEFAULT NULL, nb_teenager INT DEFAULT NULL, nb_student INT DEFAULT NULL, total_payment INT NOT NULL, paid TINYINT(1) DEFAULT NULL, createdAt DATETIME DEFAULT NULL, updatedAt DATETIME DEFAULT NULL, INDEX pk (user_id), PRIMARY KEY(payment_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE room (id_room INT AUTO_INCREMENT NOT NULL, name_room VARCHAR(255) NOT NULL, area INT NOT NULL, state VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id_room)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE ticket (ticket_id INT AUTO_INCREMENT NOT NULL, ticket_date DATE DEFAULT NULL, ticket_edate DATE DEFAULT NULL, price INT NOT NULL, ticket_type VARCHAR(50) NOT NULL, createdAt DATETIME DEFAULT NULL, updatedAt DATETIME DEFAULT NULL, PRIMARY KEY(ticket_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user_images (id INT AUTO_INCREMENT NOT NULL, users_id INT NOT NULL, name VARCHAR(255) NOT NULL, INDEX IDX_854DA55767B3B43D (users_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE users (id INT AUTO_INCREMENT NOT NULL, cin INT DEFAULT NULL, firstname VARCHAR(255) DEFAULT NULL, lastname VARCHAR(255) DEFAULT NULL, email VARCHAR(255) DEFAULT NULL, password VARCHAR(255) DEFAULT NULL, address VARCHAR(255) DEFAULT NULL, phone_num INT DEFAULT NULL, birth_date DATE DEFAULT NULL, gender VARCHAR(255) DEFAULT NULL, role VARCHAR(255) DEFAULT \'Subscriber\', status VARCHAR(255) DEFAULT \'unblocked\' NOT NULL, image VARCHAR(255) DEFAULT NULL, secretcode VARCHAR(255) DEFAULT NULL, roles LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\', created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, is_verified TINYINT(1) NOT NULL, resetToken VARCHAR(100) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE users (id INT AUTO_INCREMENT NOT NULL, cin INT DEFAULT NULL, firstname VARCHAR(255) DEFAULT NULL, lastname VARCHAR(255) DEFAULT NULL, email VARCHAR(255) DEFAULT NULL, password VARCHAR(255) DEFAULT NULL, address VARCHAR(255) DEFAULT NULL, phone_num INT DEFAULT NULL, birth_date DATE DEFAULT NULL, gender VARCHAR(255) DEFAULT NULL, role VARCHAR(255) DEFAULT \'Subscriber\', status VARCHAR(255) DEFAULT \'unblocked\' NOT NULL, image VARCHAR(255) DEFAULT NULL, secretcode VARCHAR(255) DEFAULT NULL, roles LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\', created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, is_verified TINYINT(1) NOT NULL, auth_code VARCHAR(255) DEFAULT NULL, resetToken VARCHAR(100) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE ImageArtwork ADD CONSTRAINT FK_9BD9E5962913E0E FOREIGN KEY (id_art) REFERENCES artwork (id_art)');
         $this->addSql('ALTER TABLE artwork ADD CONSTRAINT FK_881FC576276E236A FOREIGN KEY (id_artist) REFERENCES users (id)');
         $this->addSql('ALTER TABLE artwork ADD CONSTRAINT FK_881FC576F9BF4D99 FOREIGN KEY (id_room) REFERENCES room (id_room)');
         $this->addSql('ALTER TABLE auction ADD CONSTRAINT FK_DEE4F59356826C06 FOREIGN KEY (id_artwork) REFERENCES artwork (id_art)');
         $this->addSql('ALTER TABLE bid ADD CONSTRAINT FK_4AF2B3F3795CE3 FOREIGN KEY (id_auction) REFERENCES auction (id_auction)');
+        $this->addSql('ALTER TABLE comments ADD CONSTRAINT FK_5F9E962A6B3CA4B FOREIGN KEY (id_user) REFERENCES users (id)');
+        $this->addSql('ALTER TABLE comments ADD CONSTRAINT FK_5F9E962A71F7E88B FOREIGN KEY (event_id) REFERENCES event (id)');
+        $this->addSql('ALTER TABLE comments ADD CONSTRAINT FK_5F9E962A727ACA70 FOREIGN KEY (parent_id) REFERENCES comments (id)');
         $this->addSql('ALTER TABLE event ADD CONSTRAINT FK_3BAE0AA7F9BF4D99 FOREIGN KEY (id_room) REFERENCES room (id_room)');
         $this->addSql('ALTER TABLE images ADD CONSTRAINT FK_E01FBE6A71F7E88B FOREIGN KEY (event_id) REFERENCES event (id)');
         $this->addSql('ALTER TABLE participants ADD CONSTRAINT FK_71697092D52B4B97 FOREIGN KEY (id_event) REFERENCES event (id)');
@@ -54,6 +58,9 @@ final class Version20230424060641 extends AbstractMigration
         $this->addSql('ALTER TABLE artwork DROP FOREIGN KEY FK_881FC576F9BF4D99');
         $this->addSql('ALTER TABLE auction DROP FOREIGN KEY FK_DEE4F59356826C06');
         $this->addSql('ALTER TABLE bid DROP FOREIGN KEY FK_4AF2B3F3795CE3');
+        $this->addSql('ALTER TABLE comments DROP FOREIGN KEY FK_5F9E962A6B3CA4B');
+        $this->addSql('ALTER TABLE comments DROP FOREIGN KEY FK_5F9E962A71F7E88B');
+        $this->addSql('ALTER TABLE comments DROP FOREIGN KEY FK_5F9E962A727ACA70');
         $this->addSql('ALTER TABLE event DROP FOREIGN KEY FK_3BAE0AA7F9BF4D99');
         $this->addSql('ALTER TABLE images DROP FOREIGN KEY FK_E01FBE6A71F7E88B');
         $this->addSql('ALTER TABLE participants DROP FOREIGN KEY FK_71697092D52B4B97');
@@ -64,6 +71,7 @@ final class Version20230424060641 extends AbstractMigration
         $this->addSql('DROP TABLE artwork');
         $this->addSql('DROP TABLE auction');
         $this->addSql('DROP TABLE bid');
+        $this->addSql('DROP TABLE comments');
         $this->addSql('DROP TABLE event');
         $this->addSql('DROP TABLE images');
         $this->addSql('DROP TABLE messenger_messages');
