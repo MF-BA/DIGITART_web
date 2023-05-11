@@ -16,6 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\BidRepository;
 use App\Repository\ImageArtworkRepository;
 use App\Repository\UsersRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use LDAP\Result;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -102,7 +105,7 @@ class AuctionController extends AbstractController
 
 
 
-    #[Route('/new/back', name: 'app_auction_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_auction_new', methods: ['GET', 'POST'])]
     public function new(Request $request, AuctionRepository $auctionRepository): Response
     {
         $auction = new Auction();
@@ -389,8 +392,8 @@ class AuctionController extends AbstractController
     ///////////////////////////////////////////////////////////////////////////////////////
     //  Mobile
     /////////////////////////////////////////////////////////////////////////////////////////
-    #[Route('/mobile/Display', name: 'Display_MOBILE')]
-    public function DisplayMOBILE(AuctionRepository $auctionRepository, NormalizerInterface $normalizer)
+    #[Route('/mobile/Display/back', name: 'Display_Back_MOBILE')]
+    public function DisplayBackMOBILE(AuctionRepository $auctionRepository, NormalizerInterface $normalizer)
     {
         $auctions = $auctionRepository->findAll();
         $studentNormalize = $normalizer->normalize($auctions, 'json', ['groups' => "Auction"]);
@@ -398,16 +401,82 @@ class AuctionController extends AbstractController
 
         return new Response($json);
     }
+    #[Route('/mobile/Display', name: 'Display_MOBILE')]
+    public function DisplayMOBILE(AuctionRepository $auctionRepository, NormalizerInterface $normalizer)
+    {
+        $currentDateTime = new \DateTime();
+        $auctions = $auctionRepository->createQueryBuilder('a')
+            ->where('a.endingDate > :currentDateTime')
+            ->setParameter('currentDateTime', $currentDateTime)
+            ->andWhere('a.deleted is NULL')
+            ->getQuery()
+            ->getResult();
+        $studentNormalize = $normalizer->normalize($auctions, 'json', ['groups' => "Auction"]);
+        $json = json_encode($studentNormalize);
+
+        return new Response($json);
+    }
+
+    #[Route('/mobile/{id}/images', name: 'get_artwork_images_MOBILE')]
+    public function ArtworkImagesMOBILE(NormalizerInterface $normalizer, $id, ImageArtworkRepository $ImageartworkRepository)
+    {
+        $images = $ImageartworkRepository->createQueryBuilder('i')
+            ->select('i.imageName')
+            ->where('i.idArt = :idArt')
+            ->setParameter('idArt', $id)
+            ->getQuery()
+            ->getResult();
+
+        $imagesNormalize = $normalizer->normalize($images, 'json', ['groups' => "Images"]);
+        $json = json_encode($imagesNormalize);
+        return new Response($json);
+    }
+
+    #[Route('/mobile/{id}/bid', name: 'get_auction_bid_MOBILE')]
+    public function AuctionBidMOBILE(NormalizerInterface $normalizer, $id, BidRepository $ImageartworkRepository)
+    {
+        $bid = $ImageartworkRepository->createQueryBuilder('b')
+            ->where('b.id_auction = :idArt')
+            ->setParameter('idArt', $id)
+            ->getQuery()
+            ->getResult();
+
+        $bidNormalize = $normalizer->normalize($bid, 'json', ['groups' => "Bid"]);
+        $json = json_encode($bidNormalize);
+        return new Response($json);
+    }
+
+    #[Route('/mobile/bid/add', name: 'add_auction_bid_MOBILE')]
+    public function AddAuctionBidMOBILE(Request $req, EntityManagerInterface $entityManager, AuctionRepository $auctionRepository)
+    {
+        $id_auction = intval($req->get('id_auction'));
+        $auction = $auctionRepository->find($id_auction);
+        $bid = new bid();
+        $currentDateTime = new \DateTime();
+        $bid->setDate($currentDateTime);
+        $bid->setOffer(intval($req->get('offer')));
+        $bid->setIdAuction($auction);
+        $bid->setIdUser(intval($req->get('id_user')));
+
+        // Persist the Auction object
+        $entityManager->persist($bid);
+
+        // Flush changes to the database
+        $entityManager->flush();
+        return new Response('bid added successfully');
+    }
 
     #[Route('/mobile/add', name: 'create_MOBILE')]
-    public function addMOBILE(Request $req, AuctionRepository $auctionRepository, ArtworkRepository $ArtworkRepository)
+    public function addMOBILE(Request $req, EntityManagerInterface $entityManager, ArtworkRepository $ArtworkRepository)
     {
-        $entityManager = $this->getDoctrine()->getManager();
+        $format = "D M d H:i:s T Y";
+        $datetime = \DateTime::createFromFormat($format, $req->get('EndingDate'));
+
         $auction = new Auction();
-        $auction->setStartingPrice($req->get('StartingPrice'));
-        $auction->setDescription($req->get('Description'));
-        $auction->setEndingDate($req->get('EndingDate'));
-        $auction->setIncrement($req->get('Increment'));
+        $auction->setStartingPrice(intval($req->get('StartingPrice')));
+        $auction->setDescription(($req->get('Description')));
+        $auction->setEndingDate($datetime);
+        $auction->setIncrement(intval($req->get('Increment')));
         $artwork = $ArtworkRepository->find($req->get('Artwork'));
         $auction->setartwork($artwork);
 
@@ -416,6 +485,7 @@ class AuctionController extends AbstractController
 
         // Flush changes to the database
         $entityManager->flush();
+        return new Response('auction added successfully');
     }
 
     #[Route('/mobile/{id}/edit', name: 'edit_mobile')]
@@ -423,7 +493,6 @@ class AuctionController extends AbstractController
     {
         $auction = $auctionRepository->find($id);
         $entityManager = $this->getDoctrine()->getManager();
-
         $auction->setStartingPrice($req->get('StartingPrice'));
         $auction->setDescription($req->get('Description'));
         $auction->setEndingDate($req->get('EndingDate'));
@@ -448,5 +517,38 @@ class AuctionController extends AbstractController
         return new Response('Auction deleted successfully');
     }
 
-    
+    #[Route('/mobile/artwork', name: 'get_artwork')]
+    public function GetArtwork(NormalizerInterface $normalizer, ArtworkRepository $er): Response
+    {
+        $sub = $er->createQueryBuilder('s')
+            ->select('s.idArt, a.idArt as artwork_id')
+            ->from(Auction::class, 'ac')
+            ->join('ac.artwork', 'a')
+            ->where('ac.state = :sold')
+            ->orWhere('ac.deleted is null')
+            ->setParameter('sold', 'sold')
+            ->getQuery()
+            ->getResult();
+        $artworkIds = array_map(function ($row) {
+            return $row['artwork_id'];
+        }, $sub);
+        if ($artworkIds == null) {
+            $artworks = $er->createQueryBuilder('a')
+                ->Where('a.idArtist != :excluded_id')
+                ->setParameter('excluded_id', -1)->getQuery()
+                ->getResult();;
+        } else {
+            $artworks = $er->createQueryBuilder('a')
+                ->where('a.idArt NOT IN (:artwork_ids)')
+                ->andWhere('a.idArtist != :excluded_id')
+                ->setParameter('excluded_id', -1)
+                ->setParameter('artwork_ids', $artworkIds)->getQuery()
+                ->getResult();;
+        }
+
+        $artworksNormalize = $normalizer->normalize($artworks, 'json', ['groups' => "Auction"]);
+        $json = json_encode($artworksNormalize);
+
+        return new Response($json);
+    }
 }
