@@ -126,13 +126,14 @@ class Event
      */
     private $comments;
 
- /**
-     * @return Collection|Comments[]
-     */
-    public function getComments(): Collection
-    {
-        return $this->comments;
-    }
+/**
+ * @return Collection|Comments[]
+ */
+public function getComments(): Collection
+{
+    return $this->comments ?? new ArrayCollection();
+}
+
 
     public function addComment(Comments $comment): self
     {
