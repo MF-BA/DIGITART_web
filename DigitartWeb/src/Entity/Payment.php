@@ -21,6 +21,7 @@ class Payment
      * @ORM\Column(name="payment_id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups("payments")
      */
     private $paymentId;
 
@@ -76,6 +77,7 @@ class Payment
      *
      * @ORM\Column(name="createdAt", type="datetime", nullable=true)
      * @Gedmo\Timestampable(on="create")
+     * 
      */
     private $createdAt;
 
@@ -83,6 +85,7 @@ class Payment
      *
      * @ORM\Column(name="updatedAt", type="datetime", nullable=true)
      * @Gedmo\Timestampable(on="update")
+     * 
      */
     private $updatedAt;
 
