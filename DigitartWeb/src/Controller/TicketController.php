@@ -19,7 +19,7 @@ use Knp\Component\Pager\PaginatorInterface;
 #[Route('/ticket')]
 class TicketController extends AbstractController
 {
-    #[Route('/', name: 'app_ticket_index', methods: ['GET'])]
+    #[Route('/back', name: 'app_ticket_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
         $tickets = $entityManager
@@ -31,7 +31,7 @@ class TicketController extends AbstractController
         ]);
     }
 
-    #[Route('/payment', name: 'app_payment_index', methods: ['GET'])]
+    #[Route('/payment/back', name: 'app_payment_index', methods: ['GET'])]
     public function indexPayment(EntityManagerInterface $entityManager, PaginatorInterface $paginator, PaymentRepository $PaymentRepository,Request $request): Response
     {
     
@@ -46,7 +46,7 @@ class TicketController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_ticket_new', methods: ['GET', 'POST'])]
+    #[Route('/new/back', name: 'app_ticket_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, ManagerRegistry $doctrine): Response
     {
         $ticket = new Ticket();
@@ -96,7 +96,7 @@ class TicketController extends AbstractController
     }
     */
 
-    #[Route('/{ticketId}/edit', name: 'app_ticket_edit', methods: ['GET', 'POST'])]
+    #[Route('/{ticketId}/edit/back', name: 'app_ticket_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Ticket $ticket, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(TicketType::class, $ticket);
@@ -127,7 +127,7 @@ class TicketController extends AbstractController
     }
 
 
-    #[Route('/stat', name: 'app_ticket_stat')]
+    #[Route('/stat/back', name: 'app_ticket_stat')]
     public function Statistics(PaymentRepository $PaymentRepository): Response
     {   
         $payments = $PaymentRepository->findAll();
