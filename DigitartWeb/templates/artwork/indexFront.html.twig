@@ -1,4 +1,3 @@
-
 {% extends 'base.html.twig' %}
 {% block homeActive %}{% endblock %}
 {% block artworkactive %}
@@ -117,18 +116,22 @@
       </div><!-- End Projects Container -->
     </div>
   </div>
-    <h2 class="title">Let's explore the rooms</h2>
-</section><!-- End Our Projects Section -->
+     <br>   <br>  
+     <hr>
+     <h2 class="title" style="padding-left:20px;" >Know more informations about our artworks Powered By OPENAI</h2>
+     <div>
+     
+    {{ include('artwork/chatgpt.html.twig') }}  
+    </div>
+    <hr>
+     <h2 class="title" style="padding-left:20px;" >Let's explore the rooms</h2>
+     
+  </section><!-- End Our Projects Section -->
 
  
       
       <iframe src="https://www.google.com/maps/embed/v1/streetview?key=AIzaSyB20J0YArSAor39b70wlsLGS5L2LKKBc4A&location=45.767000577319344,4.834155074587501&heading=-156.63&pitch=20&fov=80" width="100%" height="580" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
     
-    <div>
-    {{ include('artwork/chatgpt.html.twig') }}  
-    </div>
+   
     
 {% endblock %}
-
-
-
