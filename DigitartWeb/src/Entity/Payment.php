@@ -6,6 +6,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo; // gedmo annotations
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * Payment
  *
@@ -27,6 +28,7 @@ class Payment
      * @var \DateTime
      *
      * @ORM\Column(name="purchase_date", type="date", nullable=false)
+     * @Groups("payments")
      */
     private $purchaseDate;
 
@@ -34,6 +36,7 @@ class Payment
      * @var int|null
      *
      * @ORM\Column(name="nb_adult", type="integer", nullable=true)
+     * @Groups("payments")
      */
     private $nbAdult;
 
@@ -41,6 +44,7 @@ class Payment
      * @var int|null
      *
      * @ORM\Column(name="nb_teenager", type="integer", nullable=true)
+     * @Groups("payments")
      */
     private $nbTeenager;
 
@@ -48,6 +52,7 @@ class Payment
      * @var int|null
      *
      * @ORM\Column(name="nb_student", type="integer", nullable=true)
+     * @Groups("payments")
      */
     private $nbStudent;
 
@@ -55,6 +60,7 @@ class Payment
      * @var int|null
      *
      * @ORM\Column(name="total_payment", type="integer", nullable=false)
+     * @Groups("payments")
      */
     private $totalPayment;
 
@@ -62,6 +68,7 @@ class Payment
      * @var bool|null
      *
      * @ORM\Column(name="paid", type="boolean", nullable=true)
+     * @Groups("payments")
      */
     private $paid;
 
@@ -86,6 +93,7 @@ class Payment
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })
+     * @Groups("payments")
      */
     private $user;
 
