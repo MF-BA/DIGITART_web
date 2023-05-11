@@ -23,6 +23,10 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Constraints\DateTime;
+use App\Service\SendMailService;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mailer\MailerInterface;
+
 
 class UsersJsonController extends AbstractController
 {
@@ -296,18 +300,54 @@ class UsersJsonController extends AbstractController
     }
 
     #[Route('user/getPasswordByEmail', name: 'app_password')]
-    public function getPasswordByEmail(Request $request)
-    {
-        $email = $request->query->get('email');
-        $user = $this-->getDoctrine()->getManager()->getRepository(Users::class)->findOneBy(['email'=>$email]);
+    public function forgotPassword(Request $request, UsersRepository $userRepository, MailerInterface $mailer)
+{
+    
+    $email = $request->query->get('email');
 
-        if($user){
-            $password = $user->getPassword();
-            $serializer = new Serializer([new ObjectNormalizer()]);
-            $formatted = $serializer->normalize($password);
-            return new JsonResponse($formatted);
-        }
-        return new Response('user not found');
+    $user = $userRepository->findOneByEmail($email);
+
+    if (!$user) {
+        return new JsonResponse(['message' => 'User not found.'], Response::HTTP_NOT_FOUND);
     }
+
+    
+    $code = rand(100000,900000);;
+   
+
+    // Send an email to the user with the code
+    $email = (new Email())
+        ->from('digitart.primes@gmail.com')
+        ->to($user->getEmail())
+        ->subject('Password Reset')
+        ->html("<table width='30%' border='0' cellspacing='0' cellpadding='0' style='background-color:#f2f2f2;'>
+        <tr>
+                <td style='padding: 20px 0;'>
+                    <img src='https://cdn.discordapp.com/attachments/1095078227573219358/1101220396486885376/header.png' alt='Museum Logo' style='max-height: 80px;'>
+                </td>
+            </tr>
+          <tr>
+            <td align='center' style='padding: 40px 0 30px 0;'>
+              <h1>Reset Your Password</h1>
+              <h3> you're trying to access your DIGITART account! </h3>
+            </td>
+          </tr>
+          <tr>
+            <td align='center' style='padding: 0 0 20px 0;'>
+              <p>Your reset code is: <strong style='color: red'> $code </strong></p>
+            </td>
+          </tr>
+          <tr>
+            <td align='center'>
+              <p style='font-size: 12px; line-height: 18px;'>If you did not request this code, please ignore this email.</p>
+            </td>
+          </tr>
+        </table>");
+
+    $mailer->send($email);
+
+    // Return a success response
+    return new JsonResponse(['message' => 'Code sent successfully.','code' => $code], Response::HTTP_OK);
+}
     
 }
