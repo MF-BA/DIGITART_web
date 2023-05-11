@@ -118,7 +118,7 @@ class ArtworkController extends AbstractController
         return new Response($json);
     }
 
-    #[Route('/artwork', name: 'app_artwork_index', methods: ['GET'])]
+    #[Route('/artwork/back', name: 'app_artwork_index', methods: ['GET'])]
     public function index(ArtworkRepository $artworkRepository,RoomRepository $roomRepository,UsersRepository $userRepository): Response
     {
         $artworks = $artworkRepository->findAll();
