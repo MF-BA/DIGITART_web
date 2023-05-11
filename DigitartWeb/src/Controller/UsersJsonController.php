@@ -26,6 +26,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use App\Service\SendMailService;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
 class UsersJsonController extends AbstractController
@@ -55,7 +56,7 @@ class UsersJsonController extends AbstractController
     }
     
     #[Route('/addUserJSON/new', name: 'addUserJSON')]
-    public function addUserJSON(Request $req, NormalizerInterface $normalizer,UserPasswordHasherInterface $userPasswordHasher): Response
+    public function addUserJSON(Request $req, NormalizerInterface $normalizer,UserPasswordEncoderInterface $PasswordEncoder): Response
     {
 
         $em= $this->getDoctrine()->getManager();
@@ -64,10 +65,12 @@ class UsersJsonController extends AbstractController
         $user->setFirstname($req->get('firstname'));
         $user->setLastname($req->get('lastname'));
         $user->setEmail($req->get('email'));
-        $user->setPassword($userPasswordHasher->hashPassword(
-            $user,
-            $req->get('password')
-        ));
+        $user->setPassword(
+            $PasswordEncoder->encodePassword(
+                $user,
+                $req->get('password')
+            ));
+        
         $user->setAddress($req->get('address'));
         $user->setPhoneNum($req->get('phoneNum'));
         $user->setRole($req->get('role'));
@@ -200,7 +203,7 @@ class UsersJsonController extends AbstractController
      return new Response("User deleted successfully " . json_encode($jsoncontent));
     }
     #[Route('user/signup', name: 'app_user_signup')]
-    public function signupAction(Request $req,UserPasswordHasherInterface $userPasswordHasher): Response
+    public function signupAction(Request $req,UserPasswordEncoderInterface $PasswordEncoder): Response
     {
 
        $cin = $req->query->get('cin');
@@ -235,11 +238,10 @@ class UsersJsonController extends AbstractController
         $user->setLastname($lastname);
         $user->setEmail($email);
         $user->setPassword(
-            $userPasswordHasher->hashPassword(
+            $PasswordEncoder->encodePassword(
                 $user,
                 $password
-            )
-        );
+            ));
         $user->setAddress($address);
         $user->setPhoneNum($phonenum);
         $user->setBirthDate(new \DateTime($birthDate));
