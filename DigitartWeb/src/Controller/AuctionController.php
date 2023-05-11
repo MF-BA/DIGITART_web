@@ -488,7 +488,7 @@ class AuctionController extends AbstractController
         return new Response('auction added successfully');
     }
 
-    #[Route('/mobile/{id}/edit', name: 'edit_mobile')]
+    #[Route('/mobile/edit', name: 'edit_mobile')]
     public function editMOBILE(Request $req,  AuctionRepository $auctionRepository, ArtworkRepository $artworkRepository, $id)
     {
         $auction = $auctionRepository->find($id);
