@@ -11,6 +11,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use App\Entity\Payment;
 use App\Entity\Ticket;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
+use Symfony\Component\Mailer\Mailer;
 
 class TryOutController extends AbstractController
 {
@@ -190,6 +195,52 @@ class TryOutController extends AbstractController
      
     }
     
+    #[Route('/mailJSON', name: 'testJSON')]
+    public function Test(MailerInterface $mailer,PaymentRepository $PaymentRepository)
+    {
+        $userId = null;
+
+        $lastUpdatedAt = $PaymentRepository->getLastUpdatedAtByUserId();
+        $lastUpdatedAt = new \DateTime($lastUpdatedAt);
+        
+        $date = $lastUpdatedAt->format('Y-m-d');
+        $time = $lastUpdatedAt->format('H:i');
+        $payments = $PaymentRepository->findBy(['user' => $userId, 'updatedAt' => $lastUpdatedAt]);
+        // Calculate total values
+        $total_nb_adult = 0;
+        $total_nb_teenager = 0;
+        $total_nb_student = 0;
+        $total_payment = 0;
+        foreach ($payments as $payment) {
+            $total_nb_adult += $payment->getNbAdult();
+            $total_nb_teenager += $payment->getNbTeenager();
+            $total_nb_student += $payment->getNbStudent();
+            $total_payment += $payment->getTotalPayment();
+        }
+       // $userEmail = $this->getUser()->getEmail();
+        $to = 'aminemehdi999@gmail.com';
+        $subject = 'Digitart payment Receipt No Reply';
+        $template = 'payment/testpayment_email.html.twig';
+        $context = [
+            'total_nb_adult' => $total_nb_adult,
+            'total_nb_student' => $total_nb_student,
+            'total_nb_teenager' => $total_nb_teenager,
+            'total_payment' => $total_payment,
+            'lastUpdatedAt' => $date,
+            'time' => $time,
+
+        ];
+        $body = $this->renderView($template, $context);
     
+        $email = (new Email())
+            ->from('DIGITART@NOREPLY.COM')
+            ->to($to)
+            ->subject($subject)
+            ->html($body);
+    
+        $mailer->send($email);
+    
+        return new Response("Email sent Successfully");
+    }
 
 }

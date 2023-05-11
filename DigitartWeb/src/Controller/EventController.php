@@ -45,7 +45,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncode;
 #[Route('/event')]
 class EventController extends AbstractController
 {
-    #[Route('/', name: 'app_event_index', methods: ['GET'])]
+    #[Route('/back', name: 'app_event_index', methods: ['GET'])]
     public function index(EventRepository $eventRepository): Response
     {
         $events = $eventRepository->findAll();
@@ -185,7 +185,7 @@ class EventController extends AbstractController
     }
  
   
-    #[Route('/{id}', name: 'app_event_show', methods: ['GET'])]
+    #[Route('/{id}/back', name: 'app_event_show', methods: ['GET'])]
     public function show(Event $event): Response
     {
         return $this->render('event/show.html.twig', [
@@ -512,7 +512,7 @@ public function showfront(FlashyNotifier $flashy,Event $event, Request $request)
     }
     
 
-    #[Route('/{id}/edit', name: 'app_event_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit/back', name: 'app_event_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Event $event, EventRepository $eventRepository): Response
     {
         $form = $this->createForm(EventType::class, $event);
@@ -751,7 +751,7 @@ public function cancelParticipation(Request $request, $eventId)
     return $this->redirectToRoute('my_participated_events');
 }
      /**
- * @Route("/stat/show", name="stats")
+ * @Route("/stat/show/back", name="stats")
  */
 public function statistiques(EventRepository $eventRepo, ParticipantsRepository $participRepo)
 {
@@ -856,7 +856,7 @@ $pdf->Cell(0, 10, 'End Date: ' . $endDate, 0, 1, 'L');
     return new Response($pdf->Output('event.pdf', 'I'));
 }
   /**
-     * @Route("/calendar/show", name="calendar")
+     * @Route("/calendar/show/back", name="calendar")
      */
     public function calendar(EventRepository $calendar)
     {

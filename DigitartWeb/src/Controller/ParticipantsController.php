@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncode;
 #[Route('/participants')]
 class ParticipantsController extends AbstractController
 {
-    #[Route('/', name: 'app_participants_index', methods: ['GET'])]
+    #[Route('/back', name: 'app_participants_index', methods: ['GET'])]
     public function index(ParticipantsRepository $participantsRepository): Response
     {
         return $this->render('participants/index.html.twig', [
@@ -29,7 +29,7 @@ class ParticipantsController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_participants_new', methods: ['GET', 'POST'])]
+    #[Route('/new/back', name: 'app_participants_new', methods: ['GET', 'POST'])]
     public function new(Request $request, ParticipantsRepository $participantsRepository): Response
     {
         $participant = new Participants();
@@ -48,7 +48,7 @@ class ParticipantsController extends AbstractController
         ]);
     }
 
-    #[Route('/{idUser}', name: 'app_participants_show', methods: ['GET'])]
+    #[Route('/{idUser}/back', name: 'app_participants_show', methods: ['GET'])]
     public function show(Participants $participant): Response
     {
         return $this->render('participants/show.html.twig', [
@@ -56,7 +56,7 @@ class ParticipantsController extends AbstractController
         ]);
     }
 
-    #[Route('/{idUser}/edit', name: 'app_participants_edit', methods: ['GET', 'POST'])]
+    #[Route('/{idUser}/edit/back', name: 'app_participants_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Participants $participant, ParticipantsRepository $participantsRepository): Response
     {
         $form = $this->createForm(ParticipantsType::class, $participant);
@@ -74,7 +74,7 @@ class ParticipantsController extends AbstractController
         ]);
     }
 
-    #[Route('/{idUser}', name: 'app_participants_delete', methods: ['POST'])]
+    #[Route('/{idUser}/back', name: 'app_participants_delete', methods: ['POST'])]
     public function delete(Request $request, Participants $participant, ParticipantsRepository $participantsRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$participant->getIdUser(), $request->request->get('_token'))) {

@@ -226,11 +226,11 @@ normalizeFunction: 'polynomial'
 									<ul class="sub-menu children dropdown-menu">
 										<li>
 											<i class="fa fa-table"></i>
-											<a href="/room">Show Rooms</a>
+											<a href="{{path('app_room_index')}}">Show Rooms</a> 
 										</li>
 										<li>
 											<i class="fa  fa-plus-square"></i>
-											<a href="/room/new">Add New Room</a>
+											<a href="{{path('app_room_new')}}">Add New Room</a>
 										</li>
 										<li>
 											<i class="menu-icon fa fa-bar-chart-o"></i>
@@ -302,42 +302,42 @@ normalizeFunction: 'polynomial'
 										</li>
 									{% endif %}
 									{% if app.user.role == 'Gallery Manager' %}
-										<li class="menu-item-has-children dropdown">
-											<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-												<i class="menu-icon fa fa-picture-o"></i>Artworks</a>
-											<ul class="sub-menu children dropdown-menu">
-												<li>
-													<i class="fa fa-table"></i>
-													<a href="/artwork">Show Artworks</a>
-												</li>
-												<li>
-													<i class="fa  fa-plus-square"></i>
-													<a href="/artwork/new">Add New Artwork</a>
-												</li>
-												<li>
-													<i class="menu-icon fa fa-bar-chart-o"></i>
-													<a href="{{path('artwork_stats')}}">Statistics</a>
-												</li>
-											</ul>
+												<li class="menu-item-has-children dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										<i class="menu-icon fa fa-picture-o"></i>Artworks</a>
+									<ul class="sub-menu children dropdown-menu">
+										<li>
+											<i class="fa fa-table"></i>
+											<a href="{{path('app_artwork_index')}}">Show Artworks</a>
 										</li>
-										<li class="menu-item-has-children dropdown">
-											<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-												<i class="menu-icon fa fa-building-o"></i>Rooms</a>
-											<ul class="sub-menu children dropdown-menu">
-												<li>
-													<i class="fa fa-table"></i>
-													<a href="/room">Show Rooms</a>
-												</li>
-												<li>
-													<i class="fa  fa-plus-square"></i>
-													<a href="/room/new">Add New Room</a>
-												</li>
-												<li>
-													<i class="menu-icon fa fa-bar-chart-o"></i>
-													<a href="{{path('artwork_stats')}}">Statistics</a>
-												</li>
-											</ul>
+										<li>
+											<i class="fa  fa-plus-square"></i>
+											<a href="{{path('app_artwork_new')}}">Add New Artwork</a>
 										</li>
+										<li>
+											<i class="menu-icon fa fa-bar-chart-o"></i>
+											<a href="{{path('artwork_stats')}}">Statistics</a>
+										</li>
+									</ul>
+								</li>
+								<li class="menu-item-has-children dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										<i class="menu-icon fa fa-building-o"></i>Rooms</a>
+									<ul class="sub-menu children dropdown-menu">
+										<li>
+											<i class="fa fa-table"></i>
+											<a href="{{path('app_room_index')}}">Show Rooms</a> 
+										</li>
+										<li>
+											<i class="fa  fa-plus-square"></i>
+											<a href="{{path('app_room_new')}}">Add New Room</a>
+										</li>
+										<li>
+											<i class="menu-icon fa fa-bar-chart-o"></i>
+											<a href="{{path('artwork_stats')}}">Statistics</a>
+										</li>
+									</ul>
+								</li>
 									{% endif %}
 
 

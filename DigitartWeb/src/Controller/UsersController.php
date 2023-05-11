@@ -25,7 +25,7 @@ use League\OAuth2\Client\Provider\Facebook;
 class UsersController extends AbstractController
 {
     
-    #[Route('/', name: 'app_users_index')]
+    #[Route('/back', name: 'app_users_index')]
     public function index(Request $request, UsersRepository $usersRepository): Response
     {
         $limit = 5;
@@ -60,7 +60,7 @@ class UsersController extends AbstractController
           $form=$form->createView();
         return $this->render('users/index.html.twig',compact('users','total','limit','page','form'));
     }
-    #[Route('/stats', name: 'app_users_statsusers', methods: ['GET'])]
+    #[Route('/stats/back', name: 'app_users_statsusers', methods: ['GET'])]
     public function statsusers(UsersRepository $userRepo)
     {
         $users = $userRepo->findAll();
@@ -125,7 +125,7 @@ class UsersController extends AbstractController
 
         ]);
     }
-    #[Route('/new', name: 'app_users_new', methods: ['GET', 'POST'])]
+    #[Route('/new/back', name: 'app_users_new', methods: ['GET', 'POST'])]
     public function new(Request $request, UserPasswordEncoderInterface $PasswordEncoder, EntityManagerInterface $entityManager): Response
     {
         $user = new Users();
@@ -189,7 +189,7 @@ class UsersController extends AbstractController
         
     }
 
-    #[Route('/{id}', name: 'app_users_show', methods: ['GET'])]
+    #[Route('/{id}/back', name: 'app_users_show', methods: ['GET'])]
     public function show(Users $user): Response
     {
         return $this->render('users/show.html.twig', [
@@ -292,7 +292,7 @@ $client->messages->create(
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_users_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit/back', name: 'app_users_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Users $user, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(UsersType::class, $user);
@@ -310,7 +310,7 @@ $client->messages->create(
             'form' => $form,
         ]);
     }
-    #[Route('/{id}/editprof', name: 'app_users_editprof', methods: ['GET', 'POST'])]
+    #[Route('/{id}/editprof/back', name: 'app_users_editprof', methods: ['GET', 'POST'])]
     public function editprof(Request $request, Users $user, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(UsersType::class, $user);
@@ -404,7 +404,7 @@ $client->messages->create(
         return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
     }
    
-    #[Route('/delprofile/{id}', name: 'app_users_deleteprofile')]
+    #[Route('/delprofile/{id}/back', name: 'app_users_deleteprofile')]
 public function deleteprofile(Request $request,int $id,ManagerRegistry $doctrine): Response
 {
     $repousers= $doctrine->getRepository(Users::class);

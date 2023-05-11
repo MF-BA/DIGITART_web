@@ -114,7 +114,7 @@ class RoomController extends AbstractController
 
 
 
-    #[Route('/', name: 'app_room_index', methods: ['GET'])]
+    #[Route('/back', name: 'app_room_index', methods: ['GET'])]
     public function index(RoomRepository $roomRepository): Response
     {
         return $this->render('room/index.html.twig', [
@@ -122,7 +122,7 @@ class RoomController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_room_new', methods: ['GET', 'POST'])]
+    #[Route('/new/back', name: 'app_room_new', methods: ['GET', 'POST'])]
     public function new(Request $request, RoomRepository $roomRepository): Response
     {
         $room = new Room();
@@ -141,7 +141,7 @@ class RoomController extends AbstractController
         ]);
     }
 
-    #[Route('/{idRoom}', name: 'app_room_show', methods: ['GET'])]
+    #[Route('/{idRoom}/back', name: 'app_room_show', methods: ['GET'])]
     public function show(Room $room): Response
     {
         return $this->render('room/show.html.twig', [
@@ -149,7 +149,7 @@ class RoomController extends AbstractController
         ]);
     }
 
-    #[Route('/{idRoom}/edit', name: 'app_room_edit', methods: ['GET', 'POST'])]
+    #[Route('/{idRoom}/edit/back', name: 'app_room_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Room $room, RoomRepository $roomRepository): Response
     {
         $form = $this->createForm(RoomType::class, $room);
@@ -167,7 +167,7 @@ class RoomController extends AbstractController
         ]);
     }
 
-    #[Route('/{idRoom}', name: 'app_room_delete', methods: ['POST'])]
+    #[Route('/{idRoom}/back', name: 'app_room_delete', methods: ['POST'])]
     public function delete(Request $request, Room $room, RoomRepository $roomRepository,ArtworkRepository $artworkRepository): Response
     {
 

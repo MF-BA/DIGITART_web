@@ -464,7 +464,7 @@ class ArtworkController extends AbstractController
     }
 
 
-    #[Route('/artwork/stats/show', name: 'artwork_stats')]
+    #[Route('/artwork/stats/show/back', name: 'artwork_stats')]
     public function statistiques(RoomRepository $roomRepo, ArtworkRepository $artRepo){
         $nrbartwork = $artRepo->countArtworks();
         $rooms=$roomRepo->findAll();
