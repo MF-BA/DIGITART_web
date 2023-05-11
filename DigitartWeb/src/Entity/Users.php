@@ -13,7 +13,7 @@ use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use EWZ\Bundle\RecaptchaBundle\Validator\Constraints as Recaptcha;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=UsersRepository::class)
  */
@@ -25,6 +25,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups("users")
      */
     private $id;
 
@@ -32,6 +33,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var int|null
      * 
      * @ORM\Column(name="cin", type="integer", nullable=true)
+     * @Groups("users")
      * @Assert\NotBlank(message="Please enter a cin")
      * @Assert\Length(
      *      min = 8,
@@ -49,6 +51,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var string|null
      * 
      * @ORM\Column(name="firstname", type="string", length=255, nullable=true)
+     * @Groups("users")
      * @Assert\NotBlank(message="Please enter a first name")
      * @Assert\Regex(
      *      pattern = "/^[a-zA-Z ]+$/",
@@ -61,6 +64,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var string|null
      * 
      * @ORM\Column(name="lastname", type="string", length=255, nullable=true)
+     * @Groups("users")
      * @Assert\NotBlank(message="Please enter a last name")
      * @Assert\Regex(
      *      pattern = "/^[a-zA-Z ]+$/",
@@ -73,6 +77,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var string|null
      * 
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @Groups("users")
      * @Assert\NotBlank(message="Please enter an email")
      * @Assert\Email(message="Please enter a valid email address")
      */
@@ -82,6 +87,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var string|null
      * 
      * @ORM\Column(name="password", type="string", length=255, nullable=true)
+     * @Groups("users")
      * @Assert\Length(
      *      min = 6,
      *      max = 4096,
@@ -99,6 +105,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var string|null
      *
      * @ORM\Column(name="address", type="string", length=255, nullable=true)
+     * @Groups("users")
      * @Assert\NotBlank(message="Please enter an address")
      */
     private $address;
@@ -107,6 +114,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var int|null
      * 
      * @ORM\Column(name="phone_num", type="integer", nullable=true)
+     * @Groups("users")
      * @Assert\NotBlank(message="Please enter a phone number")
      * @Assert\Length(
      *      min = 8,
@@ -124,6 +132,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var \DateTime|null
      *
      * @ORM\Column(name="birth_date", type="date", nullable=true)
+     * @Groups("users")
      * @Assert\NotBlank(message="Please enter a birth date")
      */
     private $birthDate;
@@ -132,6 +141,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var string|null
      *
      * @ORM\Column(name="gender", type="string", length=255, nullable=true)
+     * @Groups("users")
      * @Assert\NotBlank(message="Please select a gender")
      */
     private $gender;
@@ -140,6 +150,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var string|null
      *
      * @ORM\Column(name="role", type="string", length=255, nullable=true, options={"default"="Subscriber"})
+     * @Groups("users")
      * @Assert\NotBlank(message="Please select a role")
      */
     private $role = 'Subscriber';
@@ -148,6 +159,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var string
      *
      * @ORM\Column(name="status", type="string", length=255, nullable=false, options={"default"="unblocked"})
+     * @Groups("users")
      */
     private $status;
 
@@ -155,6 +167,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var string|null
      *
      * @ORM\Column(name="image", type="string", length=255, nullable=true)
+     * @Groups("users")
      */
     private $image;
 
@@ -162,38 +175,45 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var string|null
      *
      * @ORM\Column(name="secretcode", type="string", length=255, nullable=true)
+     * @Groups("users")
      */
     private $secretcode;
 
     /**
     * @ORM\Column(type="json", nullable=true)
+    * @Groups("users")
     */
     private array $roles = [];
 
      /**
      * @ORM\OneToMany(targetEntity="App\Entity\UserImages", mappedBy="users", orphanRemoval=true, cascade={"persist"})
+     * @Groups("users")
      */
     private $userImages;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups("users")
      * @Gedmo\Timestampable(on="create")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups("users")
      * @Gedmo\Timestampable(on="update")
      */
     private $updatedAt;
 
      /**
      * @ORM\Column(type="boolean")
+     * @Groups("users")
      */
     private $is_verified = false;
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @Groups("users")
      */
     private $authCode;
 
@@ -202,6 +222,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @var string|null
      *
      * @ORM\Column(name="resetToken", type="string", length=100, nullable=true)
+     * @Groups("users")
      */
     private $resetToken;
  
@@ -244,6 +265,17 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
     public function setResetToken(?string $resetToken): self
     {
         $this->resetToken = $resetToken;
+
+        return $this;
+    }
+    public function getauthCode(): ?string
+    {
+        return $this->authCode;
+    }
+
+    public function setauthCode(?string $authCode): self
+    {
+        $this->authCode = $authCode;
 
         return $this;
     }

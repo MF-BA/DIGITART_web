@@ -22,8 +22,9 @@ use App\Service\SendMailService;
 class RegistrationController extends AbstractController
 {
     
+    
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request,FlashyNotifier $flashy,UsersRepository $usersRepository,UserPasswordHasherInterface $userPasswordHasher,UserAuthenticatorInterface $userAuthenticator, AppCustomAuthenticator $authenticator, EntityManagerInterface $entityManager, SendMailService $mail, JWTService $jwt): Response
+    public function register(Request $request,FlashyNotifier $flashy,UsersRepository $usersRepository, UserPasswordEncoderInterface $PasswordEncoder,UserAuthenticatorInterface $userAuthenticator, AppCustomAuthenticator $authenticator, EntityManagerInterface $entityManager, SendMailService $mail, JWTService $jwt): Response
     {
         $user = new Users();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -32,11 +33,16 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the  password
             $user->setPassword(
+                $PasswordEncoder->encodePassword(
+                    $user,
+                    $form->get('password')->getData()
+                ));
+            /*$user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('password')->getData()
                 )
-            );
+            );*/
             $user_exist= $usersRepository->findOneByEmail($form->get('email')->getData());
             if ($user_exist)
             {

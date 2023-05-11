@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use libphonenumber\PhoneNumberUtil;
 use libphonenumber\NumberParseException;
@@ -125,7 +126,7 @@ class UsersController extends AbstractController
         ]);
     }
     #[Route('/new', name: 'app_users_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, UserPasswordEncoderInterface $PasswordEncoder, EntityManagerInterface $entityManager): Response
     {
         $user = new Users();
         $form = $this->createForm(UsersType::class, $user);
@@ -134,11 +135,16 @@ class UsersController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
+                $PasswordEncoder->encodePassword(
+                    $user,
+                    $form->get('password')->getData()
+                ));
+            /*$user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('password')->getData()
                 )
-            );
+            );*/
             
             if($form->get('role')->getData()==='Artist')
             {
