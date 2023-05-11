@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Artwork;
 use App\Entity\ImageArtwork;
+use App\Entity\Room;
 use App\Form\ArtworkArtistType;
 use App\Form\ArtworkType;
 use App\Form\ImageArtworkType;
@@ -23,9 +24,100 @@ use OpenAI;
 use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ArtworkController extends AbstractController
-{
+{   
+    #[Route("/AllArtwork", name: "listArtworkJson")]
+    
+    public function getArtwork(ArtworkRepository $repo, NormalizerInterface $normalizer)
+    {
+        $Artwork=$repo->findAll();
+        $ArtworkNormalises=$normalizer->normalize($Artwork, 'json', ['groups' => "artworks"]);
+        $json = json_encode($ArtworkNormalises);
+        return new Response($json);
+    }
+
+    #[Route('/artworkJson/{id}', name: 'artworkJson')]
+    public function ArtworkIdJson($id,NormalizerInterface $normalizer, ArtworkRepository $artworkRepository,)
+    {
+        $artwork = $artworkRepository->find($id);
+        $artworkNormalises = $normalizer->normalize($artwork, 'json', ['groups' => "artworks"]);
+        return new Response(json_encode($artworkNormalises));
+    }
+
+
+    #[Route("/addArtworkJSON/new", name: "addArtworkJSON")]
+    
+    public function addArtworkJSON(Request $req,NormalizerInterface $Normalizer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user =  $this->getUser();
+        $Artwork = new Artwork();
+        $Artwork->setArtworkName($req->get('ArtworkName'));
+        if($req->get('IdArtist'))
+        $Artwork->setIdArtist($em->getRepository(Users::class)->find($req->get('IdArtist')));
+        else
+        {
+        $Artwork->setIdArtist(null);
+        $Artwork->setArtistName($req->get('artistName'));
+        }
+        
+        $Artwork->setDateArt(new \DateTime($req->get('DateArt')));
+        $Artwork->setDescription($req->get('Description'));
+        $Artwork->setIdRoom($em->getRepository(Room::class)->find($req->get('IdRoom')));
+        $em->persist($Artwork);
+        $em->flush();
+
+
+        $jsonContent = $Normalizer->normalize($Artwork, 'json', ['groups' => 'Artworks']);
+        return new Response(json_encode($jsonContent));
+    }
+
+
+    #[Route("/updateArtworkJSON/{id}", name: "updateArtworkJSON")]
+    public function updateArtworkJSON(Request $req, $id, NormalizerInterface $Normalizer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $Artwork=$em->getRepository(Artwork::class)->find($id);
+        $Artwork->setArtworkName($req->get('ArtworkName'));
+        $Artwork->setIdArtist($em->getRepository(Users::class)->find($req->get('IdArtist')));
+        $Artwork->setDateArt(new \DateTime($req->get('DateArt')));
+        $Artwork->setDescription($req->get('Description'));
+        $Artwork->setIdRoom($em->getRepository(Room::class)->find($req->get('IdRoom')));
+        $em->flush();
+        $jsonContent
+        =
+        $Normalizer->normalize($Artwork, 'json', ['groups' => 'Artworks']);
+        return new Response("Artwork updated successfully " . json_encode($jsonContent));
+    }
+
+    #[Route("/deleteArtworkJSON/{id}", name: "deleteArtworkJSON")]
+    public function deleteArtworkJSON(Request $req, $id, NormalizerInterface $Normalizer)
+    {
+        $em=$this->getDoctrine()->getManager();
+        $Artwork = $em->getRepository (Artwork::class)->find($id);
+        $em->remove($Artwork);
+        $em->flush();
+        $jsonContent = $Normalizer->normalize($Artwork, 'json', ['groups' => 'Artworks']); 
+        return new Response("Artwork deleted successfully " . json_encode($jsonContent));
+    }
+
+    #[Route('/mobile/{id}/images', name: 'get_artwork_images_MOBILE')]
+    public function ArtworkImagesMOBILE(NormalizerInterface $normalizer, $id, ImageArtworkRepository $ImageartworkRepository)
+    {
+        $images = $ImageartworkRepository->createQueryBuilder('i')
+            ->select('i.imageName')
+            ->where('i.idArt = :idArt')
+            ->setParameter('idArt', $id)
+            ->getQuery()
+            ->getResult();
+
+        $imagesNormalize = $normalizer->normalize($images, 'json', ['groups' => "Artworks"]);
+        $json = json_encode($imagesNormalize);
+        return new Response($json);
+    }
+
     #[Route('/artwork', name: 'app_artwork_index', methods: ['GET'])]
     public function index(ArtworkRepository $artworkRepository,RoomRepository $roomRepository,UsersRepository $userRepository): Response
     {

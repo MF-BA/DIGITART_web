@@ -6,14 +6,114 @@ use App\Entity\Room;
 use App\Form\RoomType;
 use App\Repository\ArtworkRepository;
 use App\Repository\RoomRepository;
+use App\Repository\UsersRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 #[Route('/room')]
 class RoomController extends AbstractController
 {
+    #[Route("/AllJson", name: "listRoomJson")]
+    
+    public function getRoom(RoomRepository $repo, NormalizerInterface $normalizer)
+    {
+        $Room=$repo->findAll();
+        $RoomNormalises=$normalizer->normalize($Room, 'json', ['groups' => "Rooms"]);
+        $json = json_encode($RoomNormalises);
+        return new Response($json);
+    }
+
+    #[Route('/RoomJson/{id}', name: 'RoomJson')]
+    public function RoomIdJson($id,NormalizerInterface $normalizer, RoomRepository $RoomRepository,)
+    {
+        $Room = $RoomRepository->find($id);
+        $RoomNormalises = $normalizer->normalize($Room, 'json', ['groups' => "Rooms"]);
+        return new Response(json_encode($RoomNormalises));
+    }
+
+
+    #[Route("/addRoomJSON/new", name: "addRoomJSON")]
+    
+    public function addRoomJSON(Request $req,NormalizerInterface $Normalizer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $Room = new Room();
+        $Room->setNameRoom($req->get('nameRoom'));
+        $Room->setArea($req->get('area'));
+        $Room->setState($req->get('state'));
+        $Room->setDescription($req->get('description'));
+        $em->persist($Room);
+        $em->flush();
+
+
+        $jsonContent = $Normalizer->normalize($Room, 'json', ['groups' => 'Rooms']);
+        return new Response(json_encode($jsonContent));
+    }
+
+
+    #[Route("/updateRoomJSON/{id}", name: "updateRoomJSON")]
+    public function updateRoomJSON(Request $req, $id, NormalizerInterface $Normalizer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $Room=$em->getRepository(Room::class)->find($id);
+        $Room->setNameRoom($req->get('nameRoom'));
+        $Room->setArea($req->get('area'));
+        $Room->setState($req->get('state'));
+        $Room->setDescription($req->get('description'));
+        $em->flush();
+        $jsonContent
+        =
+        $Normalizer->normalize($Room, 'json', ['groups' => 'Rooms']);
+        return new Response("Room updated successfully " . json_encode($jsonContent));
+    }
+
+    #[Route("/deleteRoomJSON/{id}", name: "deleteRoomJSON")]
+    public function deleteRoomJSON(Request $req, $id, NormalizerInterface $Normalizer)
+    {
+        $em=$this->getDoctrine()->getManager();
+        $Room = $em->getRepository (Room::class)->find($id);
+        $em->remove($Room);
+        $em->flush();
+        $jsonContent = $Normalizer->normalize($Room, 'json', ['groups' => 'Rooms']); 
+        return new Response("Room deleted successfully " . json_encode($jsonContent));
+    }
+
+    #[Route('/mobile/getAvailableRooms', name: 'get_getAvailableRooms_MOBILE')]
+    public function getAvailableRoomsMOBILE(NormalizerInterface $normalizer,  RoomRepository $RoomRepository)
+    {
+        $images = $RoomRepository->createQueryBuilder('i')
+            ->select('i.nameRoom,i.idRoom')
+            ->where('i.state = :state')
+            ->setParameter('state', "Available")
+            ->getQuery()
+            ->getResult();
+
+        $imagesNormalize = $normalizer->normalize($images, 'json', ['groups' => "Rooms"]);
+        $json = json_encode($imagesNormalize);
+        return new Response($json);
+    }
+
+    #[Route('/mobile/getArtists', name: 'get_getArtists_MOBILE')]
+    public function getArtistsMOBILE(NormalizerInterface $normalizer,  UsersRepository $UsersRepository)
+    {
+        $images = $UsersRepository->createQueryBuilder('i')
+            ->select('i.lastname,i.id')
+            ->where('i.role = :role')
+            ->setParameter('role', "Artist")
+            ->getQuery()
+            ->getResult();
+
+        $imagesNormalize = $normalizer->normalize($images, 'json', ['groups' => "Rooms"]);
+        $json = json_encode($imagesNormalize);
+        return new Response($json);
+    }
+
+
+
+
     #[Route('/', name: 'app_room_index', methods: ['GET'])]
     public function index(RoomRepository $roomRepository): Response
     {
