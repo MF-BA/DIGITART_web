@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Artwork;
 use App\Entity\ImageArtwork;
+use App\Entity\Room;
 use App\Form\ArtworkArtistType;
 use App\Form\ArtworkType;
 use App\Form\ImageArtworkType;
@@ -23,9 +24,100 @@ use OpenAI;
 use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ArtworkController extends AbstractController
-{
+{   
+    #[Route("/AllArtwork", name: "listArtworkJson")]
+    
+    public function getArtwork(ArtworkRepository $repo, NormalizerInterface $normalizer)
+    {
+        $Artwork=$repo->findAll();
+        $ArtworkNormalises=$normalizer->normalize($Artwork, 'json', ['groups' => "artworks"]);
+        $json = json_encode($ArtworkNormalises);
+        return new Response($json);
+    }
+
+    #[Route('/artworkJson/{id}', name: 'artworkJson')]
+    public function ArtworkIdJson($id,NormalizerInterface $normalizer, ArtworkRepository $artworkRepository,)
+    {
+        $artwork = $artworkRepository->find($id);
+        $artworkNormalises = $normalizer->normalize($artwork, 'json', ['groups' => "artworks"]);
+        return new Response(json_encode($artworkNormalises));
+    }
+
+
+    #[Route("/addArtworkJSON/new", name: "addArtworkJSON")]
+    
+    public function addArtworkJSON(Request $req,NormalizerInterface $Normalizer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user =  $this->getUser();
+        $Artwork = new Artwork();
+        $Artwork->setArtworkName($req->get('ArtworkName'));
+        if($req->get('IdArtist'))
+        $Artwork->setIdArtist($em->getRepository(Users::class)->find($req->get('IdArtist')));
+        else
+        {
+        $Artwork->setIdArtist(null);
+        $Artwork->setArtistName($req->get('artistName'));
+        }
+        
+        $Artwork->setDateArt(new \DateTime($req->get('DateArt')));
+        $Artwork->setDescription($req->get('Description'));
+        $Artwork->setIdRoom($em->getRepository(Room::class)->find($req->get('IdRoom')));
+        $em->persist($Artwork);
+        $em->flush();
+
+
+        $jsonContent = $Normalizer->normalize($Artwork, 'json', ['groups' => 'Artworks']);
+        return new Response(json_encode($jsonContent));
+    }
+
+
+    #[Route("/updateArtworkJSON/{id}", name: "updateArtworkJSON")]
+    public function updateArtworkJSON(Request $req, $id, NormalizerInterface $Normalizer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $Artwork=$em->getRepository(Artwork::class)->find($id);
+        $Artwork->setArtworkName($req->get('ArtworkName'));
+        $Artwork->setIdArtist($em->getRepository(Users::class)->find($req->get('IdArtist')));
+        $Artwork->setDateArt(new \DateTime($req->get('DateArt')));
+        $Artwork->setDescription($req->get('Description'));
+        $Artwork->setIdRoom($em->getRepository(Room::class)->find($req->get('IdRoom')));
+        $em->flush();
+        $jsonContent
+        =
+        $Normalizer->normalize($Artwork, 'json', ['groups' => 'Artworks']);
+        return new Response("Artwork updated successfully " . json_encode($jsonContent));
+    }
+
+    #[Route("/deleteArtworkJSON/{id}", name: "deleteArtworkJSON")]
+    public function deleteArtworkJSON(Request $req, $id, NormalizerInterface $Normalizer)
+    {
+        $em=$this->getDoctrine()->getManager();
+        $Artwork = $em->getRepository (Artwork::class)->find($id);
+        $em->remove($Artwork);
+        $em->flush();
+        $jsonContent = $Normalizer->normalize($Artwork, 'json', ['groups' => 'Artworks']); 
+        return new Response("Artwork deleted successfully " . json_encode($jsonContent));
+    }
+
+    #[Route('/mobile/{id}/images', name: 'get_artwork_images_MOBILE')]
+    public function ArtworkImagesMOBILE(NormalizerInterface $normalizer, $id, ImageArtworkRepository $ImageartworkRepository)
+    {
+        $images = $ImageartworkRepository->createQueryBuilder('i')
+            ->select('i.imageName')
+            ->where('i.idArt = :idArt')
+            ->setParameter('idArt', $id)
+            ->getQuery()
+            ->getResult();
+
+        $imagesNormalize = $normalizer->normalize($images, 'json', ['groups' => "Artworks"]);
+        $json = json_encode($imagesNormalize);
+        return new Response($json);
+    }
+
     #[Route('/artwork', name: 'app_artwork_index', methods: ['GET'])]
     public function index(ArtworkRepository $artworkRepository,RoomRepository $roomRepository,UsersRepository $userRepository): Response
     {
@@ -76,7 +168,7 @@ class ArtworkController extends AbstractController
     }
    
 
-    #[Route('/artwork/new', name: 'app_artwork_new', methods: ['GET', 'POST'])]
+    #[Route('/artwork/new/back', name: 'app_artwork_new', methods: ['GET', 'POST'])]
     public function new(Request $request, ArtworkRepository $artworkRepository): Response
     {
         $artwork = new Artwork();
@@ -169,73 +261,42 @@ class ArtworkController extends AbstractController
             ->to($user->getEmail())
             ->subject('Artwork Added In Digitart')
             ->html(
-                '<html>
-                    <head>
+                '<!DOCTYPE html>
+                <html>
+                  <head>
+                    <meta charset="utf-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <title>Two-factor authentication code</title>
                     <style>
-                    /* Define your CSS styles here */
-                    body {
-                       
-                        font-size: 14px;
-                     
-                        margin: 0;
-                        padding: 0;
-                    }
-                    .container {
-                        max-width: 600px;
-                        margin: 0 auto;
-                    }
-                    .header {
-                        background-color: black;
-                        padding: 20px;
-                        text-align: center;
-                    }
-                    .header h1 {
-                        color: black;
-                        font-size: 24px;
-                        margin: 0;
-                    }
-                    .logo {
-                        max-width: 100px;
-                    }
-                    .content {
-                        padding: 20px;
-                        background-color: black;
-                        font-family: Arial, sans-serif;
-                        color:  #FF0000; 
-                        font-weight: bold;
-                    }
-                    .footer {
-                        background-color: black;
-                        padding: 20px;
-                        text-align: center;
-                    }
-                    .footer p {
-                        margin: 0;
-                        color: #FF0000;
-                        font-weight: bold;
-                    }
-                </style>
-                
-                    </head>
-                    <body>
-                        <div class="container">
-                            <div class="header">
-                                <img src="https://cdn.discordapp.com/attachments/1068664672498241577/1088590451973574706/logo_digitart_rouge.png" alt="Digitart Logo" class="logo">
-                                <h1>Artwork Added In Digitart</h1>
-                            </div>
-                            <div class="content">
-                                <p>Dear '.$user->getLastname().' '.$user->getFirstname().',</p>
-                                <p>We are pleased to inform you that your artwork "'.$artwork->getArtworkName().'" has been added to Digitart.</p>
-                                <p>Thank you for sharing your artwork with our community.</p>
-                                <p>Best regards,</p>
-                                <p>The Digitart team</p>
-                            </div>
-                            <div class="footer">
-                                <p>© 2023 Digitart. All rights reserved.</p>
-                            </div>
-                        </div>
-                    </body>
-                </html>'
+                      /* Put your custom styles here */
+                    </style>
+                  </head>
+                  <body>
+                    <table width="30%" border="0" cellspacing="0" cellpadding="0" style="background-color:#f2f2f2;">
+                    <tr>
+                            <td style="padding: 20px 0;">
+                                <img src="https://cdn.discordapp.com/attachments/1095078227573219358/1101220396486885376/header.png" alt="Museum Logo" style="max-height: 80px;">
+                            </td>
+                        </tr>
+                      <tr>
+                        <td align="center" style="padding: 40px 0 30px 0;">
+                            <h1>Dear <strong style="color: red">'.$user->getLastname().' '.$user->getFirstname().'</strong>,</h1>
+                           <h3>We are pleased to inform you that your artwork "'.$artwork->getArtworkName().'" has been added to Digitart.</h3>
+                           <h3>Thank you for sharing your artwork with our community.</h3>
+                          <h3>Best regards,</h3>
+                                                
+                             </td>
+                      </tr>
+                      
+                      <tr>
+                        <td align="center">
+                          <p style="font-size: 12px; line-height: 18px;">The Digitart team</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </body>
+                </html>
+                '
             );
             $transport=new GmailSmtpTransport('digitart.primes@gmail.com','ktknrunncnveaidz');
             $mailer=new Mailer($transport);
@@ -250,7 +311,7 @@ class ArtworkController extends AbstractController
         ]);
     }
 
-    #[Route('/artwork/{idArt}', name: 'app_artwork_show', methods: ['GET'])]
+    #[Route('/artwork/{idArt}/back', name: 'app_artwork_show', methods: ['GET'])]
     public function show(Artwork $artwork,RoomRepository $roomRepository,ImageArtworkRepository $ImageartworkRepository): Response
     {
         $roomNames = [];
@@ -294,7 +355,7 @@ class ArtworkController extends AbstractController
         ]);
     }
 
-    #[Route('/artwork/{idArt}/edit', name: 'app_artwork_edit', methods: ['GET', 'POST'])]
+    #[Route('/artwork/{idArt}/edit/back', name: 'app_artwork_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Artwork $artwork, ArtworkRepository $artworkRepository,ImageArtworkRepository $ImageartworkRepository): Response
     {
         $form = $this->createForm(ArtworkType::class, $artwork);
@@ -338,7 +399,7 @@ class ArtworkController extends AbstractController
         ]);
     }
 
-    #[Route('/artwork/{idArt}', name: 'app_artwork_delete', methods: ['POST'])]
+    #[Route('/artwork/{idArt}/back', name: 'app_artwork_delete', methods: ['POST'])]
     public function delete(Request $request, Artwork $artwork, ArtworkRepository $artworkRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$artwork->getIdArt(), $request->request->get('_token'))) {
@@ -403,7 +464,7 @@ class ArtworkController extends AbstractController
     }
 
 
-    #[Route('/artwork/stats/show', name: 'stats')]
+    #[Route('/artwork/stats/show', name: 'artwork_stats')]
     public function statistiques(RoomRepository $roomRepo, ArtworkRepository $artRepo){
         $nrbartwork = $artRepo->countArtworks();
         $rooms=$roomRepo->findAll();
