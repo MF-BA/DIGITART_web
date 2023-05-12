@@ -292,7 +292,7 @@ class UsersJsonController extends AbstractController
         }
 
 
-        $code = rand(100000, 900000);;
+        $code = rand(100000, 900000);
 
 
         // Send an email to the user with the code
@@ -327,6 +327,59 @@ class UsersJsonController extends AbstractController
         $mailer->send($email);
 
         // Return a success response
-        return new JsonResponse(['message' => 'Code sent successfully.', 'code' => $code], Response::HTTP_OK);
+        return new JsonResponse(['message' => 'Code sent successfully.', 'code' => $code, 'user' => $user ], Response::HTTP_OK);
+    }
+    #[Route('user/editpwd', name: 'editpwd')]
+    public function editpwd(Request $req, UserPasswordEncoderInterface $PasswordEncoder): Response
+    {
+        $email = $req->get('email');
+        $password = $req->query->get('password');
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(Users::class)->findOneByEmail($email);
+
+        if (!$user) {
+            return new JsonResponse(['message' => 'User not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        else{
+        $user->setPassword(
+            $PasswordEncoder->encodePassword(
+                $user,
+                $password
+            )
+        );
+
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            return new JsonResponse("success", 200); //200 ya3ni http result mt3 serveur OK 
+        } catch (\Exception $ex) {
+            return new Response("Failed" . $ex->getMessage());
+        }
+    }
+    
+    }
+    #[Route('user/stats', name: 'StatsUser')]
+    public function StatsUser(UsersRepository $userRepo) : Response
+    {
+        $users = $userRepo->findAll();
+
+        $totalMale = 0;
+        $totalFemale = 0;
+  
+    
+        foreach ($users as $user) {
+            if ($user->getGender() == 'Male') {
+                $totalMale += 1;
+            }
+            if ($user->getGender() == 'Female') {
+                $totalFemale += 1;
+            }
+        }
+
+        return new JsonResponse(['totalMale' => $totalMale, 'totalFemale' => $totalFemale], Response::HTTP_OK);
     }
 }
