@@ -28,7 +28,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Groups("users")
      * @Groups("Auction")
-     
      */
     private $id;
 
@@ -190,7 +189,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface, TwoFac
 
      /**
      * @ORM\OneToMany(targetEntity="App\Entity\UserImages", mappedBy="users", orphanRemoval=true, cascade={"persist"})
-     * @Groups("users")
      */
     private $userImages;
 

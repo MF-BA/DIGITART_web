@@ -24,7 +24,7 @@ use League\OAuth2\Client\Provider\Facebook;
 #[Route('/users')]
 class UsersController extends AbstractController
 {
-    
+
     #[Route('/back', name: 'app_users_index')]
     public function index(Request $request, UsersRepository $usersRepository): Response
     {
@@ -40,10 +40,10 @@ class UsersController extends AbstractController
         //$users = $usersRepository->findBy(['role' => 'subscriber'],['createdAt' => 'desc'], 5);
         $users = $usersRepository->getPaginatedusers($page, $limit);
         $form = $this->createForm(SearchUsersType::class);
-        
+
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             // On recherche les annonces correspondant aux mots clés
             $data = $form->getData();
             $users = $usersRepository->search(
@@ -57,14 +57,14 @@ class UsersController extends AbstractController
             return new JsonResponse($table);
         }
 
-          $form=$form->createView();
-        return $this->render('users/index.html.twig',compact('users','total','limit','page','form'));
+        $form = $form->createView();
+        return $this->render('users/index.html.twig', compact('users', 'total', 'limit', 'page', 'form'));
     }
     #[Route('/stats/back', name: 'app_users_statsusers', methods: ['GET'])]
     public function statsusers(UsersRepository $userRepo)
     {
         $users = $userRepo->findAll();
-        
+
         $totalMale = 0;
         $totalFemale = 0;
         $totalAdmin = 0;
@@ -75,46 +75,41 @@ class UsersController extends AbstractController
 
         $currentYear = (int) date('Y');
         foreach ($users as $user) {
-            if($user->getGender() == 'Male')
-            {
-                $totalMale +=1;
+            if ($user->getGender() == 'Male') {
+                $totalMale += 1;
             }
-            if($user->getGender() == 'Female')
-            {
-                $totalFemale +=1;
+            if ($user->getGender() == 'Female') {
+                $totalFemale += 1;
             }
-            if($user->getRole() == 'Artist')
-            {
-                $totalArtist +=1;
+            if ($user->getRole() == 'Artist') {
+                $totalArtist += 1;
             }
-            if($user->getRole() == 'Admin')
-            {
-                $totalAdmin +=1;
+            if ($user->getRole() == 'Admin') {
+                $totalAdmin += 1;
             }
-            if($user->getRole() == 'Subscriber')
-            {
-                $totalSubscriber +=1;
+            if ($user->getRole() == 'Subscriber') {
+                $totalSubscriber += 1;
             }
 
             // Calculate user's age and increment the corresponding age range
             $birthDate = $user->getBirthDate();
-         if ($birthDate) {
-           $birthYear = $birthDate->format('Y');
-           $age = (new \DateTime())->diff($birthDate)->y;
-        } else {
-           $birthYear = '';
-           $age = 0;
-         }
-        $ageRangeIndex = floor($age / 10);
-        if ($ageRangeIndex < 0) {
-            $ageRangeIndex = 0;
+            if ($birthDate) {
+                $birthYear = $birthDate->format('Y');
+                $age = (new \DateTime())->diff($birthDate)->y;
+            } else {
+                $birthYear = '';
+                $age = 0;
+            }
+            $ageRangeIndex = floor($age / 10);
+            if ($ageRangeIndex < 0) {
+                $ageRangeIndex = 0;
+            }
+            if ($ageRangeIndex > 9) {
+                $ageRangeIndex = 9;
+            }
+            $ageRanges[$ageRangeIndex] += 1;
         }
-        if ($ageRangeIndex > 9) {
-            $ageRangeIndex = 9;
-        }
-        $ageRanges[$ageRangeIndex] += 1;
-        }
-    
+
         return $this->render('users/statsusers.html.twig', [
             'totalMale' => $totalMale,
             'totalFemale' => $totalFemale,
@@ -138,44 +133,37 @@ class UsersController extends AbstractController
                 $PasswordEncoder->encodePassword(
                     $user,
                     $form->get('password')->getData()
-                ));
+                )
+            );
             /*$user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('password')->getData()
                 )
             );*/
-            
-            if($form->get('role')->getData()==='Artist')
-            {
+
+            if ($form->get('role')->getData() === 'Artist') {
                 $user->setRoles(['ROLE_ARTIST']);
             }
-            if($form->get('role')->getData()==='Subscriber')
-            {
+            if ($form->get('role')->getData() === 'Subscriber') {
                 $user->setRoles(['ROLE_SUBSCRIBER']);
             }
-            if($form->get('role')->getData()==='Admin')
-            {
+            if ($form->get('role')->getData() === 'Admin') {
                 $user->setRoles(['ROLE_ADMIN']);
             }
-            if($form->get('role')->getData()==='Gallery Manager')
-            {
+            if ($form->get('role')->getData() === 'Gallery Manager') {
                 $user->setRoles(['ROLE_GALLERY_MANAGER']);
             }
-            if($form->get('role')->getData()==='Auction Manager')
-            {
+            if ($form->get('role')->getData() === 'Auction Manager') {
                 $user->setRoles(['ROLE_AUCTION_MANAGER']);
             }
-            if($form->get('role')->getData()==='Events Manager')
-            {
+            if ($form->get('role')->getData() === 'Events Manager') {
                 $user->setRoles(['ROLE_EVENT_MANAGER']);
             }
-            if($form->get('role')->getData()==='Tickets Manager')
-            {
+            if ($form->get('role')->getData() === 'Tickets Manager') {
                 $user->setRoles(['ROLE_TICKETS_MANAGER']);
             }
-            if($form->get('role')->getData()==='Users Manager')
-            {
+            if ($form->get('role')->getData() === 'Users Manager') {
                 $user->setRoles(['ROLE_USERS_MANAGER']);
             }
             $entityManager->persist($user);
@@ -186,7 +174,6 @@ class UsersController extends AbstractController
         return $this->render('users/new.html.twig', [
             'form' => $form->createView(),
         ]);
-        
     }
 
     #[Route('/{id}/back', name: 'app_users_show', methods: ['GET'])]
@@ -200,7 +187,7 @@ class UsersController extends AbstractController
     #[Route('/profile/{id}', name: 'app_users_showprofile', methods: ['GET'])]
     public function showprofile(Users $user): Response
     {
-       
+
         return $this->render('users/showprofile.html.twig', [
             'user' => $user,
         ]);
@@ -278,9 +265,9 @@ $client->messages->create(
     {
         $form = $this->createForm(UsersType::class, $user);
         $form->handleRequest($request);
-         
+
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -315,40 +302,37 @@ $client->messages->create(
     {
         $form = $this->createForm(UsersType::class, $user);
         $form->handleRequest($request);
-         
+
         if ($form->isSubmitted() && $form->isValid()) {
             $userImages = $form->get('userImages')->getData();
             $profileimage = $form->get('image')->getData();
             // on boucle sur les images 
-            foreach($userImages as $image)
-            {
-                if  ($profileimage != $image)
-                {
-               // On génère un nouveau nom de fichier
-               $fichier = md5(uniqid()) . '.' . $image->guessExtension();
+            foreach ($userImages as $image) {
+                if ($profileimage != $image) {
+                    // On génère un nouveau nom de fichier
+                    $fichier = md5(uniqid()) . '.' . $image->guessExtension();
 
-               // On copie le fichier dans le dossier uploads
-               $image->move(
-                   $this->getParameter('images_directory'),
-                   $fichier
-               );
+                    // On copie le fichier dans le dossier uploads
+                    $image->move(
+                        $this->getParameter('images_directory'),
+                        $fichier
+                    );
 
-               // On stocke l'image dans la base de données (son nom)
-               $img = new UserImages();
-               $img->setName($fichier);
-               $user->addUserImage($img); 
-               }
+                    // On stocke l'image dans la base de données (son nom)
+                    $img = new UserImages();
+                    $img->setName($fichier);
+                    $user->addUserImage($img);
+                }
             }
-            if($profileimage != null)
-            { 
-                
-            $fichier2 = md5(uniqid()) . '.' . $profileimage->guessExtension();
-            $profileimage->move(
-                $this->getParameter('images_directory'),
-                $fichier2
-            );
-            $user->setImage($fichier2);
-               }
+            if ($profileimage != null) {
+
+                $fichier2 = md5(uniqid()) . '.' . $profileimage->guessExtension();
+                $profileimage->move(
+                    $this->getParameter('images_directory'),
+                    $fichier2
+                );
+                $user->setImage($fichier2);
+            }
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -360,91 +344,88 @@ $client->messages->create(
             'form' => $form,
         ]);
     }
-    
+
     #[Route('/uploadimage/{name_img}/{id}', name: 'app_user_upload_image', methods: ['GET', 'POST'])]
-    public function upload_profimage(Request $request, $name_img, $id,ManagerRegistry $doctrine, EntityManagerInterface $entityManager): Response
+    public function upload_profimage(Request $request, $name_img, $id, ManagerRegistry $doctrine, EntityManagerInterface $entityManager): Response
     {
         $user = new Users();
-         $repousers= $doctrine->getRepository(Users::class);
-         $user = $repousers->find($id);
+        $repousers = $doctrine->getRepository(Users::class);
+        $user = $repousers->find($id);
         $imageFile = $request->files->get('image');
-        if ($name_img === 'empty' )
-         {
+        if ($name_img === 'empty') {
             return $this->redirectToRoute('app_users_profilefront', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
-         }
-         else
-         {
+        } else {
 
-    if (!$imageFile) {
-        throw $this->createNotFoundException('No image file was uploaded');
-    }
-    $filename = $imageFile->getClientOriginalName();
-    $fichier2 = md5(uniqid()) . '.' . $imageFile->guessExtension();
-    $imageFile->move(
-        $this->getParameter('images_directory'),
-        $fichier2
-    );
-    $user->setImage($fichier2);
-    $img = new UserImages();
-    $img->setName($fichier2);
-    $user->addUserImage($img); 
-       
-    $entityManager->persist($user);
-    $entityManager->flush();
-    return $this->redirectToRoute('app_users_profilefront', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
-    } 
+            if (!$imageFile) {
+                throw $this->createNotFoundException('No image file was uploaded');
+            }
+            $filename = $imageFile->getClientOriginalName();
+            $fichier2 = md5(uniqid()) . '.' . $imageFile->guessExtension();
+            $imageFile->move(
+                $this->getParameter('images_directory'),
+                $fichier2
+            );
+            $user->setImage($fichier2);
+            $img = new UserImages();
+            $img->setName($fichier2);
+            $user->addUserImage($img);
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_users_profilefront', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
+        }
     }
     #[Route('/{id}', name: 'app_users_delete', methods: ['POST'])]
     public function delete(Request $request, Users $user, UsersRepository $usersRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
             $usersRepository->remove($user, true);
         }
 
         return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
     }
-   
+
     #[Route('/delprofile/{id}/back', name: 'app_users_deleteprofile')]
-public function deleteprofile(Request $request,int $id,ManagerRegistry $doctrine): Response
-{
-    $repousers= $doctrine->getRepository(Users::class);
-    $user = $repousers->find($id);
-    
-     $session = $request->getSession();
-     $session->invalidate();
+    public function deleteprofile(Request $request, int $id, ManagerRegistry $doctrine): Response
+    {
+        $repousers = $doctrine->getRepository(Users::class);
+        $user = $repousers->find($id);
 
-     $em = $doctrine->getManager();
-     $em->remove($user);
-     $em->flush();
+        $session = $request->getSession();
+        $session->invalidate();
 
-    return $this->redirectToRoute('app_logout', [], Response::HTTP_SEE_OTHER);
-}
+        $em = $doctrine->getManager();
+        $em->remove($user);
+        $em->flush();
 
-    
+        return $this->redirectToRoute('app_logout', [], Response::HTTP_SEE_OTHER);
+    }
+
+
     #[Route('/{id}/updatestatus', name: 'app_users_updatestatus', methods: ['GET', 'POST'])]
     public function updateStatus(Request $request, $id)
     {
         $newStatus = $request->query->get('newStatus');
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository(Users::class)->find($id);
-    
+
         if (!$user) {
             throw $this->createNotFoundException('User not found');
         }
-    
+
         $user->setStatus($newStatus);
         $entityManager->flush();
-    
+
         return $this->redirectToRoute('app_users_index', ['id' => $id]);
     }
+
+    
     #[Route('/users/search', name: 'app_users_search', methods: ['POST'])]
     public function search(Request $request, UsersRepository $userRepository): JsonResponse
-     {
-    $searchTerm = $request->request->get('searchTerm');
-    $users = $userRepository->search($searchTerm);
-    
-    return $this->json(['users' => $users]);
-     }
-    
-    
+    {
+        $searchTerm = $request->request->get('searchTerm');
+        $users = $userRepository->search($searchTerm);
+
+        return $this->json(['users' => $users]);
+    }
 }
