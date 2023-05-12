@@ -491,17 +491,23 @@ class AuctionController extends AbstractController
     #[Route('/mobile/{id}/edit', name: 'edit_mobile')]
     public function editMOBILE(Request $req,  AuctionRepository $auctionRepository, ArtworkRepository $artworkRepository, $id)
     {
+
+        $format = "D M d H:i:s T Y";
+        $datetime = \DateTime::createFromFormat($format, $req->get('EndingDate'));
+
         $auction = $auctionRepository->find($id);
         $entityManager = $this->getDoctrine()->getManager();
         $auction->setStartingPrice($req->get('StartingPrice'));
         $auction->setDescription($req->get('Description'));
-        $auction->setEndingDate($req->get('EndingDate'));
+        $auction->setEndingDate($datetime);
         $auction->setIncrement($req->get('Increment'));
         $artwork = $artworkRepository->find($req->get('Artwork'));
         $auction->setArtwork($artwork);
 
         // Flush changes to the database
         $entityManager->flush();
+
+        return new Response('Auction modified successfully');
     }
 
     #[Route('/mobile/{id}/delete', name: 'delete_auction')]
@@ -550,5 +556,56 @@ class AuctionController extends AbstractController
         $json = json_encode($artworksNormalize);
 
         return new Response($json);
+    }
+
+    #[Route('/mobile/currency/symbols', name: 'get_curr_sym')]
+    public function currencySymbols(): Response
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.apilayer.com/fixer/symbols",
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: text/plain",
+                "apikey: 90bvVgraQiEn2QC6KuN8OOayRnaSqbIx"
+            ),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET"
+        ));
+
+        $response = curl_exec($curl);
+
+        return new Response($response);
+    }
+
+
+    #[Route('/mobile/currency/{curr}/{amount}', name: 'get_curr')]
+    public function currency($curr, $amount): Response
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.apilayer.com/fixer/convert?to=" . $curr . "&from=USD&amount=" . $amount,
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: text/plain",
+                "apikey: 90bvVgraQiEn2QC6KuN8OOayRnaSqbIx"
+            ),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET"
+        ));
+
+        $response = curl_exec($curl);
+
+        return new Response($response);
     }
 }
