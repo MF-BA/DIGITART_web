@@ -987,6 +987,32 @@ public function detailEvent(Request $request)
 
 
 
+/**
+ * @Route("/my-participated-events/json", name="my_participated_events_json")
+ */
+public function myParticipatedEventsJson(Request $request): JsonResponse
+{
+    $id = $request->get("id");
+    $entityManager = $this->getDoctrine()->getManager();
+    $participantRepository = $entityManager->getRepository(Participants::class);
+
+    $participants = $participantRepository->findBy(['idUser' => $id]); // Pass criteria as an array
+
+    $participatedEvents = [];
+
+    foreach ($participants as $participant) {
+        $participatedEvents[] = $participant->getIdEvent();
+    }
+
+    $eventRepository = $entityManager->getRepository(Event::class);
+    $participatedEventObjects = $eventRepository->findBy(['id' => $participatedEvents]);
+
+    $serializer = new Serializer([new ObjectNormalizer()]);
+    $formatted = $serializer->normalize($participatedEventObjects);
+
+    return new JsonResponse($formatted);
+}
+
 
 
 }
