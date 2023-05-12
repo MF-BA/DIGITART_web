@@ -129,6 +129,30 @@ class UsersJsonController extends AbstractController
         $user->setBirthDate(new \DateTime($req->query->get('birthDate')));
         $user->setStatus($req->query->get('status'));
 
+        if ($req->query->get('role') === 'Artist') {
+            $user->setRoles(['ROLE_ARTIST']);
+        }
+        if ($req->query->get('role') === 'Subscriber') {
+            $user->setRoles(['ROLE_SUBSCRIBER']);
+        }
+        if ($req->query->get('role') === 'Admin') {
+            $user->setRoles(['ROLE_ADMIN']);
+        }
+        if ($req->query->get('role') === 'Gallery Manager') {
+            $user->setRoles(['ROLE_GALLERY_MANAGER']);
+        }
+        if ($req->query->get('role') === 'Auction Manager') {
+            $user->setRoles(['ROLE_AUCTION_MANAGER']);
+        }
+        if ($req->query->get('role') === 'Events Manager') {
+            $user->setRoles(['ROLE_EVENT_MANAGER']);
+        }
+        if ($req->query->get('role') === 'Tickets Manager') {
+            $user->setRoles(['ROLE_TICKETS_MANAGER']);
+        }
+        if ($req->query->get('role') === 'Users Manager') {
+            $user->setRoles(['ROLE_USERS_MANAGER']);
+        }
         $em->flush();
         $jsoncontent = $normalizer->normalize($user, 'json', ['groups' => "users"]);
         return new Response("User updated successfully" . json_encode($jsoncontent));
@@ -169,7 +193,30 @@ class UsersJsonController extends AbstractController
         $user->setRole($role);
         $user->setPhoneNum($phoneNum);
         $user->setBirthDate(new \DateTime($birthDate));
-
+        if ($req->query->get('role') === 'Artist') {
+            $user->setRoles(['ROLE_ARTIST']);
+        }
+        if ($req->query->get('role') === 'Subscriber') {
+            $user->setRoles(['ROLE_SUBSCRIBER']);
+        }
+        if ($req->query->get('role') === 'Admin') {
+            $user->setRoles(['ROLE_ADMIN']);
+        }
+        if ($req->query->get('role') === 'Gallery Manager') {
+            $user->setRoles(['ROLE_GALLERY_MANAGER']);
+        }
+        if ($req->query->get('role') === 'Auction Manager') {
+            $user->setRoles(['ROLE_AUCTION_MANAGER']);
+        }
+        if ($req->query->get('role') === 'Events Manager') {
+            $user->setRoles(['ROLE_EVENT_MANAGER']);
+        }
+        if ($req->query->get('role') === 'Tickets Manager') {
+            $user->setRoles(['ROLE_TICKETS_MANAGER']);
+        }
+        if ($req->query->get('role') === 'Users Manager') {
+            $user->setRoles(['ROLE_USERS_MANAGER']);
+        }
         $user->setIsVerified(true); //par defaut lezem ykoun enabled
 
         try {
