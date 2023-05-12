@@ -25,7 +25,8 @@ class Artwork
      * @ORM\Column(name="id_art", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Groups("Auction")
+     * @Groups("artworks")
+     *  @Groups("Auction")
      */
     private $idArt;
 
@@ -38,7 +39,8 @@ class Artwork
      *
      *     )
      * @ORM\Column(name="artwork_name", type="string", length=255, nullable=false)
-     * @Groups("Auction")
+     * @Groups("artworks")
+     *  @Groups("Auction")
      */
     private $artworkName;
 
@@ -48,7 +50,8 @@ class Artwork
      * @ORM\JoinColumns({
      * @ORM\JoinColumn(name="id_artist", referencedColumnName="id")
      * })
-     * @Groups("Auction")
+     * @Groups("artworks")
+     *  @Groups("Auction")
      */
     private $idArtist;
 
@@ -56,6 +59,7 @@ class Artwork
      * @var string|null
      *
      * @ORM\Column(name="artist_name", type="string", length=255, nullable=true)
+     * @Groups("artworks")
      */
     private $artistName;
 
@@ -64,6 +68,7 @@ class Artwork
      * @Assert\NotBlank(message="Date of artwork creation cannot be blank")
      * @Assert\LessThanOrEqual("today", message="Date of artwork creation cannot be in the future")
      * @ORM\Column(name="date_art", type="date", nullable=false)
+     * @Groups("artworks")
      */
     private $dateArt;
 
@@ -78,11 +83,13 @@ class Artwork
      *      maxMessage = "Artwork description cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(name="description", type="text", length=65535, nullable=true)
+     * @Groups("artworks")
      */
     private $description;
 
     /**
      * @ORM\OneToMany(targetEntity="ImageArtwork",mappedBy="idArt", orphanRemoval=true, cascade={"persist"})
+     * @Groups("artworks")
      */
     private $images;
 
@@ -93,6 +100,7 @@ class Artwork
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_room", referencedColumnName="id_room")
      * })
+     * @Groups("artworks")
      */
     private $idRoom;
 
@@ -100,12 +108,14 @@ class Artwork
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
+     * @Groups("artworks")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="update")
+     * @Groups("artworks")
      */
     private $updatedAt;
 

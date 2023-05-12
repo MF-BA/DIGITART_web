@@ -6,6 +6,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Room
@@ -21,6 +22,7 @@ class Room
      * @ORM\Column(name="id_room", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups("Rooms")
      */
     private $idRoom;
 
@@ -34,6 +36,7 @@ class Room
      *     maxMessage = "The name of the room cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(name="name_room", type="string", length=255, nullable=false)
+     * @Groups("Rooms")
      */
     private $nameRoom;
 
@@ -43,6 +46,7 @@ class Room
      * @Assert\Positive(message="The area of the room must be a positive number")
      *
      * @ORM\Column(name="area", type="integer", nullable=false)
+     * @Groups("Rooms")
      */
     private $area;
 
@@ -50,6 +54,7 @@ class Room
      * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="state", type="string", length=255, nullable=false)
+     * @Groups("Rooms")
      */
     private $state;
 
@@ -63,6 +68,7 @@ class Room
      *      maxMessage = "Artwork description cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(name="description", type="text", length=65535, nullable=true)
+     * @Groups("Rooms")
      */
     private $description;
 
@@ -70,12 +76,14 @@ class Room
 
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
+     * @Groups("Rooms")
      */
     private $createdAt;
     
      /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="update")
+     * @Groups("Rooms")
      */
     private $updatedAt;
 
