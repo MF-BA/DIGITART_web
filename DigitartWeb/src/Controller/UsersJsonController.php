@@ -350,7 +350,6 @@ class UsersJsonController extends AbstractController
 
         $code = rand(100000, 900000);
 
-
         // Send an email to the user with the code
         $email = (new Email())
             ->from('digitart.primes@gmail.com')

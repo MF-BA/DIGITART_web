@@ -25,6 +25,7 @@ use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Mailer\MailerInterface;
 
 class ArtworkController extends AbstractController
 {   
@@ -531,7 +532,67 @@ class ArtworkController extends AbstractController
         ]);
     }
 
+    #[Route('artwork/sendmail', name: 'sendmail_json')]
+    public function sendmailjson(Request $request, UsersRepository $userRepository, MailerInterface $mailer)
+    {
 
+        $email = $request->query->get('email');
+
+        $user = $userRepository->findOneByEmail($email);
+
+        if (!$user) {
+            return new JsonResponse(['message' => 'User not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+
+        
+
+        // Send an email to the user with the code
+        $email = (new Email())
+            ->from('digitart.primes@gmail.com')
+            ->to($user->getEmail())
+            ->subject('Artwork Added In Digitart')
+            ->html("<!DOCTYPE html>
+            <html>
+              <head>
+                <meta charset='utf-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1'>
+                <title>Two-factor authentication code</title>
+                <style>
+                  /* Put your custom styles here */
+                </style>
+              </head>
+              <body>
+                <table width='30%' border='0' cellspacing='0' cellpadding='0' style='background-color:#f2f2f2;'>
+                <tr>
+                        <td style='padding: 20px 0;'>
+                            <img src='https://cdn.discordapp.com/attachments/1095078227573219358/1101220396486885376/header.png' alt='Museum Logo' style='max-height: 80px;'>
+                        </td>
+                    </tr>
+                  <tr>
+                    <td align='center' style='padding: 40px 0 30px 0;'>
+                        <h1>Dear Artist<strong style='color: red'></strong>,</h1>
+                       <h3>We are pleased to inform you that your artwork has been added to Digitart.</h3>
+                       <h3>Thank you for sharing your artwork with our community.</h3>
+                      <h3>Best regards,</h3>
+                                            
+                         </td>
+                  </tr>
+                  
+                  <tr>
+                    <td align='center'>
+                      <p style='font-size: 12px; line-height: 18px;'>The Digitart team</p>
+                    </td>
+                  </tr>
+                </table>
+              </body>
+            </html>");
+
+        $mailer->send($email);
+
+        // Return a success response
+        return new JsonResponse(['message' => 'Mail sent successfully.'], Response::HTTP_OK);
+    }
 
     #[Route('/artwork/stats/mobile', name: 'artwork_statsMobile')]
     public function statistiquesMobile(RoomRepository $roomRepo, ArtworkRepository $artRepo){
