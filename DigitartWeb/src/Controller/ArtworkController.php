@@ -54,7 +54,7 @@ class ArtworkController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $user =  $this->getUser();
         $Artwork = new Artwork();
-        $Artwork->setArtworkName($req->get('ArtworkName'));
+        $Artwork->setArtworkName($req->get('artworkName'));
         if($req->get('IdArtist'))
         $Artwork->setIdArtist($em->getRepository(Users::class)->find($req->get('IdArtist')));
         else
@@ -63,9 +63,9 @@ class ArtworkController extends AbstractController
         $Artwork->setArtistName($req->get('artistName'));
         }
         
-        $Artwork->setDateArt(new \DateTime($req->get('DateArt')));
-        $Artwork->setDescription($req->get('Description'));
-        $Artwork->setIdRoom($em->getRepository(Room::class)->find($req->get('IdRoom')));
+        $Artwork->setDateArt(new \DateTime($req->get('dateArt')));
+        $Artwork->setDescription($req->get('description'));
+        $Artwork->setIdRoom($em->getRepository(Room::class)->find($req->get('idRoom')));
         $em->persist($Artwork);
         $em->flush();
 
@@ -80,11 +80,17 @@ class ArtworkController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $Artwork=$em->getRepository(Artwork::class)->find($id);
-        $Artwork->setArtworkName($req->get('ArtworkName'));
+        $Artwork->setArtworkName($req->get('artworkName'));
+        if($req->get('IdArtist'))
         $Artwork->setIdArtist($em->getRepository(Users::class)->find($req->get('IdArtist')));
-        $Artwork->setDateArt(new \DateTime($req->get('DateArt')));
-        $Artwork->setDescription($req->get('Description'));
-        $Artwork->setIdRoom($em->getRepository(Room::class)->find($req->get('IdRoom')));
+        else
+        {
+        $Artwork->setIdArtist(null);
+        $Artwork->setArtistName($req->get('artistName'));
+        }
+        $Artwork->setDateArt(new \DateTime($req->get('dateArt')));
+        $Artwork->setDescription($req->get('description'));
+        $Artwork->setIdRoom($em->getRepository(Room::class)->find($req->get('idRoom')));
         $em->flush();
         $jsonContent
         =
@@ -117,6 +123,23 @@ class ArtworkController extends AbstractController
         $json = json_encode($imagesNormalize);
         return new Response($json);
     }
+
+    #[Route('/mobile/{id}/Lastname', name: 'get_lastname_artist_MOBILE')]
+    public function LastnameArtistMOBILE(NormalizerInterface $normalizer, $id,UsersRepository $usersRepository)
+    {
+        $Lastname =$usersRepository->createQueryBuilder('u')
+            ->select('u.lastname')
+            ->where('u.id = :idArtist')
+            ->setParameter('idArtist', $id)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $jsonContent=$normalizer->normalize($Lastname, 'json', ['groups' => "Artworks"]);
+        $json = json_encode($jsonContent);
+        return new Response($json);
+    }
+
+
 
     #[Route('/artwork/back', name: 'app_artwork_index', methods: ['GET'])]
     public function index(ArtworkRepository $artworkRepository,RoomRepository $roomRepository,UsersRepository $userRepository): Response
@@ -506,6 +529,22 @@ class ArtworkController extends AbstractController
             'lastupdatedArtworkName' => $lastupdatedArtwork->getArtworkName(),
             'lastupdatedArtwork' => $lastupdatedArtwork->getUpdatedAt(),
         ]);
+    }
+
+
+
+    #[Route('/artwork/stats/mobile', name: 'artwork_statsMobile')]
+    public function statistiquesMobile(RoomRepository $roomRepo, ArtworkRepository $artRepo){
+       
+       
+       
+        $nrbartwork = $artRepo->countArtworks();
+        $nbavailable=$roomRepo->countAvailable();
+        $nbunavailable=$roomRepo->countUnavailable();
+        $nbrooms=$roomRepo->countrooms();
+
+
+        return new JsonResponse(['nrbartwork' => $nrbartwork, 'nbavailable' => $nbavailable,'nbunavailable' => $nbunavailable, 'nbrooms' => $nbrooms], Response::HTTP_OK);
     }
 
 }

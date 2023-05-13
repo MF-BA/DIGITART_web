@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Artwork;
+use App\Entity\Users;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
