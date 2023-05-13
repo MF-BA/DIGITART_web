@@ -196,9 +196,10 @@ class TryOutController extends AbstractController
     }
     
     #[Route('/mailJSON', name: 'testJSON')]
-    public function Test(MailerInterface $mailer,PaymentRepository $PaymentRepository)
+    public function Test(MailerInterface $mailer,PaymentRepository $PaymentRepository,Request $request)
     {
-        $userId = null;
+        $userId = $request->get('Name');;
+        $email = $request->get('email');
 
         $lastUpdatedAt = $PaymentRepository->getLastUpdatedAtByUserId();
         $lastUpdatedAt = new \DateTime($lastUpdatedAt);
@@ -218,7 +219,8 @@ class TryOutController extends AbstractController
             $total_payment += $payment->getTotalPayment();
         }
        // $userEmail = $this->getUser()->getEmail();
-        $to = 'aminemehdi999@gmail.com';
+        $to = $email;
+        
         $subject = 'Digitart payment Receipt No Reply';
         $template = 'payment/testpayment_email.html.twig';
         $context = [

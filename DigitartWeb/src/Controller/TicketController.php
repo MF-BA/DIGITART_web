@@ -30,6 +30,7 @@ class TicketController extends AbstractController
             'tickets' => $tickets,
         ]);
     }
+    
 
     #[Route('/payment/back', name: 'app_payment_index', methods: ['GET'])]
     public function indexPayment(EntityManagerInterface $entityManager, PaginatorInterface $paginator, PaymentRepository $PaymentRepository,Request $request): Response
