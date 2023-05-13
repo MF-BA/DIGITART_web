@@ -60,9 +60,16 @@ class UsersJsonController extends AbstractController
     public function addUserJSON(Request $req, NormalizerInterface $normalizer, UserPasswordEncoderInterface $PasswordEncoder): Response
     {
 
-        $em = $this->getDoctrine()->getManager();
+        
         $user = new Users();
-        $user->setCin($req->get('cin'));
+
+        $em = $this->getDoctrine()->getManager();
+        $mail_exist = $em->getRepository(Users::class)->findOneByEmail($req->get('email'));
+
+        if ($mail_exist) {
+            return new JsonResponse("Email already used!");
+        } else {
+            $user->setCin($req->get('cin'));
         $user->setFirstname($req->get('firstname'));
         $user->setLastname($req->get('lastname'));
         $user->setEmail($req->get('email'));
@@ -109,6 +116,8 @@ class UsersJsonController extends AbstractController
 
         $em->persist($user);
         $em->flush();
+        }
+        
         $jsoncontent = $normalizer->normalize($user, 'json', ['groups' => "users"]);
         return new Response(json_encode($jsoncontent));
     }

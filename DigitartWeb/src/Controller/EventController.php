@@ -28,6 +28,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use TCPDF;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Comments;
+use App\Repository\UsersRepository;
 use Symfony\Component\Validator\Constraints\DateTime;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\Mailer\MailerInterface;
@@ -1012,7 +1013,116 @@ public function myParticipatedEventsJson(Request $request): JsonResponse
 
     return new JsonResponse($formatted);
 }
+/**
+ * @Route("/getPasswordByEmail", name="detail_event")
+ * @Method("GET")
+ */
+    public function forgotPassword(Request $request, UsersRepository $userRepository, MailerInterface $mailer)
+{
+    
+    $email = $request->query->get('email');
 
+    $user = $userRepository->findOneByEmail($email);
 
+    if (!$user) {
+        return new JsonResponse(['message' => 'User not found.'], Response::HTTP_NOT_FOUND);
+    }
+
+    
+    $code = rand(100000,900000);;
+   
+
+    // Send an email to the user with the code
+    $email = (new Email())
+        ->from('digitart.primes@gmail.com')
+        ->to($user->getEmail())
+        ->subject('Event Participation')
+        ->html('<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Your email subject</title>
+            <style>
+                /* Style the body of the email */
+                body {
+                    font-family: Arial, sans-serif;
+                    font-size: 16px;
+                    line-height: 1.5;
+                    color: #333;
+                    background-color: #f5f5f5;
+                    margin: 0;
+                    padding: 0;
+                }
+                /* Style the container of the email */
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: #fff;
+                }
+                /* Style the heading of the email */
+                h1 {
+                    font-size: 24px;
+                    color: #333;
+                    margin-top: 0;
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+                /* Style the paragraphs of the email */
+                p {
+                    margin-top: 0;
+                    margin-bottom: 20px;
+                    text-align: justify;
+                    color:#000;
+                }
+                /* Style the link in the email */
+                a {
+                    color: #333;
+                    text-decoration: none;
+                }
+                /* Style the button in the email */
+                .btn {
+                    display: inline-block;
+                    background-color: #007bff;
+                    color: #fff;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    text-decoration: none;
+                }
+                /* Style the image in the email */
+                .img {
+                    display: block;
+                    margin: 0 auto;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+            <img src="https://cdn.discordapp.com/attachments/866163650824896592/1101423432870150225/logo_digitart.png" alt="Your Image" class="img" width="300">
+
+                <h1>you just participated in the Event </h1>
+            
+                <p>We would like to extend an invitation to you to attend our upcoming event</p>
+
+                <p>The event will be an opportunity for us to showcase our latest products and services, as well as to network with industry professionals and connect with potential clients.
+                
+                We believe that your presence at the event would be invaluable, and we would be honored if you could join us.
+                
+                Let us know if you have any special dietary requirements or other needs that we should be aware of.
+                
+                Thank you for your consideration, and we hope to see you at the event.
+                
+                Best regards,</p>
+                <p><strong>Digitart</strong></p>
+            </div>
+        </body>
+        </html>
+        ');
+
+    $mailer->send($email);
+
+    // Return a success response
+    return new JsonResponse(['message' => 'Code sent successfully.','code' => $code], Response::HTTP_OK);
+}
 
 }
