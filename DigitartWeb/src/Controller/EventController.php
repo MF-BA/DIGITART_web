@@ -347,6 +347,16 @@ public function showfront(FlashyNotifier $flashy,Event $event, Request $request)
             'events' => $events,
         ]);
     }
+
+    #[Route('/login/a', name: 'app_event_login', methods: ['GET'])]
+    public function login(FlashyNotifier $flashy,EventRepository $eventRepository): Response
+    {
+        $events = $eventRepository->findAll();
+
+        return $this->render('event/login.html.twig', [
+            'events' => $events,
+        ]);
+    }
     #[Route('/noparticipated/l', name: 'app_event_particip', methods: ['GET'])]
     public function particip(EventRepository $eventRepository): Response
     {

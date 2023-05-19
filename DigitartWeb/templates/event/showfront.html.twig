@@ -203,17 +203,20 @@ if(distance<0)
               <p>{{ event.getDetail }}</p>
 
               <div class="watch-video d-flex align-items-center position-relative">
-                <i class="bi bi-play-circle"></i>
-                <a href="" class="glightbox stretched-link ">Watch Video</a>
-                
-                
-              </div>
-                   <a href="{{ path('PDF_Voyage') }}">
-                 <button>Print all the events</button>
-           </a>
-           
-           <a href="{{ path('app_event_participate', {'id': event.getId}) }}" class="glightbox stretched-link ">Participate</a>
-            </div>
+    <i class="bi bi-play-circle"></i>
+    <a href="" class="glightbox stretched-link">Watch Video</a>
+</div>
+
+<a href="{{ path('PDF_Voyage') }}">
+    <button>Print all the events</button>
+</a>
+
+{% if app.user %}
+    <a href="{{ path('app_event_participate', {'id': event.getId}) }}" class="glightbox stretched-link">Participate</a>
+{% else %}
+    <a href="{{ path('app_event_login') }}" class="glightbox stretched-link">Participate</a>
+{% endif %}
+
           </div>
 
         </div>
@@ -321,13 +324,21 @@ if(distance<0)
 
               <h2 class="title">Here are some additional informations to keep in mind</h2>
 
-              <div class="meta-top">
-                <ul>
-                  <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="blog-details.html">{{app.user.firstname}}</a></li>
-                  <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-details.html"><time datetime="2020-01-01">Jan 1, 2022</time></a></li>
-          
-                </ul>
-              </div><!-- End meta top -->
+             <div class="meta-top">
+    <ul>
+        {% if app.user %}
+            
+            <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="blog-details.html">{{ app.user.firstname }}</a></li>
+            <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-details.html"><time datetime="2020-01-01">Jan 1, 2022</time></a></li>
+
+        {% else %}
+            <li class="d-flex align-items-center"><i class="bi bi-person"></i> User</li>
+            <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-details.html"><time datetime="2020-01-01">Jan 1, 2022</time></a></li>
+
+        {% endif %}
+    </ul>
+</div><!-- End meta top -->
+
 
               <div class="content">
                 <p>
