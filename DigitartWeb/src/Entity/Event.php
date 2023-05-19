@@ -9,6 +9,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 /**
  * Event
  *
@@ -25,6 +27,7 @@ class Event
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups("events")
      */
     private $id;
 
@@ -33,6 +36,7 @@ class Event
      * @ORM\Column(name="event_name", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="Event name cannot be empty")
      * @Assert\Length(min=3, max=50, minMessage="doit etre plus que 3", maxMessage="doit etre moins que 49")
+     * @Groups("events")
      */
     private $eventName;
 
@@ -41,6 +45,7 @@ class Event
      *
      * @ORM\Column(name="start_date", type="date", nullable=false)
      * @Assert\NotNull(message="Start date cannot be empty")
+     * @Groups("events")
      */
     private $startDate;
 
@@ -53,6 +58,7 @@ class Event
      *     propertyPath="startDate",
      *     message="The end date must be greater than the start date."
      * )
+     * @Groups("events")
      */
     private $endDate;
 
@@ -63,6 +69,7 @@ class Event
      * @Assert\NotBlank()
      * @Assert\GreaterThan(value=0, message="The number of participants should be greater than 0.")
      * @Assert\Type(type="numeric", message="The number of participants must be a valid number.")
+     * @Groups("events")
      */
     private $nbParticipants;
 
@@ -72,6 +79,7 @@ class Event
      * @ORM\Column(name="detail", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="Event details cannot be empty")
      * @Assert\Length(min=5, max=500, minMessage="doit etre plus que 5", maxMessage="doit etre moins que 500")
+     * @Groups("events")
      */
     private $detail;
 
@@ -81,6 +89,7 @@ class Event
      * @ORM\Column(name="start_time", type="integer", nullable=false)
      * @Assert\NotNull(message="Start time cannot be empty")
      * @Assert\Range(min=0, max=23, notInRangeMessage="Start time must be between {{ min }} and {{ max }}")
+     * @Groups("events")
      */
     private $startTime;
 
@@ -88,6 +97,7 @@ class Event
      * @var string|null
      *
      * @ORM\Column(name="image", type="string", length=255, nullable=true)
+     * @Groups("events")
      */
     private $image;
 
@@ -98,31 +108,37 @@ class Event
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_room", referencedColumnName="id_room")
      * })
+     * @Groups("events")
      */
     private $idRoom;
 
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
+     * @Groups("events")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="update")
+     * @Groups("events")
      */
     private $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Images", mappedBy="event", orphanRemoval=true, cascade={"persist"})
+     * @Groups("events")
      */
     private $images;
     /**
      * @ORM\Column(type="string", length=7, nullable=true)
+     * @Groups("events")
      */
     private $color;
     /**
      * @ORM\OneToMany(targetEntity=Comments::class, mappedBy="event", orphanRemoval=true)
+     * @Groups("events")
      */
     private $comments;
 

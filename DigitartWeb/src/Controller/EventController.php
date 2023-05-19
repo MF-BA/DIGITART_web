@@ -913,17 +913,16 @@ $pdf->Cell(0, 10, 'End Date: ' . $endDate, 0, 1, 'L');
 
 
     }
-
+   
     /**
      * @Route("/DisplayEvent/Json", name="display _event")
      */
-    public function dislpayEvent()
+    public function dislpayEvent(NormalizerInterface $normalizer)
     {
         $event = $this->getDoctrine()->getManager()->getRepository(Event::class)->findAll();
-        $serializer = new Serializer([new ObjectNormalizer()]);
-        $formatted = $serializer->normalize($event);
-
-        return new JsonResponse($formatted);
+        $eventNormalize = $normalizer->normalize($event, 'json', ['groups' => "events"]);
+        $json = json_encode($eventNormalize);
+        return new Response($json);
     }
     /**
      * @Route("/modifyEvent/Json", name="modify_event")
