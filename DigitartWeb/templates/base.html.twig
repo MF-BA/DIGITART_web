@@ -342,8 +342,10 @@ updateTimer(endingDate, timerId);
 								<i class="bi bi-chevron-down dropdown-indicator"></i>
 							</a>
 							<ul>
+								{% if app.user is not null  %}
 								<li><a href="{{ path('app_payment_card') }}">Ticket Added to the card</a></li>
 								<li><a href="{{ path('app_payment_CurrentcardHistoryNoUpdate') }}">Ticket History</a></li>
+								{% endif %}
 							</ul>
 
 						</li>
