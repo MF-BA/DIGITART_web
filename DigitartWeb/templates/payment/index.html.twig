@@ -83,8 +83,14 @@
             <p class="expcvv_text2"> </p>
              {{ form_row(form.totalPayment, { 'attr': {'class': 'inputbox total-amount', 'name': 'name', 'type': 'text'} }) }} 
             </div>
-           
-            <button type="submit" class="button">{{ button_label|default('Add to Card') }}</button>
+            {% if app.user is not null %}
+                <button type="submit" class="button">{{ button_label|default('Add to Cart') }}</button>
+            {% else %}
+                <div class="center-content">
+                    <a href="{{path('app_logout')}}"> Please log in to continue !! </a>
+                </div>
+            {% endif %}
+
             {{ form_end(form) }}
           </form> 
         </div>
