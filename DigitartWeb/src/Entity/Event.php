@@ -108,27 +108,23 @@ class Event
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_room", referencedColumnName="id_room")
      * })
-     * @Groups("events")
      */
     private $idRoom;
 
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
-     * @Groups("events")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="update")
-     * @Groups("events")
      */
     private $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Images", mappedBy="event", orphanRemoval=true, cascade={"persist"})
-     * @Groups("events")
      */
     private $images;
     /**
@@ -138,17 +134,16 @@ class Event
     private $color;
     /**
      * @ORM\OneToMany(targetEntity=Comments::class, mappedBy="event", orphanRemoval=true)
-     * @Groups("events")
      */
     private $comments;
 
-/**
- * @return Collection|Comments[]
- */
-public function getComments(): Collection
-{
-    return $this->comments ?? new ArrayCollection();
-}
+    /**
+     * @return Collection|Comments[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments ?? new ArrayCollection();
+    }
 
 
     public function addComment(Comments $comment): self
@@ -177,7 +172,7 @@ public function getComments(): Collection
         $this->images = new ArrayCollection();
     }
 
-     /**
+    /**
      * @return Collection|Images[]
      */
 
@@ -330,7 +325,7 @@ public function getComments(): Collection
 
         return $this;
     }
-  
+
 
     public function getColor(): ?string
     {

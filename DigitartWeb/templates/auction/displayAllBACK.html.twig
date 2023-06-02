@@ -124,10 +124,13 @@ success: function (data) { // Handle the response from the server
 											<td>{{ auction.description|slice(0, 100) }}{{ (auction.description|length > 100 ? '...' : '') }}</td>
 											<td>{{ highestBids[auction.idAuction] is not null ? highestBids[auction.idAuction] : 'none' }}</td>
 											<td>
-												<a href="{{ path('app_bid_index', {'id_auction': auction.idAuction}) }}">
+											{% if auction.DELETED is null %}
+													<a href="{{ path('app_bid_index', {'id_auction': auction.idAuction}) }}">
 
 													<i class="fa fa-eye"></i>
 												</a>
+												{% endif %}
+												
 												{% if highestBids[auction.idAuction] == 'No Bids yet' %}
 													{% if auction.DELETED is null %}
 														{% if auction.endingDate|date('Y-m-d') >=  'now'|date('Y-m-d') %}

@@ -392,13 +392,16 @@ class AuctionController extends AbstractController
     ///////////////////////////////////////////////////////////////////////////////////////
     //  Mobile
     /////////////////////////////////////////////////////////////////////////////////////////
-    #[Route('/mobile/Display/back', name: 'Display_Back_MOBILE')]
-    public function DisplayBackMOBILE(AuctionRepository $auctionRepository, NormalizerInterface $normalizer)
+    #[Route('/mobile/backDisplay', name: 'Display_MOBILE_back')]
+    public function DisplayMOBILEBACK(AuctionRepository $auctionRepository, NormalizerInterface $normalizer)
     {
-        $auctions = $auctionRepository->findAll();
+        $currentDateTime = new \DateTime();
+        $auctions = $auctionRepository->createQueryBuilder('a')
+        ->Where('a.deleted is NULL')
+        ->getQuery()
+        ->getResult();
         $studentNormalize = $normalizer->normalize($auctions, 'json', ['groups' => "Auction"]);
         $json = json_encode($studentNormalize);
-
         return new Response($json);
     }
     #[Route('/mobile/Display', name: 'Display_MOBILE')]
